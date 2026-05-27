@@ -1,16 +1,9 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import Head from '@docusaurus/Head';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import Landing from '@site/src/components/Landing';
 import LibrarySidebar from '@site/src/components/LibrarySidebar';
 import {useCatalogue, type Manifest} from '@site/src/data/manifests';
-
-function pickInitial(manifests: Manifest[]): string | null {
-  if (manifests.length === 0) return null;
-  if (typeof window === 'undefined') return manifests[0]?.dir ?? null;
-  const fromHash = window.location.hash.replace(/^#/, '');
-  if (fromHash && manifests.some((m) => m.dir === fromHash)) return fromHash;
-  return manifests[0]?.dir ?? null;
-}
 
 function CodexShell(): React.ReactElement {
   const catalogue = useCatalogue();
@@ -18,44 +11,62 @@ function CodexShell(): React.ReactElement {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [initialized, setInitialized] = useState(false);
 
-  // Once the catalogue resolves, pick an initial source from the URL hash
-  // (if present) or default to the first listed source. Auto-collapse so
-  // the iframe gets full viewport width on load.
-  useEffect(() => {
-    if (initialized) return;
-    if (catalogue.status !== 'ready') return;
-    const initial = pickInitial(catalogue.manifests);
-    setActive(initial);
-    setCollapsed(initial !== null);
-    setInitialized(true);
-  }, [catalogue, initialized]);
+  // Sort by display name. The catalogue's natural order is codex.yaml's,
+  // but the library UX wants packages alphabetised.
+  const manifests: Manifest[] = useMemo(() => {
+    if (catalogue.status !== 'ready') return [];
+    return [...catalogue.manifests].sort((a, b) =>
+      a.name.localeCompare(b.name, undefined, {sensitivity: 'base'}),
+    );
+  }, [catalogue]);
 
+  // Resolve initial source from URL hash; if none, stay on the landing page.
   useEffect(() => {
-    if (!active) return;
-    if (window.location.hash.replace(/^#/, '') !== active) {
-      window.history.replaceState(null, '', `#${active}`);
+    if (initialized || catalogue.status !== 'ready') return;
+    const hash = window.location.hash.replace(/^#/, '');
+    if (hash && manifests.some((m) => m.dir === hash)) {
+      setActive(hash);
+      setCollapsed(true);
     }
-  }, [active]);
+    setInitialized(true);
+  }, [catalogue, manifests, initialized]);
+
+  // Reflect selection in URL hash so links + back/forward work.
+  useEffect(() => {
+    if (!initialized) return;
+    const desired = active ?? '';
+    const current = window.location.hash.replace(/^#/, '');
+    if (current !== desired) {
+      window.history.replaceState(null, '', desired ? `#${desired}` : window.location.pathname);
+    }
+  }, [active, initialized]);
 
   useEffect(() => {
     const onHash = () => {
       if (catalogue.status !== 'ready') return;
-      const fromHash = window.location.hash.replace(/^#/, '');
-      if (fromHash && catalogue.manifests.some((m) => m.dir === fromHash)) {
-        setActive(fromHash);
+      const hash = window.location.hash.replace(/^#/, '');
+      if (!hash) {
+        setActive(null);
+        setCollapsed(false);
+      } else if (manifests.some((m) => m.dir === hash)) {
+        setActive(hash);
+        setCollapsed(true);
       }
     };
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
-  }, [catalogue]);
+  }, [catalogue, manifests]);
 
   const onSelect = useCallback((dir: string) => {
     setActive(dir);
     setCollapsed(true);
   }, []);
 
-  const onToggle = useCallback(() => {
-    setCollapsed((c) => !c);
+  const onToggle = useCallback(() => setCollapsed((c) => !c), []);
+
+  const onHome = useCallback(() => {
+    setActive(null);
+    setCollapsed(false);
   }, []);
 
   if (catalogue.status === 'loading') {
@@ -72,11 +83,12 @@ function CodexShell(): React.ReactElement {
   return (
     <div className="codex-shell">
       <LibrarySidebar
-        manifests={catalogue.manifests}
+        manifests={manifests}
         active={active}
         collapsed={collapsed}
         onSelect={onSelect}
         onToggle={onToggle}
+        onHome={onHome}
       />
       <main className="codex-frame-pane">
         {active ? (
@@ -87,7 +99,7 @@ function CodexShell(): React.ReactElement {
             className="codex-frame"
           />
         ) : (
-          <div className="codex-empty">Pick a package to start reading.</div>
+          <Landing manifests={manifests} onSelect={onSelect} />
         )}
       </main>
     </div>

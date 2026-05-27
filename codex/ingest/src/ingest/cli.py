@@ -1,6 +1,7 @@
 """Codex ingest CLI."""
 from __future__ import annotations
 
+import json
 import shutil
 from pathlib import Path
 
@@ -74,6 +75,36 @@ def fetch(only: tuple[str, ...]) -> None:
     cfg = _load()
     for src in _selected(cfg, only):
         _do_fetch(src)
+
+
+@main.command()
+@click.option("--only", multiple=True, help="Restrict to specific sources.")
+def manifest(only: tuple[str, ...]) -> None:
+    """Regenerate per-source _manifest.json files (and the catalogue) for
+    already-staged sources. Cheap — touches no cache files. Useful after
+    changes to display metadata or favicon detection logic.
+    """
+    cfg = _load()
+    targets = _selected(cfg, only)
+    touched = 0
+    for src in targets:
+        dest_dir = cfg.sources_dir / src.name
+        if not dest_dir.exists():
+            console.log(f"[dim]skip {src.name} (not staged)[/dim]")
+            continue
+        # Pull the previous page_count so we don't lose it.
+        prev_path = dest_dir / "_manifest.json"
+        page_count = 0
+        if prev_path.exists():
+            try:
+                page_count = int(json.loads(prev_path.read_text(encoding="utf-8")).get("page_count", 0))
+            except (json.JSONDecodeError, ValueError):
+                pass
+        write_manifest(dest_dir, src, page_count)
+        touched += 1
+        console.log(f"  refreshed {src.name}")
+    write_catalogue(cfg.sources_dir, list(cfg.sources.keys()))
+    console.print(f"[green]refreshed[/green] {touched} manifests")
 
 
 @main.command()

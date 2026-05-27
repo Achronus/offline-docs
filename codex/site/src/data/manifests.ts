@@ -12,6 +12,7 @@ export type Manifest = {
   page_count: number;
   source_url?: string;
   fetched_at?: string;
+  favicon?: string | null;
 };
 
 export type CatalogueState =

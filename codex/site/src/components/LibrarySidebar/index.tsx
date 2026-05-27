@@ -7,6 +7,18 @@ interface Props {
   collapsed: boolean;
   onSelect: (dir: string) => void;
   onToggle: () => void;
+  onHome: () => void;
+}
+
+function PackageIcon({m}: {m: Manifest}): React.ReactElement {
+  if (m.favicon) {
+    return <img src={m.favicon} alt="" className="codex-package-logo" aria-hidden />;
+  }
+  return (
+    <span className="codex-package-icon" style={{background: m.color}} aria-hidden>
+      {m.tag}
+    </span>
+  );
 }
 
 export default function LibrarySidebar({
@@ -15,6 +27,7 @@ export default function LibrarySidebar({
   collapsed,
   onSelect,
   onToggle,
+  onHome,
 }: Props): React.ReactElement {
   const activeManifest = manifests.find((m) => m.dir === active);
 
@@ -33,15 +46,7 @@ export default function LibrarySidebar({
         <span className="codex-toggle" aria-hidden>
           ☰
         </span>
-        {activeManifest && (
-          <span
-            className="codex-package-icon"
-            style={{background: activeManifest.color}}
-            aria-hidden
-          >
-            {activeManifest.tag}
-          </span>
-        )}
+        {activeManifest && <PackageIcon m={activeManifest} />}
       </aside>
     );
   }
@@ -49,7 +54,14 @@ export default function LibrarySidebar({
   return (
     <aside className="codex-library-sidebar">
       <div className="codex-logo">
-        <span>Codex</span>
+        <button
+          type="button"
+          className="codex-home-btn"
+          onClick={onHome}
+          aria-label="Go to library home"
+        >
+          Codex
+        </button>
         <span className="codex-offline-badge">offline</span>
         <button
           type="button"
@@ -73,13 +85,7 @@ export default function LibrarySidebar({
             className={m.dir === active ? 'active' : ''}
             onClick={() => onSelect(m.dir)}
           >
-            <span
-              className="codex-package-icon"
-              style={{background: m.color}}
-              aria-hidden
-            >
-              {m.tag}
-            </span>
+            <PackageIcon m={m} />
             <span className="codex-package-name">{m.name}</span>
             <span className="codex-page-count">{m.page_count}</span>
           </li>
