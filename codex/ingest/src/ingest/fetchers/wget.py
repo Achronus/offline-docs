@@ -213,7 +213,84 @@ def fetch(
         f"[bold green]fetched {fetched} pages[/bold green] from {base_url} "
         f"(assets {assets}, skipped {skipped}, excluded {excluded})"
     )
+
+    # Playwright completion pass: capture dynamically-loaded resources
+    # (web workers, JSON search indexes, lazy chunks) that wget's HTML scrape
+    # never sees because they're requested at runtime from JS.
+    try:
+        captured = _playwright_completion_pass(base_url, cache_dir, host, path_prefix)
+        if captured:
+            console.log(f"[dim]+ {captured} dynamic assets via browser pass[/dim]")
+    except Exception as e:
+        console.log(f"[yellow]completion pass skipped: {e}[/yellow]")
+
     return cache_dir
+
+
+def _playwright_completion_pass(base_url: str, cache_dir: Path, host: str, path_prefix: str) -> int:
+    """Open the homepage in a real browser, snapshot any same-host responses
+    that aren't already cached. Catches webpack-style chunked workers, search
+    indexes, and other JS-fetched resources wget misses.
+    """
+    try:
+        from playwright.sync_api import sync_playwright  # type: ignore
+    except ImportError:
+        return 0
+
+    captured = 0
+
+    def on_response(response):
+        nonlocal captured
+        try:
+            url = response.url
+            status = response.status
+            if status >= 400:
+                return
+            parsed = urlparse(url)
+            if parsed.netloc != host or not parsed.path:
+                return
+            asset_path = parsed.path
+            if asset_path.startswith(path_prefix):
+                asset_path = asset_path[len(path_prefix):]
+            rel = asset_path.lstrip("/")
+            if not rel:
+                return
+            # Don't overwrite HTML pages (wget handled those) or files we
+            # already have.
+            out = cache_dir / rel
+            if out.exists():
+                return
+            ctype = (response.headers.get("content-type") or "").lower()
+            if "text/html" in ctype and not rel.endswith((".json", ".js", ".css", ".svg")):
+                return
+            body = response.body()
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_bytes(body)
+            captured += 1
+        except Exception:
+            return
+
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch()
+        context = browser.new_context(
+            user_agent=(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+            ),
+            viewport={"width": 1280, "height": 800},
+        )
+        page = context.new_page()
+        page.on("response", on_response)
+        try:
+            page.goto(base_url, wait_until="networkidle", timeout=20000)
+            # Some sites only fetch the search index on first interaction —
+            # try to nudge it by focusing search-like elements.
+            page.wait_for_timeout(800)
+        except Exception:
+            pass
+        browser.close()
+
+    return captured
 
 
 def _asset_elements(soup: BeautifulSoup):
