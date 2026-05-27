@@ -2,9 +2,10 @@ import React, {useCallback, useEffect, useState} from 'react';
 import Head from '@docusaurus/Head';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import LibrarySidebar from '@site/src/components/LibrarySidebar';
-import {manifests} from '@site/src/data/manifests';
+import {useCatalogue, type Manifest} from '@site/src/data/manifests';
 
-function pickInitial(): string | null {
+function pickInitial(manifests: Manifest[]): string | null {
+  if (manifests.length === 0) return null;
   if (typeof window === 'undefined') return manifests[0]?.dir ?? null;
   const fromHash = window.location.hash.replace(/^#/, '');
   if (fromHash && manifests.some((m) => m.dir === fromHash)) return fromHash;
@@ -12,12 +13,22 @@ function pickInitial(): string | null {
 }
 
 function CodexShell(): React.ReactElement {
-  const initialActive = pickInitial();
-  const [active, setActive] = useState<string | null>(initialActive);
-  // Auto-collapse on initial load if a source is already picked — gives the
-  // iframe full width so the upstream site renders in its desktop layout
-  // rather than falling back to mobile because of our 220px sidebar.
-  const [collapsed, setCollapsed] = useState<boolean>(initialActive !== null);
+  const catalogue = useCatalogue();
+  const [active, setActive] = useState<string | null>(null);
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [initialized, setInitialized] = useState(false);
+
+  // Once the catalogue resolves, pick an initial source from the URL hash
+  // (if present) or default to the first listed source. Auto-collapse so
+  // the iframe gets full viewport width on load.
+  useEffect(() => {
+    if (initialized) return;
+    if (catalogue.status !== 'ready') return;
+    const initial = pickInitial(catalogue.manifests);
+    setActive(initial);
+    setCollapsed(initial !== null);
+    setInitialized(true);
+  }, [catalogue, initialized]);
 
   useEffect(() => {
     if (!active) return;
@@ -28,14 +39,15 @@ function CodexShell(): React.ReactElement {
 
   useEffect(() => {
     const onHash = () => {
+      if (catalogue.status !== 'ready') return;
       const fromHash = window.location.hash.replace(/^#/, '');
-      if (fromHash && manifests.some((m) => m.dir === fromHash)) {
+      if (fromHash && catalogue.manifests.some((m) => m.dir === fromHash)) {
         setActive(fromHash);
       }
     };
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
-  }, []);
+  }, [catalogue]);
 
   const onSelect = useCallback((dir: string) => {
     setActive(dir);
@@ -46,9 +58,21 @@ function CodexShell(): React.ReactElement {
     setCollapsed((c) => !c);
   }, []);
 
+  if (catalogue.status === 'loading') {
+    return <div className="codex-empty">Loading library…</div>;
+  }
+  if (catalogue.status === 'empty') {
+    return (
+      <div className="codex-empty">
+        No sources staged yet. Run <code>ingest sync</code> to populate.
+      </div>
+    );
+  }
+
   return (
     <div className="codex-shell">
       <LibrarySidebar
+        manifests={catalogue.manifests}
         active={active}
         collapsed={collapsed}
         onSelect={onSelect}

@@ -10,7 +10,7 @@ from rich.table import Table
 
 from . import __version__
 from .config import CodexConfig, Source, cache_root, find_config, load
-from .emitter import write_manifest
+from .emitter import write_catalogue, write_manifest
 from .fetchers import local as local_fetcher
 from .fetchers import rtd as rtd_fetcher
 from .fetchers import wget as wget_fetcher
@@ -74,6 +74,19 @@ def fetch(only: tuple[str, ...]) -> None:
     cfg = _load()
     for src in _selected(cfg, only):
         _do_fetch(src)
+
+
+@main.command()
+def catalogue() -> None:
+    """Regenerate static/sources/_catalogue.json from currently-staged sources.
+
+    The catalogue is written automatically after every `stage`/`sync`, but
+    you can rerun this command directly if you've removed a source or
+    edited codex.yaml's order.
+    """
+    cfg = _load()
+    path = write_catalogue(cfg.sources_dir, list(cfg.sources.keys()))
+    console.print(f"[green]wrote[/green] {path}")
 
 
 @main.command()
@@ -153,6 +166,7 @@ def _do_stage(src: Source, cfg: CodexConfig) -> None:
 
     pages, files = stage_source(cache_dir, cfg.site_root, src.name)
     write_manifest(dest_dir, src, pages)
+    write_catalogue(cfg.sources_dir, list(cfg.sources.keys()))
     console.print(
         f"[bold green]done[/bold green]: {pages} pages ({files} files total) "
         f"in {dest_dir}"

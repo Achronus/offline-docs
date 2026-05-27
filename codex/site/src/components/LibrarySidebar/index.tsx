@@ -1,7 +1,8 @@
 import React from 'react';
-import {manifests, type Manifest} from '@site/src/data/manifests';
+import type {Manifest} from '@site/src/data/manifests';
 
 interface Props {
+  manifests: Manifest[];
   active: string | null;
   collapsed: boolean;
   onSelect: (dir: string) => void;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function LibrarySidebar({
+  manifests,
   active,
   collapsed,
   onSelect,

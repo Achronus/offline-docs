@@ -1,6 +1,7 @@
-// Hardcoded manifests for Phase 1 — the manifests Docusaurus plugin
-// (Phase 6) replaces this with build-time-generated data sourced from each
-// package's docs/<source>/_manifest.json.
+// Library catalogue is fetched at runtime from /sources/_catalogue.json,
+// which the ingest CLI regenerates after every successful stage.
+
+import {useEffect, useState} from 'react';
 
 export type Manifest = {
   dir: string;
@@ -10,50 +11,36 @@ export type Manifest = {
   version: string;
   page_count: number;
   source_url?: string;
+  fetched_at?: string;
 };
 
-export const manifests: Manifest[] = [
-  {
-    dir: 'jax',
-    name: 'JAX',
-    tag: 'Jx',
-    color: '#1D9E75',
-    version: '0.6.1',
-    page_count: 1,
-    source_url: 'https://docs.jax.dev/en/latest/',
-  },
-  {
-    dir: 'fastapi',
-    name: 'FastAPI',
-    tag: 'Fa',
-    color: '#1D9E75',
-    version: '0.115',
-    page_count: 151,
-    source_url: 'https://fastapi.tiangolo.com/',
-  },
-  {
-    dir: 'envrax',
-    name: 'Envrax',
-    tag: 'Ev',
-    color: '#854F0B',
-    version: '0.3.1',
-    page_count: 33,
-  },
-  {
-    dir: 'mujorax',
-    name: 'Mujorax',
-    tag: 'Mr',
-    color: '#854F0B',
-    version: '0.2.0',
-    page_count: 39,
-  },
-  {
-    dir: 'flax',
-    name: 'Flax',
-    tag: 'Fl',
-    color: '#534AB7',
-    version: '0.10.4',
-    page_count: 140,
-    source_url: 'https://flax.readthedocs.io/en/latest/',
-  },
-];
+export type CatalogueState =
+  | {status: 'loading'}
+  | {status: 'ready'; manifests: Manifest[]}
+  | {status: 'empty'};
+
+export function useCatalogue(): CatalogueState {
+  const [state, setState] = useState<CatalogueState>({status: 'loading'});
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/sources/_catalogue.json', {cache: 'no-cache'})
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: Manifest[]) => {
+        if (cancelled) return;
+        if (!Array.isArray(data) || data.length === 0) {
+          setState({status: 'empty'});
+        } else {
+          setState({status: 'ready', manifests: data});
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setState({status: 'empty'});
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return state;
+}
