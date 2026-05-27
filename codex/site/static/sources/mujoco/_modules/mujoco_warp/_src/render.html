@@ -1,0 +1,1303 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2024.08.06 -->
+        <title>mujoco_warp._src.render - MuJoCo Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme_overrides.css?v=6c1b457d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme_overrides_mjwarp.css?v=e08d3b36" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  --color-brand-visited: var(--color-brand-content);
+  --font-stack--monospace: Inconsolata,Consolas,ui-monospace,monospace;
+  --at-color: #830b2b;
+  --at-val-color: #bc103e;
+  --body-color: #14234b;
+  --color-highlight-on-target: #e5e8ed;
+  --primary-header-color: #0053d6;
+  --row-odd-background-color: #f0f3f7;
+  --rst-content-a-color: #2980b9;
+  --secondary-header-color: #123693;
+  --wy-menu-vertical-background-color: #0053d6;
+  --wy-menu-vertical-color: white;
+  --wy-nav-side-background-color: #0053d6;
+  --admonition-font-size: 1rem;
+  --admonition-title-font-size: 1rem;
+  --sidebar-item-font-size: 130%;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  --color-brand-visited: var(--color-brand-content);
+  --at-color: #ffaab7;
+  --at-val-color: #ff95a6;
+  --body-color: #14234b;
+  --color-admonition-background: #1e1e21;
+  --color-highlight-on-target: #3d4045;
+  --primary-header-color: #a8caff;
+  --row-odd-background-color: #222326;
+  --rst-content-a-color: #2980b9;
+  --secondary-header-color: #458dff;
+  --wy-menu-vertical-background-color: #0053d6;
+  --wy-menu-vertical-color: white;
+  --wy-nav-side-background-color: #0053d6;
+  --admonition-font-size: 1rem;
+  --admonition-title-font-size: 1rem;
+  --sidebar-item-font-size: 130%;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  --color-brand-visited: var(--color-brand-content);
+  --at-color: #ffaab7;
+  --at-val-color: #ff95a6;
+  --body-color: #14234b;
+  --color-admonition-background: #1e1e21;
+  --color-highlight-on-target: #3d4045;
+  --primary-header-color: #a8caff;
+  --row-odd-background-color: #222326;
+  --rst-content-a-color: #2980b9;
+  --secondary-header-color: #458dff;
+  --wy-menu-vertical-background-color: #0053d6;
+  --wy-menu-vertical-color: white;
+  --wy-nav-side-background-color: #0053d6;
+  --admonition-font-size: 1rem;
+  --admonition-title-font-size: 1rem;
+  --sidebar-item-font-size: 130%;
+  
+      }
+    }
+  }
+</style><script async type="text/javascript" src="/sources/mujoco/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="mujoco" /><meta name="readthedocs-version-slug" content="stable" /><meta name="readthedocs-resolver-filename" content="/_modules/mujoco_warp/_src/render.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">MuJoCo Documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../../_static/banner.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">MuJoCo Documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../computation/index.html">Computation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Computation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../computation/fluid.html">Fluid forces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../XMLreference.html">XML Reference</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../programming/index.html">Programming</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Programming</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../programming/simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../programming/visualization.html">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../programming/ui.html">User Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../programming/modeledit.html">Model Editing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../programming/samples.html">Code samples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../programming/extension.html">Extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../APIreference/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../APIreference/APItypes.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../APIreference/APIfunctions.html">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../APIreference/APIglobals.html">Globals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python.html">Python</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../mjx.html">MuJoCo XLA</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of MuJoCo XLA</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../mjx_api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../mjwarp/index.html">MuJoCo Warp</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of MuJoCo Warp</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../mjwarp/api.html">API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../unity.html">Unity Plug-in</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../OpenUSD/index.html">OpenUSD</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of OpenUSD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../OpenUSD/building.html">Building</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../OpenUSD/mjcPhysics.html">mjcPhysics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../OpenUSD/mjcf_file_format_plugin.html">File Format Plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../OpenUSD/importing.html">Importing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../OpenUSD/exporting.html">Exporting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Model Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/google-deepmind/mujoco">GitHub</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for mujoco_warp._src.render</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2026 The Newton Developers</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1"># ==============================================================================</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">warp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wp</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src</span><span class="w"> </span><span class="kn">import</span> <span class="n">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">ray_box</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">ray_capsule</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">ray_cylinder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">ray_ellipsoid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">ray_flex_with_bvh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">ray_flex_with_bvh_anyhit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">ray_mesh_with_bvh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">ray_mesh_with_bvh_anyhit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">ray_plane</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.ray</span><span class="w"> </span><span class="kn">import</span> <span class="n">ray_sphere</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.render_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_ray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.render_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">pack_rgba_to_uint32</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">MJ_MAXVAL</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">GeomType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">ObjType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">RenderContext</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mujoco_warp._src.warp_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">event_scope</span>
+
+<span class="n">wp</span><span class="o">.</span><span class="n">set_module_options</span><span class="p">({</span><span class="s2">&quot;enable_backward&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+
+<span class="nd">@wp</span><span class="o">.</span><span class="n">func</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sample_texture</span><span class="p">(</span>
+  <span class="c1"># Model:</span>
+  <span class="n">geom_type</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">mesh_faceadr</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="c1"># In:</span>
+  <span class="n">geom_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">tex_repeat</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec2</span><span class="p">,</span>
+  <span class="n">tex</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">Texture2D</span><span class="p">,</span>
+  <span class="n">pos</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+  <span class="n">rot</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">mat33</span><span class="p">,</span>
+  <span class="n">mesh_facetexcoord</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3i</span><span class="p">],</span>
+  <span class="n">mesh_texcoord</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2</span><span class="p">],</span>
+  <span class="n">mesh_texcoord_offsets</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">hit_point</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+  <span class="n">bary_u</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+  <span class="n">bary_v</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+  <span class="n">f</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">mesh_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">:</span>
+  <span class="n">uv</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">geom_type</span><span class="p">[</span><span class="n">geom_id</span><span class="p">]</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">PLANE</span><span class="p">:</span>
+    <span class="n">local</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">rot</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">hit_point</span> <span class="o">-</span> <span class="n">pos</span><span class="p">)</span>
+    <span class="n">uv</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec2</span><span class="p">(</span><span class="n">local</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">local</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+  <span class="k">if</span> <span class="n">geom_type</span><span class="p">[</span><span class="n">geom_id</span><span class="p">]</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">MESH</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">f</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">mesh_id</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="n">face_adr</span> <span class="o">=</span> <span class="n">mesh_faceadr</span><span class="p">[</span><span class="n">mesh_id</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span>
+    <span class="n">uv0</span> <span class="o">=</span> <span class="n">mesh_texcoord</span><span class="p">[</span><span class="n">mesh_texcoord_offsets</span><span class="p">[</span><span class="n">mesh_id</span><span class="p">]</span> <span class="o">+</span> <span class="n">mesh_facetexcoord</span><span class="p">[</span><span class="n">face_adr</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">uv1</span> <span class="o">=</span> <span class="n">mesh_texcoord</span><span class="p">[</span><span class="n">mesh_texcoord_offsets</span><span class="p">[</span><span class="n">mesh_id</span><span class="p">]</span> <span class="o">+</span> <span class="n">mesh_facetexcoord</span><span class="p">[</span><span class="n">face_adr</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">uv2</span> <span class="o">=</span> <span class="n">mesh_texcoord</span><span class="p">[</span><span class="n">mesh_texcoord_offsets</span><span class="p">[</span><span class="n">mesh_id</span><span class="p">]</span> <span class="o">+</span> <span class="n">mesh_facetexcoord</span><span class="p">[</span><span class="n">face_adr</span><span class="p">][</span><span class="mi">2</span><span class="p">]]</span>
+    <span class="n">uv</span> <span class="o">=</span> <span class="n">uv0</span> <span class="o">*</span> <span class="n">bary_u</span> <span class="o">+</span> <span class="n">uv1</span> <span class="o">*</span> <span class="n">bary_v</span> <span class="o">+</span> <span class="n">uv2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">bary_u</span> <span class="o">-</span> <span class="n">bary_v</span><span class="p">)</span>
+
+  <span class="n">u</span> <span class="o">=</span> <span class="n">uv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tex_repeat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">v</span> <span class="o">=</span> <span class="n">uv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">tex_repeat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="n">u</span> <span class="o">=</span> <span class="n">u</span> <span class="o">-</span> <span class="n">wp</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+  <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">-</span> <span class="n">wp</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+  <span class="n">tex_color</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">texture_sample</span><span class="p">(</span><span class="n">tex</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec2</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">wp</span><span class="o">.</span><span class="n">vec4</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="n">tex_color</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tex_color</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tex_color</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+
+<span class="nd">@wp</span><span class="o">.</span><span class="n">func</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sample_skybox</span><span class="p">(</span>
+  <span class="c1"># In:</span>
+  <span class="n">skybox_tex</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">Texture2D</span><span class="p">,</span>
+  <span class="n">face_width_inv</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+  <span class="n">ray_dir_world</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">:</span>
+  <span class="c1"># MuJoCo maps a world-space direction to cube-map space by rotating 90° about X</span>
+  <span class="c1"># (see render_gl3.c: S=x, T=z, R=-y). Faces in tex_data are stacked vertically</span>
+  <span class="c1"># in OpenGL cube-face order: +X, -X, +Y, -Y, +Z, -Z.</span>
+  <span class="n">rx</span> <span class="o">=</span> <span class="n">ray_dir_world</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">ry</span> <span class="o">=</span> <span class="n">ray_dir_world</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+  <span class="n">rz</span> <span class="o">=</span> <span class="o">-</span><span class="n">ray_dir_world</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+  <span class="n">arx</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rx</span><span class="p">)</span>
+  <span class="n">ary</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ry</span><span class="p">)</span>
+  <span class="n">arz</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rz</span><span class="p">)</span>
+
+  <span class="n">face</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+  <span class="n">sc</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+  <span class="n">tc</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+  <span class="n">ma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">arx</span> <span class="o">&gt;=</span> <span class="n">ary</span> <span class="ow">and</span> <span class="n">arx</span> <span class="o">&gt;=</span> <span class="n">arz</span><span class="p">:</span>
+    <span class="n">ma</span> <span class="o">=</span> <span class="n">arx</span>
+    <span class="k">if</span> <span class="n">rx</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+      <span class="n">face</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="n">sc</span> <span class="o">=</span> <span class="o">-</span><span class="n">rz</span>
+      <span class="n">tc</span> <span class="o">=</span> <span class="o">-</span><span class="n">ry</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">face</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="n">sc</span> <span class="o">=</span> <span class="n">rz</span>
+      <span class="n">tc</span> <span class="o">=</span> <span class="o">-</span><span class="n">ry</span>
+  <span class="k">elif</span> <span class="n">ary</span> <span class="o">&gt;=</span> <span class="n">arz</span><span class="p">:</span>
+    <span class="n">ma</span> <span class="o">=</span> <span class="n">ary</span>
+    <span class="k">if</span> <span class="n">ry</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+      <span class="n">face</span> <span class="o">=</span> <span class="mi">2</span>
+      <span class="n">sc</span> <span class="o">=</span> <span class="n">rx</span>
+      <span class="n">tc</span> <span class="o">=</span> <span class="n">rz</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">face</span> <span class="o">=</span> <span class="mi">3</span>
+      <span class="n">sc</span> <span class="o">=</span> <span class="n">rx</span>
+      <span class="n">tc</span> <span class="o">=</span> <span class="o">-</span><span class="n">rz</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">ma</span> <span class="o">=</span> <span class="n">arz</span>
+    <span class="k">if</span> <span class="n">rz</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+      <span class="n">face</span> <span class="o">=</span> <span class="mi">4</span>
+      <span class="n">sc</span> <span class="o">=</span> <span class="n">rx</span>
+      <span class="n">tc</span> <span class="o">=</span> <span class="o">-</span><span class="n">ry</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">face</span> <span class="o">=</span> <span class="mi">5</span>
+      <span class="n">sc</span> <span class="o">=</span> <span class="o">-</span><span class="n">rx</span>
+      <span class="n">tc</span> <span class="o">=</span> <span class="o">-</span><span class="n">ry</span>
+
+  <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">safe_div</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">ma</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+  <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">safe_div</span><span class="p">(</span><span class="n">tc</span><span class="p">,</span> <span class="n">ma</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+
+  <span class="c1"># Keep the linear filter from bleeding between adjacent faces in the vertical strip.</span>
+  <span class="n">t_min</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">face_width_inv</span>
+  <span class="n">t</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">t_min</span><span class="p">)</span>
+
+  <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">face</span><span class="p">)</span> <span class="o">+</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">wp</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">6.0</span><span class="p">)</span>
+  <span class="n">color</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">texture_sample</span><span class="p">(</span><span class="n">skybox_tex</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec2</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">wp</span><span class="o">.</span><span class="n">vec4</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+
+<span class="c1"># TODO: Investigate combining cast_ray and cast_ray_first_hit</span>
+<span class="nd">@wp</span><span class="o">.</span><span class="n">func</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cast_ray</span><span class="p">(</span>
+  <span class="c1"># Model:</span>
+  <span class="n">geom_type</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">geom_dataid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">geom_size</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+  <span class="n">flex_vertadr</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">flex_edge</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2i</span><span class="p">],</span>
+  <span class="n">flex_radius</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+  <span class="c1"># Data in:</span>
+  <span class="n">geom_xpos_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+  <span class="n">geom_xmat_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">mat33</span><span class="p">],</span>
+  <span class="n">flexvert_xpos_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+  <span class="c1"># In:</span>
+  <span class="n">bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span>
+  <span class="n">group_root</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">worldid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">bvh_ngeom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">flex_bvh_ngeom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">enabled_geom_ids</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">mesh_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+  <span class="n">hfield_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+  <span class="n">flex_geom_flexid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">flex_geom_edgeid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">flex_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+  <span class="n">flex_group_root</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">ray_origin_world</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+  <span class="n">ray_dir_world</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+  <span class="n">dist</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">MJ_MAXVAL</span><span class="p">)</span>
+  <span class="n">normal</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+  <span class="n">geom_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">bary_u</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+  <span class="n">bary_v</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+  <span class="n">face_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">geom_mesh_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+  <span class="n">query</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">bvh_query_ray</span><span class="p">(</span><span class="n">bvh_id</span><span class="p">,</span> <span class="n">ray_origin_world</span><span class="p">,</span> <span class="n">ray_dir_world</span><span class="p">,</span> <span class="n">group_root</span><span class="p">)</span>
+  <span class="n">bounds_nr</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+  <span class="n">ngeom</span> <span class="o">=</span> <span class="n">bvh_ngeom</span> <span class="o">+</span> <span class="n">flex_bvh_ngeom</span>
+
+  <span class="k">while</span> <span class="n">wp</span><span class="o">.</span><span class="n">bvh_query_next</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">bounds_nr</span><span class="p">,</span> <span class="n">dist</span><span class="p">):</span>
+    <span class="n">gi_global</span> <span class="o">=</span> <span class="n">bounds_nr</span>
+    <span class="n">local_id</span> <span class="o">=</span> <span class="n">gi_global</span> <span class="o">-</span> <span class="p">(</span><span class="n">worldid</span> <span class="o">*</span> <span class="n">ngeom</span><span class="p">)</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">hit_mesh_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">hit_geom_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">local_id</span> <span class="o">&lt;</span> <span class="n">bvh_ngeom</span><span class="p">:</span>
+      <span class="n">gi</span> <span class="o">=</span> <span class="n">enabled_geom_ids</span><span class="p">[</span><span class="n">local_id</span><span class="p">]</span>
+      <span class="n">gtype</span> <span class="o">=</span> <span class="n">geom_type</span><span class="p">[</span><span class="n">gi</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">gi</span> <span class="o">=</span> <span class="n">local_id</span> <span class="o">-</span> <span class="n">bvh_ngeom</span>
+      <span class="n">gtype</span> <span class="o">=</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">FLEX</span>
+
+    <span class="n">hit_geom_id</span> <span class="o">=</span> <span class="n">gi</span>
+
+    <span class="c1"># TODO: Investigate branch elimination with static loop unrolling</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">PLANE</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_plane</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">HFIELD</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">geom_hfield_id</span> <span class="o">=</span> <span class="n">ray_mesh_with_bvh</span><span class="p">(</span>
+        <span class="n">hfield_bvh_id</span><span class="p">,</span>
+        <span class="n">geom_dataid</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_dataid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+        <span class="n">dist</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">SPHERE</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_sphere</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">ELLIPSOID</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_ellipsoid</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">CAPSULE</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_capsule</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">CYLINDER</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_cylinder</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">BOX</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="nb">all</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_box</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">MESH</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">hit_mesh_id</span> <span class="o">=</span> <span class="n">ray_mesh_with_bvh</span><span class="p">(</span>
+        <span class="n">mesh_bvh_id</span><span class="p">,</span>
+        <span class="n">geom_dataid</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_dataid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+        <span class="n">dist</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">FLEX</span><span class="p">:</span>
+      <span class="n">hit_geom_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+      <span class="n">flexid</span> <span class="o">=</span> <span class="n">flex_geom_flexid</span><span class="p">[</span><span class="n">gi</span><span class="p">]</span>
+      <span class="n">edge_id</span> <span class="o">=</span> <span class="n">flex_geom_edgeid</span><span class="p">[</span><span class="n">gi</span><span class="p">]</span>
+
+      <span class="k">if</span> <span class="n">edge_id</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">edge</span> <span class="o">=</span> <span class="n">flex_edge</span><span class="p">[</span><span class="n">edge_id</span><span class="p">]</span>
+        <span class="n">vert_adr</span> <span class="o">=</span> <span class="n">flex_vertadr</span><span class="p">[</span><span class="n">flexid</span><span class="p">]</span>
+        <span class="n">v0</span> <span class="o">=</span> <span class="n">flexvert_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">vert_adr</span> <span class="o">+</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">flexvert_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">vert_adr</span> <span class="o">+</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">v0</span> <span class="o">+</span> <span class="n">v1</span><span class="p">)</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">-</span> <span class="n">v0</span>
+
+        <span class="n">length</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">length</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+        <span class="n">edgeq</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">quat_z2vec</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">quat_to_mat</span><span class="p">(</span><span class="n">edgeq</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="n">flex_radius</span><span class="p">[</span><span class="n">flexid</span><span class="p">],</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">length</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_capsule</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">mat</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ray_origin_world</span><span class="p">,</span> <span class="n">ray_dir_world</span><span class="p">)</span>
+        <span class="n">hit_mesh_id</span> <span class="o">=</span> <span class="n">flexid</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">flex_gr</span> <span class="o">=</span> <span class="n">flex_group_root</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">flexid</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">ray_flex_with_bvh</span><span class="p">(</span><span class="n">flex_bvh_id</span><span class="p">,</span> <span class="n">flexid</span><span class="p">,</span> <span class="n">flex_gr</span><span class="p">,</span> <span class="n">ray_origin_world</span><span class="p">,</span> <span class="n">ray_dir_world</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+          <span class="n">hit_mesh_id</span> <span class="o">=</span> <span class="n">flexid</span>
+
+    <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">dist</span><span class="p">:</span>
+      <span class="n">dist</span> <span class="o">=</span> <span class="n">d</span>
+      <span class="n">normal</span> <span class="o">=</span> <span class="n">n</span>
+      <span class="n">geom_id</span> <span class="o">=</span> <span class="n">hit_geom_id</span>
+      <span class="n">bary_u</span> <span class="o">=</span> <span class="n">u</span>
+      <span class="n">bary_v</span> <span class="o">=</span> <span class="n">v</span>
+      <span class="n">face_idx</span> <span class="o">=</span> <span class="n">f</span>
+      <span class="n">geom_mesh_id</span> <span class="o">=</span> <span class="n">hit_mesh_id</span>
+
+  <span class="k">return</span> <span class="n">geom_id</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">bary_u</span><span class="p">,</span> <span class="n">bary_v</span><span class="p">,</span> <span class="n">face_idx</span><span class="p">,</span> <span class="n">geom_mesh_id</span>
+
+
+<span class="nd">@wp</span><span class="o">.</span><span class="n">func</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cast_ray_first_hit</span><span class="p">(</span>
+  <span class="c1"># Model:</span>
+  <span class="n">geom_type</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">geom_dataid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">geom_size</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+  <span class="n">flex_vertadr</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">flex_edge</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2i</span><span class="p">],</span>
+  <span class="n">flex_radius</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+  <span class="c1"># Data in:</span>
+  <span class="n">geom_xpos_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+  <span class="n">geom_xmat_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">mat33</span><span class="p">],</span>
+  <span class="n">flexvert_xpos_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+  <span class="c1"># In:</span>
+  <span class="n">bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span>
+  <span class="n">group_root</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">worldid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">bvh_ngeom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">bvh_nflexgeom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">enabled_geom_ids</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">mesh_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+  <span class="n">hfield_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+  <span class="n">flex_geom_flexid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">flex_geom_edgeid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">flex_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+  <span class="n">flex_group_root</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">ray_origin_world</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+  <span class="n">ray_dir_world</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+  <span class="n">max_dist</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;A simpler version of casting rays that only checks for the first hit.&quot;&quot;&quot;</span>
+  <span class="n">query</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">bvh_query_ray</span><span class="p">(</span><span class="n">bvh_id</span><span class="p">,</span> <span class="n">ray_origin_world</span><span class="p">,</span> <span class="n">ray_dir_world</span><span class="p">,</span> <span class="n">group_root</span><span class="p">)</span>
+  <span class="n">bounds_nr</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+  <span class="n">ngeom</span> <span class="o">=</span> <span class="n">bvh_ngeom</span> <span class="o">+</span> <span class="n">bvh_nflexgeom</span>
+
+  <span class="k">while</span> <span class="n">wp</span><span class="o">.</span><span class="n">bvh_query_next</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">bounds_nr</span><span class="p">,</span> <span class="n">max_dist</span><span class="p">):</span>
+    <span class="n">gi_global</span> <span class="o">=</span> <span class="n">bounds_nr</span>
+    <span class="n">local_id</span> <span class="o">=</span> <span class="n">gi_global</span> <span class="o">-</span> <span class="p">(</span><span class="n">worldid</span> <span class="o">*</span> <span class="n">ngeom</span><span class="p">)</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">local_id</span> <span class="o">&lt;</span> <span class="n">bvh_ngeom</span><span class="p">:</span>
+      <span class="n">gi</span> <span class="o">=</span> <span class="n">enabled_geom_ids</span><span class="p">[</span><span class="n">local_id</span><span class="p">]</span>
+      <span class="n">gtype</span> <span class="o">=</span> <span class="n">geom_type</span><span class="p">[</span><span class="n">gi</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">gi</span> <span class="o">=</span> <span class="n">local_id</span> <span class="o">-</span> <span class="n">bvh_ngeom</span>
+      <span class="n">gtype</span> <span class="o">=</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">FLEX</span>
+
+    <span class="c1"># TODO: Investigate branch elimination with static loop unrolling</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">PLANE</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_plane</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">HFIELD</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">geom_hfield_id</span> <span class="o">=</span> <span class="n">ray_mesh_with_bvh</span><span class="p">(</span>
+        <span class="n">hfield_bvh_id</span><span class="p">,</span>
+        <span class="n">geom_dataid</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_dataid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+        <span class="n">max_dist</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">SPHERE</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_sphere</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">ELLIPSOID</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_ellipsoid</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">CAPSULE</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_capsule</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">CYLINDER</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_cylinder</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">BOX</span><span class="p">:</span>
+      <span class="n">d</span><span class="p">,</span> <span class="nb">all</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_box</span><span class="p">(</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_size</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_size</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">MESH</span><span class="p">:</span>
+      <span class="n">hit</span> <span class="o">=</span> <span class="n">ray_mesh_with_bvh_anyhit</span><span class="p">(</span>
+        <span class="n">mesh_bvh_id</span><span class="p">,</span>
+        <span class="n">geom_dataid</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_dataid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">gi</span><span class="p">],</span>
+        <span class="n">ray_origin_world</span><span class="p">,</span>
+        <span class="n">ray_dir_world</span><span class="p">,</span>
+        <span class="n">max_dist</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="n">d</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">hit</span> <span class="k">else</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="k">if</span> <span class="n">gtype</span> <span class="o">==</span> <span class="n">GeomType</span><span class="o">.</span><span class="n">FLEX</span><span class="p">:</span>
+      <span class="n">flexid</span> <span class="o">=</span> <span class="n">flex_geom_flexid</span><span class="p">[</span><span class="n">gi</span><span class="p">]</span>
+      <span class="n">edge_id</span> <span class="o">=</span> <span class="n">flex_geom_edgeid</span><span class="p">[</span><span class="n">gi</span><span class="p">]</span>
+
+      <span class="k">if</span> <span class="n">edge_id</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">edge</span> <span class="o">=</span> <span class="n">flex_edge</span><span class="p">[</span><span class="n">edge_id</span><span class="p">]</span>
+        <span class="n">vert_adr</span> <span class="o">=</span> <span class="n">flex_vertadr</span><span class="p">[</span><span class="n">flexid</span><span class="p">]</span>
+        <span class="n">v0</span> <span class="o">=</span> <span class="n">flexvert_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">vert_adr</span> <span class="o">+</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">flexvert_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">vert_adr</span> <span class="o">+</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">v0</span> <span class="o">+</span> <span class="n">v1</span><span class="p">)</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">-</span> <span class="n">v0</span>
+
+        <span class="n">length</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">length</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+        <span class="n">edgeq</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">quat_z2vec</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">quat_to_mat</span><span class="p">(</span><span class="n">edgeq</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="n">flex_radius</span><span class="p">[</span><span class="n">flexid</span><span class="p">],</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">length</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ray_capsule</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">mat</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ray_origin_world</span><span class="p">,</span> <span class="n">ray_dir_world</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">hit</span> <span class="o">=</span> <span class="n">ray_flex_with_bvh_anyhit</span><span class="p">(</span>
+          <span class="n">flex_bvh_id</span><span class="p">,</span>
+          <span class="n">flexid</span><span class="p">,</span>
+          <span class="n">flex_group_root</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">flexid</span><span class="p">],</span>
+          <span class="n">ray_origin_world</span><span class="p">,</span>
+          <span class="n">ray_dir_world</span><span class="p">,</span>
+          <span class="n">max_dist</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">hit</span> <span class="k">else</span> <span class="o">-</span><span class="mf">1.0</span>
+
+    <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">max_dist</span><span class="p">:</span>
+      <span class="k">return</span> <span class="kc">True</span>
+
+  <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="nd">@wp</span><span class="o">.</span><span class="n">func</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_lighting</span><span class="p">(</span>
+  <span class="c1"># Model:</span>
+  <span class="n">geom_type</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">geom_dataid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">geom_size</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+  <span class="n">flex_vertadr</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">flex_edge</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2i</span><span class="p">],</span>
+  <span class="n">flex_radius</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+  <span class="c1"># Data in:</span>
+  <span class="n">geom_xpos_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+  <span class="n">geom_xmat_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">mat33</span><span class="p">],</span>
+  <span class="n">flexvert_xpos_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+  <span class="c1"># In:</span>
+  <span class="n">use_shadows</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+  <span class="n">bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span>
+  <span class="n">group_root</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">bvh_ngeom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">bvh_nflexgeom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">enabled_geom_ids</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">worldid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">mesh_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+  <span class="n">hfield_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+  <span class="n">flex_geom_flexid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">flex_geom_edgeid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">flex_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+  <span class="n">flex_group_root</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+  <span class="n">lightactive</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+  <span class="n">lighttype</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">lightcastshadow</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+  <span class="n">lightpos</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+  <span class="n">lightdir</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+  <span class="n">normal</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+  <span class="n">hitpoint</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+  <span class="n">light_contribution</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+  <span class="c1"># TODO: We should probably only be looping over active lights</span>
+  <span class="c1"># in the first place with a static loop of enabled light idx?</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">lightactive</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">light_contribution</span>
+
+  <span class="n">L</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+  <span class="n">dist_to_light</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">MJ_MAXVAL</span><span class="p">)</span>
+  <span class="n">attenuation</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">lighttype</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># directional light</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="o">-</span><span class="n">lightdir</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">L</span><span class="p">,</span> <span class="n">dist_to_light</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">normalize_with_norm</span><span class="p">(</span><span class="n">lightpos</span> <span class="o">-</span> <span class="n">hitpoint</span><span class="p">)</span>
+    <span class="n">attenuation</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="n">dist_to_light</span> <span class="o">*</span> <span class="n">dist_to_light</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lighttype</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># spot light</span>
+      <span class="n">spot_dir</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">lightdir</span><span class="p">)</span>
+      <span class="n">cos_theta</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">L</span><span class="p">,</span> <span class="n">spot_dir</span><span class="p">)</span>
+      <span class="n">spot_factor</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="n">cos_theta</span> <span class="o">-</span> <span class="mf">0.85</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.95</span> <span class="o">-</span> <span class="mf">0.85</span><span class="p">)))</span>
+      <span class="n">attenuation</span> <span class="o">=</span> <span class="n">attenuation</span> <span class="o">*</span> <span class="n">spot_factor</span>
+
+  <span class="n">ndotl</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">L</span><span class="p">))</span>
+  <span class="k">if</span> <span class="n">ndotl</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">light_contribution</span>
+
+  <span class="n">visible</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">use_shadows</span> <span class="ow">and</span> <span class="n">lightcastshadow</span><span class="p">:</span>
+    <span class="c1"># Nudge the origin slightly along the surface normal to avoid</span>
+    <span class="c1"># self-intersection when casting shadow rays</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="mf">1.0e-4</span>
+    <span class="n">shadow_origin</span> <span class="o">=</span> <span class="n">hitpoint</span> <span class="o">+</span> <span class="n">normal</span> <span class="o">*</span> <span class="n">eps</span>
+    <span class="c1"># Distance-limited shadows: cap by dist_to_light (for non-directional)</span>
+    <span class="n">max_t</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_to_light</span> <span class="o">-</span> <span class="mf">1.0e-3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lighttype</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># directional light</span>
+      <span class="n">max_t</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">1.0e8</span><span class="p">)</span>
+
+    <span class="n">shadow_hit</span> <span class="o">=</span> <span class="n">cast_ray_first_hit</span><span class="p">(</span>
+      <span class="n">geom_type</span><span class="p">,</span>
+      <span class="n">geom_dataid</span><span class="p">,</span>
+      <span class="n">geom_size</span><span class="p">,</span>
+      <span class="n">flex_vertadr</span><span class="p">,</span>
+      <span class="n">flex_edge</span><span class="p">,</span>
+      <span class="n">flex_radius</span><span class="p">,</span>
+      <span class="n">geom_xpos_in</span><span class="p">,</span>
+      <span class="n">geom_xmat_in</span><span class="p">,</span>
+      <span class="n">flexvert_xpos_in</span><span class="p">,</span>
+      <span class="n">bvh_id</span><span class="p">,</span>
+      <span class="n">group_root</span><span class="p">,</span>
+      <span class="n">worldid</span><span class="p">,</span>
+      <span class="n">bvh_ngeom</span><span class="p">,</span>
+      <span class="n">bvh_nflexgeom</span><span class="p">,</span>
+      <span class="n">enabled_geom_ids</span><span class="p">,</span>
+      <span class="n">mesh_bvh_id</span><span class="p">,</span>
+      <span class="n">hfield_bvh_id</span><span class="p">,</span>
+      <span class="n">flex_geom_flexid</span><span class="p">,</span>
+      <span class="n">flex_geom_edgeid</span><span class="p">,</span>
+      <span class="n">flex_bvh_id</span><span class="p">,</span>
+      <span class="n">flex_group_root</span><span class="p">,</span>
+      <span class="n">shadow_origin</span><span class="p">,</span>
+      <span class="n">L</span><span class="p">,</span>
+      <span class="n">max_t</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">shadow_hit</span><span class="p">:</span>
+      <span class="n">visible</span> <span class="o">=</span> <span class="mf">0.3</span>
+
+  <span class="k">return</span> <span class="n">ndotl</span> <span class="o">*</span> <span class="n">attenuation</span> <span class="o">*</span> <span class="n">visible</span>
+
+
+<div class="viewcode-block" id="render">
+<a class="viewcode-back" href="../../../mjwarp/api.html#mujoco_warp.render">[docs]</a>
+<span class="nd">@event_scope</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">Data</span><span class="p">,</span> <span class="n">rc</span><span class="p">:</span> <span class="n">RenderContext</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Render the current frame.</span>
+
+<span class="sd">  Outputs are stored in buffers within the render context.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    m: The model on device.</span>
+<span class="sd">    d: The data on device.</span>
+<span class="sd">    rc: The render context on device.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">rc</span><span class="o">.</span><span class="n">rgb_data</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">background_color</span><span class="p">)</span>
+  <span class="n">rc</span><span class="o">.</span><span class="n">depth_data</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+  <span class="n">rc</span><span class="o">.</span><span class="n">seg_data</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2i</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+  <span class="nd">@wp</span><span class="o">.</span><span class="n">kernel</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="s2">&quot;unique&quot;</span><span class="p">,</span> <span class="n">enable_backward</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">_render_megakernel</span><span class="p">(</span>
+    <span class="c1"># Model:</span>
+    <span class="n">geom_type</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">geom_dataid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">geom_matid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">geom_size</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+    <span class="n">geom_rgba</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec4</span><span class="p">],</span>
+    <span class="n">cam_projection</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">cam_fovy</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">cam_sensorsize</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2</span><span class="p">],</span>
+    <span class="n">cam_intrinsic</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec4</span><span class="p">],</span>
+    <span class="n">light_type</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">light_castshadow</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+    <span class="n">light_active</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+    <span class="n">flex_vertadr</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">flex_edge</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2i</span><span class="p">],</span>
+    <span class="n">flex_radius</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">mesh_faceadr</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">mat_texid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array3d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">mat_texrepeat</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2</span><span class="p">],</span>
+    <span class="n">mat_rgba</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec4</span><span class="p">],</span>
+    <span class="c1"># Data in:</span>
+    <span class="n">geom_xpos_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+    <span class="n">geom_xmat_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">mat33</span><span class="p">],</span>
+    <span class="n">cam_xpos_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+    <span class="n">cam_xmat_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">mat33</span><span class="p">],</span>
+    <span class="n">light_xpos_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+    <span class="n">light_xdir_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+    <span class="n">flexvert_xpos_in</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+    <span class="c1"># In:</span>
+    <span class="n">nrender</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">use_shadows</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">bvh_ngeom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">bvh_nflexgeom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">cam_res</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2i</span><span class="p">],</span>
+    <span class="n">cam_id_map</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">ray</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">],</span>
+    <span class="n">rgb_adr</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">depth_adr</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">seg_adr</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">render_rgb</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+    <span class="n">render_depth</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+    <span class="n">render_seg</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+    <span class="n">bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span>
+    <span class="n">group_root</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">flex_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+    <span class="n">flex_group_root</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">enabled_geom_ids</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">mesh_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+    <span class="n">mesh_facetexcoord</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec3i</span><span class="p">],</span>
+    <span class="n">mesh_texcoord</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2</span><span class="p">],</span>
+    <span class="n">mesh_texcoord_offsets</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">hfield_bvh_id</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span>
+    <span class="n">flex_rgba</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec4</span><span class="p">],</span>
+    <span class="n">flex_geom_flexid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">flex_geom_edgeid</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">textures</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">Texture2D</span><span class="p">],</span>
+    <span class="c1"># Out:</span>
+    <span class="n">rgb_out</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">uint32</span><span class="p">],</span>
+    <span class="n">depth_out</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">seg_out</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">array2d</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">vec2i</span><span class="p">],</span>
+  <span class="p">):</span>
+    <span class="n">worldid</span><span class="p">,</span> <span class="n">rayid</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">tid</span><span class="p">()</span>
+
+    <span class="c1"># Map global rayid -&gt; (cam_idx, rayid_local) using cumulative sizes</span>
+    <span class="n">cam_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rayid_local</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">accum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrender</span><span class="p">):</span>
+      <span class="n">num_i</span> <span class="o">=</span> <span class="n">cam_res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">cam_res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+      <span class="k">if</span> <span class="n">rayid</span> <span class="o">&lt;</span> <span class="n">accum</span> <span class="o">+</span> <span class="n">num_i</span><span class="p">:</span>
+        <span class="n">cam_idx</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">rayid_local</span> <span class="o">=</span> <span class="n">rayid</span> <span class="o">-</span> <span class="n">accum</span>
+        <span class="k">break</span>
+      <span class="n">accum</span> <span class="o">+=</span> <span class="n">num_i</span>
+    <span class="k">if</span> <span class="n">cam_idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">rayid_local</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="k">return</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">render_rgb</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">render_depth</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">render_seg</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]:</span>
+      <span class="k">return</span>
+
+    <span class="c1"># Map active camera index to MuJoCo camera ID</span>
+    <span class="n">mujoco_cam_id</span> <span class="o">=</span> <span class="n">cam_id_map</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">wp</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">use_precomputed_rays</span><span class="p">):</span>
+      <span class="n">ray_dir_local_cam</span> <span class="o">=</span> <span class="n">ray</span><span class="p">[</span><span class="n">rayid</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">img_w</span> <span class="o">=</span> <span class="n">cam_res</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">img_h</span> <span class="o">=</span> <span class="n">cam_res</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+      <span class="n">px</span> <span class="o">=</span> <span class="n">rayid_local</span> <span class="o">%</span> <span class="n">img_w</span>
+      <span class="n">py</span> <span class="o">=</span> <span class="n">rayid_local</span> <span class="o">//</span> <span class="n">img_w</span>
+      <span class="n">ray_dir_local_cam</span> <span class="o">=</span> <span class="n">compute_ray</span><span class="p">(</span>
+        <span class="n">cam_projection</span><span class="p">[</span><span class="n">mujoco_cam_id</span><span class="p">],</span>
+        <span class="n">cam_fovy</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">cam_fovy</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mujoco_cam_id</span><span class="p">],</span>
+        <span class="n">cam_sensorsize</span><span class="p">[</span><span class="n">mujoco_cam_id</span><span class="p">],</span>
+        <span class="n">cam_intrinsic</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">cam_intrinsic</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mujoco_cam_id</span><span class="p">],</span>
+        <span class="n">img_w</span><span class="p">,</span>
+        <span class="n">img_h</span><span class="p">,</span>
+        <span class="n">px</span><span class="p">,</span>
+        <span class="n">py</span><span class="p">,</span>
+        <span class="n">wp</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">znear</span><span class="p">),</span>
+      <span class="p">)</span>
+
+    <span class="n">ray_dir_world</span> <span class="o">=</span> <span class="n">cam_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">mujoco_cam_id</span><span class="p">]</span> <span class="o">@</span> <span class="n">ray_dir_local_cam</span>
+    <span class="n">ray_origin_world</span> <span class="o">=</span> <span class="n">cam_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">mujoco_cam_id</span><span class="p">]</span>
+
+    <span class="n">geom_id</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">mesh_id</span> <span class="o">=</span> <span class="n">cast_ray</span><span class="p">(</span>
+      <span class="n">geom_type</span><span class="p">,</span>
+      <span class="n">geom_dataid</span><span class="p">,</span>
+      <span class="n">geom_size</span><span class="p">,</span>
+      <span class="n">flex_vertadr</span><span class="p">,</span>
+      <span class="n">flex_edge</span><span class="p">,</span>
+      <span class="n">flex_radius</span><span class="p">,</span>
+      <span class="n">geom_xpos_in</span><span class="p">,</span>
+      <span class="n">geom_xmat_in</span><span class="p">,</span>
+      <span class="n">flexvert_xpos_in</span><span class="p">,</span>
+      <span class="n">bvh_id</span><span class="p">,</span>
+      <span class="n">group_root</span><span class="p">[</span><span class="n">worldid</span><span class="p">],</span>
+      <span class="n">worldid</span><span class="p">,</span>
+      <span class="n">bvh_ngeom</span><span class="p">,</span>
+      <span class="n">bvh_nflexgeom</span><span class="p">,</span>
+      <span class="n">enabled_geom_ids</span><span class="p">,</span>
+      <span class="n">mesh_bvh_id</span><span class="p">,</span>
+      <span class="n">hfield_bvh_id</span><span class="p">,</span>
+      <span class="n">flex_geom_flexid</span><span class="p">,</span>
+      <span class="n">flex_geom_edgeid</span><span class="p">,</span>
+      <span class="n">flex_bvh_id</span><span class="p">,</span>
+      <span class="n">flex_group_root</span><span class="p">,</span>
+      <span class="n">ray_origin_world</span><span class="p">,</span>
+      <span class="n">ray_dir_world</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">render_seg</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]</span> <span class="ow">and</span> <span class="n">geom_id</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">geom_id</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">seg_out</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">seg_adr</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">rayid_local</span><span class="p">]</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec2i</span><span class="p">(</span><span class="n">mesh_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">ObjType</span><span class="o">.</span><span class="n">FLEX</span><span class="p">))</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">seg_out</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">seg_adr</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">rayid_local</span><span class="p">]</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec2i</span><span class="p">(</span><span class="n">geom_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">ObjType</span><span class="o">.</span><span class="n">GEOM</span><span class="p">))</span>
+
+    <span class="c1"># Early Out</span>
+    <span class="k">if</span> <span class="n">geom_id</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">wp</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">render_skybox</span><span class="p">)</span> <span class="ow">and</span> <span class="n">render_rgb</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]:</span>
+        <span class="n">skybox_color</span> <span class="o">=</span> <span class="n">sample_skybox</span><span class="p">(</span>
+          <span class="n">textures</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">skybox_tex_id</span><span class="p">)],</span>
+          <span class="n">wp</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">skybox_face_width</span><span class="p">)),</span>
+          <span class="n">ray_dir_world</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">rgb_out</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">rgb_adr</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">rayid_local</span><span class="p">]</span> <span class="o">=</span> <span class="n">pack_rgba_to_uint32</span><span class="p">(</span>
+          <span class="n">skybox_color</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">255.0</span><span class="p">,</span>
+          <span class="n">skybox_color</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">255.0</span><span class="p">,</span>
+          <span class="n">skybox_color</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mf">255.0</span><span class="p">,</span>
+          <span class="mf">255.0</span><span class="p">,</span>
+        <span class="p">)</span>
+      <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">render_depth</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]:</span>
+      <span class="c1"># Planar depth: project Euclidean distance onto the camera&#39;s optical axis.</span>
+      <span class="c1"># In camera-local coordinates, the optical axis is -Z. The Z-component of the</span>
+      <span class="c1"># normalized ray direction is negative, so -ray_dir_local_cam[2] gives cos(θ)</span>
+      <span class="c1"># between the ray and the optical axis.</span>
+      <span class="n">depth_out</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">depth_adr</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">rayid_local</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">ray_dir_local_cam</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">render_rgb</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]:</span>
+      <span class="k">return</span>
+
+    <span class="c1"># Shade the pixel</span>
+    <span class="n">hit_point</span> <span class="o">=</span> <span class="n">ray_origin_world</span> <span class="o">+</span> <span class="n">ray_dir_world</span> <span class="o">*</span> <span class="n">dist</span>
+
+    <span class="k">if</span> <span class="n">geom_id</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span><span class="p">:</span>
+      <span class="c1"># We encode flex_id in mesh_id for flex ray hits during cast_ray</span>
+      <span class="n">color</span> <span class="o">=</span> <span class="n">flex_rgba</span><span class="p">[</span><span class="n">mesh_id</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">geom_matid</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_matid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">geom_id</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+      <span class="n">color</span> <span class="o">=</span> <span class="n">geom_rgba</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_rgba</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">geom_id</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">color</span> <span class="o">=</span> <span class="n">mat_rgba</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">mat_rgba</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">geom_matid</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_matid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">geom_id</span><span class="p">]]</span>
+
+    <span class="n">base_color</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">hit_color</span> <span class="o">=</span> <span class="n">base_color</span>
+
+    <span class="k">if</span> <span class="n">wp</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">rc</span><span class="o">.</span><span class="n">use_textures</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">geom_id</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">mat_id</span> <span class="o">=</span> <span class="n">geom_matid</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">geom_matid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">geom_id</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">mat_id</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">tex_id</span> <span class="o">=</span> <span class="n">mat_texid</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">mat_texid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mat_id</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+          <span class="k">if</span> <span class="n">tex_id</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tex_color</span> <span class="o">=</span> <span class="n">sample_texture</span><span class="p">(</span>
+              <span class="n">geom_type</span><span class="p">,</span>
+              <span class="n">mesh_faceadr</span><span class="p">,</span>
+              <span class="n">geom_id</span><span class="p">,</span>
+              <span class="n">mat_texrepeat</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">mat_texrepeat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mat_id</span><span class="p">],</span>
+              <span class="n">textures</span><span class="p">[</span><span class="n">tex_id</span><span class="p">],</span>
+              <span class="n">geom_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">geom_id</span><span class="p">],</span>
+              <span class="n">geom_xmat_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">geom_id</span><span class="p">],</span>
+              <span class="n">mesh_facetexcoord</span><span class="p">,</span>
+              <span class="n">mesh_texcoord</span><span class="p">,</span>
+              <span class="n">mesh_texcoord_offsets</span><span class="p">,</span>
+              <span class="n">hit_point</span><span class="p">,</span>
+              <span class="n">u</span><span class="p">,</span>
+              <span class="n">v</span><span class="p">,</span>
+              <span class="n">f</span><span class="p">,</span>
+              <span class="n">mesh_id</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">base_color</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">cw_mul</span><span class="p">(</span><span class="n">base_color</span><span class="p">,</span> <span class="n">tex_color</span><span class="p">)</span>
+
+    <span class="n">len_n</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">length</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">normal</span> <span class="k">if</span> <span class="n">len_n</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="k">else</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">hemispheric</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">ambient_color</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">)</span> <span class="o">*</span> <span class="n">hemispheric</span> <span class="o">+</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">hemispheric</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">wp</span><span class="o">.</span><span class="n">cw_mul</span><span class="p">(</span><span class="n">base_color</span><span class="p">,</span> <span class="n">ambient_color</span><span class="p">)</span>
+
+    <span class="c1"># Apply lighting and shadows</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">wp</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">nlight</span><span class="p">)):</span>
+      <span class="n">light_contribution</span> <span class="o">=</span> <span class="n">compute_lighting</span><span class="p">(</span>
+        <span class="n">geom_type</span><span class="p">,</span>
+        <span class="n">geom_dataid</span><span class="p">,</span>
+        <span class="n">geom_size</span><span class="p">,</span>
+        <span class="n">flex_vertadr</span><span class="p">,</span>
+        <span class="n">flex_edge</span><span class="p">,</span>
+        <span class="n">flex_radius</span><span class="p">,</span>
+        <span class="n">geom_xpos_in</span><span class="p">,</span>
+        <span class="n">geom_xmat_in</span><span class="p">,</span>
+        <span class="n">flexvert_xpos_in</span><span class="p">,</span>
+        <span class="n">use_shadows</span><span class="p">,</span>
+        <span class="n">bvh_id</span><span class="p">,</span>
+        <span class="n">group_root</span><span class="p">[</span><span class="n">worldid</span><span class="p">],</span>
+        <span class="n">bvh_ngeom</span><span class="p">,</span>
+        <span class="n">bvh_nflexgeom</span><span class="p">,</span>
+        <span class="n">enabled_geom_ids</span><span class="p">,</span>
+        <span class="n">worldid</span><span class="p">,</span>
+        <span class="n">mesh_bvh_id</span><span class="p">,</span>
+        <span class="n">hfield_bvh_id</span><span class="p">,</span>
+        <span class="n">flex_geom_flexid</span><span class="p">,</span>
+        <span class="n">flex_geom_edgeid</span><span class="p">,</span>
+        <span class="n">flex_bvh_id</span><span class="p">,</span>
+        <span class="n">flex_group_root</span><span class="p">,</span>
+        <span class="n">light_active</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">light_active</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">l</span><span class="p">],</span>
+        <span class="n">light_type</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">light_type</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">l</span><span class="p">],</span>
+        <span class="n">light_castshadow</span><span class="p">[</span><span class="n">worldid</span> <span class="o">%</span> <span class="n">light_castshadow</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">l</span><span class="p">],</span>
+        <span class="n">light_xpos_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">l</span><span class="p">],</span>
+        <span class="n">light_xdir_in</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">l</span><span class="p">],</span>
+        <span class="n">normal</span><span class="p">,</span>
+        <span class="n">hit_point</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">+</span> <span class="n">base_color</span> <span class="o">*</span> <span class="n">light_contribution</span>
+
+    <span class="n">hit_color</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="n">hit_color</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">hit_color</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+
+    <span class="n">rgb_out</span><span class="p">[</span><span class="n">worldid</span><span class="p">,</span> <span class="n">rgb_adr</span><span class="p">[</span><span class="n">cam_idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">rayid_local</span><span class="p">]</span> <span class="o">=</span> <span class="n">pack_rgba_to_uint32</span><span class="p">(</span>
+      <span class="n">hit_color</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">255.0</span><span class="p">,</span>
+      <span class="n">hit_color</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">255.0</span><span class="p">,</span>
+      <span class="n">hit_color</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mf">255.0</span><span class="p">,</span>
+      <span class="mf">255.0</span><span class="p">,</span>
+    <span class="p">)</span>
+
+  <span class="n">wp</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span>
+    <span class="n">kernel</span><span class="o">=</span><span class="n">_render_megakernel</span><span class="p">,</span>
+    <span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nworld</span><span class="p">,</span> <span class="n">rc</span><span class="o">.</span><span class="n">total_rays</span><span class="p">),</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">[</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">geom_type</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">geom_dataid</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">geom_matid</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">geom_size</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">geom_rgba</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">cam_projection</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">cam_fovy</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">cam_sensorsize</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">cam_intrinsic</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">light_type</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">light_castshadow</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">light_active</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">flex_vertadr</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">flex_edge</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">flex_radius</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">mesh_faceadr</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">mat_texid</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">mat_texrepeat</span><span class="p">,</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">mat_rgba</span><span class="p">,</span>
+      <span class="n">d</span><span class="o">.</span><span class="n">geom_xpos</span><span class="p">,</span>
+      <span class="n">d</span><span class="o">.</span><span class="n">geom_xmat</span><span class="p">,</span>
+      <span class="n">d</span><span class="o">.</span><span class="n">cam_xpos</span><span class="p">,</span>
+      <span class="n">d</span><span class="o">.</span><span class="n">cam_xmat</span><span class="p">,</span>
+      <span class="n">d</span><span class="o">.</span><span class="n">light_xpos</span><span class="p">,</span>
+      <span class="n">d</span><span class="o">.</span><span class="n">light_xdir</span><span class="p">,</span>
+      <span class="n">d</span><span class="o">.</span><span class="n">flexvert_xpos</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">nrender</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">use_shadows</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">bvh_ngeom</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">bvh_nflexgeom</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">cam_res</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">cam_id_map</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">ray</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">rgb_adr</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">depth_adr</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">seg_adr</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">render_rgb</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">render_depth</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">render_seg</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">bvh_id</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">group_root</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">flex_bvh_id</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">flex_group_root</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">enabled_geom_ids</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">mesh_bvh_id</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">mesh_facetexcoord</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">mesh_texcoord</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">mesh_texcoord_offsets</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">hfield_bvh_id</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">flex_rgba</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">flex_geom_flexid</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">flex_geom_edgeid</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">textures</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">outputs</span><span class="o">=</span><span class="p">[</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">rgb_data</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">depth_data</span><span class="p">,</span>
+      <span class="n">rc</span><span class="o">.</span><span class="n">seg_data</span><span class="p">,</span>
+    <span class="p">],</span>
+  <span class="p">)</span></div>
+
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; DeepMind Technologies Limited
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/katex.min.js?v=1ff01101"></script>
+    <script src="../../../_static/auto-render.min.js?v=8b9f325c"></script>
+    <script src="../../../_static/katex_autorenderer.js?v=ae454eff"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/linenumbers.js?v=c3ab67e2"></script>
+    <script src="../../../_static/onthispage_mjwarp.js?v=7109a5a0"></script>
+    </body>
+</html>
