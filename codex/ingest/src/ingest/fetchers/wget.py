@@ -25,7 +25,9 @@ from urllib.parse import urldefrag, urljoin, urlparse
 # Falls back to plain requests if curl_cffi isn't installed.
 try:
     from curl_cffi import requests as http_client  # type: ignore
-    _IMPERSONATE = "chrome"
+    # Use a specific recent Chrome version target — generic "chrome" sometimes
+    # fails CF's stricter zones (Optax, others).
+    _IMPERSONATE = "chrome131"
 except ImportError:  # pragma: no cover
     import requests as http_client  # type: ignore
     _IMPERSONATE = None
