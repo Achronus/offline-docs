@@ -1,0 +1,1418 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Working with PyTree Checkpoints &#8212; Orbax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../_static/katex.min.js?v=3f697ebd"></script>
+    <script src="../../../_static/auto-render.min.js?v=ed6e749d"></script>
+    <script src="../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/checkpoint/v1/checkpointing_pytrees';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Checkpointing in a Training Loop" href="training.html" />
+    <link rel="prev" title="Working with Checkpointables" href="checkpointables.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/orbax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="orbax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/checkpoint/v1/checkpointing_pytrees.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Orbax  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="orbax_checkpoint_101.html">Introduction to Checkpointing with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpointables.html">Working with Checkpointables</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Working with PyTree Checkpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Checkpointing in a Training Loop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpoint_format.html">Checkpoint Format Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customization.html">Customizing Checkpointing Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partial_saving.html">Partial Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_surgery.html">Model Surgery</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.v1.html">orbax.checkpoint V1 API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.arrays.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.arrays</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.errors</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.handlers.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.handlers</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.handler_registration.html">CheckpointableHandler Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.options.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.options</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.partial.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.partial</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.path.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.path</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.checkpointer.html">Training Checkpointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.save_decision_policies</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.errors</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.types.html">Training Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.tree.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.multihost.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.multihost</span></code> module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Migrating to Orbax V1</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="orbax_v0_to_v1_migration.html">Orbax v0 to v1 Migration Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../index.v0.html">Legacy API (V0)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../orbax_checkpoint_101.html">Checkpointing with Orbax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../orbax_checkpoint_api_overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_refactor.html">Using the Refactored CheckpointManager  API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpointing_pytrees.html">Checkpointing PyTrees of Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimized_checkpointing.html">Optimized Checkpointing with Tensorstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transformations.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preemption_checkpointing.html">Preemption Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debug_guide.html">Debugging Guide</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.html">orbax.checkpoint API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.abstract_checkpoint_manager.html">AbstractCheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpoint_manager.html">CheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpointers.html">Checkpointers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.handlers.html">CheckpointHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.args.html">CheckpointArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.type_handlers.html">TypeHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.atomicity.html">Atomicity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.atomicity_types.html">Atomicity Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.step.html">Step entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.deleter.html">Checkpoint Deleter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.preservation_policy.html">Preservation Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.save_decision_policy.html">Save Decision Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpoint_utils.html">Checkpointing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.transform_utils.html">PyTree Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.msgpack_utils.html">Msgpack utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.multihost.html">Multi–host Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.tree.html">Tree Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.metadata.html">Metadata Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.logging.html">Checkpoint logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.options.html">Checkpointing Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.handlers.handler_registration.html">Handler Registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.arrays.html">Arrays</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exporting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../export/orbax_export_101.html">Exporting with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpointing_and_exporting_jax_models.html">Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/export.html">orbax.export API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.dtensor_utils.html">DTensor utilities for multi–device/host export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.export_manager.html">ExportManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.jax_module.html">JaxModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.serving_config.html">ServingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.utils.html">General Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.validate.validation_manager.html">ValidationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.validate.validation_report.html">ValidationReport</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Additional Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Contributors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/guides/checkpoint/v1/checkpointing_pytrees.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Working with PyTree Checkpoints</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusive-apis-to-checkpoint-pytrees">Exclusive APIs to checkpoint PyTrees</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-checkpointing">Basic Checkpointing</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-abstract-trees-and-leaves">Understanding Abstract Trees and Leaves</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-leaf-types">Standard Leaf Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-loaded-properties-for-arrays">Customizing Loaded Properties for Arrays</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#array-dtype">Array dtype</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#change-sharding">Change sharding</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#change-leaf-type">Change leaf type</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-loading">Partial Loading</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#placeholder">Placeholder</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-customizations">Advanced Customizations</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#saving">Saving</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-array-dtype">Customizing Array dtype</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#high-throughput-with-ocdbt-option">High Throughput with <code class="docutils literal notranslate"><span class="pre">ocdbt</span></code> option</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading">Loading</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pad-truncate-shape">Pad / truncate shape</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="working-with-pytree-checkpoints">
+<h1>Working with PyTree Checkpoints<a class="headerlink" href="#working-with-pytree-checkpoints" title="Link to this heading">#</a></h1>
+<p>A <a class="reference external" href="https://jax.readthedocs.io/en/latest/pytrees.html">PyTree</a> is the most common way of representing a training state in JAX. While Orbax is designed to be as generic as possible, and provides customization options for all manner of checkpointable objects, PyTrees naturally have pride of place. Furthermore, the standard object used to represent large, sharded arrays is the <a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.Array.html#jax.Array" title="(in JAX)"><code class="xref py py-class docutils literal notranslate"><span class="pre">jax.Array</span></code></a>. This, too, has extensive first-class support.</p>
+<section id="exclusive-apis-to-checkpoint-pytrees">
+<h2>Exclusive APIs to checkpoint PyTrees<a class="headerlink" href="#exclusive-apis-to-checkpoint-pytrees" title="Link to this heading">#</a></h2>
+<p>The following APIs can be used to checkpoint PyTrees exclusively.</p>
+<p>To save:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ocp.save(...)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ocp.save_async(...)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">training.Checkpointer.save(...)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">training.Checkpointer.save_async(...)</span></code></p></li>
+</ul>
+<p>To load:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ocp.load(...)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ocp.load_async(...)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">training.Checkpointer.load(...)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">training.Checkpointer.load_async(...)</span></code></p></li>
+</ul>
+<p>Of course, the <code class="docutils literal notranslate"><span class="pre">save_checkpointables(...)</span></code> and <code class="docutils literal notranslate"><span class="pre">load_checkpointables(...)</span></code>
+flavor APIs can be used to save a PyTree too.</p>
+<p>Let’s setup a PyTree of jax.Array to play with these APIs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">etils</span><span class="w"> </span><span class="kn">import</span> <span class="n">epath</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ocp</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sharding</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">(),</span> <span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,)),</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">PartitionSpec</span><span class="p">(</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="n">create_sharded_array</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">device_put</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sharding</span><span class="p">)</span>
+<span class="n">pytree</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">pytree</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="n">create_sharded_array</span><span class="p">,</span> <span class="n">pytree</span><span class="p">)</span>
+<span class="n">pytree</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;a&#39;: Array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15],      dtype=int32),
+ &#39;b&#39;: Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], dtype=int32)}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="basic-checkpointing">
+<h2>Basic Checkpointing<a class="headerlink" href="#basic-checkpointing" title="Link to this heading">#</a></h2>
+<p>Let’s use <code class="docutils literal notranslate"><span class="pre">ocp.save_*</span></code>/<code class="docutils literal notranslate"><span class="pre">ocp.load_*</span></code> to work with the pytree created earlier.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/checkpointing-pytrees/basic/&#39;</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Simple save using default options:</span>
+<span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pytree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can easily restore using the following snippet.</p>
+<p><strong>Warning: do not use for production-sensitive cases.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">loaded</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/basic. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages/orbax/checkpoint/_src/serialization/jax_array_handlers.py:743: UserWarning: Sharding info not provided when restoring. Populating sharding info from sharding file. Please note restoration time will be slightly increased due to reading from file. Note also that this option is unsafe when restoring on a different topology than the checkpoint was saved with.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;a&#39;: Array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15],      dtype=int32),
+ &#39;b&#39;: Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], dtype=int32)}
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is not recommended to load this way for production-sensitive cases because the user cannot make any guarantees about what they are loading. If the shapes of some arrays have changed in the model since the checkpoint was saved, errors can be seen when attempting to create the model. If the device topology has changed, we will see errors when attempting to place arrays on devices.</p>
+<p>It is therefore recommended that users always specify an <strong>abstract pytree</strong> when loading.</p>
+<section id="understanding-abstract-trees-and-leaves">
+<h3>Understanding Abstract Trees and Leaves<a class="headerlink" href="#understanding-abstract-trees-and-leaves" title="Link to this heading">#</a></h3>
+<p>An <strong>abstract PyTree</strong> is just a normal PyTree, but with abstract leaves. An <strong>abstract leaf</strong> is a cheap representation of a leaf type (such as an array) that contains only metadata, and does not represent the real values. (Contrast with a <em>concrete</em> PyTree, which contains real data in the form of large arrays, and other types.)</p>
+<p>Let’s create an abstract PyTree matching the structure of the PyTree we originally saved.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">abstract_state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">sharding</span><span class="p">),</span>
+    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">sharding</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">abstract_state</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;a&#39;: ShapeDtypeStruct(shape=(16,), dtype=int32, sharding=NamedSharding(mesh=Mesh(&#39;model&#39;: 1, axis_types=(Auto,)), spec=P(&#39;model&#39;,), memory_kind=device)),
+ &#39;b&#39;: ShapeDtypeStruct(shape=(16,), dtype=int32, sharding=NamedSharding(mesh=Mesh(&#39;model&#39;: 1, axis_types=(Auto,)), spec=P(&#39;model&#39;,), memory_kind=device))}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load using abstract_state.</span>
+<span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">abstract_state</span><span class="p">)</span>
+<span class="n">loaded</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/basic. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;a&#39;: Array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15],      dtype=int32),
+ &#39;b&#39;: Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], dtype=int32)}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">,</span> <span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(NamedSharding(mesh=Mesh(&#39;model&#39;: 1, axis_types=(Auto,)), spec=P(&#39;model&#39;,), memory_kind=device),
+ NamedSharding(mesh=Mesh(&#39;model&#39;: 1, axis_types=(Auto,)), spec=P(&#39;model&#39;,), memory_kind=device))
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">metadata</span></code> method returns a <code class="docutils literal notranslate"><span class="pre">CheckpointMetadata</span></code> object with a number of properties, but the core <code class="docutils literal notranslate"><span class="pre">metadata</span></code> property is just an abstract PyTree. This can also be used for loading as shown below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">metadata</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">metadata</span>
+<span class="n">metadata</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/basic. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;a&#39;: ArrayMetadata(shape=(16,), dtype=dtype(&#39;int32&#39;), sharding_metadata=NamedShardingMetadata(shape=[1], axis_names=[&#39;model&#39;], axis_types=(Auto,), partition_spec=(&#39;model&#39;,)) device_mesh=DeviceMetadataMesh(mesh=[DeviceMetadata(id=0)]), storage_metadata=StorageMetadata(chunk_shape=(16,), write_shape=(16,))),
+ &#39;b&#39;: ArrayMetadata(shape=(16,), dtype=dtype(&#39;int32&#39;), sharding_metadata=NamedShardingMetadata(shape=[1], axis_names=[&#39;model&#39;], axis_types=(Auto,), partition_spec=(&#39;model&#39;,)) device_mesh=DeviceMetadataMesh(mesh=[DeviceMetadata(id=0)]), storage_metadata=StorageMetadata(chunk_shape=(16,), write_shape=(16,)))}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+<span class="n">loaded</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/basic. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;a&#39;: Array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15],      dtype=int32),
+ &#39;b&#39;: Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], dtype=int32)}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">,</span> <span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(NamedSharding(mesh=Mesh(&#39;model&#39;: 1, axis_types=(Auto,)), spec=P(&#39;model&#39;,), memory_kind=device),
+ NamedSharding(mesh=Mesh(&#39;model&#39;: 1, axis_types=(Auto,)), spec=P(&#39;model&#39;,), memory_kind=device))
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that it is also valid to provide a “concrete” PyTree for loading rather than an “abstract” target, since by definition, the concrete leaves contain all the same properties provided by the abstract leaves.</p>
+<p>However, this requires that you fully initialize the target train state
+before loading from the checkpoint, which is inefficient or impractical for real use cases. It is better practice to only initialize metadata (either by manually creating <code class="docutils literal notranslate"><span class="pre">jax.ShapeDtypeStruct</span></code>s or using <code class="docutils literal notranslate"><span class="pre">jax.eval_shape</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pytree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/basic. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;a&#39;: Array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15],      dtype=int32),
+ &#39;b&#39;: Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], dtype=int32)}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="standard-leaf-types">
+<h3>Standard Leaf Types<a class="headerlink" href="#standard-leaf-types" title="Link to this heading">#</a></h3>
+<p>The following standard leaf types are supported by Orbax by default. Each concrete leaf type has a corresponding abstract leaf type. Most abstract types are implemented as <code class="docutils literal notranslate"><span class="pre">Protocol</span></code>’s, so that any object implementing the required properties can be accepted as a valid abstract type.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><code class="docutils literal notranslate"><span class="pre">Leaf</span></code> Type</p></th>
+<th class="head text-left"><p><code class="docutils literal notranslate"><span class="pre">AbstractLeaf</span></code> Type</p></th>
+<th class="head text-left"><p>Properties</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">jax.Array</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">AbstractShardedArray</span></code> (<code class="docutils literal notranslate"><span class="pre">jax.ShapeDtypeStruct</span></code>)</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">shape</span></code>, <code class="docutils literal notranslate"><span class="pre">dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">sharding</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">AbstractArray</span></code> (<code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>)</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">shape</span></code>, <code class="docutils literal notranslate"><span class="pre">dtype</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">bytes</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">bytes</span></code></p></td>
+<td class="text-left"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td class="text-left"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">None</span></code> is always a valid abstract leaf; it serves as an indication that the leaf should be restored using metadata stored in the checkpoint.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Type[AbstractLeaf]</span></code> is also always a valid abstract leaf; it again serves as an indication that the leaf should be restored using the metadata, but with the additional constraint to load as the indicated type. For example, instead of specifying <code class="docutils literal notranslate"><span class="pre">jax.ShapeDtypeStruct(shape=...,</span> <span class="pre">dtype=...,</span> <span class="pre">sharding=...)</span></code>, it is sufficient to pass <code class="docutils literal notranslate"><span class="pre">jax.ShapeDtypeStruct</span></code>. Similarly, instead of passing <code class="docutils literal notranslate"><span class="pre">0</span></code> to restore as an <code class="docutils literal notranslate"><span class="pre">int</span></code>, the type itself may be passed.</p>
+<p>To summarize, here are the ways you can load a PyTree using abstract leaves, with the way we most recommend at the top, and the way we least recommend at the bottom.</p>
+<p><strong>1. Fully-specified abstract values</strong></p>
+<p>This provides the most loading validations and requires the least amount of
+unnecessary metadata reads.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">abstract_state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">(</span><span class="n">shape</span><span class="o">=...</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=...</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>2. Only types specified</strong></p>
+<p>This guarantees that each leaf will be loaded with the indicated type, but metadata
+will be used to restore specific properties for each leaf.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">abstract_state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">,</span>
+  <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>3. <code class="docutils literal notranslate"><span class="pre">None</span></code> specified (per-leaf)</strong></p>
+<p>This is essentially the same as (2), but metadata will also be used to decide
+which type each leaf should be loaded as.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">abstract_state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>4. <code class="docutils literal notranslate"><span class="pre">None</span></code> specified</strong></p>
+<p>This loads the PyTree structure without any checks, and can lead to errors later
+in your code if the checkpoint does not have the structure you expect.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">abstract_state</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</section>
+<section id="customizing-loaded-properties-for-arrays">
+<h3>Customizing Loaded Properties for Arrays<a class="headerlink" href="#customizing-loaded-properties-for-arrays" title="Link to this heading">#</a></h3>
+<section id="array-dtype">
+<h4>Array dtype<a class="headerlink" href="#array-dtype" title="Link to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_loading_dtype</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">:</span>
+  <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+
+
+<span class="n">cast_dtype_abstract_state</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span>
+    <span class="n">set_loading_dtype</span><span class="p">,</span> <span class="n">abstract_state</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">cast_dtype_abstract_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/basic. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;a&#39;: Array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15],      dtype=int16),
+ &#39;b&#39;: Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], dtype=int16)}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="change-sharding">
+<h4>Change sharding<a class="headerlink" href="#change-sharding" title="Link to this heading">#</a></h4>
+<p><strong>NOTE: This can often be a particularly sharp edge.</strong></p>
+<p>Sharding commonly needs to be changed when loading a checkpoint saved on one topology to a different topology.</p>
+<p><strong>If changing topologies, you MUST specify sharding when loading.</strong></p>
+<p>Unless you are loading on the exact same topology, Orbax does not make any decisions about shardings on your behalf. If you have the exact same topology,
+however, it is possible to avoid specifying the sharding when loading. This is demonstrated below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/basic. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">,</span> <span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(NamedSharding(mesh=Mesh(&#39;model&#39;: 1, axis_types=(Auto,)), spec=P(&#39;model&#39;,), memory_kind=device),
+ NamedSharding(mesh=Mesh(&#39;model&#39;: 1, axis_types=(Auto,)), spec=P(&#39;model&#39;,), memory_kind=device))
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the example below, we alter the sharding while loading.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sharding</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">(),</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,)),</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">PartitionSpec</span><span class="p">(),</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">set_sharding</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">:</span>
+  <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sharding</span><span class="o">=</span><span class="n">sharding</span><span class="p">)</span>
+
+
+<span class="n">change_sharding_abstract_state</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span>
+    <span class="n">set_sharding</span><span class="p">,</span> <span class="n">abstract_state</span>
+<span class="p">)</span>
+<span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">change_sharding_abstract_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/basic. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">,</span> <span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(NamedSharding(mesh=Mesh(&#39;x&#39;: 1, axis_types=(Auto,)), spec=P(), memory_kind=device),
+ NamedSharding(mesh=Mesh(&#39;x&#39;: 1, axis_types=(Auto,)), spec=P(), memory_kind=device))
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can use pytree metadata instead of the abstract pytree.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">metadata</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">metadata</span>
+<span class="n">change_sharding_metadata</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">sharding</span><span class="p">),</span> <span class="n">metadata</span>
+<span class="p">)</span>
+<span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">change_sharding_metadata</span><span class="p">)</span>
+<span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">,</span> <span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/basic. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/basic. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(NamedSharding(mesh=Mesh(&#39;x&#39;: 1, axis_types=(Auto,)), spec=P(), memory_kind=device),
+ NamedSharding(mesh=Mesh(&#39;x&#39;: 1, axis_types=(Auto,)), spec=P(), memory_kind=device))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="change-leaf-type">
+<h4>Change leaf type<a class="headerlink" href="#change-leaf-type" title="Link to this heading">#</a></h4>
+<p>The abstract leaf type dictates the loaded type for each leaf. If we save a value as a <code class="docutils literal notranslate"><span class="pre">jax.Array</span></code> but provide an abstract leaf without the required <code class="docutils literal notranslate"><span class="pre">sharding</span></code> property, Orbax will load as <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>. Similarly, we can save as an <code class="docutils literal notranslate"><span class="pre">int</span></code> and load as a <code class="docutils literal notranslate"><span class="pre">float</span></code> if we specify <code class="docutils literal notranslate"><span class="pre">float</span></code> as the abstract leaf.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/checkpointing-pytrees/change-type/&#39;</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">pytree_with_scalars</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="mi">12</span><span class="p">),</span>
+    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mf">13.5</span><span class="p">,</span>
+    <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="n">create_sharded_array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">)),</span>
+<span class="p">}</span>
+<span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pytree_with_scalars</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">abstract_state_with_scalars</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">8</span><span class="p">,)),</span>
+<span class="p">}</span>
+<span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">abstract_state_with_scalars</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/change-type. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;a&#39;: 12.0, &#39;b&#39;: 13, &#39;c&#39;: array([0., 1., 2., 3., 4., 5., 6., 7.])}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="partial-loading">
+<h3>Partial Loading<a class="headerlink" href="#partial-loading" title="Link to this heading">#</a></h3>
+<p>You may wish to load part of a PyTree contained within a saved checkpoint. For example, consider the following item:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">original_item</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;layer1&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+            <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;layer2&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+            <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;opt_state&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">)],</span>
+    <span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="mi">101</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/checkpointing-pytrees/partial/&#39;</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">original_item</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we want to load only a subset of PyTree nodes (<code class="docutils literal notranslate"><span class="pre">params.layer2</span></code> and <code class="docutils literal notranslate"><span class="pre">step</span></code>, for example), we can use Placeholder values.</p>
+<section id="placeholder">
+<h4>Placeholder<a class="headerlink" href="#placeholder" title="Link to this heading">#</a></h4>
+<p>To load part of a PyTree item, we can specify which nodes to ignore during loading by using <code class="docutils literal notranslate"><span class="pre">...</span></code> (<code class="docutils literal notranslate"><span class="pre">ocp.PLACEHOLDER</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reference_item</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;layer1&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
+            <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;layer2&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+            <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;opt_state&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="mi">101</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">reference_item</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/partial/1. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;opt_state&#39;: [Ellipsis, Ellipsis],
+ &#39;params&#39;: {&#39;layer1&#39;: {&#39;bias&#39;: Ellipsis, &#39;kernel&#39;: Ellipsis},
+  &#39;layer2&#39;: {&#39;bias&#39;: array([0, 1, 2, 3, 4, 5, 6, 7]),
+   &#39;kernel&#39;: array([0, 1, 2, 3, 4, 5, 6, 7])}},
+ &#39;step&#39;: 101}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="advanced-customizations">
+<h2>Advanced Customizations<a class="headerlink" href="#advanced-customizations" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ocp.Context</span></code> enables more customizations.</p>
+<p>For customized save/load behavior, these APIs should be invoked within a <code class="docutils literal notranslate"><span class="pre">ocp.Context</span></code>
+instance, which in turn can be configured with a number of options like Saving, Loading,
+FileOptions etc.</p>
+<p>The usage pattern is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">ocp</span><span class="o">.</span><span class="n">Context</span><span class="p">(</span>
+  <span class="n">pytree_options</span><span class="o">=</span><span class="n">PyTreeOptions</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+  <span class="n">file_options</span><span class="o">=</span><span class="n">FileOptions</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+<span class="p">):</span>
+  <span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pytree</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Let’s explore few examples. Please also take a look at API Reference for specific option details.</p>
+<section id="saving">
+<h3>Saving<a class="headerlink" href="#saving" title="Link to this heading">#</a></h3>
+<section id="customizing-array-dtype">
+<h4>Customizing Array dtype<a class="headerlink" href="#customizing-array-dtype" title="Link to this heading">#</a></h4>
+<p>we can customize the on-disk type used to save individual arrays. First, let’s save and load as normal.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/checkpointing-pytrees/advanced/&#39;</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">pytree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/advanced/1. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(dtype(&#39;int32&#39;), dtype(&#39;int32&#39;))
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s set the dtype of selective array when saving.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">scoped_storage_options_creator</span><span class="p">(</span><span class="n">keypath</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+  <span class="k">del</span> <span class="n">value</span>
+  <span class="n">last_key</span> <span class="o">=</span> <span class="n">keypath</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="c1"># Override &#39;a&#39; to int16</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">last_key</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">GetAttrKey</span><span class="p">)</span> <span class="ow">and</span> <span class="n">last_key</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="o">.</span><span class="n">Saving</span><span class="o">.</span><span class="n">StorageOptions</span><span class="p">(</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+    <span class="p">)</span>
+  <span class="c1"># Return None to use global default storage_options for other leaves</span>
+  <span class="k">return</span> <span class="kc">None</span>
+
+<span class="k">with</span> <span class="n">ocp</span><span class="o">.</span><span class="n">Context</span><span class="p">(</span>
+    <span class="n">array_options</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="p">(</span>
+        <span class="n">saving</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="o">.</span><span class="n">Saving</span><span class="p">(</span>
+            <span class="n">scoped_storage_options_creator</span><span class="o">=</span><span class="n">scoped_storage_options_creator</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">):</span>
+  <span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="n">pytree</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/advanced/2. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(dtype(&#39;int32&#39;), dtype(&#39;int32&#39;))
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s set the dtype of all arrays when saving.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scoped_storage_options_creator</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="o">.</span><span class="n">Saving</span><span class="o">.</span><span class="n">StorageOptions</span><span class="p">(</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="k">with</span> <span class="n">ocp</span><span class="o">.</span><span class="n">Context</span><span class="p">(</span>
+    <span class="n">array_options</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="p">(</span>
+        <span class="n">saving</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="o">.</span><span class="n">Saving</span><span class="p">(</span>
+            <span class="n">scoped_storage_options_creator</span><span class="o">=</span><span class="n">scoped_storage_options_creator</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">):</span>
+  <span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="n">pytree</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/advanced/3. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(dtype(&#39;int16&#39;), dtype(&#39;int16&#39;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="high-throughput-with-ocdbt-option">
+<h4>High Throughput with <code class="docutils literal notranslate"><span class="pre">ocdbt</span></code> option<a class="headerlink" href="#high-throughput-with-ocdbt-option" title="Link to this heading">#</a></h4>
+<p>For high throughput and avoid creating separate subdirectories for each leaf, enable <code class="docutils literal notranslate"><span class="pre">use_ocdbt</span></code>. Please note that it is enabled by default.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">ocp</span><span class="o">.</span><span class="n">Context</span><span class="p">(</span>
+    <span class="n">array_options</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="p">(</span>
+        <span class="n">saving</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="o">.</span><span class="n">Saving</span><span class="p">(</span>
+            <span class="n">use_ocdbt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">):</span>
+  <span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="n">pytree</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>A checkpoint created with this option enabled can be identified by presence of files <code class="docutils literal notranslate"><span class="pre">manifest.ocdbt</span></code> and subdirs like <code class="docutils literal notranslate"><span class="pre">ocdbt.process_*</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>ls<span class="w"> </span>/tmp/checkpointing-pytrees/advanced/4/pytree
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/docs/.asdf/installs/python/3.12.12/lib/python3.12/pty.py:95: RuntimeWarning: os.fork() was called. os.fork() is incompatible with multithreaded code, and JAX is multithreaded, so this will likely lead to a deadlock.
+  pid, fd = os.forkpty()
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ls: cannot access &#39;/tmp/checkpointing-pytrees/advanced/4/pytree&#39;: No such file or directory
+</pre></div>
+</div>
+</div>
+</div>
+<p>However, for use cases like large stacked models, disabling this option may be more efficient.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">ocp</span><span class="o">.</span><span class="n">Context</span><span class="p">(</span>
+    <span class="n">array_options</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="p">(</span>
+        <span class="n">saving</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="o">.</span><span class="n">Saving</span><span class="p">(</span>
+            <span class="n">use_ocdbt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">):</span>
+  <span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="n">pytree</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="o">!</span>ls<span class="w"> </span>/tmp/checkpointing-pytrees/advanced/5/pytree
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:[process=0][thread=Thread-136 (_event_loop_runner)] Skipping merge of OCDBT checkpoints: No per-process OCDBT checkpoint subdirs found in /tmp/checkpointing-pytrees/advanced/5.orbax-checkpoint-tmp/state, 
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ls: cannot access &#39;/tmp/checkpointing-pytrees/advanced/5/pytree&#39;: No such file or directory
+</pre></div>
+</div>
+</div>
+</div>
+<p>Please note how each leaf is written in its own subdir when <code class="docutils literal notranslate"><span class="pre">use_ocdbt=False</span></code>.</p>
+</section>
+</section>
+<section id="loading">
+<h3>Loading<a class="headerlink" href="#loading" title="Link to this heading">#</a></h3>
+<section id="pad-truncate-shape">
+<h4>Pad / truncate shape<a class="headerlink" href="#pad-truncate-shape" title="Link to this heading">#</a></h4>
+<p>Ordinarily, specifying a target array with a different shape than in the
+checkpoint results in an error.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Original shape.</span>
+<span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/advanced/1. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((16,), (16,))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">different_shape_abstract_state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">(</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,),</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">abstract_state</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="n">sharding</span><span class="o">=</span><span class="n">abstract_state</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">(</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,),</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">abstract_state</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="n">sharding</span><span class="o">=</span><span class="n">abstract_state</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sharding</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">different_shape_abstract_state</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/advanced/1. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requested shape: (8,) is not compatible with the stored shape: (16,). Truncating/padding is disabled. To enable it, set `strict=False` in `ArrayRestoreArgs` for any array in v0 API or `enable_padding_and_truncation=True` in `ArrayOptions.Loading` in v1 API.
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can pad or truncate arrays as they are loaded by specifying <code class="docutils literal notranslate"><span class="pre">enable_padding_and_truncation=True</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">ocp</span><span class="o">.</span><span class="n">Context</span><span class="p">(</span>
+    <span class="n">array_options</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="p">(</span>
+        <span class="n">loading</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="o">.</span><span class="n">Loading</span><span class="p">(</span>
+            <span class="n">enable_padding_and_truncation</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">):</span>
+  <span class="n">loaded</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">different_shape_abstract_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/checkpointing-pytrees/advanced/1. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">loaded</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((8,), (32,))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="checkpointables.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Working with Checkpointables</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="training.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Checkpointing in a Training Loop</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exclusive-apis-to-checkpoint-pytrees">Exclusive APIs to checkpoint PyTrees</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-checkpointing">Basic Checkpointing</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-abstract-trees-and-leaves">Understanding Abstract Trees and Leaves</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-leaf-types">Standard Leaf Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-loaded-properties-for-arrays">Customizing Loaded Properties for Arrays</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#array-dtype">Array dtype</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#change-sharding">Change sharding</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#change-leaf-type">Change leaf type</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-loading">Partial Loading</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#placeholder">Placeholder</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-customizations">Advanced Customizations</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#saving">Saving</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-array-dtype">Customizing Array dtype</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#high-throughput-with-ocdbt-option">High Throughput with <code class="docutils literal notranslate"><span class="pre">ocdbt</span></code> option</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading">Loading</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pad-truncate-shape">Pad / truncate shape</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Orbax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Google.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

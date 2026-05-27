@@ -1,0 +1,660 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ExportManager &#8212; Orbax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/katex.min.js?v=3f697ebd"></script>
+    <script src="../_static/auto-render.min.js?v=ed6e749d"></script>
+    <script src="../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/export.export_manager';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="JaxModule" href="export.jax_module.html" />
+    <link rel="prev" title="DTensor utilities for multi–device/host export" href="export.dtensor_utils.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/orbax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="orbax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/api_reference/export.export_manager.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Orbax  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/orbax_checkpoint_101.html">Introduction to Checkpointing with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/checkpointables.html">Working with Checkpointables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/checkpointing_pytrees.html">Working with PyTree Checkpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/training.html">Checkpointing in a Training Loop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/customization.html">Customizing Checkpointing Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/partial_saving.html">Partial Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/model_surgery.html">Model Surgery</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="checkpoint.v1.html">orbax.checkpoint V1 API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint.v1.arrays.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.arrays</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint.v1.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.errors</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint.v1.handlers.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.handlers</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint.v1.handler_registration.html">CheckpointableHandler Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint.v1.options.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.options</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint.v1.partial.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.partial</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint.v1.path.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.path</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="checkpoint.v1.training.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.v1.training.checkpointer.html">Training Checkpointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.v1.training.save_decision_policies.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.save_decision_policies</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.v1.training.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.errors</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.v1.training.types.html">Training Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint.v1.tree.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoint.v1.multihost.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.multihost</span></code> module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Migrating to Orbax V1</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/orbax_v0_to_v1_migration.html">Orbax v0 to v1 Migration Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../index.v0.html">Legacy API (V0)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpoint/orbax_checkpoint_101.html">Checkpointing with Orbax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpoint/orbax_checkpoint_api_overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpoint/api_refactor.html">Using the Refactored CheckpointManager  API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpoint/checkpointing_pytrees.html">Checkpointing PyTrees of Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpoint/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpoint/optimized_checkpointing.html">Optimized Checkpointing with Tensorstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpoint/transformations.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpoint/preemption_checkpointing.html">Preemption Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpoint/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpoint/debug_guide.html">Debugging Guide</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="checkpoint.html">orbax.checkpoint API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.abstract_checkpoint_manager.html">AbstractCheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.checkpoint_manager.html">CheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.checkpointers.html">Checkpointers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.handlers.html">CheckpointHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.args.html">CheckpointArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.type_handlers.html">TypeHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.path.atomicity.html">Atomicity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.path.atomicity_types.html">Atomicity Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.path.step.html">Step entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.path.deleter.html">Checkpoint Deleter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.preservation_policy.html">Preservation Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.save_decision_policy.html">Save Decision Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.checkpoint_utils.html">Checkpointing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.transform_utils.html">PyTree Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.msgpack_utils.html">Msgpack utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.multihost.html">Multi–host Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.tree.html">Tree Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.metadata.html">Metadata Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.logging.html">Checkpoint logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.options.html">Checkpointing Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.handlers.handler_registration.html">Handler Registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="checkpoint.arrays.html">Arrays</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exporting</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../guides/export/orbax_export_101.html">Exporting with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/checkpoint/v1/checkpointing_and_exporting_jax_models.html">Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="export.html">orbax.export API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="export.dtensor_utils.html">DTensor utilities for multi–device/host export</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">ExportManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="export.jax_module.html">JaxModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="export.serving_config.html">ServingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="export.utils.html">General Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="export.validate.validation_manager.html">ValidationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="export.validate.validation_report.html">ValidationReport</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Additional Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api_reference/export.export_manager.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>ExportManager</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">ExportManager</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager"><code class="docutils literal notranslate"><span class="pre">ExportManager</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager.__init__"><code class="docutils literal notranslate"><span class="pre">ExportManager.__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager.tf_module"><code class="docutils literal notranslate"><span class="pre">ExportManager.tf_module</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager.serving_signatures"><code class="docutils literal notranslate"><span class="pre">ExportManager.serving_signatures</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager.save"><code class="docutils literal notranslate"><span class="pre">ExportManager.save()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager.load"><code class="docutils literal notranslate"><span class="pre">ExportManager.load()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-orbax.export.export_manager">
+<span id="exportmanager"></span><h1>ExportManager<a class="headerlink" href="#module-orbax.export.export_manager" title="Link to this heading">#</a></h1>
+<p>Manage the exporting of a JAXModule.</p>
+<section id="id1">
+<h2>ExportManager<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="orbax.export.export_manager.ExportManager">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">orbax.export.export_manager.</span></span><span class="sig-name descname"><span class="pre">ExportManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serving_configs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google/orbax/tree/main/export/orbax/export/export_manager.py#L33#L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../_modules/orbax/export/export_manager.html#ExportManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbax.export.export_manager.ExportManager" title="Link to this definition">#</a></dt>
+<dd><p>Exports a JAXModule with pre- and post-processors.</p>
+<p>This manager acts as a unified interface for exporting JAX modules. It
+handles the underlying serialization logic, dynamically routing to either
+Orbax-native export (<cite>ObmExport</cite>) or TensorFlow SavedModel export
+(<cite>TensorFlowExport</cite>) based on the configuration of the provided module.</p>
+<p class="rubric">Example</p>
+<p>Configure and export a JAX module using a specific serving configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.export</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExportManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.export</span><span class="w"> </span><span class="kn">import</span> <span class="n">serving_config</span>
+
+<span class="c1"># Assume `my_jax_module` is a fully initialized jax_module.JaxModule</span>
+<span class="c1"># Define how the model should handle incoming requests</span>
+<span class="n">my_config</span> <span class="o">=</span> <span class="n">serving_config</span><span class="o">.</span><span class="n">ServingConfig</span><span class="p">(</span>
+    <span class="n">signature_key</span><span class="o">=</span><span class="s2">&quot;serving_default&quot;</span><span class="p">,</span>
+    <span class="n">input_signature</span><span class="o">=</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">TensorSpec</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)],</span>
+<span class="p">)</span>
+
+<span class="c1"># Initialize the manager</span>
+<span class="n">export_mgr</span> <span class="o">=</span> <span class="n">ExportManager</span><span class="p">(</span>
+    <span class="n">module</span><span class="o">=</span><span class="n">my_jax_module</span><span class="p">,</span>
+    <span class="n">serving_configs</span><span class="o">=</span><span class="p">[</span><span class="n">my_config</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Save the model to a directory</span>
+<span class="n">export_mgr</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;/path/to/my/saved_model&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="orbax.export.export_manager.ExportManager.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serving_configs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google/orbax/tree/main/export/orbax/export/export_manager.py#L65#L90"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../_modules/orbax/export/export_manager.html#ExportManager.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbax.export.export_manager.ExportManager.__init__" title="Link to this definition">#</a></dt>
+<dd><p>ExportManager constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">UnionType</span></code>[<a class="reference internal" href="export.jax_module.html#orbax.export.jax_module.JaxModule" title="orbax.export.jax_module.JaxModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">JaxModule</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – The <cite>JaxModule</cite> to be exported. Can be None in specific delayed
+initialization or native Orbax load scenarios.</p></li>
+<li><p><strong>serving_configs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<a class="reference internal" href="export.serving_config.html#orbax.export.serving_config.ServingConfig" title="orbax.export.serving_config.ServingConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServingConfig</span></code></a>]) – a sequence of which each element is a <cite>ServingConfig</cite>
+corresponding to a serving signature of the exported SavedModel.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="orbax.export.export_manager.ExportManager.tf_module">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tf_module</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Module</span></em><a class="headerlink" href="#orbax.export.export_manager.ExportManager.tf_module" title="Link to this definition">#</a></dt>
+<dd><p>Returns the tf.module maintained by the export manager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – If the export version is <cite>ExportModelType.ORBAX_MODEL</cite> or if
+    the module is not provided (as Orbax models do not use tf.Module).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="orbax.export.export_manager.ExportManager.serving_signatures">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">serving_signatures</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#orbax.export.export_manager.ExportManager.serving_signatures" title="Link to this definition">#</a></dt>
+<dd><p>Returns a map of signature keys to serving functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[…, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="orbax.export.export_manager.ExportManager.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signature_overrides</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google/orbax/tree/main/export/orbax/export/export_manager.py#L118#L137"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../_modules/orbax/export/export_manager.html#ExportManager.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbax.export.export_manager.ExportManager.save" title="Link to this definition">#</a></dt>
+<dd><p>Saves the JAX model to a Savemodel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – a directory in which to write the SavedModel.</p></li>
+<li><p><strong>save_options</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">SaveOptions</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – an optional tf.saved_model.SaveOptions for configuring save
+options.</p></li>
+<li><p><strong>signature_overrides</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[…, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]], <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – signatures to override the self-maintained ones, or
+additional signatures to export.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="orbax.export.export_manager.ExportManager.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google/orbax/tree/main/export/orbax/export/export_manager.py#L139#L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../_modules/orbax/export/export_manager.html#ExportManager.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#orbax.export.export_manager.ExportManager.load" title="Link to this definition">#</a></dt>
+<dd><p>Loads the exported model from disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The directory from which to load the model.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments passed to the underlying loader.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The loaded model instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="export.dtensor_utils.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">DTensor utilities for multi–device/host export</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="export.jax_module.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">JaxModule</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">ExportManager</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager"><code class="docutils literal notranslate"><span class="pre">ExportManager</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager.__init__"><code class="docutils literal notranslate"><span class="pre">ExportManager.__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager.tf_module"><code class="docutils literal notranslate"><span class="pre">ExportManager.tf_module</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager.serving_signatures"><code class="docutils literal notranslate"><span class="pre">ExportManager.serving_signatures</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager.save"><code class="docutils literal notranslate"><span class="pre">ExportManager.save()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax.export.export_manager.ExportManager.load"><code class="docutils literal notranslate"><span class="pre">ExportManager.load()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Orbax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Google.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

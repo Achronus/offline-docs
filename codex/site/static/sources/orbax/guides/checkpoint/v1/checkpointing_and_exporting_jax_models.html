@@ -1,0 +1,1225 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax &#8212; Orbax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../_static/katex.min.js?v=3f697ebd"></script>
+    <script src="../../../_static/auto-render.min.js?v=ed6e749d"></script>
+    <script src="../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/checkpoint/v1/checkpointing_and_exporting_jax_models';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="orbax.export API Reference" href="../../../api_reference/export.html" />
+    <link rel="prev" title="Exporting with Orbax" href="../../export/orbax_export_101.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/orbax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="orbax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/checkpoint/v1/checkpointing_and_exporting_jax_models.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Orbax  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="orbax_checkpoint_101.html">Introduction to Checkpointing with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpointables.html">Working with Checkpointables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpointing_pytrees.html">Working with PyTree Checkpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Checkpointing in a Training Loop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpoint_format.html">Checkpoint Format Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customization.html">Customizing Checkpointing Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partial_saving.html">Partial Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_surgery.html">Model Surgery</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.v1.html">orbax.checkpoint V1 API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.arrays.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.arrays</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.errors</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.handlers.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.handlers</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.handler_registration.html">CheckpointableHandler Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.options.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.options</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.partial.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.partial</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.path.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.path</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.checkpointer.html">Training Checkpointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.save_decision_policies</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.errors</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.types.html">Training Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.tree.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.multihost.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.multihost</span></code> module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Migrating to Orbax V1</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="orbax_v0_to_v1_migration.html">Orbax v0 to v1 Migration Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../index.v0.html">Legacy API (V0)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../orbax_checkpoint_101.html">Checkpointing with Orbax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../orbax_checkpoint_api_overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_refactor.html">Using the Refactored CheckpointManager  API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpointing_pytrees.html">Checkpointing PyTrees of Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimized_checkpointing.html">Optimized Checkpointing with Tensorstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transformations.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preemption_checkpointing.html">Preemption Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debug_guide.html">Debugging Guide</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.html">orbax.checkpoint API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.abstract_checkpoint_manager.html">AbstractCheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpoint_manager.html">CheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpointers.html">Checkpointers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.handlers.html">CheckpointHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.args.html">CheckpointArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.type_handlers.html">TypeHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.atomicity.html">Atomicity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.atomicity_types.html">Atomicity Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.step.html">Step entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.deleter.html">Checkpoint Deleter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.preservation_policy.html">Preservation Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.save_decision_policy.html">Save Decision Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpoint_utils.html">Checkpointing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.transform_utils.html">PyTree Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.msgpack_utils.html">Msgpack utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.multihost.html">Multi–host Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.tree.html">Tree Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.metadata.html">Metadata Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.logging.html">Checkpoint logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.options.html">Checkpointing Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.handlers.handler_registration.html">Handler Registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.arrays.html">Arrays</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exporting</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../export/orbax_export_101.html">Exporting with Orbax</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/export.html">orbax.export API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.dtensor_utils.html">DTensor utilities for multi–device/host export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.export_manager.html">ExportManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.jax_module.html">JaxModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.serving_config.html">ServingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.utils.html">General Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.validate.validation_manager.html">ValidationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.validate.validation_report.html">ValidationReport</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Additional Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Contributors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/guides/checkpoint/v1/checkpointing_and_exporting_jax_models.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">1. Setup</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#helper-for-directory-management">Helper for Directory Management</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-simulated-jax-state">2. Define a Simulated JAX State</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-model-and-training-state">Define a Model and Training State</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax-checkpointing-workflow">3. Orbax Checkpointing Workflow</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-checkpointing-directory">Create a Checkpointing Directory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checkpointing-during-a-simulated-training-loop">Checkpointing During a Simulated Training Loop</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resuming-from-a-checkpoint">Resuming from a Checkpoint</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#saving-final-jax-parameters-for-export">4. Saving Final JAX Parameters for Export</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-final-parameters-for-saving">Extract Final Parameters for Saving</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-save-pytree-for-the-final-save">Using <code class="docutils literal notranslate"><span class="pre">save_pytree</span></code> for the Final Save</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-exported-parameters-verification">Loading Exported Parameters (Verification)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exporting-to-tensorflow-savedmodel">5. Exporting to TensorFlow SavedModel</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-jax-model-apply-function-and-pre-post-processing-for-export">Define JAX Model Apply Function and Pre/Post-processing for Export</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-jaxmodule-and-servingconfig">Create <code class="docutils literal notranslate"><span class="pre">JaxModule</span></code> and <code class="docutils literal notranslate"><span class="pre">ServingConfig</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-to-tensorflow-savedmodel">Export to TensorFlow SavedModel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-the-exported-model">Validate the Exported Model</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="checkpointing-and-exporting-jax-models-an-end-to-end-guide-with-orbax">
+<h1>Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax<a class="headerlink" href="#checkpointing-and-exporting-jax-models-an-end-to-end-guide-with-orbax" title="Link to this heading">#</a></h1>
+<p>This guide demonstrates a complete, end-to-end workflow for managing JAX models using the Orbax library, from robust training-time checkpointing to final model export. We will simulate a Flax/Optax setup to show how the <code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code> API enables policy-based management and restoration of training states. Following that, we use the standalone <code class="docutils literal notranslate"><span class="pre">save_pytree</span></code> function to save the final parameters for inference. At the end, we export these parameters into a TensorFlow SavedModel with <code class="docutils literal notranslate"><span class="pre">orbax-export</span></code>.</p>
+<section id="setup">
+<h2>1. Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<p>First, we set up the necessary environment by installing the required packages and importing the modules we’ll use throughout this guide.</p>
+<p>Note: The following cells install the packages required for this guide. If you are running this within an internal Google environment where these dependencies are already available, these installation steps can be safely skipped.</p>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h3>
+<p>Install <code class="docutils literal notranslate"><span class="pre">orbax-checkpoint</span></code> for core checkpointing, <code class="docutils literal notranslate"><span class="pre">flax</span></code> and <code class="docutils literal notranslate"><span class="pre">optax</span></code> for the JAX model and optimizer, and <code class="docutils literal notranslate"><span class="pre">orbax-export</span></code> with <code class="docutils literal notranslate"><span class="pre">tensorflow</span></code> for exporting to the SavedModel format.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>orbax-checkpoint<span class="w"> </span>flax<span class="w"> </span>optax
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: orbax-checkpoint in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (0.11.40)
+Requirement already satisfied: flax in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (0.12.7)
+Requirement already satisfied: optax in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (0.2.8)
+Requirement already satisfied: absl-py in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (2.4.0)
+Requirement already satisfied: etils[epath,epy] in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (1.14.0)
+Requirement already satisfied: typing_extensions in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (4.15.0)
+Requirement already satisfied: msgpack in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (1.1.2)
+Requirement already satisfied: jax&gt;=0.6.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (0.10.1)
+Requirement already satisfied: numpy in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (2.4.6)
+Requirement already satisfied: prometheus-client&gt;=0.20.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (0.25.0)
+Requirement already satisfied: pyyaml in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (6.0.3)
+Requirement already satisfied: tensorstore&gt;=0.1.84 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (0.1.84)
+Requirement already satisfied: aiofiles in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (25.1.0)
+Requirement already satisfied: protobuf in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (6.33.6)
+Requirement already satisfied: humanize in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (4.15.0)
+Requirement already satisfied: simplejson&gt;=3.16.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (4.1.1)
+Requirement already satisfied: psutil in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (7.2.2)
+Requirement already satisfied: uvloop in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint) (0.22.1)
+Requirement already satisfied: rich&gt;=11.1 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from flax) (15.0.0)
+Requirement already satisfied: treescope&gt;=0.1.7 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from flax) (0.1.10)
+Requirement already satisfied: jaxlib&gt;=0.5.3 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from optax) (0.10.1)
+Requirement already satisfied: ml_dtypes&gt;=0.5.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from jax&gt;=0.6.0-&gt;orbax-checkpoint) (0.5.4)
+Requirement already satisfied: opt_einsum in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from jax&gt;=0.6.0-&gt;orbax-checkpoint) (3.4.0)
+Requirement already satisfied: scipy&gt;=1.14 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from jax&gt;=0.6.0-&gt;orbax-checkpoint) (1.17.1)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: markdown-it-py&gt;=2.2.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from rich&gt;=11.1-&gt;flax) (3.0.0)
+Requirement already satisfied: pygments&lt;3.0.0,&gt;=2.13.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from rich&gt;=11.1-&gt;flax) (2.20.0)
+Requirement already satisfied: mdurl~=0.1 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from markdown-it-py&gt;=2.2.0-&gt;rich&gt;=11.1-&gt;flax) (0.1.2)
+Requirement already satisfied: fsspec in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from etils[epath,epy]-&gt;orbax-checkpoint) (2026.4.0)
+Requirement already satisfied: zipp in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from etils[epath,epy]-&gt;orbax-checkpoint) (4.1.0)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>orbax-export<span class="w"> </span>tensorflow
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: orbax-export in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (0.0.8)
+Requirement already satisfied: tensorflow in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (2.20.0rc0)
+Requirement already satisfied: absl-py in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-export) (2.4.0)
+Requirement already satisfied: dataclasses-json in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-export) (0.6.7)
+Requirement already satisfied: etils in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-export) (1.14.0)
+Requirement already satisfied: jax&gt;=0.4.34 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-export) (0.10.1)
+Requirement already satisfied: jaxlib in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-export) (0.10.1)
+Requirement already satisfied: jaxtyping in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-export) (0.3.10)
+Requirement already satisfied: numpy in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-export) (2.4.6)
+Requirement already satisfied: protobuf in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-export) (6.33.6)
+Requirement already satisfied: orbax-checkpoint&gt;=0.9.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-export) (0.11.40)
+Requirement already satisfied: astunparse&gt;=1.6.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (1.6.3)
+Requirement already satisfied: flatbuffers&gt;=24.3.25 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (25.12.19)
+Requirement already satisfied: gast!=0.5.0,!=0.5.1,!=0.5.2,&gt;=0.2.1 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (0.7.0)
+Requirement already satisfied: google_pasta&gt;=0.1.1 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (0.2.0)
+Requirement already satisfied: libclang&gt;=13.0.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (18.1.1)
+Requirement already satisfied: opt_einsum&gt;=2.3.2 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (3.4.0)
+Requirement already satisfied: packaging in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (26.2)
+Requirement already satisfied: requests&lt;3,&gt;=2.21.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (2.34.2)
+Requirement already satisfied: setuptools in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (82.0.1)
+Requirement already satisfied: six&gt;=1.12.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (1.17.0)
+Requirement already satisfied: termcolor&gt;=1.1.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (3.3.0)
+Requirement already satisfied: typing_extensions&gt;=3.6.6 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (4.15.0)
+Requirement already satisfied: wrapt&gt;=1.11.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (2.2.1)
+Requirement already satisfied: grpcio&lt;2.0,&gt;=1.24.3 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (1.80.0)
+Requirement already satisfied: tensorboard~=2.20.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (2.20.0)
+Requirement already satisfied: keras&gt;=3.10.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (3.14.1)
+Requirement already satisfied: h5py&gt;=3.11.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (3.16.0)
+Requirement already satisfied: ml_dtypes&lt;1.0.0,&gt;=0.5.1 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorflow) (0.5.4)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from requests&lt;3,&gt;=2.21.0-&gt;tensorflow) (3.4.7)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from requests&lt;3,&gt;=2.21.0-&gt;tensorflow) (3.16)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.26 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from requests&lt;3,&gt;=2.21.0-&gt;tensorflow) (2.7.0)
+Requirement already satisfied: certifi&gt;=2023.5.7 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from requests&lt;3,&gt;=2.21.0-&gt;tensorflow) (2026.5.20)
+Requirement already satisfied: markdown&gt;=2.6.8 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorboard~=2.20.0-&gt;tensorflow) (3.10.2)
+Requirement already satisfied: pillow in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorboard~=2.20.0-&gt;tensorflow) (12.2.0)
+Requirement already satisfied: tensorboard-data-server&lt;0.8.0,&gt;=0.7.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorboard~=2.20.0-&gt;tensorflow) (0.7.2)
+Requirement already satisfied: werkzeug&gt;=1.0.1 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from tensorboard~=2.20.0-&gt;tensorflow) (3.1.8)
+Requirement already satisfied: wheel&lt;1.0,&gt;=0.23.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from astunparse&gt;=1.6.0-&gt;tensorflow) (0.40.0)
+Requirement already satisfied: scipy&gt;=1.14 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from jax&gt;=0.4.34-&gt;orbax-export) (1.17.1)
+Requirement already satisfied: rich in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from keras&gt;=3.10.0-&gt;tensorflow) (15.0.0)
+Requirement already satisfied: namex in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from keras&gt;=3.10.0-&gt;tensorflow) (0.1.0)
+Requirement already satisfied: optree in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from keras&gt;=3.10.0-&gt;tensorflow) (0.19.1)
+Requirement already satisfied: msgpack in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (1.1.2)
+Requirement already satisfied: prometheus-client&gt;=0.20.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (0.25.0)
+Requirement already satisfied: pyyaml in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (6.0.3)
+Requirement already satisfied: tensorstore&gt;=0.1.84 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (0.1.84)
+Requirement already satisfied: aiofiles in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (25.1.0)
+Requirement already satisfied: humanize in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (4.15.0)
+Requirement already satisfied: simplejson&gt;=3.16.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (4.1.1)
+Requirement already satisfied: psutil in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (7.2.2)
+Requirement already satisfied: uvloop in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (0.22.1)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: markupsafe&gt;=2.1.1 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from werkzeug&gt;=1.0.1-&gt;tensorboard~=2.20.0-&gt;tensorflow) (3.0.3)
+Requirement already satisfied: marshmallow&lt;4.0.0,&gt;=3.18.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from dataclasses-json-&gt;orbax-export) (3.26.2)
+Requirement already satisfied: typing-inspect&lt;1,&gt;=0.4.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from dataclasses-json-&gt;orbax-export) (0.9.0)
+Requirement already satisfied: mypy-extensions&gt;=0.3.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from typing-inspect&lt;1,&gt;=0.4.0-&gt;dataclasses-json-&gt;orbax-export) (1.1.0)
+Requirement already satisfied: fsspec in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from etils[epath,epy]-&gt;orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (2026.4.0)
+Requirement already satisfied: zipp in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from etils[epath,epy]-&gt;orbax-checkpoint&gt;=0.9.0-&gt;orbax-export) (4.1.0)
+Requirement already satisfied: wadler-lindig&gt;=0.1.3 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from jaxtyping-&gt;orbax-export) (0.1.7)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: markdown-it-py&gt;=2.2.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from rich-&gt;keras&gt;=3.10.0-&gt;tensorflow) (3.0.0)
+Requirement already satisfied: pygments&lt;3.0.0,&gt;=2.13.0 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from rich-&gt;keras&gt;=3.10.0-&gt;tensorflow) (2.20.0)
+Requirement already satisfied: mdurl~=0.1 in /home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages (from markdown-it-py&gt;=2.2.0-&gt;rich-&gt;keras&gt;=3.10.0-&gt;tensorflow) (0.1.2)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="imports">
+<h3>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint</span><span class="w"> </span><span class="kn">import</span> <span class="n">v1</span> <span class="k">as</span> <span class="n">ocp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flax.linen</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">etils</span><span class="w"> </span><span class="kn">import</span> <span class="n">epath</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">tree_util</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="helper-for-directory-management">
+<h3>Helper for Directory Management<a class="headerlink" href="#helper-for-directory-management" title="Link to this heading">#</a></h3>
+<p>A utility function to ensure a clean state for our checkpointing directories during each run of this tutorial.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cleanup_directory_if_exists</span><span class="p">(</span><span class="n">path_str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Removes a directory if it exists.&quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">path_str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+<span class="n">tutorial_base_dir</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/orbax_tutorial&#39;</span><span class="p">)</span>
+<span class="n">cleanup_directory_if_exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tutorial_base_dir</span><span class="p">))</span>
+<span class="n">tutorial_base_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tutorial artifacts will be saved under: </span><span class="si">{</span><span class="n">tutorial_base_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tutorial artifacts will be saved under: /tmp/orbax_tutorial
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="define-a-simulated-jax-state">
+<h2>2. Define a Simulated JAX State<a class="headerlink" href="#define-a-simulated-jax-state" title="Link to this heading">#</a></h2>
+<p>We’ll construct a PyTree representing our model’s training state. This typically includes model parameters, optimizer state, and the current training step.</p>
+<section id="define-a-model-and-training-state">
+<h3>Define a Model and Training State<a class="headerlink" href="#define-a-model-and-training-state" title="Link to this heading">#</a></h3>
+<p>We will define a basic Flax model, initialize its parameters, and create an Optax optimizer. The complete training state (model parameters, optimizer state, and step count) is stored in a Python dictionary. Sharding is applied to array elements using <code class="docutils literal notranslate"><span class="pre">jax.device_put</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Model Hyperparameters</span>
+<span class="n">input_dim</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">hidden_dim</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">output_dim</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">batch_size_for_init</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SimpleFlaxModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="n">hidden_dim</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">output_dim</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;d1&quot;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dim</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;d2&quot;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">model_instance</span> <span class="o">=</span> <span class="n">SimpleFlaxModel</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">)</span>
+
+<span class="c1"># Initialize model parameters with dummy data.</span>
+<span class="n">dummy_input_for_flax_init</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">batch_size_for_init</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">))</span>
+<span class="n">initial_model_params_template</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">dummy_input_for_flax_init</span><span class="p">)[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
+<span class="n">np_params</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">initial_model_params_template</span><span class="p">)</span>
+
+<span class="c1"># Initialize the optimizer state.</span>
+<span class="n">optimizer_instance</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="n">np_opt_state_template</span> <span class="o">=</span> <span class="n">optimizer_instance</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">initial_model_params_template</span><span class="p">)</span>
+<span class="c1"># Convert all array-like elements to NumPy arrays, leaving others (like `count`) as-is.</span>
+<span class="n">np_opt_state</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span><span class="p">,</span> <span class="n">np_opt_state_template</span><span class="p">)</span>
+
+<span class="c1"># Define sharding for the model (replicated across all devices).</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">(),</span> <span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,))</span>
+<span class="n">replicated_sharding</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">PartitionSpec</span><span class="p">())</span>
+
+<span class="c1"># Group components and apply sharding to all NumPy arrays in the PyTree.</span>
+<span class="n">pytree_components_np</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">np_params</span><span class="p">,</span>
+    <span class="s1">&#39;opt_state&#39;</span><span class="p">:</span> <span class="n">np_opt_state</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">pytree_components_jax</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">device_put</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">replicated_sharding</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span><span class="p">,</span> <span class="n">pytree_components_np</span><span class="p">)</span>
+
+<span class="c1"># Combine everything into the final training state PyTree.</span>
+<span class="n">simulated_train_state</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">pytree_components_jax</span><span class="p">,</span> <span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialized JAX training state PyTree with explicit sharding.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initialized JAX training state PyTree with explicit sharding.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="orbax-checkpointing-workflow">
+<h2>3. Orbax Checkpointing Workflow<a class="headerlink" href="#orbax-checkpointing-workflow" title="Link to this heading">#</a></h2>
+<p>This section covers managing checkpoints during a simulated training loop using <code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code>. This API is designed for common training scenarios and allows for powerful configuration through save policies. For a more comprehensive introduction to the Checkpointer API, refer to the <a class="reference internal" href="orbax_checkpoint_101.html"><span class="doc">Orbax Checkpoint 101 guide</span></a>.</p>
+<section id="create-a-checkpointing-directory">
+<h3>Create a Checkpointing Directory<a class="headerlink" href="#create-a-checkpointing-directory" title="Link to this heading">#</a></h3>
+<p>We’ll create a dedicated directory to store our training checkpoints and define a constant for our save interval.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">training_ckpt_dir</span> <span class="o">=</span> <span class="n">tutorial_base_dir</span> <span class="o">/</span> <span class="s1">&#39;simulated_training_ckpts&#39;</span>
+<span class="n">cleanup_directory_if_exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">training_ckpt_dir</span><span class="p">))</span>
+<span class="n">training_ckpt_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">SAVE_INTERVAL_STEPS</span> <span class="o">=</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="checkpointing-during-a-simulated-training-loop">
+<h3>Checkpointing During a Simulated Training Loop<a class="headerlink" href="#checkpointing-during-a-simulated-training-loop" title="Link to this heading">#</a></h3>
+<p>We use <code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code> as a context manager and configure it with a <code class="docutils literal notranslate"><span class="pre">FixedIntervalPolicy</span></code>. Inside the loop, <code class="docutils literal notranslate"><span class="pre">save_pytree(...)</span></code> is called on every step, but the policy ensures that a checkpoint is only written to disk when the condition (e.g., <code class="docutils literal notranslate"><span class="pre">step</span> <span class="pre">%</span> <span class="pre">2</span> <span class="pre">==</span> <span class="pre">0</span></code>) is met.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A simplified function to simulate a single training step.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_step_for_loop</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+  <span class="n">new_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># Work with a mutable copy of the state dict.</span>
+  <span class="n">new_state</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="c1"># For this demo, we simulate param changes by adding small random noise.</span>
+  <span class="n">key_for_noise</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
+  <span class="n">new_state</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span> <span class="o">+</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">key_for_noise</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+        <span class="n">state</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
+    <span class="p">)</span>
+  <span class="k">return</span> <span class="n">new_state</span>
+
+<span class="n">current_loop_state</span> <span class="o">=</span> <span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">simulated_train_state</span><span class="p">)</span> <span class="c1"># Start with a fresh copy.</span>
+<span class="n">num_training_steps</span> <span class="o">=</span> <span class="mi">7</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulating </span><span class="si">{</span><span class="n">num_training_steps</span><span class="si">}</span><span class="s2"> training steps...&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">ocp</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span>
+    <span class="n">directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">training_ckpt_dir</span><span class="p">),</span>
+    <span class="n">save_decision_policy</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">save_decision_policies</span><span class="o">.</span><span class="n">FixedIntervalPolicy</span><span class="p">(</span><span class="n">SAVE_INTERVAL_STEPS</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training_steps</span><span class="p">):</span>
+        <span class="n">step_to_save_at</span> <span class="o">=</span> <span class="n">current_loop_state</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span>
+
+        <span class="c1"># `save` takes the current step, the state to save, and optional metrics.</span>
+        <span class="n">saved</span> <span class="o">=</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">step_to_save_at</span><span class="p">,</span> <span class="n">current_loop_state</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;accuracy&#39;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">})</span>
+
+        <span class="k">if</span> <span class="n">saved</span><span class="p">:</span> <span class="c1"># Will be True if the save_decision_policy decided to save.</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Saved checkpoint for step </span><span class="si">{</span><span class="n">step_to_save_at</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+        <span class="n">current_loop_state</span> <span class="o">=</span> <span class="n">train_step_for_loop</span><span class="p">(</span><span class="n">current_loop_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Simulating 7 training steps...
+  Saved checkpoint for step 0...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Saved checkpoint for step 2...
+  Saved checkpoint for step 4...
+  Saved checkpoint for step 6...
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="resuming-from-a-checkpoint">
+<h3>Resuming from a Checkpoint<a class="headerlink" href="#resuming-from-a-checkpoint" title="Link to this heading">#</a></h3>
+<p>To resume training, we use <code class="docutils literal notranslate"><span class="pre">training.Checkpointer.load_pytree</span></code>. Orbax-checkpoint can automatically find the latest completed checkpoint. We provide an <code class="docutils literal notranslate"><span class="pre">abstract_pytree</span></code> (an empty or example version of our state) to guide the restoration process and ensure the data is loaded with the correct structure and sharding.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">ocp</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">training_ckpt_dir</span><span class="p">))</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Restore from the latest checkpoint in </span><span class="si">{</span><span class="n">training_ckpt_dir</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># It returns None if no checkpoint is found.</span>
+    <span class="n">resumed_train_state</span> <span class="o">=</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+        <span class="n">abstract_state</span><span class="o">=</span><span class="n">simulated_train_state</span> <span class="c1"># Provide an abstract state for structure and sharding.</span>
+    <span class="p">)</span>
+
+<span class="c1"># If a checkpoint was successfully loaded, resumed_train_state will not be None.</span>
+<span class="k">if</span> <span class="n">resumed_train_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Restored state successfully. Resuming from step: </span><span class="si">{</span><span class="n">resumed_train_state</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">ocp</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">training_ckpt_dir</span><span class="p">))</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">resumed_train_state</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">latest</span><span class="o">.</span><span class="n">step</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># If no checkpoint was found, fall back to the initial state.</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No checkpoint found to restore; using initial state.&quot;</span><span class="p">)</span>
+    <span class="n">resumed_train_state</span> <span class="o">=</span> <span class="n">simulated_train_state</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Restore from the latest checkpoint in /tmp/orbax_tutorial/simulated_training_ckpts...
+Restored state successfully. Resuming from step: 6
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="saving-final-jax-parameters-for-export">
+<h2>4. Saving Final JAX Parameters for Export<a class="headerlink" href="#saving-final-jax-parameters-for-export" title="Link to this heading">#</a></h2>
+<p>After training, you often need to save just the final model parameters for inference or export. For this, Orbax provides the simple <code class="docutils literal notranslate"><span class="pre">save_pytree</span></code> function, which is ideal for one-off saves without the overhead of training policies. See the <a class="reference internal" href="checkpointing_pytrees.html"><span class="doc">Checkpointing PyTrees</span></a> guide for more details on this lower-level API.</p>
+<section id="extract-final-parameters-for-saving">
+<h3>Extract Final Parameters for Saving<a class="headerlink" href="#extract-final-parameters-for-saving" title="Link to this heading">#</a></h3>
+<p>We extract the learned parameters from our final training state, as this is the only part we need for inference.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">final_params_save_dir</span> <span class="o">=</span> <span class="n">tutorial_base_dir</span> <span class="o">/</span> <span class="s1">&#39;exported_model_params_orbax&#39;</span>
+<span class="n">final_model_params_to_save</span> <span class="o">=</span> <span class="n">current_loop_state</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final model parameters extracted for saving.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Final model parameters extracted for saving.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-save-pytree-for-the-final-save">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">save_pytree</span></code> for the Final Save<a class="headerlink" href="#using-save-pytree-for-the-final-save" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">save_pytree</span></code> directly saves the given PyTree to the specified directory. It’s a straightforward way to persist the final artifacts of a training process.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensure a clean state by removing the directory if it exists from a previous run.</span>
+<span class="n">cleanup_directory_if_exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">final_params_save_dir</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saving final parameters to: </span><span class="si">{</span><span class="n">final_params_save_dir</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+<span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">final_params_save_dir</span><span class="p">,</span>
+    <span class="n">state</span><span class="o">=</span><span class="n">final_model_params_to_save</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span> <span class="c1">#  overwrites an existing checkpoint in directory</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final model parameters saved via `save`.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Saving final parameters to: /tmp/orbax_tutorial/exported_model_params_orbax...
+Final model parameters saved via `save`.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="loading-exported-parameters-verification">
+<h3>Loading Exported Parameters (Verification)<a class="headerlink" href="#loading-exported-parameters-verification" title="Link to this heading">#</a></h3>
+<p>We can use <code class="docutils literal notranslate"><span class="pre">load_pytree</span></code> to load the parameters back and verify that the save operation was successful. Again, we can pass an <code class="docutils literal notranslate"><span class="pre">abstract_pytree</span></code> to help guide the restoration.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">final_params_save_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">final_params_save_dir</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading parameters from </span><span class="si">{</span><span class="n">final_params_save_dir</span><span class="si">}</span><span class="s2"> for verification...&quot;</span><span class="p">)</span>
+    <span class="n">loaded_final_params</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+        <span class="n">final_params_save_dir</span><span class="p">,</span>
+        <span class="n">abstract_state</span><span class="o">=</span><span class="n">final_model_params_to_save</span> <span class="c1"># Use instance as a template for structure and sharding.</span>
+    <span class="p">)</span>
+    <span class="c1"># Check that the loaded parameters match the original ones.</span>
+    <span class="n">params_match</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_all</span><span class="p">(</span>
+        <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array_equal</span><span class="p">,</span> <span class="n">final_model_params_to_save</span><span class="p">,</span> <span class="n">loaded_final_params</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Verification: </span><span class="si">{</span><span class="s1">&#39;PASSED&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">params_match</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;FAILED&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saved parameters directory not found or empty. Skipping verification.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/orbax_tutorial/exported_model_params_orbax. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading parameters from /tmp/orbax_tutorial/exported_model_params_orbax for verification...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Verification: PASSED
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="exporting-to-tensorflow-savedmodel">
+<h2>5. Exporting to TensorFlow SavedModel<a class="headerlink" href="#exporting-to-tensorflow-savedmodel" title="Link to this heading">#</a></h2>
+<p>This section demonstrates converting the saved JAX model parameters into a TensorFlow SavedModel format using the <a class="reference internal" href="../../export/orbax_export_101.html"><span class="doc">orbax export</span></a> library. This is a common step for for exporting JAX models to TensorFlow <a class="reference external" href="https://www.tensorflow.org/guide/saved_model">SavedModel</a> format.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">orbax.export</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExportManager</span><span class="p">,</span> <span class="n">JaxModule</span><span class="p">,</span> <span class="n">ServingConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.export.validate.validation_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationManager</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="define-jax-model-apply-function-and-pre-post-processing-for-export">
+<h3>Define JAX Model Apply Function and Pre/Post-processing for Export<a class="headerlink" href="#define-jax-model-apply-function-and-pre-post-processing-for-export" title="Link to this heading">#</a></h3>
+<p>For <a class="reference internal" href="../../export/orbax_export_101.html"><span class="doc">orbax export</span></a>, we need to provide a JAX function that takes <code class="docutils literal notranslate"><span class="pre">(params,</span> <span class="pre">inputs)</span></code>. We can also define TensorFlow-based pre-processing and post-processing functions, which will be included in the SavedModel’s computation graph.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># `model_instance` was defined in Section 2 (the SimpleFlaxModel instance).</span>
+<span class="c1"># `final_model_params_to_save` contains the parameters we want to export from Section 4.</span>
+
+<span class="c1"># JAX Apply Function: The core JAX logic for the model&#39;s forward pass.</span>
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">jax_model_apply_fn_for_export</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;A JAX function with the signature (params, inputs) for orbax-export.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">apply</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">},</span> <span class="n">inputs</span><span class="p">)</span>
+
+
+<span class="c1"># Optional: TF Pre-processing Function.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tf_preprocess_fn_for_export</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Normalizes the raw input tensor. Orbax-export will trace this into a graph.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+
+
+<span class="c1"># Optional: TF Post-processing Function.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tf_postprocess_fn_for_export</span><span class="p">(</span><span class="n">output_tensor</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Packages the model output into a dictionary. Orbax-export will trace this.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;predictions&#39;</span><span class="p">:</span> <span class="n">output_tensor</span><span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JAX apply function and plain TF pre/post-processing functions defined for export.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>JAX apply function and plain TF pre/post-processing functions defined for export.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="create-jaxmodule-and-servingconfig">
+<h3>Create <code class="docutils literal notranslate"><span class="pre">JaxModule</span></code> and <code class="docutils literal notranslate"><span class="pre">ServingConfig</span></code><a class="headerlink" href="#create-jaxmodule-and-servingconfig" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="../../../api_reference/export.jax_module.html#orbax.export.jax_module.JaxModule" title="orbax.export.jax_module.JaxModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">JaxModule</span></code></a> wraps the JAX function and its parameters. <a class="reference internal" href="../../../api_reference/export.serving_config.html#orbax.export.serving_config.ServingConfig" title="orbax.export.serving_config.ServingConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServingConfig</span></code></a> defines the input signature for the SavedModel and specifies which pre/post-processing functions to use for a given serving signature key (e.g., <code class="docutils literal notranslate"><span class="pre">serving_default</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the JaxModule, which encapsulates the JAX function and its parameters.</span>
+<span class="n">jax_module_for_export</span> <span class="o">=</span> <span class="n">JaxModule</span><span class="p">(</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">final_model_params_to_save</span><span class="p">,</span>
+    <span class="n">apply_fn</span><span class="o">=</span><span class="n">jax_model_apply_fn_for_export</span><span class="p">,</span>
+    <span class="n">input_polymorphic_shape</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;(b, </span><span class="si">{</span><span class="n">input_dim</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">,</span>
+    <span class="n">jax2tf_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;with_gradient&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;native_serialization&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># This tells orbax-export how to trace the Python preprocessor function.</span>
+<span class="n">tf_input_signature</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">TensorSpec</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="c1"># Create a serving configuration that bundles the signature key, input specs,</span>
+<span class="c1"># and our Python processing functions.</span>
+<span class="n">serving_config</span> <span class="o">=</span> <span class="n">ServingConfig</span><span class="p">(</span>
+    <span class="n">signature_key</span><span class="o">=</span><span class="s1">&#39;serving_default&#39;</span><span class="p">,</span>
+    <span class="n">input_signature</span><span class="o">=</span><span class="n">tf_input_signature</span><span class="p">,</span>
+    <span class="n">tf_preprocessor</span><span class="o">=</span><span class="n">tf_preprocess_fn_for_export</span><span class="p">,</span>
+    <span class="n">tf_postprocessor</span><span class="o">=</span><span class="n">tf_postprocess_fn_for_export</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JaxModule and ServingConfig created successfully.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>JaxModule and ServingConfig created successfully.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-05-27 19:40:23.674863: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="export-to-tensorflow-savedmodel">
+<h3>Export to TensorFlow SavedModel<a class="headerlink" href="#export-to-tensorflow-savedmodel" title="Link to this heading">#</a></h3>
+<p>The <a class="reference internal" href="../../../api_reference/export.export_manager.html#orbax.export.export_manager.ExportManager" title="orbax.export.export_manager.ExportManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExportManager</span></code></a> takes the <code class="docutils literal notranslate"><span class="pre">JaxModule</span></code> and a list of <code class="docutils literal notranslate"><span class="pre">ServingConfig</span></code> to build and save the final TensorFlow SavedModel.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the directory to save the final exported model.</span>
+<span class="n">saved_model_dir</span> <span class="o">=</span> <span class="n">tutorial_base_dir</span> <span class="o">/</span> <span class="s1">&#39;tf_saved_model_orbax_export&#39;</span>
+<span class="n">cleanup_directory_if_exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">saved_model_dir</span><span class="p">))</span>
+<span class="n">saved_model_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># The ExportManager orchestrates the JAX-to-TF conversion and saving process.</span>
+<span class="n">export_manager</span> <span class="o">=</span> <span class="n">ExportManager</span><span class="p">(</span><span class="n">jax_module_for_export</span><span class="p">,</span> <span class="p">[</span><span class="n">serving_config</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exporting SavedModel to: </span><span class="si">{</span><span class="n">saved_model_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">export_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">saved_model_dir</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model exported successfully to SavedModel format.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Contents of </span><span class="si">{</span><span class="n">saved_model_dir</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">saved_model_dir</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR during SavedModel export: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+    <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Exporting SavedModel to: /tmp/orbax_tutorial/tf_saved_model_orbax_export
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model exported successfully to SavedModel format.
+Contents of /tmp/orbax_tutorial/tf_saved_model_orbax_export: [&#39;fingerprint.pb&#39;, &#39;assets&#39;, &#39;saved_model.pb&#39;, &#39;variables&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="validate-the-exported-model">
+<h3>Validate the Exported Model<a class="headerlink" href="#validate-the-exported-model" title="Link to this heading">#</a></h3>
+<p>A critical final step is to verify that the exported TensorFlow model produces the same results as the original JAX model. We use the <a class="reference internal" href="../../../api_reference/export.validate.validation_manager.html#orbax.export.validate.validation_manager.ValidationManager" title="orbax.export.validate.validation_manager.ValidationManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValidationManager</span></code></a>, which compares the outputs of the JAX model and the loaded TF SavedModel for a given batch of inputs and generates a detailed report.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare a batch of test inputs. These should be &quot;raw&quot; (pre-preprocessing).</span>
+<span class="n">validation_batch_size</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">raw_validation_inputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">validation_batch_size</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">*</span> <span class="mf">255.0</span>
+
+<span class="c1"># To match the positional signature pass inputs as a list of lists.</span>
+<span class="n">validation_mgr</span> <span class="o">=</span> <span class="n">ValidationManager</span><span class="p">(</span>
+    <span class="n">module</span><span class="o">=</span><span class="n">jax_module_for_export</span><span class="p">,</span>
+    <span class="n">serving_configs</span><span class="o">=</span><span class="p">[</span><span class="n">serving_config</span><span class="p">],</span>
+    <span class="n">model_inputs</span><span class="o">=</span><span class="p">[[</span><span class="n">raw_validation_inputs</span><span class="p">]]</span>
+<span class="p">)</span>
+
+<span class="c1"># Load the candidate model we want to validate.</span>
+<span class="n">loaded_tf_model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">saved_model</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">saved_model_dir</span><span class="p">))</span>
+
+<span class="c1"># Run the validation, which compares the JAX and TF outputs.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Running validation...&quot;</span><span class="p">)</span>
+<span class="n">validation_reports</span> <span class="o">=</span> <span class="n">validation_mgr</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">loaded_tf_model</span><span class="p">)</span>
+
+<span class="c1"># Check the report. The report is a dict keyed by the signature_key.</span>
+<span class="n">report</span> <span class="o">=</span> <span class="n">validation_reports</span><span class="p">[</span><span class="s1">&#39;serving_default&#39;</span><span class="p">]</span>
+
+<span class="c1"># The report status is an enum. We check its string name for a simple pass/fail result.</span>
+<span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Pass&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;VERIFICATION PASSED! Status: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;VERIFICATION FAILED! Status: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># The report can be printed as a JSON string for detailed inspection of differences and latencies.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Validation Report:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running validation...
+VERIFICATION PASSED! Status: Pass
+
+Validation Report:
+{
+  &quot;outputs&quot;: {
+    &quot;FloatingPointDiffReport&quot;: {
+      &quot;total&quot;: 40,
+      &quot;max_diff&quot;: 0.0,
+      &quot;max_rel_diff&quot;: 0.0,
+      &quot;all_close&quot;: true,
+      &quot;all_close_absolute_tolerance&quot;: 1e-07,
+      &quot;all_close_relative_tolerance&quot;: 1e-07
+    },
+    &quot;NonFloatingPointDiffReport&quot;: {
+      &quot;total_flattened_tensors&quot;: 0,
+      &quot;mismatches&quot;: 0,
+      &quot;mismatch_ratio&quot;: 0.0,
+      &quot;max_non_floating_mismatch_ratio&quot;: 0.01
+    }
+  },
+  &quot;latency&quot;: {
+    &quot;baseline&quot;: {
+      &quot;num_batches&quot;: 1,
+      &quot;avg_in_ms&quot;: 1.1887550354003906,
+      &quot;p90_in_ms&quot;: 1.1887550354003906,
+      &quot;p99_in_ms&quot;: 1.1887550354003906
+    },
+    &quot;candidate&quot;: {
+      &quot;num_batches&quot;: 1,
+      &quot;avg_in_ms&quot;: 2.275705337524414,
+      &quot;p90_in_ms&quot;: 2.275705337524414,
+      &quot;p99_in_ms&quot;: 2.275705337524414
+    }
+  },
+  &quot;xprof_url&quot;: {
+    &quot;baseline&quot;: &quot;N/A&quot;,
+    &quot;candidate&quot;: &quot;N/A&quot;
+  },
+  &quot;metadata&quot;: {
+    &quot;baseline&quot;: {},
+    &quot;candidate&quot;: {}
+  },
+  &quot;status&quot;: 1
+}
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1779910824.053265    3679 device_compiler.h:196] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../../export/orbax_export_101.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Exporting with Orbax</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../../api_reference/export.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">orbax.export API Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">1. Setup</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#helper-for-directory-management">Helper for Directory Management</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-simulated-jax-state">2. Define a Simulated JAX State</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-model-and-training-state">Define a Model and Training State</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax-checkpointing-workflow">3. Orbax Checkpointing Workflow</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-checkpointing-directory">Create a Checkpointing Directory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checkpointing-during-a-simulated-training-loop">Checkpointing During a Simulated Training Loop</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resuming-from-a-checkpoint">Resuming from a Checkpoint</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#saving-final-jax-parameters-for-export">4. Saving Final JAX Parameters for Export</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-final-parameters-for-saving">Extract Final Parameters for Saving</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-save-pytree-for-the-final-save">Using <code class="docutils literal notranslate"><span class="pre">save_pytree</span></code> for the Final Save</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-exported-parameters-verification">Loading Exported Parameters (Verification)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exporting-to-tensorflow-savedmodel">5. Exporting to TensorFlow SavedModel</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-jax-model-apply-function-and-pre-post-processing-for-export">Define JAX Model Apply Function and Pre/Post-processing for Export</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-jaxmodule-and-servingconfig">Create <code class="docutils literal notranslate"><span class="pre">JaxModule</span></code> and <code class="docutils literal notranslate"><span class="pre">ServingConfig</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-to-tensorflow-savedmodel">Export to TensorFlow SavedModel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-the-exported-model">Validate the Exported Model</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Orbax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Google.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

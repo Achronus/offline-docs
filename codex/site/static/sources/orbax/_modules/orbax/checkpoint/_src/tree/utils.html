@@ -1,0 +1,946 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>orbax.checkpoint._src.tree.utils &#8212; Orbax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../../../_static/katex.min.js?v=3f697ebd"></script>
+    <script src="../../../../../_static/auto-render.min.js?v=ed6e749d"></script>
+    <script src="../../../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/orbax/checkpoint/_src/tree/utils';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/orbax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="orbax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_modules/orbax/checkpoint/_src/tree/utils.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Orbax  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/orbax_checkpoint_101.html">Introduction to Checkpointing with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpointables.html">Working with Checkpointables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpointing_pytrees.html">Working with PyTree Checkpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/training.html">Checkpointing in a Training Loop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/customization.html">Customizing Checkpointing Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/partial_saving.html">Partial Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/model_surgery.html">Model Surgery</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.html">orbax.checkpoint V1 API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.arrays.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.arrays</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.errors</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.handlers.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.handlers</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.handler_registration.html">CheckpointableHandler Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.options.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.options</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.partial.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.partial</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.path.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.path</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.checkpointer.html">Training Checkpointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.save_decision_policies.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.save_decision_policies</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.errors</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.types.html">Training Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.tree.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.multihost.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.multihost</span></code> module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Migrating to Orbax V1</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/orbax_v0_to_v1_migration.html">Orbax v0 to v1 Migration Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../index.v0.html">Legacy API (V0)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/orbax_checkpoint_101.html">Checkpointing with Orbax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/orbax_checkpoint_api_overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/api_refactor.html">Using the Refactored CheckpointManager  API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/checkpointing_pytrees.html">Checkpointing PyTrees of Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/optimized_checkpointing.html">Optimized Checkpointing with Tensorstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/transformations.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/preemption_checkpointing.html">Preemption Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/debug_guide.html">Debugging Guide</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../api_reference/checkpoint.html">orbax.checkpoint API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.abstract_checkpoint_manager.html">AbstractCheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.checkpoint_manager.html">CheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.checkpointers.html">Checkpointers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.handlers.html">CheckpointHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.args.html">CheckpointArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.type_handlers.html">TypeHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.atomicity.html">Atomicity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.atomicity_types.html">Atomicity Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.step.html">Step entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.deleter.html">Checkpoint Deleter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.preservation_policy.html">Preservation Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.save_decision_policy.html">Save Decision Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.checkpoint_utils.html">Checkpointing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.transform_utils.html">PyTree Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.msgpack_utils.html">Msgpack utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.multihost.html">Multi–host Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.tree.html">Tree Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.metadata.html">Metadata Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.logging.html">Checkpoint logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.options.html">Checkpointing Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.handlers.handler_registration.html">Handler Registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.arrays.html">Arrays</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exporting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/export/orbax_export_101.html">Exporting with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpointing_and_exporting_jax_models.html">Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../api_reference/export.html">orbax.export API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.dtensor_utils.html">DTensor utilities for multi–device/host export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.export_manager.html">ExportManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.jax_module.html">JaxModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.serving_config.html">ServingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.utils.html">General Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.validate.validation_manager.html">ValidationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.validate.validation_report.html">ValidationReport</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Additional Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributors.html">Contributors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for orbax.checkpoint._src.tree.utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2026 The Orbax Authors.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;Tree utilities.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.tree_util</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jtu</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.arrays</span><span class="w"> </span><span class="kn">import</span> <span class="n">abstract_arrays</span>
+
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="n">PyTree</span> <span class="o">=</span> <span class="n">Any</span>
+<span class="c1"># This won&#39;t help the type checker but at least allows us to use types to</span>
+<span class="c1"># document things like `PyTreeOf[ArrayDesc]`.</span>
+<span class="n">PyTreeOf</span> <span class="o">=</span> <span class="n">PyTree</span> <span class="o">|</span> <span class="n">T</span>
+<span class="n">PyTreeKey</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">SequenceKey</span>
+    <span class="o">|</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">DictKey</span>
+    <span class="o">|</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">GetAttrKey</span>
+    <span class="o">|</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">FlattenedIndexKey</span>
+<span class="p">)</span>
+<span class="n">PyTreePath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PyTreeKey</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+<span class="c1"># These types are useful for specifying PyTree paths using user-friendly types,</span>
+<span class="c1"># rather than PyTreeKeys. For example, we may specify dictionary keys as</span>
+<span class="c1"># strings, and sequence indices as integers.</span>
+<span class="n">TreeKey</span> <span class="o">=</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span>
+<span class="n">TreePath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">TreeKey</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+<span class="n">to_shape_dtype_struct</span> <span class="o">=</span> <span class="n">abstract_arrays</span><span class="o">.</span><span class="n">to_shape_dtype_struct</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">isinstance_of_namedtuple</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Determines if the `value` is a NamedTuple.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;_fields&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">issubclass_of_namedtuple</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Determines if the `type` is a subclass of NamedTuple.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s1">&#39;_fields&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_empty_node</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">children</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">_src</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">flatten_one_level</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># pylint: disable=protected-access</span>
+  <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># non-empty leaf, otherwise flatten would return self.</span>
+  <span class="k">return</span> <span class="ow">not</span> <span class="n">children</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_leaf_node</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;The default value of the `is_leaf` predicate.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">all_leaves</span><span class="p">([</span><span class="n">t</span><span class="p">])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_leaf_node_or_none</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+  <span class="k">return</span> <span class="n">is_leaf_node</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="ow">or</span> <span class="n">t</span> <span class="ow">is</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_jax_internal_node</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+  <span class="k">return</span> <span class="ow">not</span> <span class="n">is_leaf_node</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_internal_node_as_dict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+  <span class="n">keys_and_children</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tree_flatten_with_path_one_level</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="k">return</span> <span class="p">{</span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">keystr</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">keys_and_children</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_empty_or_leaf</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="n">children</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">_src</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">flatten_one_level</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># pylint: disable=protected-access</span>
+  <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># Cannot flatten x; means it must be a leaf</span>
+  <span class="k">return</span> <span class="ow">not</span> <span class="n">children</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_key_name</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Returns the name of a JAX Key.&quot;&quot;&quot;</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">SequenceKey</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">key</span><span class="o">.</span><span class="n">idx</span>
+  <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">DictKey</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+  <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">GetAttrKey</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">key</span><span class="o">.</span><span class="n">name</span>
+  <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">FlattenedIndexKey</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">key</span><span class="o">.</span><span class="n">key</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported KeyEntry: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="si">}</span><span class="s1">: &quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">tuple_path_from_keypath</span><span class="p">(</span><span class="n">keypath</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Converts JAX keypath tuple (from tree_map_with_path) to string tuple.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">get_key_name</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keypath</span><span class="p">])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_dict_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+  <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">DictKey</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">GetAttrKey</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_sequence_key</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+  <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span>
+      <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">FlattenedIndexKey</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">SequenceKey</span><span class="p">)</span>
+  <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_raise_unsupported_key_error</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+  <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported KeyEntry: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_extend_list</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">nextvalue</span><span class="p">):</span>
+  <span class="k">assert</span> <span class="n">idx</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">ls</span><span class="p">):</span>
+    <span class="n">ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nextvalue</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">ls</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">from_flattened_with_keypath</span><span class="p">(</span>
+    <span class="n">flat_with_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">Any</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Returns a tree for the given list of (KeyPath, value) pairs.</span>
+
+<span class="sd">  IMPORTANT: The returned tree replaces tuple container nodes with list nodes,</span>
+<span class="sd">  even though the input KeyPath had originated from a tuple.</span>
+
+<span class="sd">  IMPORTANT: The returned tree replaces NamedTuple container nodes with dict</span>
+<span class="sd">  nodes, even though the input KeyPath had originated from a NamedTuple.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    flat_with_keys: A list of pair of Keypath and values.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">flat_with_keys</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="s1">&#39;Unable to uniquely reconstruct tree from empty flattened list &#39;</span>
+        <span class="s1">&#39;(it could be </span><span class="si">{}</span><span class="s1"> or []).&#39;</span>
+    <span class="p">)</span>
+  <span class="n">first_el</span> <span class="o">=</span> <span class="n">flat_with_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="k">assert</span> <span class="n">first_el</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Invalid data format: expected a pair, got </span><span class="si">{</span><span class="n">first_el</span><span class="si">=}</span><span class="s1">&#39;</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">first_el</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+    <span class="c1"># The tree is a single element (the path is empty), just return it.</span>
+    <span class="k">return</span> <span class="n">first_el</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="c1"># Accesses the first path element (arbitrary), first tuple element</span>
+  <span class="c1"># (keypath tuple), first key in keypath (outermost key in the PyTree).</span>
+  <span class="n">outerkey</span> <span class="o">=</span> <span class="n">first_el</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+  <span class="k">if</span> <span class="n">is_dict_key</span><span class="p">(</span><span class="n">outerkey</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="k">elif</span> <span class="n">is_sequence_key</span><span class="p">(</span><span class="n">outerkey</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_raise_unsupported_key_error</span><span class="p">(</span><span class="n">outerkey</span><span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">keypath</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">flat_with_keys</span><span class="p">:</span>
+    <span class="n">subtree</span> <span class="o">=</span> <span class="n">result</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keypath</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">outerkey</span><span class="p">))</span>
+      <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">keypath</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_dict_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+          <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subtree</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+          <span class="n">subtree</span><span class="p">[</span><span class="n">get_key_name</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">is_sequence_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+          <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subtree</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+          <span class="n">idx</span> <span class="o">=</span> <span class="n">get_key_name</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+          <span class="n">subtree</span> <span class="o">=</span> <span class="n">_extend_list</span><span class="p">(</span><span class="n">subtree</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">nextkey</span> <span class="o">=</span> <span class="n">keypath</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">is_dict_key</span><span class="p">(</span><span class="n">nextkey</span><span class="p">):</span>
+          <span class="n">nextvalue</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">elif</span> <span class="n">is_sequence_key</span><span class="p">(</span><span class="n">nextkey</span><span class="p">):</span>
+          <span class="n">nextvalue</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">nextvalue</span> <span class="o">=</span> <span class="kc">None</span>
+          <span class="n">_raise_unsupported_key_error</span><span class="p">(</span><span class="n">nextkey</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">is_dict_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+          <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subtree</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+          <span class="n">name</span> <span class="o">=</span> <span class="n">get_key_name</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+          <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">subtree</span><span class="p">:</span>
+            <span class="n">subtree</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">nextvalue</span>
+          <span class="n">subtree</span> <span class="o">=</span> <span class="n">subtree</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">is_sequence_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+          <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subtree</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+          <span class="n">idx</span> <span class="o">=</span> <span class="n">get_key_name</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+          <span class="n">subtree</span> <span class="o">=</span> <span class="n">_extend_list</span><span class="p">(</span><span class="n">subtree</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">nextvalue</span><span class="p">)</span>
+          <span class="n">subtree</span> <span class="o">=</span> <span class="n">subtree</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">_raise_unsupported_key_error</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">result</span>
+
+
+<div class="viewcode-block" id="serialize_tree">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.tree.html#orbax.checkpoint.tree.serialize_tree">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">serialize_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">keep_empty_nodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Transforms a PyTree to a serializable format.</span>
+
+<span class="sd">  IMPORTANT: The returned tree replaces tuple container nodes with list nodes.</span>
+
+<span class="sd">  IMPORTANT: The returned tree replaces NamedTuple container nodes with dict</span>
+<span class="sd">  nodes.</span>
+
+
+<span class="sd">  Args:</span>
+<span class="sd">    tree: The tree to serialize, if tree is empty and keep_empty_nodes is False,</span>
+<span class="sd">      an error is raised as there is no valid representation.</span>
+<span class="sd">    keep_empty_nodes: If true, does not filter out empty nodes.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    The serialized PyTree.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">flat_with_keys</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_flatten_with_path</span><span class="p">(</span>
+      <span class="n">tree</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_empty_or_leaf</span> <span class="k">if</span> <span class="n">keep_empty_nodes</span> <span class="k">else</span> <span class="kc">None</span>
+  <span class="p">)</span>
+  <span class="k">return</span> <span class="n">from_flattened_with_keypath</span><span class="p">(</span><span class="n">flat_with_keys</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="deserialize_tree">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.tree.html#orbax.checkpoint.tree.deserialize_tree">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">deserialize_tree</span><span class="p">(</span>
+    <span class="n">serialized</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">keep_empty_nodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Deserializes a PyTree to the same structure as `target`.&quot;&quot;&quot;</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">flax</span>  <span class="c1"># pylint: disable=g-import-not-at-top</span>
+  <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">flax</span> <span class="o">=</span> <span class="kc">None</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_reconstruct_from_keypath</span><span class="p">(</span><span class="n">keypath</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">serialized</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keypath</span><span class="p">:</span>
+      <span class="n">key_name</span> <span class="o">=</span> <span class="n">get_key_name</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+      <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">GetAttrKey</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">isinstance_of_namedtuple</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+          <span class="n">result</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">key_name</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">flax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">flax</span><span class="o">.</span><span class="n">struct</span><span class="o">.</span><span class="n">PyTreeNode</span><span class="p">):</span>
+          <span class="c1"># Special case to support flax.struct.PyTreeNode</span>
+          <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">key_name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">key_name</span><span class="p">]</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Special case to support Pax.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">and</span> <span class="n">key_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+          <span class="n">key_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key_name</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">key_name</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map_with_path</span><span class="p">(</span>
+      <span class="n">_reconstruct_from_keypath</span><span class="p">,</span>
+      <span class="n">target</span><span class="p">,</span>
+      <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_empty_or_leaf</span> <span class="k">if</span> <span class="n">keep_empty_nodes</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_flat_dict</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Returns True if the tree is a flat dict.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">is_leaf_node</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="to_flat_dict">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.tree.html#orbax.checkpoint.tree.to_flat_dict">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_flat_dict</span><span class="p">(</span>
+    <span class="n">tree</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span>
+    <span class="n">sep</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">keep_empty_nodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">is_leaf</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Converts a tree into a flattened dictionary.</span>
+
+<span class="sd">  The nested keys are flattened to a tuple.</span>
+
+<span class="sd">  Example::</span>
+
+<span class="sd">    tree = {&#39;foo&#39;: 1, &#39;bar&#39;: {&#39;a&#39;: 2, &#39;b&#39;: {}}}</span>
+<span class="sd">    to_flat_dict(tree)</span>
+<span class="sd">    {</span>
+<span class="sd">      (&#39;foo&#39;,): 1,</span>
+<span class="sd">      (&#39;bar&#39;, &#39;a&#39;): 2,</span>
+<span class="sd">    }</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    tree: A PyTree to be flattened.</span>
+<span class="sd">    sep: If provided, keys will be returned as `sep`-separated strings.</span>
+<span class="sd">      Otherwise, keys are returned as tuples.</span>
+<span class="sd">    keep_empty_nodes: If True, empty nodes are not filtered out.</span>
+<span class="sd">    is_leaf: If provided, a function that returns True if a value is a leaf.</span>
+<span class="sd">      Overrides `keep_empty_nodes` if that is also provided.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    A flattened dictionary and the tree structure.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">is_leaf</span> <span class="o">=</span> <span class="n">is_leaf</span> <span class="ow">or</span> <span class="p">(</span><span class="n">is_empty_or_leaf</span> <span class="k">if</span> <span class="n">keep_empty_nodes</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+  <span class="n">flat_with_keys</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_flatten_with_path</span><span class="p">(</span>
+      <span class="n">tree</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_leaf</span>
+  <span class="p">)</span>
+  <span class="n">flat_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">tuple_path_from_keypath</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">flat_with_keys</span><span class="p">}</span>
+  <span class="k">if</span> <span class="n">sep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">flat_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">flat_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+  <span class="k">return</span> <span class="n">flat_dict</span></div>
+
+
+
+<div class="viewcode-block" id="from_flat_dict">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.tree.html#orbax.checkpoint.tree.from_flat_dict">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">from_flat_dict</span><span class="p">(</span>
+    <span class="n">flat_dict</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PyTree</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sep</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Reconstructs the original tree object from a flattened dictionary.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    flat_dict: A dictionary conforming to the return value of `to_flat_dict`.</span>
+<span class="sd">    target: A reference PyTree. The returned value will conform to this</span>
+<span class="sd">      structure. If not provided, an unflattened dict will be returned with the</span>
+<span class="sd">      inferred structure of the original tree, without necessarily matching it</span>
+<span class="sd">      exactly. Note, if not provided, the keys in `flat_dict` need to match</span>
+<span class="sd">      `sep`.</span>
+<span class="sd">    sep: separator used for nested keys in `flat_dict`.</span>
+<span class="sd">    inplace: If True, removes items from flat_dict as they are added to the</span>
+<span class="sd">      result.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    A dict matching the structure of `tree` with the values of `flat_dict`.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">if</span> <span class="n">inplace</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">flat_dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Inplace operations require flat_dict to be a dict.&#39;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">flat_dict</span><span class="p">):</span>
+      <span class="n">v</span> <span class="o">=</span> <span class="n">flat_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">inplace</span> <span class="k">else</span> <span class="n">flat_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+      <span class="n">subtree</span> <span class="o">=</span> <span class="n">result</span>
+      <span class="k">if</span> <span class="n">sep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+        <span class="n">tuple_k</span> <span class="o">=</span> <span class="n">k</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">tuple_k</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">))</span>
+      <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tuple_k</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">tuple_k</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+          <span class="k">assert</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">subtree</span>
+          <span class="n">subtree</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">subtree</span><span class="p">:</span>
+            <span class="n">subtree</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+          <span class="n">subtree</span> <span class="o">=</span> <span class="n">subtree</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">result</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">flat_structure</span> <span class="o">=</span> <span class="n">to_flat_dict</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">sep</span><span class="p">)</span>
+    <span class="c1"># Ensure that the ordering of `flat_dict` keys matches that of `target`.</span>
+    <span class="c1"># Necessary for later unflattening.</span>
+    <span class="n">ordered_keys</span> <span class="o">=</span> <span class="n">flat_structure</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+      <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">flat_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ordered_keys</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">flat_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ordered_keys</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">structure</span><span class="p">(</span><span class="n">target</span><span class="p">),</span> <span class="n">values</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">str_keypath</span><span class="p">(</span><span class="n">keypath</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Returns the parameter name for a keypath.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">get_key_name</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keypath</span><span class="p">])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">param_name_from_keypath</span><span class="p">(</span><span class="n">keypath</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Returns the parameter name for a keypath.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">str_keypath</span><span class="p">(</span><span class="n">keypath</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="get_param_names">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.tree.html#orbax.checkpoint.tree.get_param_names">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_param_names</span><span class="p">(</span>
+    <span class="n">item</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">include_empty_nodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Gets parameter names for PyTree elements.&quot;&quot;&quot;</span>
+  <span class="n">is_leaf</span> <span class="o">=</span> <span class="n">is_empty_or_leaf</span> <span class="k">if</span> <span class="n">include_empty_nodes</span> <span class="k">else</span> <span class="kc">None</span>
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map_with_path</span><span class="p">(</span>
+      <span class="k">lambda</span> <span class="n">kp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">param_name_from_keypath</span><span class="p">(</span><span class="n">kp</span><span class="p">),</span>
+      <span class="n">item</span><span class="p">,</span>
+      <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_leaf</span><span class="p">,</span>
+  <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">tree_flatten_with_path_one_level</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">PyTreePath</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">PyTreeDef</span><span class="p">]:</span>
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_flatten_with_path</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">x</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">look_up_pytree_key</span><span class="p">(</span><span class="n">pytree</span><span class="p">:</span> <span class="n">PyTreeOf</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="n">PyTreeKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTreeOf</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Resolves a single PyTree key (i.e. one element of a PyTreePath).</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    pytree: The PyTree node with respect to which to resolve the key.</span>
+<span class="sd">    key: The key to resolve.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    An element of the given collection or custom PyTree node.</span>
+
+<span class="sd">  Raises:</span>
+<span class="sd">    KeyError: If the given key is not present in the given node.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">match</span> <span class="n">key</span><span class="p">:</span>
+    <span class="k">case</span> <span class="n">jtu</span><span class="o">.</span><span class="n">SequenceKey</span><span class="p">(</span><span class="n">idx</span><span class="o">=</span><span class="n">k</span><span class="p">)</span> <span class="o">|</span> <span class="n">jtu</span><span class="o">.</span><span class="n">DictKey</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">k</span><span class="p">):</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pytree</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+      <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Key </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s1"> not found in </span><span class="si">{</span><span class="n">pytree</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="k">case</span> <span class="n">jtu</span><span class="o">.</span><span class="n">FlattenedIndexKey</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">k</span><span class="p">):</span>
+      <span class="n">leaves</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tree_flatten_with_path_one_level</span><span class="p">(</span><span class="n">pytree</span><span class="p">)</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">idx_and_leaf</span> <span class="o">=</span> <span class="n">leaves</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+      <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Key </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s1"> not found in </span><span class="si">{</span><span class="n">pytree</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">idx_and_leaf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">case</span> <span class="n">jtu</span><span class="o">.</span><span class="n">GetAttrKey</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">k</span><span class="p">):</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pytree</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+      <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Key </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s1"> not found in </span><span class="si">{</span><span class="n">pytree</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+  <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Key </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s1"> not found in </span><span class="si">{</span><span class="n">pytree</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pytree_key_as_tree_key</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">PyTreeKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeKey</span><span class="p">:</span>
+  <span class="k">match</span> <span class="n">key</span><span class="p">:</span>
+    <span class="k">case</span> <span class="p">(</span><span class="n">jtu</span><span class="o">.</span><span class="n">SequenceKey</span><span class="p">(</span><span class="n">idx</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+          <span class="o">|</span> <span class="n">jtu</span><span class="o">.</span><span class="n">DictKey</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+          <span class="o">|</span> <span class="n">jtu</span><span class="o">.</span><span class="n">FlattenedIndexKey</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+          <span class="o">|</span> <span class="n">jtu</span><span class="o">.</span><span class="n">GetAttrKey</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">k</span><span class="p">)):</span>
+      <span class="k">return</span> <span class="n">k</span>  <span class="c1"># pytype: disable=bad-return-type</span>
+  <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot convert unexpected PyTreeKey to TreeKey: </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pytree_path_as_tree_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">PyTreePath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreePath</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Converts a PyTreePath to a legacy tree path.</span>
+
+<span class="sd">  Each PyTreeKey in a PyTreePath has a type specific to the type into which it</span>
+<span class="sd">  indexes. Legacy tree keys are either strings or integers.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    path: The path to be converted.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    A legacy representation of the path.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_pytree_key_as_tree_key</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">path</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">select_by_pytree_path</span><span class="p">(</span>
+    <span class="n">tree</span><span class="p">:</span> <span class="n">PyTreeOf</span><span class="p">[</span><span class="n">T</span><span class="p">],</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">PyTreePath</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTreeOf</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Extracts a subtree from a PyTree, using a PyTreePath to describe the path.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    tree: The PyTree from which to extract the subtree.</span>
+<span class="sd">    path: A tuple of PyTreeKeys specifying the path to the subtree.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    The subtree.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">match</span> <span class="n">path</span><span class="p">:</span>
+    <span class="k">case</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span><span class="p">):</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">select_by_pytree_path</span><span class="p">(</span><span class="n">look_up_pytree_key</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">rest</span><span class="p">))</span>
+      <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Path </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1"> does not exist in </span><span class="si">{</span><span class="n">tree</span><span class="si">=}</span><span class="s1">.&#39;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="k">case</span> <span class="p">():</span>
+      <span class="k">return</span> <span class="n">tree</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">select_by_tree_path</span><span class="p">(</span>
+    <span class="n">tree</span><span class="p">:</span> <span class="n">PyTreeOf</span><span class="p">[</span><span class="n">T</span><span class="p">],</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">TreePath</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTreeOf</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Extracts a subtree from a PyTree, using a tree path to describe the path.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    tree: The PyTree from which to extract the subtree.</span>
+<span class="sd">    path: A tuple of keys (str | int) specifying the path to the subtree.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    The subtree.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">match</span> <span class="n">path</span><span class="p">:</span>
+    <span class="k">case</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span><span class="p">):</span>
+      <span class="n">keys_and_children</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tree_flatten_with_path_one_level</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+      <span class="k">for</span> <span class="p">(</span><span class="n">pytree_key</span><span class="p">,),</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">keys_and_children</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_pytree_key_as_tree_key</span><span class="p">(</span><span class="n">pytree_key</span><span class="p">)</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+          <span class="k">return</span> <span class="n">select_by_tree_path</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">rest</span><span class="p">))</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Path </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1"> does not exist in </span><span class="si">{</span><span class="n">tree</span><span class="si">=}</span><span class="s1">.&#39;</span><span class="p">)</span>
+    <span class="k">case</span> <span class="p">():</span>
+      <span class="k">return</span> <span class="n">tree</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Orbax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Google.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

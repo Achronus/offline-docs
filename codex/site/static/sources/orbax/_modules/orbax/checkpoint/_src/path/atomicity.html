@@ -1,0 +1,1365 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>orbax.checkpoint._src.path.atomicity &#8212; Orbax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../../../_static/katex.min.js?v=3f697ebd"></script>
+    <script src="../../../../../_static/auto-render.min.js?v=ed6e749d"></script>
+    <script src="../../../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/orbax/checkpoint/_src/path/atomicity';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/orbax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="orbax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_modules/orbax/checkpoint/_src/path/atomicity.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Orbax  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/orbax_checkpoint_101.html">Introduction to Checkpointing with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpointables.html">Working with Checkpointables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpointing_pytrees.html">Working with PyTree Checkpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/training.html">Checkpointing in a Training Loop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/customization.html">Customizing Checkpointing Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/partial_saving.html">Partial Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/model_surgery.html">Model Surgery</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.html">orbax.checkpoint V1 API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.arrays.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.arrays</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.errors</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.handlers.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.handlers</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.handler_registration.html">CheckpointableHandler Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.options.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.options</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.partial.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.partial</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.path.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.path</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.checkpointer.html">Training Checkpointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.save_decision_policies.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.save_decision_policies</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.errors</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.types.html">Training Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.tree.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.multihost.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.multihost</span></code> module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Migrating to Orbax V1</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/orbax_v0_to_v1_migration.html">Orbax v0 to v1 Migration Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../index.v0.html">Legacy API (V0)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/orbax_checkpoint_101.html">Checkpointing with Orbax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/orbax_checkpoint_api_overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/api_refactor.html">Using the Refactored CheckpointManager  API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/checkpointing_pytrees.html">Checkpointing PyTrees of Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/optimized_checkpointing.html">Optimized Checkpointing with Tensorstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/transformations.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/preemption_checkpointing.html">Preemption Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/debug_guide.html">Debugging Guide</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../api_reference/checkpoint.html">orbax.checkpoint API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.abstract_checkpoint_manager.html">AbstractCheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.checkpoint_manager.html">CheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.checkpointers.html">Checkpointers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.handlers.html">CheckpointHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.args.html">CheckpointArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.type_handlers.html">TypeHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.atomicity.html">Atomicity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.atomicity_types.html">Atomicity Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.step.html">Step entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.deleter.html">Checkpoint Deleter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.preservation_policy.html">Preservation Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.save_decision_policy.html">Save Decision Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.checkpoint_utils.html">Checkpointing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.transform_utils.html">PyTree Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.msgpack_utils.html">Msgpack utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.multihost.html">Multi–host Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.tree.html">Tree Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.metadata.html">Metadata Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.logging.html">Checkpoint logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.options.html">Checkpointing Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.handlers.handler_registration.html">Handler Registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.arrays.html">Arrays</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exporting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/export/orbax_export_101.html">Exporting with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpointing_and_exporting_jax_models.html">Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../api_reference/export.html">orbax.export API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.dtensor_utils.html">DTensor utilities for multi–device/host export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.export_manager.html">ExportManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.jax_module.html">JaxModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.serving_config.html">ServingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.utils.html">General Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.validate.validation_manager.html">ValidationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.validate.validation_report.html">ValidationReport</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Additional Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributors.html">Contributors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for orbax.checkpoint._src.path.atomicity</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2026 The Orbax Authors.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;Utils for creating and finalizing temporary paths.</span>
+
+<span class="sd">Note that the configurability provided by this feature does</span>
+<span class="sd">not leave users free to define their own temporary path structure. The current</span>
+<span class="sd">implementation is mainly a refactoring of old logic that separately created</span>
+<span class="sd">temp directories and finalized them. It does not touch other logic that detects</span>
+<span class="sd">temp checkpoints and cleans them up (primarily located in</span>
+<span class="sd">orbax.checkpoint.path.step and :py:class:`.CheckpointManager`).</span>
+
+<span class="sd">Ordinarily, atomic logic defaults to :py:class:`AtomicRenameTemporaryPath`,</span>
+<span class="sd">which uses an atomic rename to indicate checkpoint completion. However, not all</span>
+<span class="sd">filesystems support atomic rename, so :py:class:`CommitFileTemporaryPath` is</span>
+<span class="sd">provided as an alternative, which uses a &quot;commit_success&quot; file to indicate</span>
+<span class="sd">completion.</span>
+
+<span class="sd">Ideally, we would standardize on a single behavior, but it is difficult, largely</span>
+<span class="sd">for legacy reasons, to achieve this. Furthermore, there are many other</span>
+<span class="sd">alternative ways of ensuring save atomicity. As such, we have opted to provide</span>
+<span class="sd">a more flexible approach that allows users to configure the behavior they want.</span>
+
+<span class="sd">Configuration can be done in the following way::</span>
+
+<span class="sd">  AsyncCheckpointer(</span>
+<span class="sd">      StandardCheckpointHandler(),</span>
+<span class="sd">      temporary_path_class=CommitFileTemporaryPath,</span>
+<span class="sd">  )</span>
+
+<span class="sd">  # OR</span>
+
+<span class="sd">  CheckpointManager(</span>
+<span class="sd">      directory,</span>
+<span class="sd">      item_names=(&#39;state&#39;, &#39;dataset&#39;,),</span>
+<span class="sd">      options=CheckpointManagerOptions(</span>
+<span class="sd">          temporary_path_class=atomicity.CommitFileTemporaryPath</span>
+<span class="sd">      ),</span>
+<span class="sd">  )</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">abc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Awaitable</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">absl</span><span class="w"> </span><span class="kn">import</span> <span class="n">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">etils</span><span class="w"> </span><span class="kn">import</span> <span class="n">epath</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint</span><span class="w"> </span><span class="kn">import</span> <span class="n">options</span> <span class="k">as</span> <span class="n">options_lib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">future</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">synchronization</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">event_tracking</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">checkpoint</span> <span class="k">as</span> <span class="n">checkpoint_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">step_metadata_serialization</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.multihost</span><span class="w"> </span><span class="kn">import</span> <span class="n">multihost</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">async_path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">atomicity_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">path_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.path.snapshot</span><span class="w"> </span><span class="kn">import</span> <span class="n">snapshot</span> <span class="k">as</span> <span class="n">snapshot_lib</span>
+
+
+<span class="n">ValidationError</span> <span class="o">=</span> <span class="n">atomicity_types</span><span class="o">.</span><span class="n">ValidationError</span>
+
+<span class="n">TMP_DIR_SUFFIX</span> <span class="o">=</span> <span class="n">atomicity_types</span><span class="o">.</span><span class="n">TMP_DIR_SUFFIX</span>
+<span class="n">COMMIT_SUCCESS_FILE</span> <span class="o">=</span> <span class="n">atomicity_types</span><span class="o">.</span><span class="n">COMMIT_SUCCESS_FILE</span>  <span class="c1"># pylint: disable=protected-access</span>
+
+<span class="n">_LAST_CHECKPOINT_WRITE_TIME</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">_T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;_T&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s1">&#39;TemporaryPathBase&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AsyncMakeDirFunc</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="n">parents</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">exist_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Awaitable</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the directory at path.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_create_tmp_directory</span><span class="p">(</span>
+    <span class="n">async_makedir_func</span><span class="p">:</span> <span class="n">AsyncMakeDirFunc</span><span class="p">,</span>
+    <span class="n">tmp_dir</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">path_permission_mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">checkpoint_metadata_store</span><span class="p">:</span> <span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">MetadataStore</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">snapshot</span><span class="p">:</span> <span class="n">snapshot_lib</span><span class="o">.</span><span class="n">Snapshot</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Creates a non-deterministic tmp directory for saving for given `final_dir`.</span>
+
+<span class="sd">  Also writes checkpoint metadata in the tmp directory.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    async_makedir_func: An implementation of AsyncMakeDirFunc to call.</span>
+<span class="sd">    tmp_dir: The temporary directory path.</span>
+<span class="sd">    path_permission_mode: Path permission mode for the temp directory. e.g.</span>
+<span class="sd">      0o750. Please check</span>
+<span class="sd">      https://github.com/google/etils/blob/main/etils/epath/backend.py if your</span>
+<span class="sd">        path is supported.</span>
+<span class="sd">    checkpoint_metadata_store: optional `CheckpointMetadataStore` instance. If</span>
+<span class="sd">      present then it is used to create `StepMetadata` with current timestamp.</span>
+<span class="sd">    snapshot: optional `Snapshot` instance. If present then it is used to create</span>
+<span class="sd">      a snapshot of the final path.</span>
+<span class="sd">    **kwargs: Optional. Additional kwargs to pass to `async_makedir_func`</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    The tmp directory.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">if</span> <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">):</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+        <span class="s1">&#39;Attempted to create temporary directory </span><span class="si">%s</span><span class="s1"> which already exists.&#39;</span>
+        <span class="s1">&#39; Removing existing directory since it is not finalized.&#39;</span><span class="p">,</span>
+        <span class="n">tmp_dir</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">)</span>
+  <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Creating tmp directory </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">tmp_dir</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">snapshot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">await</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">create_snapshot</span><span class="p">()</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">await</span> <span class="n">async_makedir_func</span><span class="p">(</span>
+        <span class="n">tmp_dir</span><span class="p">,</span>
+        <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">exist_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">path_permission_mode</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
+  <span class="k">if</span> <span class="n">checkpoint_metadata_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">checkpoint_metadata_store</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+        <span class="n">file_path</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">step_metadata_file_path</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">step_metadata_serialization</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span>
+            <span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">StepMetadata</span><span class="p">(</span>
+                <span class="n">init_timestamp_nsecs</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time_ns</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">tmp_dir</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_tmp_directory</span><span class="p">(</span><span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+  <span class="c1"># Path may not be completely unique if a preemption occurs. We rely on the</span>
+  <span class="c1"># existing tmp directory being deleted elsewhere.</span>
+  <span class="k">return</span> <span class="n">final_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="n">final_path</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">TMP_DIR_SUFFIX</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_final_directory</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">suffix_idx</span> <span class="o">:=</span> <span class="n">tmp_path</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">TMP_DIR_SUFFIX</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expected </span><span class="si">{</span><span class="n">tmp_path</span><span class="si">}</span><span class="s1"> to end with &quot;</span><span class="si">{</span><span class="n">TMP_DIR_SUFFIX</span><span class="si">}</span><span class="s1">&quot;.&#39;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">tmp_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">tmp_path</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="n">suffix_idx</span><span class="p">]</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TemporaryPathBase</span><span class="p">(</span><span class="n">atomicity_types</span><span class="o">.</span><span class="n">TemporaryPath</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;A base class for TemporaryPath implementations.&quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">temporary_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">checkpoint_metadata_store</span><span class="p">:</span> <span class="p">(</span>
+          <span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">MetadataStore</span> <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">file_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">FileOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">snapshot_type</span><span class="p">:</span> <span class="n">snapshot_lib</span><span class="o">.</span><span class="n">SnapshotType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span> <span class="o">=</span> <span class="n">temporary_path</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span> <span class="o">=</span> <span class="n">final_path</span>
+
+    <span class="n">file_options</span> <span class="o">=</span> <span class="n">file_options</span> <span class="ow">or</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">FileOptions</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span> <span class="o">=</span> <span class="n">checkpoint_metadata_store</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_path_permission_mode</span> <span class="o">=</span> <span class="n">file_options</span><span class="o">.</span><span class="n">path_permission_mode</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_snapshot</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">snapshot_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_snapshot</span> <span class="o">=</span> <span class="n">snapshot_lib</span><span class="o">.</span><span class="n">create_instance</span><span class="p">(</span>
+          <span class="n">source</span><span class="o">=</span><span class="n">final_path</span><span class="p">,</span>
+          <span class="n">snapshot</span><span class="o">=</span><span class="n">temporary_path</span><span class="p">,</span>
+          <span class="n">set_immutable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+          <span class="n">snapshot_type</span><span class="o">=</span><span class="n">snapshot_type</span><span class="p">,</span>
+      <span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the temporary path.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+          <span class="s1">&#39;Temporary path has not been created yet. Please call `create` first.&#39;</span>
+      <span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DeferredWritableTemporaryPath</span><span class="p">(</span><span class="n">TemporaryPathBase</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;A TemporaryPath that supports deferred writable path allocation.</span>
+
+<span class="sd">  This abstract base class is for backends (like TFHub) where the writable</span>
+<span class="sd">  path is allocated asynchronously and may not be immediately available.</span>
+<span class="sd">  Subclasses must implement `get_awaitable_path()` to provide access to the</span>
+<span class="sd">  path as a `PathAwaitingCreation`.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">get_awaitable_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">path_types</span><span class="o">.</span><span class="n">PathAwaitingCreation</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the writable path as a PathAwaitingCreation.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A PathAwaitingCreation that resolves to the writable path.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="o">...</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DeferredPath</span><span class="p">(</span><span class="n">path_types</span><span class="o">.</span><span class="n">PathAwaitingCreation</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;A path that is created asynchronously and can be awaited.</span>
+
+<span class="sd">  Uses concurrent.futures.Future instead of asyncio.Task to avoid</span>
+<span class="sd">  event loop binding issues when create() runs in a different thread.</span>
+<span class="sd">  The Future is thread-safe and can be awaited from any event loop.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_future_path</span><span class="p">:</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">Future</span><span class="p">[</span><span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">Future</span><span class="p">()</span>
+    <span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">set_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the path result. Called by create() when allocation completes.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_future_path</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__truediv__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">path_types</span><span class="o">.</span><span class="n">PathLike</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">path_types</span><span class="o">.</span><span class="n">PathAwaitingCreation</span><span class="p">:</span>
+    <span class="n">child</span> <span class="o">=</span> <span class="n">DeferredPath</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_future_path</span><span class="o">.</span><span class="n">add_done_callback</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">child</span><span class="o">.</span><span class="n">set_path</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="o">/</span> <span class="n">other</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">child</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_future_path</span><span class="o">.</span><span class="n">done</span><span class="p">():</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Path has not been created yet. Call await_creation().&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_future_path</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">await_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wrap_future</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_future_path</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ReadOnlyTemporaryPath</span><span class="p">(</span><span class="n">atomicity_types</span><span class="o">.</span><span class="n">TemporaryPath</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;A read-only, serializable object providing path properties access.</span>
+
+<span class="sd">  This implementation is not meant to be used for creating or finalizing</span>
+<span class="sd">  checkpoints. Its purpose is to be serialized and sent to other processes that</span>
+<span class="sd">  only need access to temporary and final checkpoint paths.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">temporary_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes ReadOnlyTemporaryPath.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      temporary_path: The temporary path.</span>
+<span class="sd">      final_path: The final path.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span> <span class="o">=</span> <span class="n">temporary_path</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span> <span class="o">=</span> <span class="n">final_path</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the temporary path.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">get_final</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the final path.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span>
+
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">from_paths</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">temporary_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReadOnlyTemporaryPath</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a ReadOnlyTemporaryPath from a temporary and final path.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      temporary_path: The temporary path.</span>
+<span class="sd">      final_path: The final path.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A ReadOnlyTemporaryPath instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ReadOnlyTemporaryPath</span><span class="p">(</span>
+        <span class="n">temporary_path</span><span class="o">=</span><span class="n">temporary_path</span><span class="p">,</span> <span class="n">final_path</span><span class="o">=</span><span class="n">final_path</span>
+    <span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">to_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Serializes the object to bytes.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      The serialized object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+        <span class="s1">&#39;tmp_path&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span><span class="p">,</span>
+        <span class="s1">&#39;final_path&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span><span class="p">,</span>
+    <span class="p">})</span>
+
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">from_bytes</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="s1">&#39;ReadOnlyTemporaryPath&#39;</span><span class="p">],</span>
+      <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReadOnlyTemporaryPath</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deserializes the object from bytes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      data: The serialized object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A ReadOnlyTemporaryPath instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+        <span class="n">temporary_path</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;tmp_path&#39;</span><span class="p">],</span>
+        <span class="n">final_path</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;final_path&#39;</span><span class="p">],</span>
+    <span class="p">)</span>
+
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">from_temporary</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">temporary_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">file_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">FileOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">snapshot_type</span><span class="p">:</span> <span class="n">snapshot_lib</span><span class="o">.</span><span class="n">SnapshotType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReadOnlyTemporaryPath</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Not implemented for ReadOnlyTemporaryPath.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="s1">&#39;ReadOnlyTemporaryPath is not constructible from a temporary path.&#39;</span>
+    <span class="p">)</span>
+
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">from_final</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">checkpoint_metadata_store</span><span class="p">:</span> <span class="p">(</span>
+          <span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">MetadataStore</span> <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">file_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">FileOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">snapshot_type</span><span class="p">:</span> <span class="n">snapshot_lib</span><span class="o">.</span><span class="n">SnapshotType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReadOnlyTemporaryPath</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Not implemented for ReadOnlyTemporaryPath.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="s1">&#39;ReadOnlyTemporaryPath is not constructible from a final path.&#39;</span>
+    <span class="p">)</span>
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">file_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">FileOptions</span> <span class="o">=</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">FileOptions</span><span class="p">(),</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Not supported for ReadOnlyTemporaryPath.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;`create` is not supported.&#39;</span><span class="p">)</span>
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Not supported for ReadOnlyTemporaryPath.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;`finalize` is not supported.&#39;</span><span class="p">)</span>
+
+  <span class="nd">@classmethod</span>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">temporary_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validates the temporary path or raises an error.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;`validate` is not supported.&#39;</span><span class="p">)</span>
+
+  <span class="nd">@classmethod</span>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">validate_final</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validates the final path or raises an error.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;`validate_final` is not supported.&#39;</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_shared_validate</span><span class="p">(</span><span class="n">class_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expected </span><span class="si">{</span><span class="n">class_name</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">) to be a directory.&#39;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expected </span><span class="si">{</span><span class="n">class_name</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">) to exist.&#39;</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">validate_atomic_rename_temporary_path</span><span class="p">(</span>
+    <span class="n">class_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">temporary_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Validates the temporary path or raises an error.&quot;&quot;&quot;</span>
+  <span class="k">if</span> <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">is_link</span><span class="p">(</span><span class="n">temporary_path</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;Path </span><span class="si">{</span><span class="n">temporary_path</span><span class="si">}</span><span class="s1"> is a symbolic link and cannot be treated as a&#39;</span>
+        <span class="s1">&#39; temporary checkpoint.&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+  <span class="c1"># Does not perform I/O.</span>
+  <span class="k">if</span> <span class="n">TMP_DIR_SUFFIX</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">temporary_path</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;Expected </span><span class="si">{</span><span class="n">class_name</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">temporary_path</span><span class="si">}</span><span class="s1">) to end with&#39;</span>
+        <span class="sa">f</span><span class="s1">&#39; &quot;</span><span class="si">{</span><span class="n">TMP_DIR_SUFFIX</span><span class="si">}</span><span class="s1">&quot;.&#39;</span>
+    <span class="p">)</span>
+  <span class="k">if</span> <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">temporary_path</span> <span class="o">/</span> <span class="n">COMMIT_SUCCESS_FILE</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;Expected </span><span class="si">{</span><span class="n">class_name</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">temporary_path</span><span class="si">}</span><span class="s1">) not to&#39;</span>
+        <span class="sa">f</span><span class="s1">&#39; contain the &quot;</span><span class="si">{</span><span class="n">COMMIT_SUCCESS_FILE</span><span class="si">}</span><span class="s1">&quot; file.&#39;</span>
+    <span class="p">)</span>
+  <span class="k">await</span> <span class="n">_shared_validate</span><span class="p">(</span><span class="n">class_name</span><span class="p">,</span> <span class="n">temporary_path</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">validate_atomic_rename_final_path</span><span class="p">(</span>
+    <span class="n">class_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Validates the final path or raises an error.&quot;&quot;&quot;</span>
+  <span class="c1"># Does not perform I/O.</span>
+  <span class="k">if</span> <span class="n">TMP_DIR_SUFFIX</span> <span class="ow">in</span> <span class="n">final_path</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;Expected final </span><span class="si">{</span><span class="n">class_name</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">final_path</span><span class="si">}</span><span class="s1">) not to end&#39;</span>
+        <span class="sa">f</span><span class="s1">&#39; with &quot;</span><span class="si">{</span><span class="n">TMP_DIR_SUFFIX</span><span class="si">}</span><span class="s1">&quot;.&#39;</span>
+    <span class="p">)</span>
+  <span class="k">await</span> <span class="n">_shared_validate</span><span class="p">(</span><span class="n">class_name</span><span class="p">,</span> <span class="n">final_path</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AtomicRenameTemporaryPath">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.AtomicRenameTemporaryPath">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AtomicRenameTemporaryPath</span><span class="p">(</span><span class="n">TemporaryPathBase</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;TemporaryPath implementation that uses atomic rename.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AtomicRenameTemporaryPath.validate">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.AtomicRenameTemporaryPath.validate">[docs]</a>
+  <span class="nd">@classmethod</span>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">temporary_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="k">await</span> <span class="n">validate_atomic_rename_temporary_path</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">temporary_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AtomicRenameTemporaryPath.validate_final">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.AtomicRenameTemporaryPath.validate_final">[docs]</a>
+  <span class="nd">@classmethod</span>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">validate_final</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="k">await</span> <span class="n">validate_atomic_rename_final_path</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">final_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AtomicRenameTemporaryPath.from_temporary">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.AtomicRenameTemporaryPath.from_temporary">[docs]</a>
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">from_temporary</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">temporary_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">file_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">FileOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">snapshot_type</span><span class="p">:</span> <span class="n">snapshot_lib</span><span class="o">.</span><span class="n">SnapshotType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtomicRenameTemporaryPath</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+        <span class="n">temporary_path</span><span class="p">,</span>
+        <span class="n">_get_final_directory</span><span class="p">(</span><span class="n">temporary_path</span><span class="p">),</span>
+        <span class="n">file_options</span><span class="o">=</span><span class="n">file_options</span><span class="p">,</span>
+        <span class="n">snapshot_type</span><span class="o">=</span><span class="n">snapshot_type</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AtomicRenameTemporaryPath.from_final">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.AtomicRenameTemporaryPath.from_final">[docs]</a>
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">from_final</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">checkpoint_metadata_store</span><span class="p">:</span> <span class="p">(</span>
+          <span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">MetadataStore</span> <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">file_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">FileOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">snapshot_type</span><span class="p">:</span> <span class="n">snapshot_lib</span><span class="o">.</span><span class="n">SnapshotType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtomicRenameTemporaryPath</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+        <span class="n">_get_tmp_directory</span><span class="p">(</span><span class="n">final_path</span><span class="p">),</span>
+        <span class="n">final_path</span><span class="p">,</span>
+        <span class="n">checkpoint_metadata_store</span><span class="o">=</span><span class="n">checkpoint_metadata_store</span><span class="p">,</span>
+        <span class="n">file_options</span><span class="o">=</span><span class="n">file_options</span><span class="p">,</span>
+        <span class="n">snapshot_type</span><span class="o">=</span><span class="n">snapshot_type</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AtomicRenameTemporaryPath.get_final">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.AtomicRenameTemporaryPath.get_final">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">get_final</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span></div>
+
+
+<div class="viewcode-block" id="AtomicRenameTemporaryPath.create">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.AtomicRenameTemporaryPath.create">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a non-deterministic tmp directory for saving given `final_dir`.</span>
+
+<span class="sd">    Also writes checkpoint metadata in the tmp directory.</span>
+
+<span class="sd">    NOTE: This function does not include any barrier syncs, and calling it</span>
+<span class="sd">    directly from multiprocess code can lead to race conditions. Prefer to</span>
+<span class="sd">    use `atomicity.create_all` in such cases.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      The tmp directory.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">      FileExistsError: if tmp directory already exists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">_create_tmp_directory</span><span class="p">(</span>
+        <span class="n">async_path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span><span class="p">,</span>
+        <span class="n">path_permission_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_path_permission_mode</span><span class="p">,</span>
+        <span class="n">checkpoint_metadata_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span><span class="p">,</span>
+        <span class="n">snapshot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_snapshot</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AtomicRenameTemporaryPath.finalize">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.AtomicRenameTemporaryPath.finalize">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Finalizes atomic save by renaming tmp_dir.</span>
+
+<span class="sd">    Updates checkpoint metadata with commit_timestamp_nsecs.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Renaming </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span><span class="p">:</span>
+      <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span><span class="o">.</span><span class="n">wait_until_finished</span>
+      <span class="p">)</span>
+      <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span><span class="o">.</span><span class="n">update</span><span class="p">,</span>
+          <span class="n">file_path</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">step_metadata_file_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span><span class="p">),</span>
+          <span class="n">commit_timestamp_nsecs</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time_ns</span><span class="p">(),</span>
+      <span class="p">)</span>
+      <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span><span class="o">.</span><span class="n">wait_until_finished</span>
+      <span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snapshot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snapshot</span><span class="o">.</span><span class="n">replace_source</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span><span class="p">)</span></div>
+
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;AtomicRenameTemporaryPath(tmp=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;,&#39;</span>
+        <span class="sa">f</span><span class="s1">&#39; final=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;,&#39;</span>
+        <span class="sa">f</span><span class="s1">&#39; directory=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span><span class="o">.</span><span class="n">parent</span><span class="si">}</span><span class="s1">&quot;)&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CommitFileTemporaryPath">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.CommitFileTemporaryPath">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CommitFileTemporaryPath</span><span class="p">(</span><span class="n">TemporaryPathBase</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;TemporaryPath implementation that uses a commit file.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CommitFileTemporaryPath.validate">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.CommitFileTemporaryPath.validate">[docs]</a>
+  <span class="nd">@classmethod</span>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">temporary_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="k">if</span> <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">is_link</span><span class="p">(</span><span class="n">temporary_path</span><span class="p">):</span>
+      <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+          <span class="sa">f</span><span class="s1">&#39;Path </span><span class="si">{</span><span class="n">temporary_path</span><span class="si">}</span><span class="s1"> is a symbolic link and cannot be treated as a&#39;</span>
+          <span class="s1">&#39; temporary checkpoint.&#39;</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">temporary_path</span> <span class="o">/</span> <span class="n">COMMIT_SUCCESS_FILE</span><span class="p">):</span>
+      <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+          <span class="sa">f</span><span class="s1">&#39;Expected </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">temporary_path</span><span class="si">}</span><span class="s1">) not to contain the&#39;</span>
+          <span class="sa">f</span><span class="s1">&#39; &quot;</span><span class="si">{</span><span class="n">COMMIT_SUCCESS_FILE</span><span class="si">}</span><span class="s1">&quot; file.&#39;</span>
+      <span class="p">)</span>
+    <span class="k">await</span> <span class="n">_shared_validate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">temporary_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CommitFileTemporaryPath.validate_final">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.CommitFileTemporaryPath.validate_final">[docs]</a>
+  <span class="nd">@classmethod</span>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">validate_final</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">final_path</span> <span class="o">/</span> <span class="n">COMMIT_SUCCESS_FILE</span><span class="p">):</span>
+      <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+          <span class="sa">f</span><span class="s1">&#39;Expected </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">final_path</span><span class="si">}</span><span class="s1">) to contain the&#39;</span>
+          <span class="sa">f</span><span class="s1">&#39; &quot;</span><span class="si">{</span><span class="n">COMMIT_SUCCESS_FILE</span><span class="si">}</span><span class="s1">&quot; file.&#39;</span>
+      <span class="p">)</span>
+    <span class="k">await</span> <span class="n">_shared_validate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">final_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CommitFileTemporaryPath.from_temporary">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.CommitFileTemporaryPath.from_temporary">[docs]</a>
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">from_temporary</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">temporary_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">file_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">FileOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">snapshot_type</span><span class="p">:</span> <span class="n">snapshot_lib</span><span class="o">.</span><span class="n">SnapshotType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CommitFileTemporaryPath</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+        <span class="n">temporary_path</span><span class="p">,</span>
+        <span class="n">temporary_path</span><span class="p">,</span>
+        <span class="n">file_options</span><span class="o">=</span><span class="n">file_options</span><span class="p">,</span>
+        <span class="n">snapshot_type</span><span class="o">=</span><span class="n">snapshot_type</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CommitFileTemporaryPath.from_final">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.CommitFileTemporaryPath.from_final">[docs]</a>
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">from_final</span><span class="p">(</span>
+      <span class="bp">cls</span><span class="p">,</span>
+      <span class="n">final_path</span><span class="p">:</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">checkpoint_metadata_store</span><span class="p">:</span> <span class="p">(</span>
+          <span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">MetadataStore</span> <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">file_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">FileOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">snapshot_type</span><span class="p">:</span> <span class="n">snapshot_lib</span><span class="o">.</span><span class="n">SnapshotType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CommitFileTemporaryPath</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">snapshot_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Snapshot is not supported for CommitFileTemporaryPath.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+        <span class="n">final_path</span><span class="p">,</span>
+        <span class="n">final_path</span><span class="p">,</span>
+        <span class="n">checkpoint_metadata_store</span><span class="o">=</span><span class="n">checkpoint_metadata_store</span><span class="p">,</span>
+        <span class="n">file_options</span><span class="o">=</span><span class="n">file_options</span><span class="p">,</span>
+        <span class="n">snapshot_type</span><span class="o">=</span><span class="n">snapshot_type</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CommitFileTemporaryPath.get_final">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.CommitFileTemporaryPath.get_final">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">get_final</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span></div>
+
+
+<div class="viewcode-block" id="CommitFileTemporaryPath.create">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.CommitFileTemporaryPath.create">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a non-deterministic tmp directory for saving given `final_dir`.</span>
+
+<span class="sd">    Also writes checkpoint metadata in the tmp directory.</span>
+
+<span class="sd">    NOTE: This function does not include any barrier syncs, and calling it</span>
+<span class="sd">    directly from multiprocess code can lead to race conditions. Prefer to</span>
+<span class="sd">    use `atomicity.create_all` in such cases.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      The tmp directory.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">      FileExistsError: if tmp directory already exists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">_create_tmp_directory</span><span class="p">(</span>
+        <span class="n">async_path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span><span class="p">,</span>
+        <span class="n">path_permission_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_path_permission_mode</span><span class="p">,</span>
+        <span class="n">checkpoint_metadata_store</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CommitFileTemporaryPath.finalize">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.CommitFileTemporaryPath.finalize">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Finalizes atomic save by writing a success file.</span>
+
+<span class="sd">    Updates checkpoint metadata with commit_timestamp_nsecs.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finalizing </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span><span class="p">:</span>
+      <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span><span class="o">.</span><span class="n">wait_until_finished</span>
+      <span class="p">)</span>
+      <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span><span class="o">.</span><span class="n">update</span><span class="p">,</span>
+          <span class="n">file_path</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">step_metadata_file_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tmp_path</span><span class="p">),</span>
+          <span class="n">commit_timestamp_nsecs</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time_ns</span><span class="p">(),</span>
+      <span class="p">)</span>
+      <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">_checkpoint_metadata_store</span><span class="o">.</span><span class="n">wait_until_finished</span>
+      <span class="p">)</span>
+
+    <span class="n">commit_success_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span> <span class="o">/</span> <span class="n">COMMIT_SUCCESS_FILE</span>
+    <span class="k">await</span> <span class="n">async_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+        <span class="n">commit_success_file</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s1">&#39;Checkpoint commit was successful to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_final_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_all</span><span class="p">(</span>
+    <span class="n">paths</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">atomicity_types</span><span class="o">.</span><span class="n">TemporaryPath</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">multiprocessing_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">MultiprocessingOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Creates all temporary paths in parallel.&quot;&quot;&quot;</span>
+  <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+  <span class="n">multiprocessing_options</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="n">multiprocessing_options</span> <span class="ow">or</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">MultiprocessingOptions</span><span class="p">()</span>
+  <span class="p">)</span>
+  <span class="n">barrier_sync_key_prefix</span> <span class="o">=</span> <span class="n">multiprocessing_options</span><span class="o">.</span><span class="n">barrier_sync_key_prefix</span>
+  <span class="n">active_processes</span> <span class="o">=</span> <span class="n">multiprocessing_options</span><span class="o">.</span><span class="n">active_processes</span>
+  <span class="c1"># Sync before existence is checked and directory is created because there are</span>
+  <span class="c1"># additional existence checks happening in the callers of this function.</span>
+  <span class="n">multihost</span><span class="o">.</span><span class="n">sync_global_processes</span><span class="p">(</span>
+      <span class="n">multihost</span><span class="o">.</span><span class="n">unique_barrier_key</span><span class="p">(</span>
+          <span class="s1">&#39;create_tmp_directory:pre&#39;</span><span class="p">,</span>
+          <span class="n">prefix</span><span class="o">=</span><span class="n">barrier_sync_key_prefix</span><span class="p">,</span>
+      <span class="p">),</span>
+      <span class="n">timeout</span><span class="o">=</span><span class="n">multihost</span><span class="o">.</span><span class="n">coordination_timeout</span><span class="p">(),</span>
+      <span class="n">processes</span><span class="o">=</span><span class="n">active_processes</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="k">if</span> <span class="n">multihost</span><span class="o">.</span><span class="n">is_primary_host</span><span class="p">(</span><span class="n">multiprocessing_options</span><span class="o">.</span><span class="n">primary_host</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">create</span><span class="p">()</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">])</span>
+  <span class="n">multihost</span><span class="o">.</span><span class="n">sync_global_processes</span><span class="p">(</span>
+      <span class="n">multihost</span><span class="o">.</span><span class="n">unique_barrier_key</span><span class="p">(</span>
+          <span class="s1">&#39;create_tmp_directory:post&#39;</span><span class="p">,</span>
+          <span class="n">prefix</span><span class="o">=</span><span class="n">barrier_sync_key_prefix</span><span class="p">,</span>
+      <span class="p">),</span>
+      <span class="n">timeout</span><span class="o">=</span><span class="n">multihost</span><span class="o">.</span><span class="n">coordination_timeout</span><span class="p">(),</span>
+      <span class="n">processes</span><span class="o">=</span><span class="n">active_processes</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="n">directory_creation_secs</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+  <span class="n">jax</span><span class="o">.</span><span class="n">monitoring</span><span class="o">.</span><span class="n">record_event_duration_secs</span><span class="p">(</span>
+      <span class="s1">&#39;/jax/orbax/write/directory_creation_secs&#39;</span><span class="p">,</span> <span class="n">directory_creation_secs</span>
+  <span class="p">)</span>
+  <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span>
+      <span class="mi">1</span><span class="p">,</span>
+      <span class="s1">&#39;Synchronous directory creation took </span><span class="si">%s</span><span class="s1"> seconds&#39;</span><span class="p">,</span>
+      <span class="n">directory_creation_secs</span><span class="p">,</span>
+  <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_all_async</span><span class="p">(</span>
+    <span class="n">paths</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">atomicity_types</span><span class="o">.</span><span class="n">TemporaryPath</span><span class="p">],</span>
+    <span class="n">completion_signals</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">synchronization</span><span class="o">.</span><span class="n">HandlerAwaitableSignal</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">multiprocessing_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">MultiprocessingOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">subdirectories</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">future</span><span class="o">.</span><span class="n">Future</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Creates all temporary paths in parallel asynchronously.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    paths: Sequence of temporary paths to create.</span>
+<span class="sd">    completion_signals: Sequence of signals to send when all paths are created.</span>
+<span class="sd">      Also adds them to the awaitable signals contract.</span>
+<span class="sd">    multiprocessing_options: MultiprocessingOptions to use for barrier syncs and</span>
+<span class="sd">      primary host.</span>
+<span class="sd">    subdirectories: Sequence of subdirectories to create under `paths`. If not</span>
+<span class="sd">      provided, no subdirectories will be created. The same set of</span>
+<span class="sd">      subdirectories will be created under each path in `paths`.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    A future that which sends the completion signals when all paths are created.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">multiprocessing_options</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="n">multiprocessing_options</span> <span class="ow">or</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">MultiprocessingOptions</span><span class="p">()</span>
+  <span class="p">)</span>
+  <span class="n">barrier_sync_key_prefix</span> <span class="o">=</span> <span class="n">multiprocessing_options</span><span class="o">.</span><span class="n">barrier_sync_key_prefix</span>
+  <span class="n">active_processes</span> <span class="o">=</span> <span class="n">multiprocessing_options</span><span class="o">.</span><span class="n">active_processes</span>
+  <span class="n">primary_host</span> <span class="o">=</span> <span class="n">multiprocessing_options</span><span class="o">.</span><span class="n">primary_host</span>
+  <span class="c1"># Sync for existence check to complete on all hosts before directory</span>
+  <span class="c1"># creation starts.</span>
+  <span class="n">multihost</span><span class="o">.</span><span class="n">sync_global_processes</span><span class="p">(</span>
+      <span class="n">multihost</span><span class="o">.</span><span class="n">unique_barrier_key</span><span class="p">(</span>
+          <span class="s1">&#39;create_tmp_directory:post_existence_check&#39;</span><span class="p">,</span>
+          <span class="n">prefix</span><span class="o">=</span><span class="n">barrier_sync_key_prefix</span><span class="p">,</span>
+      <span class="p">),</span>
+      <span class="n">timeout</span><span class="o">=</span><span class="n">multihost</span><span class="o">.</span><span class="n">coordination_timeout</span><span class="p">(),</span>
+      <span class="n">processes</span><span class="o">=</span><span class="n">active_processes</span><span class="p">,</span>
+  <span class="p">)</span>
+
+  <span class="n">commit_future</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">NoopFuture</span><span class="p">()</span>
+  <span class="k">if</span> <span class="n">multihost</span><span class="o">.</span><span class="n">is_primary_host</span><span class="p">(</span><span class="n">primary_host</span><span class="p">):</span>
+    <span class="n">commit_future</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">CommitFutureAwaitingContractedSignals</span><span class="p">(</span>
+        <span class="n">_create_paths</span><span class="p">(</span>
+            <span class="n">paths</span><span class="p">,</span>
+            <span class="n">subdirectories</span><span class="o">=</span><span class="n">subdirectories</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">send_signals</span><span class="o">=</span><span class="n">completion_signals</span><span class="p">,</span>
+        <span class="n">timeout_secs</span><span class="o">=</span><span class="n">multihost</span><span class="o">.</span><span class="n">coordination_timeout</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">future</span><span class="o">.</span><span class="n">AwaitableSignalsContract</span><span class="o">.</span><span class="n">add_to_awaitable_signals_contract</span><span class="p">(</span>
+        <span class="n">completion_signals</span>
+    <span class="p">)</span>
+
+  <span class="c1"># Sync to enusre that all hosts have the same awaitable signals contract.</span>
+  <span class="n">multihost</span><span class="o">.</span><span class="n">sync_global_processes</span><span class="p">(</span>
+      <span class="n">multihost</span><span class="o">.</span><span class="n">unique_barrier_key</span><span class="p">(</span>
+          <span class="s1">&#39;add_to_awaitable_signals_contract&#39;</span><span class="p">,</span>
+          <span class="n">prefix</span><span class="o">=</span><span class="n">barrier_sync_key_prefix</span><span class="p">,</span>
+      <span class="p">),</span>
+      <span class="n">timeout</span><span class="o">=</span><span class="n">multihost</span><span class="o">.</span><span class="n">coordination_timeout</span><span class="p">(),</span>
+      <span class="n">processes</span><span class="o">=</span><span class="n">active_processes</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="k">return</span> <span class="n">commit_future</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_create_paths</span><span class="p">(</span>
+    <span class="n">tmp_paths</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">atomicity_types</span><span class="o">.</span><span class="n">TemporaryPath</span><span class="p">],</span>
+    <span class="n">subdirectories</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Creates all temporary paths in parallel.&quot;&quot;&quot;</span>
+  <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+  <span class="n">paths</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">create</span><span class="p">()</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">tmp_paths</span><span class="p">])</span>
+  <span class="k">if</span> <span class="n">subdirectories</span><span class="p">:</span>
+    <span class="n">creation_ops</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+      <span class="n">creation_ops</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+          <span class="n">async_path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="n">name</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+          <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">subdirectories</span>
+      <span class="p">])</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">creation_ops</span><span class="p">)</span>
+  <span class="n">directory_creation_secs</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+  <span class="n">jax</span><span class="o">.</span><span class="n">monitoring</span><span class="o">.</span><span class="n">record_event_duration_secs</span><span class="p">(</span>
+      <span class="s1">&#39;/jax/orbax/write/directory_creation_secs&#39;</span><span class="p">,</span>
+      <span class="n">directory_creation_secs</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="c1"># TODO(mridulsahu): Adding a new metric to track only async directory creation</span>
+  <span class="c1"># time for savings. This can eventually be removed once we completely disable</span>
+  <span class="c1"># sync directory creation.</span>
+  <span class="n">jax</span><span class="o">.</span><span class="n">monitoring</span><span class="o">.</span><span class="n">record_event_duration_secs</span><span class="p">(</span>
+      <span class="s1">&#39;/jax/orbax/write/async_directory_creation_secs&#39;</span><span class="p">,</span>
+      <span class="n">directory_creation_secs</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span>
+      <span class="mi">1</span><span class="p">,</span>
+      <span class="s1">&#39;Asynchronous directory creation took </span><span class="si">%s</span><span class="s1"> seconds&#39;</span><span class="p">,</span>
+      <span class="n">directory_creation_secs</span><span class="p">,</span>
+  <span class="p">)</span>
+
+
+<div class="viewcode-block" id="on_commit_callback">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.path.atomicity.html#orbax.checkpoint.path.atomicity.on_commit_callback">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">on_commit_callback</span><span class="p">(</span>
+    <span class="n">tmp_dir</span><span class="p">:</span> <span class="n">atomicity_types</span><span class="o">.</span><span class="n">TemporaryPath</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">checkpoint_start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;To commit save operation, atomically finalizes step dir.</span>
+
+<span class="sd">  Records save duration and lineage-logs step dir.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    tmp_dir: A temporary checkpoint directory, where the checkpoint data is</span>
+<span class="sd">      currently saved.</span>
+<span class="sd">    checkpoint_start_time: The time at which checkpoint saving began. # BEGIN</span>
+<span class="sd">    tree_verity_options: Options to configure checkpoint signing and integrity</span>
+<span class="sd">      verification using</span>
+<span class="sd">    set_immutable: Whether to mark all files as immutable. This is only</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">await</span> <span class="n">tmp_dir</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span>
+  <span class="p">)</span>
+  <span class="n">record_saved_duration</span><span class="p">(</span><span class="n">checkpoint_start_time</span><span class="p">)</span>
+  <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+      <span class="s1">&#39;[process=</span><span class="si">%s</span><span class="s1">][thread=</span><span class="si">%s</span><span class="s1">] Finished saving checkpoint (finalized tmp dir)&#39;</span>
+      <span class="s1">&#39; to `</span><span class="si">%s</span><span class="s1">`.&#39;</span><span class="p">,</span>
+      <span class="n">multihost</span><span class="o">.</span><span class="n">process_index</span><span class="p">(),</span>
+      <span class="n">threading</span><span class="o">.</span><span class="n">current_thread</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+      <span class="n">tmp_dir</span><span class="o">.</span><span class="n">get_final</span><span class="p">(),</span>
+  <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">record_saved_duration</span><span class="p">(</span><span class="n">checkpoint_start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Record program duration that is accounted for by this checkpoint.</span>
+
+<span class="sd">  For the very first checkpoint, this is the interval between program init and</span>
+<span class="sd">  current checkpoint start time.</span>
+
+<span class="sd">  Note that we use the checkpoint start time instead of end time. The saved</span>
+<span class="sd">  duration should not include parallel training duration while the async</span>
+<span class="sd">  checkpoint is being written in the background.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    checkpoint_start_time: Start time of current checkpoint.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">global</span> <span class="n">_LAST_CHECKPOINT_WRITE_TIME</span>
+  <span class="c1"># Note: for the very first checkpoint, this is the interval between program</span>
+  <span class="c1"># init and the current checkpoint start time.</span>
+  <span class="n">duration_since_last_checkpoint</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="n">checkpoint_start_time</span> <span class="o">-</span> <span class="n">_LAST_CHECKPOINT_WRITE_TIME</span>
+  <span class="p">)</span>
+  <span class="c1"># TODO(hanyangtay): Remove version guard.</span>
+  <span class="k">if</span> <span class="n">jax</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">__version_info__</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">25</span><span class="p">):</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">monitoring</span><span class="o">.</span><span class="n">record_event_duration_secs</span><span class="p">(</span>
+        <span class="s1">&#39;/jax/checkpoint/write/duration_since_last_checkpoint_secs&#39;</span><span class="p">,</span>
+        <span class="n">duration_since_last_checkpoint</span><span class="p">,</span>
+    <span class="p">)</span>
+  <span class="n">_LAST_CHECKPOINT_WRITE_TIME</span> <span class="o">=</span> <span class="n">checkpoint_start_time</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Orbax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Google.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

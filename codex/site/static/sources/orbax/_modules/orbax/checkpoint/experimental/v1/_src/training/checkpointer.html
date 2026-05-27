@@ -1,0 +1,1435 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>orbax.checkpoint.experimental.v1._src.training.checkpointer &#8212; Orbax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../../../../../_static/katex.min.js?v=3f697ebd"></script>
+    <script src="../../../../../../../_static/auto-render.min.js?v=ed6e749d"></script>
+    <script src="../../../../../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script src="../../../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/orbax/checkpoint/experimental/v1/_src/training/checkpointer';</script>
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/orbax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="orbax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_modules/orbax/checkpoint/experimental/v1/_src/training/checkpointer.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Orbax  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/orbax_checkpoint_101.html">Introduction to Checkpointing with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/checkpointables.html">Working with Checkpointables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/checkpointing_pytrees.html">Working with PyTree Checkpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/training.html">Checkpointing in a Training Loop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/customization.html">Customizing Checkpointing Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/partial_saving.html">Partial Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/model_surgery.html">Model Surgery</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.html">orbax.checkpoint V1 API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.arrays.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.arrays</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.errors</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.handlers.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.handlers</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.handler_registration.html">CheckpointableHandler Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.options.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.options</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.partial.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.partial</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.path.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.path</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.training.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html">Training Checkpointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.training.save_decision_policies.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.save_decision_policies</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.training.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.errors</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.training.types.html">Training Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.tree.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.multihost.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.multihost</span></code> module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Migrating to Orbax V1</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/orbax_v0_to_v1_migration.html">Orbax v0 to v1 Migration Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../../../index.v0.html">Legacy API (V0)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/orbax_checkpoint_101.html">Checkpointing with Orbax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/orbax_checkpoint_api_overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/api_refactor.html">Using the Refactored CheckpointManager  API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/checkpointing_pytrees.html">Checkpointing PyTrees of Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/optimized_checkpointing.html">Optimized Checkpointing with Tensorstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/transformations.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/preemption_checkpointing.html">Preemption Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/debug_guide.html">Debugging Guide</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.html">orbax.checkpoint API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.abstract_checkpoint_manager.html">AbstractCheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.checkpoint_manager.html">CheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.checkpointers.html">Checkpointers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.handlers.html">CheckpointHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.args.html">CheckpointArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.type_handlers.html">TypeHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.path.atomicity.html">Atomicity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.path.atomicity_types.html">Atomicity Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.path.step.html">Step entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.path.deleter.html">Checkpoint Deleter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.preservation_policy.html">Preservation Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.save_decision_policy.html">Save Decision Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.checkpoint_utils.html">Checkpointing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.transform_utils.html">PyTree Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.msgpack_utils.html">Msgpack utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.multihost.html">Multi–host Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.tree.html">Tree Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.metadata.html">Metadata Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.logging.html">Checkpoint logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.options.html">Checkpointing Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.handlers.handler_registration.html">Handler Registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.arrays.html">Arrays</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exporting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/export/orbax_export_101.html">Exporting with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/checkpointing_and_exporting_jax_models.html">Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../../../api_reference/export.html">orbax.export API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.dtensor_utils.html">DTensor utilities for multi–device/host export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.export_manager.html">ExportManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.jax_module.html">JaxModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.serving_config.html">ServingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.utils.html">General Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.validate.validation_manager.html">ValidationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.validate.validation_report.html">ValidationReport</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Additional Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../contributors.html">Contributors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for orbax.checkpoint.experimental.v1._src.training.checkpointer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2026 The Orbax Authors.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;Defines a class for managing a sequence of checkpoints in a training loop.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">absl</span><span class="w"> </span><span class="kn">import</span> <span class="n">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">etils</span><span class="w"> </span><span class="kn">import</span> <span class="n">epy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint</span><span class="w"> </span><span class="kn">import</span> <span class="n">checkpoint_manager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">context</span> <span class="k">as</span> <span class="n">context_lib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.handlers.global_registration</span>  <span class="c1"># pylint: disable=unused-import</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.layout</span><span class="w"> </span><span class="kn">import</span> <span class="n">checkpoint_layout</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.loading</span><span class="w"> </span><span class="kn">import</span> <span class="n">loading</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">loading</span> <span class="k">as</span> <span class="n">metadata_loading</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">metadata_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">step</span> <span class="k">as</span> <span class="n">path_step_lib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">path_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.saving</span><span class="w"> </span><span class="kn">import</span> <span class="n">saving</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.saving</span><span class="w"> </span><span class="kn">import</span> <span class="n">validation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.synchronization</span><span class="w"> </span><span class="kn">import</span> <span class="n">thread_utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.synchronization</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">async_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">errors</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">preservation_policies</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_decision_policies</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.training.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">training_metadata_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">tree_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">deprecated</span>  <span class="c1"># pytype: disable=not-supported-yet</span>
+
+<span class="n">CheckpointMetadata</span> <span class="o">=</span> <span class="n">training_metadata_types</span><span class="o">.</span><span class="n">CheckpointMetadata</span>
+<span class="n">RootMetadata</span> <span class="o">=</span> <span class="n">training_metadata_types</span><span class="o">.</span><span class="n">RootMetadata</span>
+
+
+<span class="n">STATE_CHECKPOINTABLE_KEY</span> <span class="o">=</span> <span class="n">checkpoint_layout</span><span class="o">.</span><span class="n">STATE_CHECKPOINTABLE_KEY</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_AsyncSaveResponse</span><span class="p">(</span><span class="n">async_types</span><span class="o">.</span><span class="n">AsyncResponse</span><span class="p">[</span><span class="nb">bool</span><span class="p">]):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Response for asynchronous saving.&quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">CheckpointManager</span>
+  <span class="p">):</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_wait</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+      <span class="c1"># If a background operation fails wait_until_finished() will re-raise the</span>
+      <span class="c1"># exception back to caller.</span>
+      <span class="n">manager</span><span class="o">.</span><span class="n">wait_until_finished</span><span class="p">()</span>
+      <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_thread_runner</span> <span class="o">=</span> <span class="n">thread_utils</span><span class="o">.</span><span class="n">BackgroundThreadRunner</span><span class="p">[</span><span class="nb">bool</span><span class="p">](</span><span class="n">_wait</span><span class="p">())</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_thread_runner</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">on_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">bool</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_thread_runner</span><span class="o">.</span><span class="n">on_complete</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_resolve_integer_step</span><span class="p">(</span>
+    <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">CheckpointMetadata</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">step</span>
+  <span class="k">return</span> <span class="n">step</span><span class="o">.</span><span class="n">step</span>
+
+
+<div class="viewcode-block" id="Checkpointer">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer">[docs]</a>
+<span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Checkpointer</span><span class="p">(</span><span class="n">epy</span><span class="o">.</span><span class="n">ContextManager</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;An object that manages a sequence of checkpoints in a training loop.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Checkpointer.__init__">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.__init__">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">directory</span><span class="p">:</span> <span class="n">path_types</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">context</span><span class="p">:</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">Context</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">save_decision_policy</span><span class="p">:</span> <span class="p">(</span>
+          <span class="n">save_decision_policies</span><span class="o">.</span><span class="n">SaveDecisionPolicy</span> <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">preservation_policy</span><span class="p">:</span> <span class="p">(</span>
+          <span class="n">preservation_policies</span><span class="o">.</span><span class="n">PreservationPolicy</span> <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">step_name_format</span><span class="p">:</span> <span class="p">(</span>
+          <span class="n">path_step_lib</span><span class="o">.</span><span class="n">NameFormat</span><span class="p">[</span><span class="n">CheckpointMetadata</span><span class="p">[</span><span class="kc">None</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">custom_metadata</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">JsonType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">cleanup_tmp_directories</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">lightweight_initialize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes a Checkpointer.</span>
+
+<span class="sd">    IMPORTANT: This class is not thread safe. All APIs should be called across</span>
+<span class="sd">    all available processes, from the main thread.</span>
+
+<span class="sd">    The Checkpointer is intended for use in a training loop, where a sequence</span>
+<span class="sd">    of checkpoints are saved at regular intervals. Example usage::</span>
+
+<span class="sd">      # Configure the frequency at which checkpoints are saved.</span>
+<span class="sd">      save_decision_policies = ocp.training.save_decision_policies</span>
+<span class="sd">      # Save every 1000 steps, or when a preemption is detected.</span>
+<span class="sd">      save_decision_policy = save_decision_policies.AnySavePolicy([</span>
+<span class="sd">          save_decision_policies.FixedIntervalPolicy(1000),</span>
+<span class="sd">          save_decision_policies.PreemptionPolicy(),</span>
+<span class="sd">      ])</span>
+
+<span class="sd">      # Configure the checkpoints to preserve (avoid garbage collection).</span>
+<span class="sd">      preservation_policies = ocp.training.preservation_policies</span>
+<span class="sd">      # Avoid garbage collection on the latest 10, or every 10000 steps.</span>
+<span class="sd">      preservation_policy = preservation_policies.AnyPreservationPolicy([</span>
+<span class="sd">          preservation_policies.LatestN(10),</span>
+<span class="sd">          preservation_policies.EveryNSteps(10000),</span>
+<span class="sd">      ])</span>
+
+<span class="sd">      with ocp.training.Checkpointer(</span>
+<span class="sd">          directory,</span>
+<span class="sd">          save_decision_policy=save_decision_policy,</span>
+<span class="sd">          preservation_policy=preservation_policy,</span>
+<span class="sd">      ) as ckptr:</span>
+<span class="sd">        if ckptr.latest is None:</span>
+<span class="sd">          model_state = init_from_scratch(rng)</span>
+<span class="sd">        else:</span>
+<span class="sd">          model_state = ckptr.load()  # Loads latest checkpoint.</span>
+<span class="sd">          # Note: prefer to specify the abstract tree if available.</span>
+<span class="sd">          model_state = ckptr.load(</span>
+<span class="sd">              ckptr.latest, abstract_state=abstract_model_state)</span>
+<span class="sd">        start_step = ckptr.latest.step if ckptr.latest else 0</span>
+<span class="sd">        for step in range(start_step, num_steps):</span>
+<span class="sd">          model_state = train_step(model_state)</span>
+<span class="sd">          # Saves a checkpoint if needed (according to `save_decision_policy`).</span>
+<span class="sd">          ckptr.save(step, model_state)</span>
+
+<span class="sd">    Prefer to use the context manager style as shown above, which ensures that</span>
+<span class="sd">    the Checkpointer is closed properly and any outstanding async operations are</span>
+<span class="sd">    completed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      directory: The root directory where checkpoints are stored. The directory</span>
+<span class="sd">        will be created if it does not exist.</span>
+<span class="sd">      context: A :py:class:`~orbax.checkpoint.v1.Context` object that will be</span>
+<span class="sd">        used to wrap all function calls for this `Checkpointer`.</span>
+<span class="sd">      save_decision_policy: A policy used to determine when a checkpoint should</span>
+<span class="sd">        be saved. If not provided, the `Checkpointer` saves as often as possible</span>
+<span class="sd">        by default (assuming no checkpoint is currently being saved), and saves</span>
+<span class="sd">        when a preemption is detected by the JAX distributed system.</span>
+<span class="sd">      preservation_policy: A policy used to determine when a checkpoint should</span>
+<span class="sd">        be preserved. Any checkpoints not preserved are garbage collected. If</span>
+<span class="sd">        not provided,</span>
+<span class="sd">      step_name_format: An object used to specify the format for step paths. By</span>
+<span class="sd">        default, steps are rendered as simple integers, like</span>
+<span class="sd">        `/root/directory/&lt;step&gt;`.</span>
+<span class="sd">      custom_metadata: A JSON dictionary representing user-specified custom</span>
+<span class="sd">        metadata. This should be information that is relevant to the entire</span>
+<span class="sd">        sequence of checkpoints, rather than to any single checkpoint.</span>
+<span class="sd">      cleanup_tmp_directories: If True, cleans up any existing temporary</span>
+<span class="sd">        directories on Checkpointer creation.</span>
+<span class="sd">      lightweight_initialize: If True, checkpoint step metadata is not read on</span>
+<span class="sd">        Checkpointer initialization during checkpoint info loading. This is</span>
+<span class="sd">        useful to improve init performance when there are O(1k) or more existing</span>
+<span class="sd">        checkpoint steps present and checkpoint info properties like `time` and</span>
+<span class="sd">        `metrics` are not needed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_context</span> <span class="o">=</span> <span class="n">context</span> <span class="ow">or</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span>
+
+    <span class="n">default_save_decision_policy</span> <span class="o">=</span> <span class="n">save_decision_policies</span><span class="o">.</span><span class="n">AnySavePolicy</span><span class="p">([</span>
+        <span class="n">save_decision_policies</span><span class="o">.</span><span class="n">InitialSavePolicy</span><span class="p">(),</span>
+        <span class="n">save_decision_policies</span><span class="o">.</span><span class="n">ContinuousCheckpointingPolicy</span><span class="p">(),</span>
+        <span class="n">save_decision_policies</span><span class="o">.</span><span class="n">PreemptionCheckpointingPolicy</span><span class="p">(),</span>
+    <span class="p">])</span>
+    <span class="n">save_decision_policy</span> <span class="o">=</span> <span class="n">save_decision_policy</span> <span class="ow">or</span> <span class="n">default_save_decision_policy</span>
+    <span class="n">default_preservation_policy</span> <span class="o">=</span> <span class="n">preservation_policies</span><span class="o">.</span><span class="n">PreserveAll</span><span class="p">()</span>
+    <span class="n">preservation_policy</span> <span class="o">=</span> <span class="n">preservation_policy</span> <span class="ow">or</span> <span class="n">default_preservation_policy</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_step_name_format</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">step_name_format</span> <span class="ow">or</span> <span class="n">path_step_lib</span><span class="o">.</span><span class="n">standard_name_format</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">CheckpointManagerOptions</span><span class="p">(</span>
+        <span class="n">save_decision_policy</span><span class="o">=</span><span class="n">save_decision_policy</span><span class="p">,</span>
+        <span class="n">preservation_policy</span><span class="o">=</span><span class="n">preservation_policy</span><span class="p">,</span>
+        <span class="n">step_name_format</span><span class="o">=</span><span class="n">step_name_format</span><span class="p">,</span>
+        <span class="n">cleanup_tmp_directories</span><span class="o">=</span><span class="n">cleanup_tmp_directories</span><span class="p">,</span>
+        <span class="n">lightweight_initialize</span><span class="o">=</span><span class="n">lightweight_initialize</span><span class="p">,</span>
+        <span class="n">max_to_keep</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Unlimited.</span>
+        <span class="n">todelete_full_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="o">.</span><span class="n">deletion_options</span><span class="o">.</span><span class="n">gcs_deletion_options</span><span class="o">.</span><span class="n">todelete_full_path</span><span class="p">,</span>
+        <span class="n">async_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="o">.</span><span class="n">async_options</span><span class="o">.</span><span class="n">v0</span><span class="p">(),</span>
+        <span class="n">file_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="o">.</span><span class="n">file_options</span><span class="o">.</span><span class="n">v0</span><span class="p">(),</span>
+        <span class="n">multiprocessing_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="o">.</span><span class="n">multiprocessing_options</span><span class="o">.</span><span class="n">v0</span><span class="p">(),</span>
+        <span class="n">temporary_path_class</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="o">.</span><span class="n">file_options</span><span class="o">.</span><span class="n">temporary_path_class</span><span class="p">,</span>
+        <span class="c1"># Prevent the checkpoint manager from writing metrics on its own. This</span>
+        <span class="c1"># class will take responsibility for writing metrics.</span>
+        <span class="n">prevent_write_metrics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span> <span class="o">=</span> <span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">CheckpointManager</span><span class="p">(</span>
+        <span class="n">directory</span><span class="p">,</span>
+        <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">custom_metadata</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+  <span class="nd">@property</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">directory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">path_types</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The root directory where checkpoint steps are located.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">directory</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">latest</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CheckpointMetadata</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the latest :py:class:`.CheckpointMetadata`, or None if no checkpoints exist.</span>
+
+<span class="sd">    See `checkpoints` documentation below.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      The latest checkpoint, or None if no checkpoints exist.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkpoints</span><span class="p">:</span>
+      <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkpoints</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">checkpoints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">CheckpointMetadata</span><span class="p">[</span><span class="kc">None</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a list of :py:class:`.CheckpointMetadata`, sorted ascending by step.</span>
+
+<span class="sd">    The method returns a list of :py:class:`.CheckpointMetadata` objects, which</span>
+<span class="sd">    contain selected properties describing the checkpoint. Contrast this with</span>
+<span class="sd">    the methods :py:func:`.metadata` and</span>
+<span class="sd">    :py:func:`.checkpointables_metadata`, which may perform a more expensive</span>
+<span class="sd">    disk read to retrieve additional information. This method only returns</span>
+<span class="sd">    cheap cacheable properties like step and timestamp. The return value is</span>
+<span class="sd">    annotated as :py:class:`.CheckpointMetadata[None]` because the core</span>
+<span class="sd">    `metadata` property is not retrieved, and is therefore `None`.</span>
+
+<span class="sd">    The property is cached to avoid repeated disk reads. This is not a problem</span>
+<span class="sd">    unless checkpoints are manually deleted, or deleted by some other job or</span>
+<span class="sd">    class that `Checkpointer` is unaware of. Note that doing this is</span>
+<span class="sd">    discouraged.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A list of checkpoints, sorted ascending by step.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">infos</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">_checkpoints</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">info</span><span class="p">:</span> <span class="n">info</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>  <span class="c1"># pylint: disable=protected-access</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">CheckpointMetadata</span><span class="p">[</span><span class="kc">None</span><span class="p">](</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">step</span><span class="p">,</span>
+            <span class="n">path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_step_name_format</span><span class="o">.</span><span class="n">build_name</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">step</span><span class="p">),</span>
+            <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="n">commit_timestamp_nsecs</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1e9</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">infos</span>
+    <span class="p">]</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_existing_checkpoint</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">CheckpointMetadata</span> <span class="o">|</span> <span class="kc">None</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CheckpointMetadata</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">latest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">latest</span>
+      <span class="k">if</span> <span class="n">latest</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">StepNotFoundError</span><span class="p">(</span>
+            <span class="s1">&#39;Specified `step=None`, but no checkpoints were found.&#39;</span>
+        <span class="p">)</span>
+      <span class="k">return</span> <span class="n">latest</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="n">_resolve_integer_step</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">checkpoint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkpoints</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">checkpoint</span><span class="o">.</span><span class="n">step</span> <span class="o">==</span> <span class="n">step</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">checkpoint</span>
+    <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">StepNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No checkpoint found at step </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Checkpointer.should_save">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.should_save">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">should_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns whether a checkpoint should be saved at the given step.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="p">):</span>
+      <span class="n">step</span> <span class="o">=</span> <span class="n">_resolve_integer_step</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">should_save</span><span class="p">(</span><span class="n">step</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.save">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.save">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+      <span class="n">state</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">PyTreeOf</span><span class="p">[</span><span class="n">tree_types</span><span class="o">.</span><span class="n">Leaf</span><span class="p">],</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">checkpointable_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">STATE_CHECKPOINTABLE_KEY</span><span class="p">,</span>
+      <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">metrics</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">JsonType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">custom_metadata</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">JsonType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves a checkpoint, if dictated by :py:class:`.SaveDecisionPolicy`.</span>
+
+<span class="sd">    This method behaves similarly to the standalone free function</span>
+<span class="sd">    :py:func:`~orbax.checkpoint.v1.save` (see</span>
+<span class="sd">    documentation), but performs additional tasks related to managing a sequence</span>
+<span class="sd">    of checkpoint steps.</span>
+
+<span class="sd">    It consists roughly of the following steps:</span>
+<span class="sd">      - Check whether a checkpoint should be saved at the given step.</span>
+<span class="sd">      - Check whether a save is already in progress. If so, wait for it to</span>
+<span class="sd">        finish.</span>
+<span class="sd">      - Save to a directory given by `root_directory / &lt;step_format&gt;`.</span>
+<span class="sd">      - Perform garbage collection if necessary.</span>
+<span class="sd">      - Return whether a checkpoint was saved or not.</span>
+
+<span class="sd">    It is important to note that the `Checkpointer` never allows saving more</span>
+<span class="sd">    than one checkpoint at a time. Depending on the</span>
+<span class="sd">    :py:class:`.SaveDecisionPolicy`, a checkpoint may be saved or skipped at a</span>
+<span class="sd">    given step, but if a save is initiated, as dictated by the policy, then it</span>
+<span class="sd">    will proceed as normal as long as no other save is currently in progress. If</span>
+<span class="sd">    a save is already in progress, the function will block until the previous</span>
+<span class="sd">    save has finished.</span>
+
+<span class="sd">    Example usage:</span>
+<span class="sd">      1. Basic Usage:</span>
+<span class="sd">         Save a PyTree at a specific training step. The checkpointer</span>
+<span class="sd">         automatically manages the step-based directory structure inside your</span>
+<span class="sd">         root folder::</span>
+
+<span class="sd">           from orbax.checkpoint.v1 import training</span>
+
+<span class="sd">           # Initialize the checkpointer for a directory</span>
+<span class="sd">           ckptr = training.Checkpointer(directory)</span>
+
+<span class="sd">           # Save the tree at step 0.</span>
+<span class="sd">           saved = ckptr.save(step=0, state=tree)</span>
+
+<span class="sd">           # Clean up background threads gracefully when the training loop ends</span>
+<span class="sd">           ckptr.close()</span>
+
+<span class="sd">      2. Advanced Saving with Metrics and Metadata:</span>
+<span class="sd">         Attach JSON-serializable metrics (like loss/accuracy) and custom</span>
+<span class="sd">         metadata to a specific step for thorough experiment tracking::</span>
+
+<span class="sd">           from orbax.checkpoint.v1 import training</span>
+
+<span class="sd">           ckptr = training.Checkpointer(directory)</span>
+
+<span class="sd">           ckptr.save(</span>
+<span class="sd">               step=1,</span>
+<span class="sd">               state=tree,</span>
+<span class="sd">               metrics={&#39;loss&#39;: 0.12, &#39;accuracy&#39;: 0.95},</span>
+<span class="sd">               custom_metadata={&#39;description&#39;: &#39;Model after epoch 1&#39;},</span>
+<span class="sd">           )</span>
+
+<span class="sd">           ckptr.close()</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">      step: The step number to save.</span>
+<span class="sd">      state: The PyTree to save.</span>
+<span class="sd">      checkpointable_name: The name of the checkpointable to save a pytree</span>
+<span class="sd">        under. Defaults to &#39;pytree&#39;.</span>
+<span class="sd">      force: If True, ignores all :py:class:`.SaveDecisionPolicy` checks, and</span>
+<span class="sd">        always decides to save a checkpoint.</span>
+<span class="sd">      overwrite: If True, deletes any existing checkpoint at the given step</span>
+<span class="sd">        before saving. Otherwise, raises an error if the checkpoint already</span>
+<span class="sd">        exists.</span>
+<span class="sd">      metrics: A PyTree of metrics to be saved with the checkpoint.</span>
+<span class="sd">      custom_metadata: A JSON dictionary representing user-specified custom</span>
+<span class="sd">        metadata. This should be information that is relevant to the checkpoint</span>
+<span class="sd">        at the given step, rather than to the entire sequence of checkpoints.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      Whether a checkpoint was saved or not.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_async</span><span class="p">(</span>
+        <span class="n">step</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">,</span>
+        <span class="n">checkpointable_name</span><span class="o">=</span><span class="n">checkpointable_name</span><span class="p">,</span>
+        <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
+        <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+        <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span>
+        <span class="n">custom_metadata</span><span class="o">=</span><span class="n">custom_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">result</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.save_checkpointables">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.save_checkpointables">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">save_checkpointables</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+      <span class="n">checkpointables</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">metrics</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">JsonType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">custom_metadata</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">JsonType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves a dictionary of checkpointable objects at the given step.</span>
+
+<span class="sd">    This method saves a dictionary of checkpointable objects, mapping string</span>
+<span class="sd">    names to values. See `the guide on Checkpointables</span>
+<span class="sd">    &lt;https://orbax.readthedocs.io/en/latest/guides/checkpoint/v1/checkpointables.html&gt;`_</span>
+<span class="sd">    for more details on checkpointables. Also see documentation for</span>
+<span class="sd">    :py:func:`~orbax.checkpoint.v1.save`.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">      1. Basic Usage:</span>
+<span class="sd">         Save multiple named items (checkpointables) at a specific step. The</span>
+<span class="sd">         dictionary keys define the names of the saved components::</span>
+
+<span class="sd">            from orbax.checkpoint.v1 import training</span>
+
+<span class="sd">            # Initialize the checkpointer for a directory</span>
+<span class="sd">            ckptr = training.Checkpointer(directory)</span>
+
+<span class="sd">            # Save multiple items, such as model weights and optimizer state</span>
+<span class="sd">            items_to_save = {</span>
+<span class="sd">                &#39;model&#39;: my_model_state,</span>
+<span class="sd">                &#39;optimizer&#39;: my_opt_state,</span>
+<span class="sd">            }</span>
+
+<span class="sd">            saved = ckptr.save_checkpointables(</span>
+<span class="sd">                step=0,</span>
+<span class="sd">                checkpointables=items_to_save</span>
+<span class="sd">            )</span>
+
+<span class="sd">            # Clean up background threads gracefully when the training loop ends</span>
+<span class="sd">            ckptr.close()</span>
+
+<span class="sd">      2. Advanced Saving with Metrics and Metadata:</span>
+<span class="sd">         Attach JSON-serializable metrics and custom metadata to a specific step</span>
+<span class="sd">         for thorough experiment tracking::</span>
+
+<span class="sd">            from orbax.checkpoint.v1 import training</span>
+
+<span class="sd">            ckptr = training.Checkpointer(directory)</span>
+<span class="sd">            items_to_save = {&#39;model&#39;: my_model_state}</span>
+
+<span class="sd">            ckptr.save_checkpointables(</span>
+<span class="sd">                step=1,</span>
+<span class="sd">                checkpointables=items_to_save,</span>
+<span class="sd">                metrics={&#39;loss&#39;: 0.12, &#39;accuracy&#39;: 0.95},</span>
+<span class="sd">                custom_metadata={&#39;description&#39;: &#39;Model after epoch 1&#39;},</span>
+<span class="sd">            )</span>
+
+<span class="sd">            ckptr.close()</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      step: The step number to save.</span>
+<span class="sd">      checkpointables: A dictionary mapping string names to the corresponding</span>
+<span class="sd">        objects (checkpointables) that need to be saved.</span>
+<span class="sd">      force: If True, ignores all policy checks and always decides to save a</span>
+<span class="sd">        checkpoint.</span>
+<span class="sd">      overwrite: If True, deletes any existing checkpoint at the given step</span>
+<span class="sd">        before saving. Otherwise, raises an error if the checkpoint already</span>
+<span class="sd">        exists.</span>
+<span class="sd">      metrics: A dictionary of metrics to be saved with the checkpoint. Must be</span>
+<span class="sd">        JSON-serializable.</span>
+<span class="sd">      custom_metadata: A JSON dictionary representing user-specified custom</span>
+<span class="sd">        metadata relevant to the checkpoint at this specific step.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      bool: True if the checkpoint was successfully saved, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_checkpointables_async</span><span class="p">(</span>
+        <span class="n">step</span><span class="p">,</span>
+        <span class="n">checkpointables</span><span class="p">,</span>
+        <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
+        <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+        <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span>
+        <span class="n">custom_metadata</span><span class="o">=</span><span class="n">custom_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">result</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.save_async">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.save_async">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">save_async</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+      <span class="n">state</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">PyTreeOf</span><span class="p">[</span><span class="n">tree_types</span><span class="o">.</span><span class="n">Leaf</span><span class="p">],</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">checkpointable_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">STATE_CHECKPOINTABLE_KEY</span><span class="p">,</span>
+      <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">metrics</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">JsonType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">custom_metadata</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">JsonType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">async_types</span><span class="o">.</span><span class="n">AsyncResponse</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves a checkpoint asynchronously.</span>
+
+<span class="sd">    This function is the asynchronous equivalent of</span>
+<span class="sd">    :py:meth:`~.save`. It accepts the exact same</span>
+<span class="sd">    arguments; please refer to that method for detailed descriptions.</span>
+
+<span class="sd">    This method executes mostly in the background, blocking the main thread for</span>
+<span class="sd">    as little time as possible.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">      ::</span>
+
+<span class="sd">        async_response = ckptr.save_async(step=0, state=tree)</span>
+<span class="sd">        if async_response is not None:</span>
+<span class="sd">          saved = async_response.result()</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      step: The step number to save.</span>
+<span class="sd">      state: The PyTree to save.</span>
+<span class="sd">      checkpointable_name: The name of the checkpointable to save a pytree</span>
+<span class="sd">        under. Defaults to &#39;pytree&#39;.</span>
+<span class="sd">      force: See `save`.</span>
+<span class="sd">      overwrite: See `save`.</span>
+<span class="sd">      metrics: See `save`.</span>
+<span class="sd">      custom_metadata: See `save`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      An `AsyncResponse`, which can be awaited via `result()`, which returns a</span>
+<span class="sd">      bool indicating whether a checkpoint was saved or not, or None if the save</span>
+<span class="sd">      was skipped by policy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_checkpointables_async</span><span class="p">(</span>
+        <span class="n">step</span><span class="p">,</span>
+        <span class="p">{</span><span class="n">checkpointable_name</span><span class="p">:</span> <span class="n">state</span><span class="p">},</span>
+        <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
+        <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+        <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span>
+        <span class="n">custom_metadata</span><span class="o">=</span><span class="n">custom_metadata</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.save_checkpointables_async">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.save_checkpointables_async">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">save_checkpointables_async</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+      <span class="n">checkpointables</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+      <span class="n">metrics</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">JsonType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">custom_metadata</span><span class="p">:</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">JsonType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">async_types</span><span class="o">.</span><span class="n">AsyncResponse</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves checkpointable objects asynchronously.</span>
+
+<span class="sd">    This function is the asynchronous equivalent of</span>
+<span class="sd">    :py:meth:`~.save_checkpointables`. Please refer to that</span>
+<span class="sd">    method for detailed instructions and argument descriptions.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">      Save checkpointable objects asynchronously::</span>
+
+<span class="sd">        async_response = ckptr.save_checkpointables_async(</span>
+<span class="sd">            step=0,</span>
+<span class="sd">            checkpointables=items_to_save</span>
+<span class="sd">        )</span>
+<span class="sd">        if async_response is not None:</span>
+<span class="sd">          saved = async_response.result()</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      step: The step number to save.</span>
+<span class="sd">      checkpointables: A dictionary mapping string names to objects to save.</span>
+<span class="sd">      force: See `save_checkpointables`.</span>
+<span class="sd">      overwrite: See `save_checkpointables`.</span>
+<span class="sd">      metrics: See `save_checkpointables`.</span>
+<span class="sd">      custom_metadata: See `save_checkpointables`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      An object representing the background operation, or None if the save was</span>
+<span class="sd">      skipped by policy. Call `.result()` on it to block and return a boolean</span>
+<span class="sd">      indicating whether the checkpoint was successfully saved.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">      StepAlreadyExistsError: If `overwrite` is False and a checkpoint at the</span>
+<span class="sd">        target `step` already exists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="p">)</span>
+    <span class="n">validation</span><span class="o">.</span><span class="n">validate_save_checkpointables</span><span class="p">(</span><span class="n">checkpointables</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">overwrite</span><span class="p">:</span>
+      <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+          <span class="s1">&#39;Specified `overwrite`: deleting existing checkpoint </span><span class="si">%d</span><span class="s1"> if it&#39;</span>
+          <span class="s1">&#39; exists.&#39;</span><span class="p">,</span>
+          <span class="n">step</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+      <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">step</span> <span class="o">==</span> <span class="n">step</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkpoints</span><span class="p">):</span>
+      <span class="k">raise</span> <span class="n">errors</span><span class="o">.</span><span class="n">StepAlreadyExistsError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Step </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s1"> already exists.&#39;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">context</span><span class="p">:</span>
+      <span class="n">checkpointer</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">saving</span><span class="o">.</span><span class="n">get_v0_checkpointer_and_args</span><span class="p">(</span>
+          <span class="n">checkpointables</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span>
+      <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">_checkpointer</span> <span class="o">=</span> <span class="n">checkpointer</span>  <span class="c1"># pylint: disable=protected-access</span>
+      <span class="n">save_initiated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+          <span class="n">step</span><span class="p">,</span>
+          <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+          <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span>
+          <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
+          <span class="n">custom_metadata</span><span class="o">=</span><span class="n">custom_metadata</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">save_initiated</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+      <span class="k">return</span> <span class="n">_AsyncSaveResponse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.load">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.load">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">CheckpointMetadata</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">abstract_state</span><span class="p">:</span> <span class="p">(</span>
+          <span class="n">tree_types</span><span class="o">.</span><span class="n">PyTreeOf</span><span class="p">[</span><span class="n">tree_types</span><span class="o">.</span><span class="n">AbstractLeaf</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">checkpointable_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">STATE_CHECKPOINTABLE_KEY</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">PyTreeOf</span><span class="p">[</span><span class="n">tree_types</span><span class="o">.</span><span class="n">Leaf</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads a PyTree checkpoint at the given step.</span>
+
+<span class="sd">    This method behaves similarly to the standalone free function</span>
+<span class="sd">    :py:func:`~orbax.checkpoint.v1.load`.</span>
+
+<span class="sd">    **Note:** Loading a PyTree without providing an `abstract_state` is</span>
+<span class="sd">    provided purely for convenience. For serious or production use cases, it is</span>
+<span class="sd">    STRONGLY recommended to always provide an `abstract_state` to ensure the</span>
+<span class="sd">    restored PyTree strictly matches the expected shapes, dtypes, and sharding.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">      1. Basic Loading:</span>
+<span class="sd">         Load a PyTree without providing an abstract structure. By passing</span>
+<span class="sd">         `step=None` (or omitting it), it automatically loads the latest step::</span>
+
+<span class="sd">           from orbax.checkpoint.v1 import training</span>
+
+<span class="sd">           # Initialize the checkpointer for the directory</span>
+<span class="sd">           ckptr = training.Checkpointer(directory)</span>
+
+<span class="sd">           # Load the saved PyTree from latest step</span>
+<span class="sd">           restored_tree = ckptr.load(step=None)</span>
+
+<span class="sd">      2. Loading with an Abstract PyTree:</span>
+<span class="sd">         Provide an abstract structure (such as target shapes and dtypes)</span>
+<span class="sd">         to ensure the restored PyTree is safely and correctly formatted::</span>
+
+<span class="sd">           import jax</span>
+<span class="sd">           import jax.numpy as jnp</span>
+<span class="sd">           from orbax.checkpoint.v1 import training</span>
+
+<span class="sd">           ckptr = training.Checkpointer(directory)</span>
+
+<span class="sd">           # Define the expected structure (shapes and dtypes) to restore into</span>
+<span class="sd">           target_structure = {</span>
+<span class="sd">               &#39;weights&#39;: jax.ShapeDtypeStruct((128, 128), dtype=jnp.float32),</span>
+<span class="sd">               &#39;bias&#39;: jax.ShapeDtypeStruct((128,), dtype=jnp.float32)</span>
+<span class="sd">           }</span>
+
+<span class="sd">           # Restore exactly matching the target structure</span>
+<span class="sd">           restored_tree = ckptr.load(</span>
+<span class="sd">               step=1,</span>
+<span class="sd">               abstract_state=target_structure</span>
+<span class="sd">           )</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      step: The step number or :py:class:`.CheckpointMetadata` to load. If None,</span>
+<span class="sd">        the checkpointer will attempt to resolve and load the latest existing</span>
+<span class="sd">        checkpoint.</span>
+<span class="sd">      abstract_state: The abstract PyTree to load.</span>
+<span class="sd">      checkpointable_name: The name of the checkpointable to load a pytree</span>
+<span class="sd">        under. Defaults to &#39;pytree&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      The loaded PyTree.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_checkpointables</span><span class="p">(</span>
+        <span class="n">step</span><span class="p">,</span> <span class="p">{</span><span class="n">checkpointable_name</span><span class="p">:</span> <span class="n">abstract_state</span><span class="p">}</span>
+    <span class="p">)[</span><span class="n">checkpointable_name</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.load_checkpointables">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.load_checkpointables">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">load_checkpointables</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">CheckpointMetadata</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">abstract_checkpointables</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads a set of checkpointables at the given step.</span>
+
+<span class="sd">    This method behaves similarly to the standalone free function</span>
+<span class="sd">    :py:func:`~orbax.checkpoint.v1.load_checkpointables`.</span>
+
+<span class="sd">    This function retrieves multiple named items (such as model weights or</span>
+<span class="sd">    optimizer states) from a specific checkpoint directory. If no step is</span>
+<span class="sd">    provided, it automatically resolves to and loads the most recently saved</span>
+<span class="sd">    checkpoint.</span>
+
+<span class="sd">    **Note:** Loading without providing an `abstract_checkpointables`</span>
+<span class="sd">    dictionary is provided purely for convenience. For serious or production</span>
+<span class="sd">    use cases, it is STRONGLY recommended to always provide</span>
+<span class="sd">    `abstract_checkpointables` to ensure the restored items strictly match</span>
+<span class="sd">    the exact nested structures, shapes, and data types expected.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">      1. Basic Loading:</span>
+<span class="sd">         Load multiple named items (such as a model and optimizer) from a</span>
+<span class="sd">         specific step. If step is omitted, it resolves to the latest</span>
+<span class="sd">         available checkpoint::</span>
+
+<span class="sd">           from orbax.checkpoint.v1 import training</span>
+
+<span class="sd">           # Initialize the checkpointer for the directory</span>
+<span class="sd">           ckptr = training.Checkpointer(directory)</span>
+
+<span class="sd">           # Load all checkpointables saved at the latest step</span>
+<span class="sd">           restored_items = ckptr.load_checkpointables(step=None)</span>
+
+<span class="sd">           # Access the individual components by their original string keys</span>
+<span class="sd">           my_model = restored_items[&quot;model&quot;]</span>
+<span class="sd">           my_opt = restored_items[&quot;optimizer&quot;]</span>
+
+<span class="sd">      2. Loading with Abstract Checkpointables (Recommended):</span>
+<span class="sd">         Provide a dictionary of abstract structures to ensure the restored</span>
+<span class="sd">         items strictly match your expected shapes and data types::</span>
+
+<span class="sd">           import jax</span>
+<span class="sd">           import jax.numpy as jnp</span>
+<span class="sd">           from orbax.checkpoint.v1 import training</span>
+
+<span class="sd">           ckptr = training.Checkpointer(directory)</span>
+
+<span class="sd">           # Define the expected structure for each named item using JAX arrays</span>
+<span class="sd">           target_items = {</span>
+<span class="sd">               &quot;model&quot;: {</span>
+<span class="sd">                   &#39;weights&#39;: jax.ShapeDtypeStruct((128, 128), jnp.float32),</span>
+<span class="sd">                   &#39;bias&#39;: jax.ShapeDtypeStruct((128,), jnp.float32)</span>
+<span class="sd">               },</span>
+<span class="sd">               &quot;optimizer&quot;: {</span>
+<span class="sd">                   &#39;momentum&#39;: jax.ShapeDtypeStruct((128, 128), jnp.float32)</span>
+<span class="sd">               }</span>
+<span class="sd">           }</span>
+
+<span class="sd">           # Restore exactly matching the target structures</span>
+<span class="sd">           restored_items = ckptr.load_checkpointables(</span>
+<span class="sd">               step=1,</span>
+<span class="sd">               abstract_checkpointables=target_items</span>
+<span class="sd">           )</span>
+
+<span class="sd">      3. Partial Loading:</span>
+<span class="sd">         If you only need to load a subset of checkpointables (e.g., loading</span>
+<span class="sd">         model weights but omitting optimizer state), you can provide an</span>
+<span class="sd">         `abstract_checkpointables` dictionary containing only the keys for the</span>
+<span class="sd">         items you wish to restore::</span>
+
+<span class="sd">           import jax</span>
+<span class="sd">           import jax.numpy as jnp</span>
+<span class="sd">           from orbax.checkpoint.v1 import training</span>
+
+<span class="sd">           ckptr = training.Checkpointer(directory)</span>
+
+<span class="sd">           # Define abstract structure for ONLY the items to load</span>
+<span class="sd">           target_items = {</span>
+<span class="sd">               &quot;model&quot;: {</span>
+<span class="sd">                   &#39;weights&#39;: jax.ShapeDtypeStruct((128, 128), jnp.float32),</span>
+<span class="sd">                   &#39;bias&#39;: jax.ShapeDtypeStruct((128,), jnp.float32)</span>
+<span class="sd">               },</span>
+<span class="sd">           }</span>
+
+<span class="sd">           # Load only &quot;model&quot;, omitting &quot;optimizer&quot;</span>
+<span class="sd">           restored_items = ckptr.load_checkpointables(</span>
+<span class="sd">               step=1,</span>
+<span class="sd">               abstract_checkpointables=target_items</span>
+<span class="sd">           )</span>
+<span class="sd">           my_model = restored_items[&quot;model&quot;]</span>
+<span class="sd">           # my_opt = restored_items[&quot;optimizer&quot;]</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      step: The step number or :py:class:`.CheckpointMetadata` to load. If None,</span>
+<span class="sd">        the checkpointer will attempt to resolve and load the latest existing</span>
+<span class="sd">        checkpoint.</span>
+<span class="sd">      abstract_checkpointables: A dictionary mapping string names to their</span>
+<span class="sd">        corresponding abstract structures (e.g., target PyTrees). This guides</span>
+<span class="sd">        the loading process to ensure shape and type compliance. If provided, it</span>
+<span class="sd">        can be used to load only a subset of checkpointables by providing only a</span>
+<span class="sd">        subset of keys.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      dict[str, Any]: A dictionary containing the loaded checkpointable objects,</span>
+<span class="sd">        keyed by string names. If `abstract_checkpointables` was specified,</span>
+<span class="sd">        returns only the keys specified in that dict, otherwise returns all</span>
+<span class="sd">        keys saved with `save_checkpointables`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="p">):</span>
+      <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_existing_checkpoint</span><span class="p">(</span><span class="n">step</span><span class="p">)</span><span class="o">.</span><span class="n">step</span>
+      <span class="k">return</span> <span class="n">loading</span><span class="o">.</span><span class="n">load_checkpointables</span><span class="p">(</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">directory</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_step_name_format</span><span class="o">.</span><span class="n">build_name</span><span class="p">(</span><span class="n">step</span><span class="p">),</span>
+          <span class="n">abstract_checkpointables</span><span class="p">,</span>
+      <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.load_async">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.load_async">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">load_async</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">CheckpointMetadata</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">abstract_state</span><span class="p">:</span> <span class="p">(</span>
+          <span class="n">tree_types</span><span class="o">.</span><span class="n">PyTreeOf</span><span class="p">[</span><span class="n">tree_types</span><span class="o">.</span><span class="n">AbstractLeaf</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">async_types</span><span class="o">.</span><span class="n">AsyncResponse</span><span class="p">[</span><span class="n">tree_types</span><span class="o">.</span><span class="n">PyTreeOf</span><span class="p">[</span><span class="n">tree_types</span><span class="o">.</span><span class="n">Leaf</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Not yet supported.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.load_checkpointables_async">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.load_checkpointables_async">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">load_checkpointables_async</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">CheckpointMetadata</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">abstract_checkpointables</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">async_types</span><span class="o">.</span><span class="n">AsyncResponse</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads a set of checkpointables asynchronously at the given step.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.metadata">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.metadata">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">metadata</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">CheckpointMetadata</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">training_metadata_types</span><span class="o">.</span><span class="n">CheckpointMetadata</span><span class="p">[</span>
+      <span class="n">metadata_types</span><span class="o">.</span><span class="n">PyTreeMetadata</span>
+  <span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns checkpoint metadata for the given step.</span>
+
+<span class="sd">    Retrieves metadata describing the structure of the PyTree stored at the</span>
+<span class="sd">    given step. If no step is provided, the method resolves to the latest</span>
+<span class="sd">    available checkpoint.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      step: The step number to retrieve metadata for. If `None`, the latest step</span>
+<span class="sd">        is used. Can also be a :py:class:`.CheckpointMetadata` object, from</span>
+<span class="sd">        which the step is extracted.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A :py:class:`.CheckpointMetadata` object containing</span>
+<span class="sd">      :py:class:`.PyTreeMetadata`, along with checkpoint timestamp and metrics</span>
+<span class="sd">      information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="p">):</span>
+      <span class="n">checkpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_existing_checkpoint</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+      <span class="k">del</span> <span class="n">step</span>
+      <span class="n">checkpoint_metadata</span> <span class="o">=</span> <span class="n">metadata_loading</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">directory</span>
+          <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_step_name_format</span><span class="o">.</span><span class="n">build_name</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+      <span class="p">)</span>
+      <span class="k">return</span> <span class="n">training_metadata_types</span><span class="o">.</span><span class="n">CheckpointMetadata</span><span class="p">[</span>
+          <span class="n">metadata_types</span><span class="o">.</span><span class="n">PyTreeMetadata</span>
+      <span class="p">](</span>
+          <span class="n">step</span><span class="o">=</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">step</span><span class="p">,</span>
+          <span class="n">path</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+          <span class="n">metadata</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span>
+          <span class="n">init_timestamp_nsecs</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">init_timestamp_nsecs</span><span class="p">,</span>
+          <span class="n">commit_timestamp_nsecs</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">commit_timestamp_nsecs</span><span class="p">,</span>
+          <span class="n">custom_metadata</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">custom_metadata</span><span class="p">,</span>
+          <span class="n">metrics</span><span class="o">=</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+      <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.checkpointables_metadata">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.checkpointables_metadata">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">checkpointables_metadata</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">CheckpointMetadata</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">training_metadata_types</span><span class="o">.</span><span class="n">CheckpointMetadata</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns checkpoint metadata for the given step.</span>
+
+<span class="sd">    Retrieves metadata describing the structure of the checkpointables stored at</span>
+<span class="sd">    the given step. If no step is provided, the method resolves to the latest</span>
+<span class="sd">    available checkpoint.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      step: The step number to retrieve metadata for. If `None`, the latest step</span>
+<span class="sd">        is used. Can also be a :py:class:`.CheckpointMetadata` object, from</span>
+<span class="sd">        which the step is extracted.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A :py:class:`.CheckpointMetadata` object containing a `dict[str, Any]`</span>
+<span class="sd">      describing the checkpointables, along with checkpoint timestamp and</span>
+<span class="sd">      metrics information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="p">):</span>
+      <span class="n">checkpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_existing_checkpoint</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+      <span class="k">del</span> <span class="n">step</span>
+      <span class="n">checkpoint_metadata</span> <span class="o">=</span> <span class="n">metadata_loading</span><span class="o">.</span><span class="n">checkpointables_metadata</span><span class="p">(</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">directory</span>
+          <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_step_name_format</span><span class="o">.</span><span class="n">build_name</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+      <span class="p">)</span>
+      <span class="k">return</span> <span class="n">training_metadata_types</span><span class="o">.</span><span class="n">CheckpointMetadata</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]](</span>
+          <span class="n">step</span><span class="o">=</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">step</span><span class="p">,</span>
+          <span class="n">path</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+          <span class="n">metadata</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span>
+          <span class="n">init_timestamp_nsecs</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">init_timestamp_nsecs</span><span class="p">,</span>
+          <span class="n">commit_timestamp_nsecs</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">commit_timestamp_nsecs</span><span class="p">,</span>
+          <span class="n">custom_metadata</span><span class="o">=</span><span class="n">checkpoint_metadata</span><span class="o">.</span><span class="n">custom_metadata</span><span class="p">,</span>
+          <span class="n">metrics</span><span class="o">=</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+      <span class="p">)</span></div>
+
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">root_metadata</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">training_metadata_types</span><span class="o">.</span><span class="n">RootMetadata</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="p">):</span>
+      <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">RootMetadata</span><span class="p">(</span>
+          <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">custom_metadata</span><span class="o">=</span><span class="n">metadata</span><span class="o">.</span><span class="n">custom_metadata</span>
+      <span class="p">)</span>
+
+<div class="viewcode-block" id="Checkpointer.reload">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.reload">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reloads internal properties from the root directory.</span>
+
+<span class="sd">    Updates the list of available checkpoints by rescanning the storage</span>
+<span class="sd">    location. Use this method to sync the checkpointer with the file system</span>
+<span class="sd">    if checkpoints have been added or removed externally.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.is_saving_in_progress">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.is_saving_in_progress">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">is_saving_in_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns whether a checkpoint save operation is currently in progress.</span>
+
+<span class="sd">    Checks if there are any background persistence operations</span>
+<span class="sd">    currently active.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      `True` if a save operation is in progress, `False` otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">is_saving_in_progress</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.wait">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.wait">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Waits for any outstanding async operations to complete.</span>
+
+<span class="sd">    This method blocks until all background tasks, such as asynchronous saves,</span>
+<span class="sd">    have finished. Use this method to ensure that all operations are finalized</span>
+<span class="sd">    before proceeding with dependent actions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">wait_until_finished</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Checkpointer.close">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html#orbax.checkpoint.experimental.v1.training.Checkpointer.close">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Waits for pending async operations to complete and releases resources.</span>
+
+<span class="sd">    This method blocks until all background tasks, such as asynchronous saves,</span>
+<span class="sd">    have finished. It also performs necessary cleanup, such as closing</span>
+<span class="sd">    file handles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">__contextmanager__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Checkpointer</span><span class="p">]:</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="k">yield</span> <span class="bp">self</span>
+    <span class="k">finally</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+  <span class="nd">@deprecated</span><span class="p">(</span><span class="s1">&#39;Use `save` instead.&#39;</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">save_pytree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+  <span class="nd">@deprecated</span><span class="p">(</span><span class="s1">&#39;Use `save_async` instead.&#39;</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">save_pytree_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_async</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+  <span class="nd">@deprecated</span><span class="p">(</span><span class="s1">&#39;Use `load` instead.&#39;</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">load_pytree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+  <span class="nd">@deprecated</span><span class="p">(</span><span class="s1">&#39;Use `load_async` instead.&#39;</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">load_pytree_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_async</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+  <span class="nd">@deprecated</span><span class="p">(</span><span class="s1">&#39;Use `metadata` instead.&#39;</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">pytree_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Orbax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Google.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

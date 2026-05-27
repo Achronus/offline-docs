@@ -1,0 +1,983 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>orbax.checkpoint.experimental.v1._src.handlers.pytree_handler &#8212; Orbax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../../../../../_static/katex.min.js?v=3f697ebd"></script>
+    <script src="../../../../../../../_static/auto-render.min.js?v=ed6e749d"></script>
+    <script src="../../../../../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script src="../../../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/orbax/checkpoint/experimental/v1/_src/handlers/pytree_handler';</script>
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/orbax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="orbax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_modules/orbax/checkpoint/experimental/v1/_src/handlers/pytree_handler.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Orbax  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/orbax_checkpoint_101.html">Introduction to Checkpointing with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/checkpointables.html">Working with Checkpointables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/checkpointing_pytrees.html">Working with PyTree Checkpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/training.html">Checkpointing in a Training Loop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/customization.html">Customizing Checkpointing Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/partial_saving.html">Partial Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/model_surgery.html">Model Surgery</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.html">orbax.checkpoint V1 API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.arrays.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.arrays</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.errors</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.handlers.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.handlers</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.handler_registration.html">CheckpointableHandler Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.options.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.options</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.partial.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.partial</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.path.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.path</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.training.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.training.checkpointer.html">Training Checkpointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.training.save_decision_policies.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.save_decision_policies</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.training.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.errors</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.training.types.html">Training Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.tree.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.v1.multihost.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.multihost</span></code> module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Migrating to Orbax V1</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/orbax_v0_to_v1_migration.html">Orbax v0 to v1 Migration Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../../../index.v0.html">Legacy API (V0)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/orbax_checkpoint_101.html">Checkpointing with Orbax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/orbax_checkpoint_api_overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/api_refactor.html">Using the Refactored CheckpointManager  API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/checkpointing_pytrees.html">Checkpointing PyTrees of Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/optimized_checkpointing.html">Optimized Checkpointing with Tensorstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/transformations.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/preemption_checkpointing.html">Preemption Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../guides/checkpoint/debug_guide.html">Debugging Guide</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.html">orbax.checkpoint API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.abstract_checkpoint_manager.html">AbstractCheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.checkpoint_manager.html">CheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.checkpointers.html">Checkpointers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.handlers.html">CheckpointHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.args.html">CheckpointArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.type_handlers.html">TypeHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.path.atomicity.html">Atomicity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.path.atomicity_types.html">Atomicity Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.path.step.html">Step entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.path.deleter.html">Checkpoint Deleter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.preservation_policy.html">Preservation Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.save_decision_policy.html">Save Decision Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.checkpoint_utils.html">Checkpointing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.transform_utils.html">PyTree Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.msgpack_utils.html">Msgpack utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.multihost.html">Multi–host Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.tree.html">Tree Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.metadata.html">Metadata Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.logging.html">Checkpoint logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.options.html">Checkpointing Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.handlers.handler_registration.html">Handler Registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../../../api_reference/checkpoint.arrays.html">Arrays</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exporting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/export/orbax_export_101.html">Exporting with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../guides/checkpoint/v1/checkpointing_and_exporting_jax_models.html">Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../../../api_reference/export.html">orbax.export API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.dtensor_utils.html">DTensor utilities for multi–device/host export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.export_manager.html">ExportManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.jax_module.html">JaxModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.serving_config.html">ServingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.utils.html">General Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.validate.validation_manager.html">ValidationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../../../api_reference/export.validate.validation_report.html">ValidationReport</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Additional Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../contributors.html">Contributors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for orbax.checkpoint.experimental.v1._src.handlers.pytree_handler</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2026 The Orbax Authors.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;Implementation of :py:class:`~.v1.handlers.CheckpointableHandler` for PyTrees.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">get_args</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">absl</span><span class="w"> </span><span class="kn">import</span> <span class="n">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint</span><span class="w"> </span><span class="kn">import</span> <span class="n">options</span> <span class="k">as</span> <span class="n">v0_options_lib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">future</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">synchronization</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.handlers</span><span class="w"> </span><span class="kn">import</span> <span class="n">base_pytree_checkpoint_handler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">array_metadata_store</span> <span class="k">as</span> <span class="n">array_metadata_store_lib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">type_handlers</span> <span class="k">as</span> <span class="n">type_handlers_v0</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">v0_serialization_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">context</span> <span class="k">as</span> <span class="n">context_lib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">options</span> <span class="k">as</span> <span class="n">options_lib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.handlers</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">handler_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.layout</span><span class="w"> </span><span class="kn">import</span> <span class="n">checkpoint_layout</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">metadata_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">path_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">compatibility</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">options_resolution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">protocol_utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">registry</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">scalar_leaf_handler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">serialization_types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.synchronization</span><span class="w"> </span><span class="kn">import</span> <span class="n">multihost</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span> <span class="k">as</span> <span class="n">tree_types</span>
+
+
+<span class="n">Path</span> <span class="o">=</span> <span class="n">path_types</span><span class="o">.</span><span class="n">Path</span>
+<span class="n">CheckpointableHandler</span> <span class="o">=</span> <span class="n">handler_types</span><span class="o">.</span><span class="n">CheckpointableHandler</span>
+<span class="n">PyTree</span> <span class="o">=</span> <span class="n">tree_types</span><span class="o">.</span><span class="n">PyTree</span>
+<span class="n">PartialSaveError</span> <span class="o">=</span> <span class="n">base_pytree_checkpoint_handler</span><span class="o">.</span><span class="n">PartialSaveError</span>
+<span class="n">PartialSaveReplacementError</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">base_pytree_checkpoint_handler</span><span class="o">.</span><span class="n">PartialSaveReplacementError</span>
+<span class="p">)</span>
+
+<span class="n">STATE_CHECKPOINTABLE_KEY</span> <span class="o">=</span> <span class="n">checkpoint_layout</span><span class="o">.</span><span class="n">STATE_CHECKPOINTABLE_KEY</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_remaining_timeout</span><span class="p">(</span>
+    <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">timeout_secs</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">error_message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Returns remaining timeout in seconds, or raises TimeoutError if expired.&quot;&quot;&quot;</span>
+  <span class="n">time_remaining</span> <span class="o">=</span> <span class="n">timeout_secs</span> <span class="o">-</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">time_remaining</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="n">error_message</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">time_remaining</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_v0_save_args</span><span class="p">(</span>
+    <span class="n">checkpointable</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span>
+    <span class="n">array_saving_options</span><span class="p">:</span> <span class="n">options_lib</span><span class="o">.</span><span class="n">ArrayOptions</span><span class="o">.</span><span class="n">Saving</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Returns save args that are compatible with the V0 API.&quot;&quot;&quot;</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">_leaf_get_v0_save_args</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="n">resolved_options</span> <span class="o">=</span> <span class="n">options_resolution</span><span class="o">.</span><span class="n">resolve_storage_options</span><span class="p">(</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">array_saving_options</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">type_handlers_v0</span><span class="o">.</span><span class="n">SaveArgs</span><span class="p">(</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">resolved_options</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">resolved_options</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">chunk_byte_size</span><span class="o">=</span><span class="n">resolved_options</span><span class="o">.</span><span class="n">chunk_byte_size</span><span class="p">,</span>
+        <span class="n">shard_axes</span><span class="o">=</span><span class="n">resolved_options</span><span class="o">.</span><span class="n">shard_axes</span><span class="p">,</span>
+    <span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map_with_path</span><span class="p">(</span><span class="n">_leaf_get_v0_save_args</span><span class="p">,</span> <span class="n">checkpointable</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_v0_handler</span><span class="p">(</span>
+    <span class="n">context</span><span class="p">:</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">type_handler_registry</span><span class="p">:</span> <span class="n">v0_serialization_types</span><span class="o">.</span><span class="n">TypeHandlerRegistry</span><span class="p">,</span>
+    <span class="n">array_metadata_validator</span><span class="p">:</span> <span class="n">array_metadata_store_lib</span><span class="o">.</span><span class="n">Validator</span> <span class="o">=</span> <span class="n">array_metadata_store_lib</span><span class="o">.</span><span class="n">Validator</span><span class="p">(),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">base_pytree_checkpoint_handler</span><span class="o">.</span><span class="n">BasePyTreeCheckpointHandler</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Creates a V0 handler from a V1 context.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">base_pytree_checkpoint_handler</span><span class="o">.</span><span class="n">BasePyTreeCheckpointHandler</span><span class="p">(</span>
+      <span class="n">save_concurrent_bytes</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">memory_options</span><span class="o">.</span><span class="n">write_concurrent_bytes</span><span class="p">,</span>
+      <span class="n">restore_concurrent_bytes</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">memory_options</span><span class="o">.</span><span class="n">read_concurrent_bytes</span><span class="p">,</span>
+      <span class="n">save_device_host_concurrent_bytes</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">memory_options</span><span class="o">.</span><span class="n">transfer_concurrent_bytes</span><span class="p">,</span>
+      <span class="n">use_ocdbt</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">array_options</span><span class="o">.</span><span class="n">saving</span><span class="o">.</span><span class="n">use_ocdbt</span><span class="p">,</span>
+      <span class="n">use_zarr3</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">array_options</span><span class="o">.</span><span class="n">saving</span><span class="o">.</span><span class="n">use_zarr3</span><span class="p">,</span>
+      <span class="n">use_compression</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">array_options</span><span class="o">.</span><span class="n">saving</span><span class="o">.</span><span class="n">use_compression</span><span class="p">,</span>
+      <span class="n">multiprocessing_options</span><span class="o">=</span><span class="n">v0_options_lib</span><span class="o">.</span><span class="n">MultiprocessingOptions</span><span class="p">(</span>
+          <span class="n">primary_host</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">multiprocessing_options</span><span class="o">.</span><span class="n">primary_host</span><span class="p">,</span>
+          <span class="n">active_processes</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">multiprocessing_options</span><span class="o">.</span><span class="n">active_processes</span><span class="p">,</span>
+          <span class="n">barrier_sync_key_prefix</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">multiprocessing_options</span><span class="o">.</span><span class="n">barrier_sync_key_prefix</span><span class="p">,</span>
+      <span class="p">),</span>
+      <span class="n">type_handler_registry</span><span class="o">=</span><span class="n">type_handler_registry</span><span class="p">,</span>
+      <span class="n">enable_post_merge_validation</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">array_options</span><span class="o">.</span><span class="n">saving</span><span class="o">.</span><span class="n">enable_post_merge_validation</span><span class="p">,</span>
+      <span class="n">pytree_metadata_options</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">pytree_options</span><span class="o">.</span><span class="n">saving</span><span class="o">.</span><span class="n">pytree_metadata_options</span><span class="p">,</span>
+      <span class="n">array_metadata_validator</span><span class="o">=</span><span class="n">array_metadata_validator</span><span class="p">,</span>
+      <span class="n">enable_pinned_host_transfer</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">array_options</span><span class="o">.</span><span class="n">saving</span><span class="o">.</span><span class="n">enable_pinned_host_transfer</span><span class="p">,</span>
+      <span class="n">is_prioritized_key_fn</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">memory_options</span><span class="o">.</span><span class="n">is_prioritized_key_fn</span><span class="p">,</span>
+  <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_v0_save_args</span><span class="p">(</span>
+    <span class="n">context</span><span class="p">:</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span>
+    <span class="n">checkpointable</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">base_pytree_checkpoint_handler</span><span class="o">.</span><span class="n">BasePyTreeSaveArgs</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Creates v0 CheckpointArgs for saving.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">base_pytree_checkpoint_handler</span><span class="o">.</span><span class="n">BasePyTreeSaveArgs</span><span class="p">(</span>
+      <span class="n">item</span><span class="o">=</span><span class="n">checkpointable</span><span class="p">,</span>
+      <span class="n">save_args</span><span class="o">=</span><span class="n">_get_v0_save_args</span><span class="p">(</span>
+          <span class="n">checkpointable</span><span class="p">,</span>
+          <span class="n">context</span><span class="o">.</span><span class="n">array_options</span><span class="o">.</span><span class="n">saving</span><span class="p">,</span>
+      <span class="p">),</span>
+      <span class="n">ocdbt_target_data_file_size</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">array_options</span><span class="o">.</span><span class="n">saving</span><span class="o">.</span><span class="n">ocdbt_target_data_file_size</span><span class="p">,</span>
+  <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_restore_type_by_abstract_type</span><span class="p">(</span>
+    <span class="n">abstract_checkpointable</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Allows users to override the restored type.</span>
+
+<span class="sd">  When users pass the `value` in the `DeserializationParam`, the `PyTreeHandler`</span>
+<span class="sd">  will try to restore to the specified type `T`. This only supports the standard</span>
+<span class="sd">  types supported by Orbax.</span>
+<span class="sd">  For example:</span>
+<span class="sd">    - `jax.ShapeDtype` -&gt; `jax.Array`</span>
+<span class="sd">    - `NumpyAbstractType` -&gt; `jax.Array`</span>
+<span class="sd">    - `int` | `float` | `Type[int]` | `Type[float]` -&gt; `int` | `float` | `int` |</span>
+<span class="sd">    `float`</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    abstract_checkpointable: The abstract checkpointable passed in by the user.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    Returns the `restore_type` parameter for `V0RestoreArgs`. This is needed to</span>
+<span class="sd">    determine which `LeafHandler` will eventually handle this</span>
+<span class="sd">    `abstract_checkpointable`.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">if</span> <span class="n">abstract_checkpointable</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="kc">None</span>
+  <span class="k">elif</span> <span class="n">serialization_types</span><span class="o">.</span><span class="n">is_placeholder</span><span class="p">(</span><span class="n">abstract_checkpointable</span><span class="p">):</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">serialization_types</span><span class="o">.</span><span class="n">PLACEHOLDER</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">abstract_checkpointable</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+      <span class="n">abstract_type</span> <span class="o">=</span> <span class="n">abstract_checkpointable</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">abstract_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">abstract_checkpointable</span><span class="p">)</span>
+
+    <span class="c1"># Make sure test with AbstractShardedArray before AbstractArray otherwise</span>
+    <span class="c1"># Numpy will be matched first.</span>
+    <span class="k">if</span> <span class="n">protocol_utils</span><span class="o">.</span><span class="n">is_subclass_protocol</span><span class="p">(</span>
+        <span class="n">abstract_type</span><span class="p">,</span> <span class="n">serialization_types</span><span class="o">.</span><span class="n">AbstractShardedArray</span>
+    <span class="p">):</span>
+      <span class="n">ret</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span>
+    <span class="k">elif</span> <span class="n">protocol_utils</span><span class="o">.</span><span class="n">is_subclass_protocol</span><span class="p">(</span>
+        <span class="n">abstract_type</span><span class="p">,</span> <span class="n">serialization_types</span><span class="o">.</span><span class="n">AbstractArray</span>
+    <span class="p">):</span>
+      <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="k">elif</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">abstract_type</span><span class="p">,</span> <span class="n">get_args</span><span class="p">(</span><span class="n">scalar_leaf_handler</span><span class="o">.</span><span class="n">Scalar</span><span class="p">)):</span>
+      <span class="n">ret</span> <span class="o">=</span> <span class="n">abstract_type</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="c1"># this will use registered handler derived from metadata</span>
+      <span class="n">ret</span> <span class="o">=</span> <span class="kc">None</span>
+
+  <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span>
+      <span class="mi">1</span><span class="p">,</span>
+      <span class="s1">&#39;abstract_checkpointable: </span><span class="si">%s</span><span class="s1">, restore_type: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+      <span class="n">abstract_checkpointable</span><span class="p">,</span>
+      <span class="n">ret</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="k">return</span> <span class="n">ret</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_v0_restore_args</span><span class="p">(</span>
+    <span class="n">context</span><span class="p">:</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span>
+    <span class="n">abstract_checkpointable</span><span class="p">:</span> <span class="n">PyTree</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">base_pytree_checkpoint_handler</span><span class="o">.</span><span class="n">BasePyTreeRestoreArgs</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Creates v0 CheckpointArgs for restoration.&quot;&quot;&quot;</span>
+
+  <span class="k">if</span> <span class="n">abstract_checkpointable</span><span class="p">:</span>
+    <span class="n">restore_args</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">checkpointable</span><span class="p">:</span> <span class="n">compatibility</span><span class="o">.</span><span class="n">V0RestoreArgs</span><span class="p">(</span>
+            <span class="n">restore_type</span><span class="o">=</span><span class="n">_restore_type_by_abstract_type</span><span class="p">(</span><span class="n">checkpointable</span><span class="p">),</span>
+            <span class="n">abstract_leaf</span><span class="o">=</span><span class="n">checkpointable</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">abstract_checkpointable</span><span class="p">,</span>
+    <span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">restore_args</span> <span class="o">=</span> <span class="kc">None</span>
+
+  <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;restore_args: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">restore_args</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">base_pytree_checkpoint_handler</span><span class="o">.</span><span class="n">BasePyTreeRestoreArgs</span><span class="p">(</span>
+      <span class="n">item</span><span class="o">=</span><span class="n">abstract_checkpointable</span><span class="p">,</span>
+      <span class="n">restore_args</span><span class="o">=</span><span class="n">restore_args</span><span class="p">,</span>
+      <span class="n">partial_restore</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">pytree_options</span><span class="o">.</span><span class="n">loading</span><span class="o">.</span><span class="n">partial_load</span><span class="p">,</span>
+  <span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_async_futures</span><span class="p">(</span>
+    <span class="n">commit_futures</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">Future</span><span class="p">],</span>
+    <span class="n">timeout_secs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Waits for commit futures to complete with a timeout.&quot;&quot;&quot;</span>
+  <span class="n">deadline</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="n">start_time</span> <span class="o">+</span> <span class="n">timeout_secs</span>
+      <span class="k">if</span> <span class="n">timeout_secs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">start_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+      <span class="k">else</span> <span class="kc">None</span>
+  <span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_wait_with_timeout</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">future</span><span class="o">.</span><span class="n">Future</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">deadline</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="n">timeout</span> <span class="o">=</span> <span class="n">deadline</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">timeout</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s1">&#39;Overall save timeout exceeded.&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+  <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+      <span class="o">*</span><span class="p">[</span><span class="n">asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span><span class="n">_wait_with_timeout</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">commit_futures</span><span class="p">]</span>
+  <span class="p">)</span>
+
+
+<div class="viewcode-block" id="PyTreeHandler">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.handlers.pytree_handler.html#orbax.checkpoint.experimental.v1.handlers.PyTreeHandler">[docs]</a>
+<span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PyTreeHandler</span><span class="p">(</span><span class="n">CheckpointableHandler</span><span class="p">[</span><span class="n">PyTree</span><span class="p">,</span> <span class="n">PyTree</span><span class="p">]):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;An implementation of :py:class:`.CheckpointableHandler` for PyTrees.</span>
+
+<span class="sd">  PyTreeHandler manages the decomposition of JAX PyTree structures into leaf-</span>
+<span class="sd">  level parameters for persistence. It utilizes an asynchronous two-tier</span>
+<span class="sd">  execution model to allow for background I/O, ensuring that heavy array</span>
+<span class="sd">  serialization does not block the main training process.</span>
+
+<span class="sd">  **Note: Users are encouraged NEVER to instantiate or use this handler</span>
+<span class="sd">  directly.** Always use the top-level APIs like `ocp.save_checkpointables` and</span>
+<span class="sd">  `ocp.load_checkpointables`. Orbax uses this handler by default for standard</span>
+<span class="sd">  JAX PyTrees (like nested dictionaries of arrays).</span>
+
+<span class="sd">  To configure a specific serialization context for a PyTree and aggressively</span>
+<span class="sd">  force Orbax to use the customized PyTreeHandler, the recommended approach</span>
+<span class="sd">  is to use `ocp.Context` with `CheckpointablesOptions`. This allows you to</span>
+<span class="sd">  bind the handler to a specific dictionary key within the Context scope.</span>
+
+<span class="sd">  See :py:class:`~orbax.checkpoint.options.CheckpointablesOptions` for more</span>
+<span class="sd">  details on handler registration.</span>
+
+<span class="sd">  Usage Example:</span>
+<span class="sd">    Save a state dictionary configuration::</span>
+
+<span class="sd">      import orbax.checkpoint as ocp</span>
+
+<span class="sd">      state_pytree = {&#39;weights&#39;: [1.0, 2.0], &#39;bias&#39;: 0.0}</span>
+
+<span class="sd">      checkpointables_options = (</span>
+<span class="sd">          ocp.options.CheckpointablesOptions.create_with_handlers(</span>
+<span class="sd">              model_state=ocp.handlers.PyTreeHandler()</span>
+<span class="sd">          )</span>
+<span class="sd">      )</span>
+<span class="sd">      with ocp.Context(checkpointables_options=checkpointables_options):</span>
+<span class="sd">          ocp.save_checkpointables(path, dict(model_state=state_pytree))</span>
+
+<span class="sd">  Attributes:</span>
+<span class="sd">    context (Optional[Context]): Optional V1 Context providing configuration for</span>
+<span class="sd">      serialization, array options, and multiprocessing coordination.</span>
+<span class="sd">    array_metadata_validator (Validator): A validator object used to verify</span>
+<span class="sd">      consistency of array metadata during restoration.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PyTreeHandler.__init__">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.handlers.pytree_handler.html#orbax.checkpoint.experimental.v1.handlers.PyTreeHandler.__init__">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">context</span><span class="p">:</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">Context</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">array_metadata_validator</span><span class="p">:</span> <span class="n">array_metadata_store_lib</span><span class="o">.</span><span class="n">Validator</span> <span class="o">=</span> <span class="p">(</span>
+          <span class="n">array_metadata_store_lib</span><span class="o">.</span><span class="n">Validator</span><span class="p">()</span>
+      <span class="p">),</span>
+      <span class="n">leaf_handler_registry</span><span class="p">:</span> <span class="p">(</span>
+          <span class="n">serialization_types</span><span class="o">.</span><span class="n">LeafHandlerRegistry</span> <span class="o">|</span> <span class="kc">None</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">partial_save_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">context_lib</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_context</span> <span class="o">=</span> <span class="n">context</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_multiprocessing_options</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">multiprocessing_options</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_partial_save_mode</span> <span class="o">=</span> <span class="n">partial_save_mode</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_handler_registry</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">leaf_handler_registry</span> <span class="ow">or</span> <span class="n">registry</span><span class="o">.</span><span class="n">StandardLeafHandlerRegistry</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="n">type_handler_registry</span> <span class="o">=</span> <span class="n">compatibility</span><span class="o">.</span><span class="n">get_v0_type_handler_registry</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_handler_registry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_context</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_handler_impl</span> <span class="o">=</span> <span class="n">_create_v0_handler</span><span class="p">(</span>
+        <span class="n">context</span><span class="p">,</span>
+        <span class="n">type_handler_registry</span><span class="o">=</span><span class="n">type_handler_registry</span><span class="p">,</span>
+        <span class="n">array_metadata_validator</span><span class="o">=</span><span class="n">array_metadata_validator</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="n">path_types</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">multihost</span><span class="o">.</span><span class="n">is_primary_host</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_multiprocessing_options</span><span class="o">.</span><span class="n">primary_host</span><span class="p">):</span>
+      <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handler_impl</span><span class="o">.</span><span class="n">_finalize_async</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>  <span class="c1"># pylint: disable=protected-access</span>
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_background_save</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">directory</span><span class="p">:</span> <span class="n">path_types</span><span class="o">.</span><span class="n">PathAwaitingCreation</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">commit_futures</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">Future</span><span class="p">],</span>
+      <span class="n">operation_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+      <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="n">timeout_secs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="o">.</span><span class="n">async_options</span><span class="o">.</span><span class="n">timeout_secs</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="k">await</span> <span class="n">directory</span><span class="o">.</span><span class="n">await_creation</span><span class="p">()</span>
+    <span class="n">active_processes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_multiprocessing_options</span><span class="o">.</span><span class="n">active_processes</span> <span class="ow">or</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="nb">range</span><span class="p">(</span><span class="n">multihost</span><span class="o">.</span><span class="n">process_count</span><span class="p">())</span>
+    <span class="p">)</span>
+    <span class="k">await</span> <span class="n">_async_futures</span><span class="p">(</span>
+        <span class="n">commit_futures</span><span class="p">,</span> <span class="n">timeout_secs</span><span class="o">=</span><span class="n">timeout_secs</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Global sync to ensure all participating processes have completed their</span>
+    <span class="c1"># save operations before proceeding to finalize.</span>
+    <span class="n">barrier_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;save_and_finalize_</span><span class="si">{</span><span class="n">operation_id</span><span class="si">}</span><span class="s1">_commit_complete&#39;</span>
+    <span class="k">if</span> <span class="n">timeout_secs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">await</span> <span class="n">multihost</span><span class="o">.</span><span class="n">sync_global_processes</span><span class="p">(</span>
+          <span class="n">barrier_name</span><span class="p">,</span>
+          <span class="n">operation_id</span><span class="o">=</span><span class="n">operation_id</span><span class="p">,</span>
+          <span class="n">processes</span><span class="o">=</span><span class="n">active_processes</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">await</span> <span class="n">multihost</span><span class="o">.</span><span class="n">sync_global_processes</span><span class="p">(</span>
+          <span class="n">barrier_name</span><span class="p">,</span>
+          <span class="n">operation_id</span><span class="o">=</span><span class="n">operation_id</span><span class="p">,</span>
+          <span class="n">processes</span><span class="o">=</span><span class="n">active_processes</span><span class="p">,</span>
+          <span class="n">timeout</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span>
+              <span class="n">_get_remaining_timeout</span><span class="p">(</span>
+                  <span class="n">start_time</span><span class="p">,</span>
+                  <span class="n">timeout_secs</span><span class="p">,</span>
+                  <span class="s1">&#39;Timed out while waiting for commit to complete.&#39;</span><span class="p">,</span>
+              <span class="p">)</span>
+          <span class="p">),</span>
+      <span class="p">)</span>
+    <span class="c1"># Finalize.</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finalize</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+    <span class="c1"># Global sync to ensure all hosts are aware that the finalize operation</span>
+    <span class="c1"># has completed before returning to the user.</span>
+    <span class="n">barrier_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;save_and_finalize_</span><span class="si">{</span><span class="n">operation_id</span><span class="si">}</span><span class="s1">_finalize_complete&#39;</span>
+    <span class="k">if</span> <span class="n">timeout_secs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">await</span> <span class="n">multihost</span><span class="o">.</span><span class="n">sync_global_processes</span><span class="p">(</span>
+          <span class="n">barrier_name</span><span class="p">,</span>
+          <span class="n">operation_id</span><span class="o">=</span><span class="n">operation_id</span><span class="p">,</span>
+          <span class="n">processes</span><span class="o">=</span><span class="n">active_processes</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">await</span> <span class="n">multihost</span><span class="o">.</span><span class="n">sync_global_processes</span><span class="p">(</span>
+          <span class="n">barrier_name</span><span class="p">,</span>
+          <span class="n">operation_id</span><span class="o">=</span><span class="n">operation_id</span><span class="p">,</span>
+          <span class="n">processes</span><span class="o">=</span><span class="n">active_processes</span><span class="p">,</span>
+          <span class="n">timeout</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span>
+              <span class="n">_get_remaining_timeout</span><span class="p">(</span>
+                  <span class="n">start_time</span><span class="p">,</span>
+                  <span class="n">timeout_secs</span><span class="p">,</span>
+                  <span class="s1">&#39;Timed out while waiting for finalize to complete.&#39;</span><span class="p">,</span>
+              <span class="p">)</span>
+          <span class="p">),</span>
+      <span class="p">)</span>
+
+<div class="viewcode-block" id="PyTreeHandler.save">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.handlers.pytree_handler.html#orbax.checkpoint.experimental.v1.handlers.PyTreeHandler.save">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="n">path_types</span><span class="o">.</span><span class="n">PathAwaitingCreation</span><span class="p">,</span> <span class="n">checkpointable</span><span class="p">:</span> <span class="n">PyTree</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Awaitable</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_leaves_handleable</span><span class="p">(</span><span class="n">checkpointable</span><span class="p">)</span>
+
+    <span class="n">save_args</span> <span class="o">=</span> <span class="n">create_v0_save_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="p">,</span> <span class="n">checkpointable</span><span class="p">)</span>
+    <span class="n">save_args</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="n">save_args</span><span class="p">,</span> <span class="n">partial_save_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_partial_save_mode</span>
+    <span class="p">)</span>
+
+    <span class="n">commit_futures</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handler_impl</span><span class="o">.</span><span class="n">async_save</span><span class="p">(</span>
+        <span class="n">directory</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="n">save_args</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">commit_futures</span>
+
+    <span class="c1"># TODO(b/398310070): Move operation ID generation to `Context`.</span>
+    <span class="n">operation_id</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">synchronization</span><span class="o">.</span><span class="n">OperationIdGenerator</span><span class="o">.</span><span class="n">get_current_operation_id</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="c1"># Needed to differentiate between different handlers when we have multiple</span>
+    <span class="c1"># PyTreeHandlers performing a save.</span>
+    <span class="n">operation_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">operation_id</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">directory</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_save</span><span class="p">(</span>
+        <span class="n">directory</span><span class="p">,</span>
+        <span class="n">commit_futures</span><span class="o">=</span><span class="n">commit_futures</span><span class="p">,</span>
+        <span class="n">operation_id</span><span class="o">=</span><span class="n">operation_id</span><span class="p">,</span>
+        <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_background_load</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">directory</span><span class="p">:</span> <span class="n">path_types</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="n">abstract_checkpointable</span><span class="p">:</span> <span class="n">PyTree</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handler_impl</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span>
+        <span class="n">directory</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="n">create_v0_restore_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="p">,</span> <span class="n">abstract_checkpointable</span><span class="p">),</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="PyTreeHandler.load">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.handlers.pytree_handler.html#orbax.checkpoint.experimental.v1.handlers.PyTreeHandler.load">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">directory</span><span class="p">:</span> <span class="n">path_types</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span>
+      <span class="n">abstract_checkpointable</span><span class="p">:</span> <span class="n">PyTree</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">PyTree</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads a PyTree from a checkpoint directory.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      directory: The directory to load from.</span>
+<span class="sd">      abstract_checkpointable: The abstract checkpointable to load into. If</span>
+<span class="sd">        None, the handler will attempt to load the entire checkpoint using the</span>
+<span class="sd">        recorded metadata. Otherwise, the `abstract_checkpointable` is expected</span>
+<span class="sd">        to be a PyTree of abstract leaves. The abstract leaf may be a value of</span>
+<span class="sd">        type :py:class:`~.v1.tree.AbstractLeaf`,</span>
+<span class="sd">        `Type[AbstractLeaf]`, or `None`. Passing the latter two indicates that</span>
+<span class="sd">        the metadata should be used to restore the leaf.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A awaitable which can be awaited to complete the load operation and</span>
+<span class="sd">      obtain a PyTree.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_abstract_leaves_handleable</span><span class="p">(</span><span class="n">abstract_checkpointable</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_load</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">abstract_checkpointable</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PyTreeHandler.metadata">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.handlers.pytree_handler.html#orbax.checkpoint.experimental.v1.handlers.PyTreeHandler.metadata">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">metadata</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="n">path_types</span><span class="o">.</span><span class="n">Path</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">metadata_types</span><span class="o">.</span><span class="n">PyTreeMetadata</span><span class="p">:</span>
+    <span class="n">v0_metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handler_impl</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span><span class="o">.</span><span class="n">tree</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_unwrap</span><span class="p">(</span><span class="n">metadata</span><span class="p">):</span>
+      <span class="c1"># unwrap the V0Metadata to get the V1 metadata</span>
+      <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">compatibility</span><span class="o">.</span><span class="n">V0Metadata</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">metadata</span><span class="o">.</span><span class="n">v1_metadata</span>
+
+    <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_unwrap</span><span class="p">,</span> <span class="n">v0_metadata</span><span class="p">)</span></div>
+
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">validate_leaves_handleable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checkpointable</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">):</span>
+    <span class="n">missing_leaf_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_handleable_leaf</span><span class="p">(</span><span class="n">leaf</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">serialization_types</span><span class="o">.</span><span class="n">is_placeholder</span><span class="p">(</span><span class="n">leaf</span><span class="p">):</span>
+        <span class="k">return</span>
+
+      <span class="n">leaf_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">leaf</span><span class="p">)</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_handler_registry</span><span class="o">.</span><span class="n">is_handleable</span><span class="p">(</span><span class="n">leaf_type</span><span class="p">):</span>
+        <span class="n">missing_leaf_types</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">leaf_type</span><span class="p">)</span>
+
+    <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="n">_validate_handleable_leaf</span><span class="p">,</span>
+        <span class="n">checkpointable</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">missing_leaf_types</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="n">registry</span><span class="o">.</span><span class="n">UnregisteredTypeError</span><span class="p">(</span>
+          <span class="s1">&#39;The following leaf types are not registered in the&#39;</span>
+          <span class="sa">f</span><span class="s1">&#39; `LeafHandlerRegistry`: [</span><span class="si">{</span><span class="n">missing_leaf_types</span><span class="si">}</span><span class="s1">]. Please register a&#39;</span>
+          <span class="s1">&#39; `LeafHandler` for each type in the `LeafHandlerRegistry` and&#39;</span>
+          <span class="s1">&#39; assign it into the `PyTreeOptions` in the `Context`.&#39;</span>
+      <span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">validate_abstract_leaves_handleable</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">abstract_checkpointable</span><span class="p">:</span> <span class="n">PyTree</span>
+  <span class="p">):</span>
+    <span class="n">missing_abstract_leaf_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_handleable_leaf</span><span class="p">(</span><span class="n">leaf</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">serialization_types</span><span class="o">.</span><span class="n">is_placeholder</span><span class="p">(</span><span class="n">leaf</span><span class="p">):</span>
+        <span class="k">return</span>
+
+      <span class="n">leaf_type</span> <span class="o">=</span> <span class="n">leaf</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">leaf</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="k">else</span> <span class="nb">type</span><span class="p">(</span><span class="n">leaf</span><span class="p">)</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_leaf_handler_registry</span><span class="o">.</span><span class="n">is_abstract_handleable</span><span class="p">(</span><span class="n">leaf_type</span><span class="p">):</span>
+        <span class="n">missing_abstract_leaf_types</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">leaf_type</span><span class="p">)</span>
+
+    <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="n">_validate_handleable_leaf</span><span class="p">,</span>
+        <span class="n">abstract_checkpointable</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">missing_abstract_leaf_types</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="n">registry</span><span class="o">.</span><span class="n">UnregisteredTypeError</span><span class="p">(</span>
+          <span class="s1">&#39;The following abstract leaf types are not registered in the&#39;</span>
+          <span class="sa">f</span><span class="s1">&#39; `LeafHandlerRegistry`: [</span><span class="si">{</span><span class="n">missing_abstract_leaf_types</span><span class="si">}</span><span class="s1">]. Please&#39;</span>
+          <span class="s1">&#39; register a `LeafHandler` for each type in the&#39;</span>
+          <span class="s1">&#39; `LeafHandlerRegistry` and assign it into the `PyTreeOptions` in&#39;</span>
+          <span class="s1">&#39; the `Context`.&#39;</span>
+      <span class="p">)</span>
+
+<div class="viewcode-block" id="PyTreeHandler.is_handleable">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.handlers.pytree_handler.html#orbax.checkpoint.experimental.v1.handlers.PyTreeHandler.is_handleable">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">is_handleable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checkpointable</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="c1"># If it&#39;s a leaf it&#39;s not handleable.</span>
+      <span class="n">tree_structure</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">structure</span><span class="p">(</span><span class="n">checkpointable</span><span class="p">)</span>
+      <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span>
+          <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">treedef_is_leaf</span><span class="p">(</span><span class="n">tree_structure</span><span class="p">)</span>
+          <span class="ow">and</span> <span class="n">tree_structure</span><span class="o">.</span><span class="n">num_leaves</span> <span class="o">==</span> <span class="mi">1</span>
+      <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pylint: disable=broad-exception-caught</span>
+      <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="PyTreeHandler.is_abstract_handleable">
+<a class="viewcode-back" href="../../../../../../../api_reference/checkpoint.v1.handlers.pytree_handler.html#orbax.checkpoint.experimental.v1.handlers.PyTreeHandler.is_abstract_handleable">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">is_abstract_handleable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abstract_checkpointable</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_handleable</span><span class="p">(</span><span class="n">abstract_checkpointable</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Orbax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Google.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

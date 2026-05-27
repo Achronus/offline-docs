@@ -1,0 +1,912 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Partial Saving &#8212; Orbax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../_static/katex.min.js?v=3f697ebd"></script>
+    <script src="../../../_static/auto-render.min.js?v=ed6e749d"></script>
+    <script src="../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/checkpoint/v1/partial_saving';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Model Surgery" href="model_surgery.html" />
+    <link rel="prev" title="Customizing Checkpointing Behavior" href="customization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/orbax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="orbax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/checkpoint/v1/partial_saving.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Orbax  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="orbax_checkpoint_101.html">Introduction to Checkpointing with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpointables.html">Working with Checkpointables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpointing_pytrees.html">Working with PyTree Checkpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Checkpointing in a Training Loop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpoint_format.html">Checkpoint Format Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customization.html">Customizing Checkpointing Behavior</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Partial Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_surgery.html">Model Surgery</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.v1.html">orbax.checkpoint V1 API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.arrays.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.arrays</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.errors</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.handlers.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.handlers</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.handler_registration.html">CheckpointableHandler Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.options.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.options</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.partial.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.partial</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.path.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.path</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.checkpointer.html">Training Checkpointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.save_decision_policies</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.errors</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.types.html">Training Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.tree.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.multihost.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.multihost</span></code> module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Migrating to Orbax V1</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="orbax_v0_to_v1_migration.html">Orbax v0 to v1 Migration Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../index.v0.html">Legacy API (V0)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../orbax_checkpoint_101.html">Checkpointing with Orbax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../orbax_checkpoint_api_overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_refactor.html">Using the Refactored CheckpointManager  API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpointing_pytrees.html">Checkpointing PyTrees of Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimized_checkpointing.html">Optimized Checkpointing with Tensorstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transformations.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preemption_checkpointing.html">Preemption Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debug_guide.html">Debugging Guide</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.html">orbax.checkpoint API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.abstract_checkpoint_manager.html">AbstractCheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpoint_manager.html">CheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpointers.html">Checkpointers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.handlers.html">CheckpointHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.args.html">CheckpointArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.type_handlers.html">TypeHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.atomicity.html">Atomicity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.atomicity_types.html">Atomicity Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.step.html">Step entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.deleter.html">Checkpoint Deleter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.preservation_policy.html">Preservation Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.save_decision_policy.html">Save Decision Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpoint_utils.html">Checkpointing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.transform_utils.html">PyTree Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.msgpack_utils.html">Msgpack utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.multihost.html">Multi–host Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.tree.html">Tree Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.metadata.html">Metadata Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.logging.html">Checkpoint logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.options.html">Checkpointing Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.handlers.handler_registration.html">Handler Registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.arrays.html">Arrays</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exporting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../export/orbax_export_101.html">Exporting with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpointing_and_exporting_jax_models.html">Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/export.html">orbax.export API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.dtensor_utils.html">DTensor utilities for multi–device/host export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.export_manager.html">ExportManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.jax_module.html">JaxModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.serving_config.html">ServingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.utils.html">General Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.validate.validation_manager.html">ValidationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.validate.validation_report.html">ValidationReport</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Additional Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Contributors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/guides/checkpoint/v1/partial_saving.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Partial Saving</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-core-concept-the-partial-save-session">The Core Concept: The Partial Save Session</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-and-basic-usage-adding-to-a-checkpoint">API and Basic Usage: Adding to a Checkpoint</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-example-a-simple-addition-workflow">Code Example: A Simple Addition Workflow</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-save">Initial Save</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-more-data">Add More Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aside-loading-before-finalizing">Aside: Loading Before Finalizing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finalize-the-checkpoint">Finalize the Checkpoint</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verify-the-result">Verify the Result</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-workflow-combining-partial-saving-and-partial-restore">Advanced Workflow: Combining Partial Saving and Partial Restore</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-case-creating-an-inference-ready-checkpoint">Use Case: Creating an Inference-Ready Checkpoint</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-efficient-update-workflow">The Efficient Update Workflow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#update-and-partial-save">Update and Partial Save</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verification">Verification</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#atomicity-guarantees">Atomicity Guarantees</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="partial-saving">
+<h1>Partial Saving<a class="headerlink" href="#partial-saving" title="Link to this heading">#</a></h1>
+<p>As deep learning models grow, often to hundreds of billions of parameters, managing their checkpoints becomes a significant challenge. Modifying a large checkpoint, even for a small change like adding metrics or a single layer, traditionally requires an inefficient “load-modify-save” cycle. This process uses lots memory and I/O bandwidth, as the entire multi-terabyte checkpoint must be loaded from storage, changed in memory, and written back out.</p>
+<p>Partial saving is designed to solve this problem by allowing you to modify a checkpoint without loading the entire object into host memory. It dramatically reduces peak memory usage, minimizes redundant I/O, and simplifies common model update workflows.</p>
+<section id="the-core-concept-the-partial-save-session">
+<h2>The Core Concept: The Partial Save Session<a class="headerlink" href="#the-core-concept-the-partial-save-session" title="Link to this heading">#</a></h2>
+<p>Partial saving operates on a “session” or “transaction” model. Instead of overwriting your checkpoint directly, Orbax stages all changes in a temporary, in-progress location. The workflow consists of two stages:</p>
+<ol class="arabic simple">
+<li><p><strong>Incremental Updates</strong>: Calls to functions like <a class="reference internal" href="../../../api_reference/checkpoint.v1.partial.html#orbax.checkpoint.experimental.v1.partial.save" title="orbax.checkpoint.experimental.v1.partial.save"><code class="xref py py-func docutils literal notranslate"><span class="pre">ocp.partial.save</span></code></a> contribute data to an in-progress checkpointing session. These changes are staged in a temporary location and are not yet visible at the final checkpoint path. From the user’s perspective, the first save call simply begins this incremental process, and subsequent calls add to it.</p></li>
+<li><p><strong>Finalization</strong>: A concluding call to <a class="reference internal" href="../../../api_reference/checkpoint.v1.partial.html#orbax.checkpoint.experimental.v1.partial.finalize" title="orbax.checkpoint.experimental.v1.partial.finalize"><code class="xref py py-func docutils literal notranslate"><span class="pre">ocp.partial.finalize</span></code></a> completes the session. This action commits all the staged changes, making the checkpoint available at its final destination and ready for consumption.</p></li>
+</ol>
+<p>This approach ensures that the modification process is safe and atomic. If the process is interrupted before finalization, your original checkpoint remains untouched.</p>
+<blockquote>
+<div><p><strong>Note</strong>: Partial saving currently does <em>NOT</em> support replacing data written out in previous save calls. If you have a need for Partial Saving Replacement (as opposed to the currently supported Partial Saving Addition), please reach out to the Orbax Checkpointing team so that development of this feature can be prioritized.</p>
+<p>The canonical way to do Replacement without partial saving is by loading the model, updating values in memory, then saving back out.</p>
+</div></blockquote>
+</section>
+<section id="api-and-basic-usage-adding-to-a-checkpoint">
+<h2>API and Basic Usage: Adding to a Checkpoint<a class="headerlink" href="#api-and-basic-usage-adding-to-a-checkpoint" title="Link to this heading">#</a></h2>
+<p>The partial saving API is available in the <a class="reference internal" href="../../../api_reference/checkpoint.v1.partial.html#module-orbax.checkpoint.experimental.v1.partial" title="orbax.checkpoint.experimental.v1.partial"><code class="xref py py-mod docutils literal notranslate"><span class="pre">orbax.checkpoint.v1.partial</span></code></a> module, but you’ll likely access it via <a class="reference internal" href="../../../api_reference/checkpoint.v1.partial.html#module-orbax.checkpoint.experimental.v1.partial" title="orbax.checkpoint.experimental.v1.partial"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocp.partial</span></code></a>.</p>
+<p>The most common (and only supported) use case is adding new data (leaves or subtrees) to an existing PyTree checkpoint. The provided PyTree in a save call represents a set of updates. If a key does not exist in the on-disk checkpoint, it is treated as an addition. If a key already exists, it is viewed as a replacement (currently not allowed), and results in a <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>.</p>
+</section>
+<section id="code-example-a-simple-addition-workflow">
+<h2>Code Example: A Simple Addition Workflow<a class="headerlink" href="#code-example-a-simple-addition-workflow" title="Link to this heading">#</a></h2>
+<p>Let’s start with an initial training state, then update that state with new data in a separate step.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint</span><span class="w"> </span><span class="kn">import</span> <span class="n">v1</span> <span class="k">as</span> <span class="n">ocp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">etils</span><span class="w"> </span><span class="kn">import</span> <span class="n">epath</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="initial-save">
+<h3>Initial Save<a class="headerlink" href="#initial-save" title="Link to this heading">#</a></h3>
+<p>Let’s say we have an initial training state. The first call creates a temporary directory (e.g., <code class="docutils literal notranslate"><span class="pre">/tmp/partial-saving/partial_save/ckpt.partial_save</span></code>) and saves the initial state there.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/partial-saving/partial_save/ckpt&#39;</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">initial_state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;layer0&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">ocp</span><span class="o">.</span><span class="n">partial</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">)</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.partial_save&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="add-more-data">
+<h3>Add More Data<a class="headerlink" href="#add-more-data" title="Link to this heading">#</a></h3>
+<p>After training some more, we have a new layer ready to be added. A subsequent call adds the new layer to the same temporary directory. Orbax merges the new PyTree with the existing one.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;layer1&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">ocp</span><span class="o">.</span><span class="n">partial</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">new_state</span><span class="p">)</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.partial_save&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="aside-loading-before-finalizing">
+<h3>Aside: Loading Before Finalizing<a class="headerlink" href="#aside-loading-before-finalizing" title="Link to this heading">#</a></h3>
+<p>Before finalizing the checkpoint, let’s see what happens if we try to load the partial checkpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+  <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LOAD ERROR&quot;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LOAD ERROR
+Could not recognize the checkpoint at /tmp/partial-saving/partial_save/ckpt as a valid Orbax checkpoint. If you are trying to load a checkpoint that does not conform to the standard Orbax format, use `ocp.Context(layout=...)` to specify the expected checkpoint layout.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="finalize-the-checkpoint">
+<h3>Finalize the Checkpoint<a class="headerlink" href="#finalize-the-checkpoint" title="Link to this heading">#</a></h3>
+<p>This atomically renames the temporary directory to the final path, making it a complete, readable checkpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ocp</span><span class="o">.</span><span class="n">partial</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.partial_save&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="verify-the-result">
+<h3>Verify the Result<a class="headerlink" href="#verify-the-result" title="Link to this heading">#</a></h3>
+<p>Now, we can load the checkpoint and see the merged result.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">restored_state</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+<span class="n">expected_state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s1">&#39;layer0&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]),</span>
+    <span class="s1">&#39;layer1&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+  <span class="p">},</span>
+  <span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_equal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">x</span> <span class="o">==</span> <span class="n">y</span>
+
+<span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">is_equal</span><span class="p">,</span> <span class="n">restored_state</span><span class="p">,</span> <span class="n">expected_state</span><span class="p">)</span>
+<span class="n">restored_state</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/partial-saving/partial_save/ckpt. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;layer0&#39;: array([0, 1, 2, 3, 4, 5, 6, 7]),
+  &#39;layer1&#39;: array([1., 1., 1., 1.])},
+ &#39;step&#39;: 10000}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ocp.partial.save()</span></code> / <code class="docutils literal notranslate"><span class="pre">ocp.partial.save_async()</span></code>: Saves a PyTree to the temporary partial save location. These functions can be called multiple times.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ocp.partial.finalize()</span></code>: Commits the transaction, making the checkpoint permanent at the specified path. This must be called to complete the process.</p></li>
+</ul>
+</section>
+<section id="advanced-workflow-combining-partial-saving-and-partial-restore">
+<h2>Advanced Workflow: Combining Partial Saving and Partial Restore<a class="headerlink" href="#advanced-workflow-combining-partial-saving-and-partial-restore" title="Link to this heading">#</a></h2>
+<p>When combined with Partial Restore, this feature can enable highly efficient, targeted updates to massive checkpoints with a minimal memory footprint. You can use Partial Restore for a memory-efficient <em>read</em>, perform modifications, and then use Partial Save for a flexible and efficient <em>write</em>.</p>
+<section id="use-case-creating-an-inference-ready-checkpoint">
+<h3>Use Case: Creating an Inference-Ready Checkpoint<a class="headerlink" href="#use-case-creating-an-inference-ready-checkpoint" title="Link to this heading">#</a></h3>
+<p>Imagine you have a 2TB training checkpoint containing model params and a bulky optimizer_state. You want to create a smaller, inference-ready checkpoint that:</p>
+<ul class="simple">
+<li><p>Contains only the <code class="docutils literal notranslate"><span class="pre">params</span></code>.</p></li>
+<li><p>Has an updated <code class="docutils literal notranslate"><span class="pre">encoder_stack</span></code> within the params from a recent fine-tuning run.</p></li>
+</ul>
+<p>This entire process can be done without ever loading the massive optimizer_state into memory.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint</span><span class="w"> </span><span class="kn">import</span> <span class="n">v1</span> <span class="k">as</span> <span class="n">ocp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">etils</span><span class="w"> </span><span class="kn">import</span> <span class="n">epath</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h3>
+<p>Create a large, multi-part “base” checkpoint to simulate a real scenario. This represents a very large model, but we only write it to disk. We never load it all at once (other than to view the metadata).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_path</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/partial-saving/base_model/ckpt&#39;</span><span class="p">)</span>
+<span class="n">base_path</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">sharding</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">(),</span> <span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,)),</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">PartitionSpec</span><span class="p">(</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="n">create_sharded_array</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">device_put</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sharding</span><span class="p">)</span>
+<span class="n">base_model_state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;large_embedding_table&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)),</span> <span class="c1"># A large array</span>
+        <span class="s1">&#39;encoder_stack&#39;</span><span class="p">:</span> <span class="p">{</span><span class="sa">f</span><span class="s1">&#39;layer_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)},</span> <span class="c1"># The part we will replace</span>
+        <span class="s1">&#39;classification_head&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;optimizer_state&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">)],</span>
+<span class="p">}</span>
+<span class="n">base_model_state</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">create_sharded_array</span><span class="p">,</span> <span class="n">base_model_state</span><span class="p">)</span>
+<span class="n">ocp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">base_model_state</span><span class="p">)</span>
+
+<span class="n">abstract_base_model_state</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="n">ocp</span><span class="o">.</span><span class="n">arrays</span><span class="o">.</span><span class="n">to_shape_dtype_struct</span><span class="p">,</span>
+    <span class="n">base_model_state</span>
+<span class="p">)</span>
+<span class="n">init_ckpt</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">abstract_base_model_state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Setup ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Optimizer state exists in initial checkpoint: </span><span class="si">{</span><span class="s1">&#39;optimizer_state&#39;</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">init_ckpt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model version exists in initial checkpoint: </span><span class="si">{</span><span class="s1">&#39;model_version&#39;</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">init_ckpt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">layer</span><span class="p">,</span> <span class="n">weights</span> <span class="ow">in</span> <span class="n">init_ckpt</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;encoder_stack&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original </span><span class="si">{</span><span class="n">layer</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">weights</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/partial-saving/base_model/ckpt. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Setup ---
+Optimizer state exists in initial checkpoint: True
+Model version exists in initial checkpoint: False
+Original layer_0: [0.8978006  0.59713537]
+Original layer_1: [0.85860205 0.649278  ]
+Original layer_2: [0.9969154 0.9314793]
+Original layer_3: [0.3530059 0.5061118]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-efficient-update-workflow">
+<h3>The Efficient Update Workflow<a class="headerlink" href="#the-efficient-update-workflow" title="Link to this heading">#</a></h3>
+<p>Use Partial Restore (Omission mode) to load ONLY the <code class="docutils literal notranslate"><span class="pre">params</span></code>. Create a reference PyTree that only has the <code class="docutils literal notranslate"><span class="pre">params</span></code> structure. This tells Orbax to ignore everything else (like <code class="docutils literal notranslate"><span class="pre">optimizer_state</span></code>). Enable partial loading via <code class="docutils literal notranslate"><span class="pre">Context</span></code> to allow omitting nodes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inference_path</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/partial-saving/inference_model/ckpt&#39;</span><span class="p">)</span>
+<span class="n">inference_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">abstract_params</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="n">ocp</span><span class="o">.</span><span class="n">arrays</span><span class="o">.</span><span class="n">to_shape_dtype_struct</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">base_model_state</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]}</span>
+<span class="p">)</span>
+
+<span class="k">with</span> <span class="n">ocp</span><span class="o">.</span><span class="n">Context</span><span class="p">(</span>
+    <span class="n">pytree_options</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">PyTreeOptions</span><span class="p">(</span>
+        <span class="n">loading</span><span class="o">=</span><span class="n">ocp</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">PyTreeOptions</span><span class="o">.</span><span class="n">Loading</span><span class="p">(</span><span class="n">partial_load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">):</span>
+    <span class="n">loaded_params</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">abstract_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/partial-saving/base_model/ckpt. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+</div>
+</div>
+<p>At this point, <code class="docutils literal notranslate"><span class="pre">params</span></code> is in memory, but <code class="docutils literal notranslate"><span class="pre">optimizer_state</span></code> was never loaded.</p>
+</section>
+<section id="update-and-partial-save">
+<h3>Update and Partial Save<a class="headerlink" href="#update-and-partial-save" title="Link to this heading">#</a></h3>
+<p>Modify the loaded parameters in memory. Add new metadata that might be useful for inference. Use Partial Save to write the modified <code class="docutils literal notranslate"><span class="pre">params</span></code> and new metadata to the new inference checkpoint location. Finalize the new, smaller, inference-ready checkpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">save_params</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Used to create abstract params for inference</span>
+
+<span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;model_version&#39;</span><span class="p">:</span> <span class="s1">&#39;v1.2-finetuned&#39;</span><span class="p">}</span>
+<span class="n">save_params</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">save_params</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+<span class="n">ocp</span><span class="o">.</span><span class="n">partial</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">inference_path</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>  <span class="c1"># Initial partial save for metadata</span>
+
+<span class="k">for</span> <span class="n">layer</span><span class="p">,</span> <span class="n">weights</span> <span class="ow">in</span> <span class="n">loaded_params</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;encoder_stack&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+  <span class="n">new_weights</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="n">stack_layer</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s1">&#39;encoder_stack&#39;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="n">layer</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                  <span class="n">create_sharded_array</span><span class="p">,</span> <span class="n">new_weights</span>
+              <span class="p">),</span>
+          <span class="p">}</span>
+      <span class="p">},</span>
+  <span class="p">}</span>
+  <span class="n">save_params</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">save_params</span><span class="p">,</span> <span class="n">stack_layer</span><span class="p">)</span>
+  <span class="n">ocp</span><span class="o">.</span><span class="n">partial</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">inference_path</span><span class="p">,</span> <span class="n">stack_layer</span><span class="p">)</span>  <span class="c1"># One partial save per layer</span>
+
+<span class="n">ocp</span><span class="o">.</span><span class="n">partial</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span><span class="n">inference_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:`memory_size` is not implemented for `TypeHandler` of type: &lt;class &#39;orbax.checkpoint.experimental.v1._src.serialization.compatibility.CompatibleTypeHandler&#39;&gt;. Using the a default implementation to measure value memory consumption that may result in inaccurate estimation.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:[process=0][thread=Thread-47 (_event_loop_runner)] Skipping merge of OCDBT checkpoints: No per-process OCDBT checkpoint subdirs found in /tmp/partial-saving/inference_model/ckpt.partial_save.orbax-checkpoint-tmp/state, 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="verification">
+<h3>Verification<a class="headerlink" href="#verification" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">abstract_params</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span>
+        <span class="nb">str</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="k">else</span> <span class="n">ocp</span><span class="o">.</span><span class="n">arrays</span><span class="o">.</span><span class="n">to_shape_dtype_struct</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">save_params</span>
+<span class="p">)</span>
+<span class="n">final_ckpt</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">inference_path</span><span class="p">,</span> <span class="n">abstract_params</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Verification ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Optimizer state exists in final checkpoint: </span><span class="si">{</span><span class="s1">&#39;optimizer_state&#39;</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">final_ckpt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model version: </span><span class="si">{</span><span class="n">final_ckpt</span><span class="p">[</span><span class="s1">&#39;model_version&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">layer</span><span class="p">,</span> <span class="n">weights</span> <span class="ow">in</span> <span class="n">final_ckpt</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;encoder_stack&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New </span><span class="si">{</span><span class="n">layer</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">weights</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:TensorStore data files not found in checkpoint path /tmp/partial-saving/inference_model/ckpt. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:`memory_size` is not implemented for `TypeHandler` of type: &lt;class &#39;orbax.checkpoint.experimental.v1._src.serialization.compatibility.CompatibleTypeHandler&#39;&gt;. Using the a default implementation to measure value memory consumption that may result in inaccurate estimation.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Verification ---
+Optimizer state exists in final checkpoint: False
+Model version: v1.2-finetuned
+New layer_0: [1.3751186 1.1776493]
+New layer_1: [1.639404  1.6096032]
+New layer_2: [1.2422184 1.5487835]
+New layer_3: [1.327002  0.7732728]
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this workflow, we created a new, pruned, and modified checkpoint. The key efficiency gain came from using Partial Restore to load only the params, completely avoiding the memory cost of the massive <code class="docutils literal notranslate"><span class="pre">optimizer_state</span></code>.</p>
+</section>
+</section>
+<section id="atomicity-guarantees">
+<h2>Atomicity Guarantees<a class="headerlink" href="#atomicity-guarantees" title="Link to this heading">#</a></h2>
+<p>The use of a temporary directory and an atomic rename operation during finalization guarantees safety. If your program crashes mid-save, the original checkpoint (if any) is unharmed, and the temporary directory can be safely deleted.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="customization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Customizing Checkpointing Behavior</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="model_surgery.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Model Surgery</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-core-concept-the-partial-save-session">The Core Concept: The Partial Save Session</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-and-basic-usage-adding-to-a-checkpoint">API and Basic Usage: Adding to a Checkpoint</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-example-a-simple-addition-workflow">Code Example: A Simple Addition Workflow</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-save">Initial Save</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-more-data">Add More Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aside-loading-before-finalizing">Aside: Loading Before Finalizing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finalize-the-checkpoint">Finalize the Checkpoint</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verify-the-result">Verify the Result</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-workflow-combining-partial-saving-and-partial-restore">Advanced Workflow: Combining Partial Saving and Partial Restore</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-case-creating-an-inference-ready-checkpoint">Use Case: Creating an Inference-Ready Checkpoint</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-efficient-update-workflow">The Efficient Update Workflow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#update-and-partial-save">Update and Partial Save</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verification">Verification</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#atomicity-guarantees">Atomicity Guarantees</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Orbax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Google.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

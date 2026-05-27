@@ -1,0 +1,929 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>orbax.checkpoint._src.serialization.type_handlers &#8212; Orbax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../../../_static/katex.min.js?v=3f697ebd"></script>
+    <script src="../../../../../_static/auto-render.min.js?v=ed6e749d"></script>
+    <script src="../../../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/orbax/checkpoint/_src/serialization/type_handlers';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/orbax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="orbax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_modules/orbax/checkpoint/_src/serialization/type_handlers.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Orbax  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/orbax_checkpoint_101.html">Introduction to Checkpointing with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpointables.html">Working with Checkpointables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpointing_pytrees.html">Working with PyTree Checkpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/training.html">Checkpointing in a Training Loop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/customization.html">Customizing Checkpointing Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/partial_saving.html">Partial Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/model_surgery.html">Model Surgery</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.html">orbax.checkpoint V1 API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.arrays.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.arrays</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.errors</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.handlers.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.handlers</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.handler_registration.html">CheckpointableHandler Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.options.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.options</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.partial.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.partial</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.path.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.path</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.checkpointer.html">Training Checkpointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.save_decision_policies.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.save_decision_policies</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.errors</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.training.types.html">Training Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.tree.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/checkpoint.v1.multihost.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.multihost</span></code> module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Migrating to Orbax V1</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/orbax_v0_to_v1_migration.html">Orbax v0 to v1 Migration Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../index.v0.html">Legacy API (V0)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/orbax_checkpoint_101.html">Checkpointing with Orbax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/orbax_checkpoint_api_overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/api_refactor.html">Using the Refactored CheckpointManager  API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/checkpointing_pytrees.html">Checkpointing PyTrees of Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/optimized_checkpointing.html">Optimized Checkpointing with Tensorstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/transformations.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/preemption_checkpointing.html">Preemption Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/checkpoint/debug_guide.html">Debugging Guide</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../api_reference/checkpoint.html">orbax.checkpoint API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.abstract_checkpoint_manager.html">AbstractCheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.checkpoint_manager.html">CheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.checkpointers.html">Checkpointers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.handlers.html">CheckpointHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.args.html">CheckpointArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.type_handlers.html">TypeHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.atomicity.html">Atomicity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.atomicity_types.html">Atomicity Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.step.html">Step entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.path.deleter.html">Checkpoint Deleter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.preservation_policy.html">Preservation Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.save_decision_policy.html">Save Decision Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.checkpoint_utils.html">Checkpointing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.transform_utils.html">PyTree Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.msgpack_utils.html">Msgpack utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.multihost.html">Multi–host Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.tree.html">Tree Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.metadata.html">Metadata Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.logging.html">Checkpoint logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.options.html">Checkpointing Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.handlers.handler_registration.html">Handler Registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../api_reference/checkpoint.arrays.html">Arrays</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exporting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/export/orbax_export_101.html">Exporting with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/checkpoint/v1/checkpointing_and_exporting_jax_models.html">Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../api_reference/export.html">orbax.export API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.dtensor_utils.html">DTensor utilities for multi–device/host export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.export_manager.html">ExportManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.jax_module.html">JaxModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.serving_config.html">ServingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.utils.html">General Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.validate.validation_manager.html">ValidationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api_reference/export.validate.validation_report.html">ValidationReport</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Additional Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributors.html">Contributors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for orbax.checkpoint._src.serialization.type_handlers</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2026 The Orbax Authors.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;Provides utils for PytreeCheckpointHandler.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeAlias</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">absl</span><span class="w"> </span><span class="kn">import</span> <span class="n">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">future</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">value</span> <span class="k">as</span> <span class="n">value_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.multihost</span><span class="w"> </span><span class="kn">import</span> <span class="n">multihost</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">format_utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">jax_array_handlers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">ocdbt_utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">tensorstore_utils</span> <span class="k">as</span> <span class="n">ts_utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint._src.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorstore</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ts</span>
+
+<span class="n">ParamInfo</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span>
+<span class="n">SaveArgs</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">SaveArgs</span>
+<span class="n">RestoreArgs</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">RestoreArgs</span>
+<span class="n">TypeHandler</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">TypeHandler</span>
+<span class="n">TypeHandlerRegistry</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">TypeHandlerRegistry</span>
+<span class="n">PLACEHOLDER</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">PLACEHOLDER_TYPESTR</span> <span class="o">=</span> <span class="s1">&#39;placeholder&#39;</span>
+<span class="n">JAX_ARRAY_TYPE_STR</span> <span class="o">=</span> <span class="n">jax_array_handlers</span><span class="o">.</span><span class="n">JAX_ARRAY_TYPE_STR</span>
+
+<span class="n">Scalar</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">]</span>
+<span class="n">ScalarMetadata</span> <span class="o">=</span> <span class="n">value_metadata</span><span class="o">.</span><span class="n">ScalarMetadata</span>
+<span class="n">StringMetadata</span> <span class="o">=</span> <span class="n">value_metadata</span><span class="o">.</span><span class="n">StringMetadata</span>
+<span class="n">is_ocdbt_checkpoint</span> <span class="o">=</span> <span class="n">format_utils</span><span class="o">.</span><span class="n">is_ocdbt_checkpoint</span>
+<span class="n">check_array_values</span> <span class="o">=</span> <span class="n">jax_array_handlers</span><span class="o">.</span><span class="n">check_array_values</span>
+<span class="n">represents_jax_array</span> <span class="o">=</span> <span class="n">jax_array_handlers</span><span class="o">.</span><span class="n">represents_jax_array</span>
+<span class="n">any_jax_array_param_info</span> <span class="o">=</span> <span class="n">jax_array_handlers</span><span class="o">.</span><span class="n">any_jax_array_param_info</span>
+<span class="n">ArrayRestoreArgs</span> <span class="o">=</span> <span class="n">jax_array_handlers</span><span class="o">.</span><span class="n">ArrayRestoreArgs</span>
+<span class="n">ArrayHandler</span> <span class="o">=</span> <span class="n">jax_array_handlers</span><span class="o">.</span><span class="n">ArrayHandler</span>
+<span class="n">SingleReplicaArrayRestoreArgs</span> <span class="o">=</span> <span class="n">jax_array_handlers</span><span class="o">.</span><span class="n">SingleReplicaArrayRestoreArgs</span>
+<span class="n">SingleReplicaArrayHandler</span> <span class="o">=</span> <span class="n">jax_array_handlers</span><span class="o">.</span><span class="n">SingleReplicaArrayHandler</span>
+<span class="n">InvalidShardingError</span> <span class="o">=</span> <span class="n">jax_array_handlers</span><span class="o">.</span><span class="n">InvalidShardingError</span>
+
+
+<div class="viewcode-block" id="NumpyHandler">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.NumpyHandler">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NumpyHandler</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">TypeHandler</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Provides an implementation of TypeHandler for replicated numpy arrays.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NumpyHandler.__init__">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.NumpyHandler.__init__">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">metadata_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">ocdbt_process_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      metadata_key: name to give to Tensorstore metadata files.</span>
+<span class="sd">      ocdbt_process_id: name of the process id to be used by single controller</span>
+<span class="sd">        systems to write in OCDBT format. The checkpoints are written in a</span>
+<span class="sd">        subdir with this name to avoid collisions with the subdir names used by</span>
+<span class="sd">        other host processes managed by this controller.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_key</span> <span class="o">=</span> <span class="n">metadata_key</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_override_ocdbt_process_id</span> <span class="o">=</span> <span class="n">ocdbt_process_id</span></div>
+
+
+<div class="viewcode-block" id="NumpyHandler.typestr">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.NumpyHandler.typestr">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">typestr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;np.ndarray&#39;</span></div>
+
+
+<div class="viewcode-block" id="NumpyHandler.metadata">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.NumpyHandler.metadata">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">metadata</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">]</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">value_metadata</span><span class="o">.</span><span class="n">ArrayMetadata</span><span class="p">]:</span>
+    <span class="n">open_ops</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">infos</span><span class="p">:</span>
+      <span class="k">await</span> <span class="n">info</span><span class="o">.</span><span class="n">await_path_creation</span><span class="p">()</span>
+      <span class="c1"># Use OCDBT flag from the existing checkpoint.</span>
+      <span class="n">use_ocdbt</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">is_ocdbt_checkpoint</span>
+      <span class="n">array_read_spec</span> <span class="o">=</span> <span class="n">ts_utils</span><span class="o">.</span><span class="n">build_array_read_spec</span><span class="p">(</span>
+          <span class="n">info</span><span class="p">,</span>
+          <span class="n">use_ocdbt</span><span class="o">=</span><span class="n">use_ocdbt</span><span class="p">,</span>
+          <span class="n">metadata_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_key</span><span class="p">,</span>
+          <span class="n">raise_array_data_missing_error</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">raise_array_data_missing_error</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="n">tspec</span> <span class="o">=</span> <span class="n">array_read_spec</span><span class="o">.</span><span class="n">json</span>
+      <span class="n">open_ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+          <span class="n">ts</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">tspec</span><span class="p">),</span> <span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">ts_context</span><span class="p">)</span>
+      <span class="p">)</span>
+
+    <span class="n">tensorstores</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">open_ops</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">ts_utils</span><span class="o">.</span><span class="n">array_metadata_from_tensorstore</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tensorstores</span><span class="p">,</span> <span class="n">infos</span><span class="p">)</span>
+    <span class="p">]</span></div>
+
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_open_and_write</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tspec</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">ts_context</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">Context</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Opens and writes using Tensorstore.&quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ts</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">tspec</span><span class="p">),</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">ts_context</span>
+    <span class="p">)</span>
+    <span class="k">await</span> <span class="n">t</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">can_reference_source_data_indefinitely</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># pytype: disable=attribute-error</span>
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_background_serialize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+      <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">],</span>
+      <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">SaveArgs</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Serializes numpy arrays in a background thread.&quot;&quot;&quot;</span>
+    <span class="n">write_coros</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">infos</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+      <span class="k">await</span> <span class="n">info</span><span class="o">.</span><span class="n">await_path_creation</span><span class="p">()</span>
+      <span class="n">array_write_spec</span> <span class="o">=</span> <span class="n">ts_utils</span><span class="o">.</span><span class="n">build_array_write_spec</span><span class="p">(</span>
+          <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span>
+          <span class="n">arg</span><span class="o">=</span><span class="n">arg</span><span class="p">,</span>
+          <span class="n">global_shape</span><span class="o">=</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+          <span class="n">local_shape</span><span class="o">=</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+          <span class="n">dtype</span><span class="o">=</span><span class="n">value</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+          <span class="n">use_ocdbt</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">is_ocdbt_checkpoint</span><span class="p">,</span>
+          <span class="n">process_index</span><span class="o">=</span><span class="n">ocdbt_utils</span><span class="o">.</span><span class="n">get_process_index_for_subdir</span><span class="p">(</span>
+              <span class="n">use_ocdbt</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">is_ocdbt_checkpoint</span><span class="p">,</span>
+              <span class="n">override_ocdbt_process_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_override_ocdbt_process_id</span><span class="p">,</span>
+          <span class="p">),</span>
+          <span class="n">metadata_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_key</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="n">tspec</span> <span class="o">=</span> <span class="n">array_write_spec</span><span class="o">.</span><span class="n">json</span>
+      <span class="k">if</span> <span class="n">logging</span><span class="o">.</span><span class="n">vlog_is_on</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;tspec = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">tspec</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;infos = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;args = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">multihost</span><span class="o">.</span><span class="n">process_index</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ts_context</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">ts_context</span>
+        <span class="n">write_coros</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_open_and_write</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">tspec</span><span class="p">,</span> <span class="n">ts_context</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">write_coros</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NumpyHandler.serialize">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.NumpyHandler.serialize">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+      <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">],</span>
+      <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">SaveArgs</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">Future</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uses Tensorstore to serialize a numpy array.&quot;&quot;&quot;</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">SaveArgs</span><span class="p">()]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">types</span><span class="o">.</span><span class="n">check_input_arguments</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">infos</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="n">check_array_values</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">infos</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">logging</span><span class="o">.</span><span class="n">vlog_is_on</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+      <span class="n">ts_utils</span><span class="o">.</span><span class="n">print_ts_debug_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_key</span><span class="p">,</span> <span class="n">infos</span><span class="p">)</span>
+    <span class="n">copied_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">future</span><span class="o">.</span><span class="n">CommitFutureAwaitingContractedSignals</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_background_serialize</span><span class="p">(</span><span class="n">copied_values</span><span class="p">,</span> <span class="n">infos</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;np_type_handler&#39;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="NumpyHandler.deserialize">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.NumpyHandler.deserialize">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">deserialize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">],</span>
+      <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">RestoreArgs</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deserializes the array using Tensorstore.&quot;&quot;&quot;</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">args</span> <span class="ow">or</span> <span class="p">[</span><span class="n">RestoreArgs</span><span class="p">()]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">infos</span><span class="p">)</span>
+    <span class="n">types</span><span class="o">.</span><span class="n">check_input_arguments</span><span class="p">(</span><span class="n">infos</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="n">open_futures</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">info</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">infos</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+      <span class="k">await</span> <span class="n">info</span><span class="o">.</span><span class="n">await_path_creation</span><span class="p">()</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">info</span><span class="o">.</span><span class="n">is_ocdbt_checkpoint</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">ts_utils</span><span class="o">.</span><span class="n">assert_parameter_files_exist</span><span class="p">(</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">parent_dir</span> <span class="o">/</span> <span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_key</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">use_zarr3</span>
+        <span class="p">)</span>
+      <span class="c1"># Use OCDBT flag from the existing checkpoint.</span>
+      <span class="n">use_ocdbt</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">is_ocdbt_checkpoint</span>
+      <span class="n">array_read_spec</span> <span class="o">=</span> <span class="n">ts_utils</span><span class="o">.</span><span class="n">build_array_read_spec</span><span class="p">(</span>
+          <span class="n">info</span><span class="p">,</span>
+          <span class="n">use_ocdbt</span><span class="o">=</span><span class="n">use_ocdbt</span><span class="p">,</span>
+          <span class="n">metadata_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_key</span><span class="p">,</span>
+          <span class="n">raise_array_data_missing_error</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">raise_array_data_missing_error</span><span class="p">,</span>
+          <span class="n">target_dtype</span><span class="o">=</span><span class="n">arg</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="n">tspec</span> <span class="o">=</span> <span class="n">array_read_spec</span><span class="o">.</span><span class="n">json</span>
+
+      <span class="k">if</span> <span class="n">logging</span><span class="o">.</span><span class="n">vlog_is_on</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;tspec = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">tspec</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;infos = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">infos</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;args = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+      <span class="n">open_futures</span> <span class="o">+=</span> <span class="p">[</span>
+          <span class="n">ts</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">Spec</span><span class="p">(</span><span class="n">tspec</span><span class="p">),</span> <span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">ts_context</span><span class="p">)</span>
+      <span class="p">]</span>
+    <span class="n">tensorstores</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">open_futures</span><span class="p">)</span>
+    <span class="n">read_ops</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tensorstores</span><span class="p">]</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">read_ops</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">logging</span><span class="o">.</span><span class="n">vlog_is_on</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+      <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">vlog</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;restored ndarray.shape = </span><span class="si">%s</span><span class="s1">, array.dtype = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dtype</span>
+        <span class="p">)</span>
+        <span class="n">ts_utils</span><span class="o">.</span><span class="n">print_ts_debug_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_key</span><span class="p">,</span> <span class="n">infos</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ret</span></div>
+
+
+<div class="viewcode-block" id="NumpyHandler.memory_size">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.NumpyHandler.memory_size">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">memory_size</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+    <span class="n">actual_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">itemsize</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">multihost</span><span class="o">.</span><span class="n">process_index</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">write_sizes</span> <span class="o">=</span> <span class="n">actual_sizes</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">write_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+    <span class="n">read_sizes</span> <span class="o">=</span> <span class="n">actual_sizes</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">write_sizes</span><span class="p">,</span> <span class="n">read_sizes</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ScalarHandler">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.ScalarHandler">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScalarHandler</span><span class="p">(</span><span class="n">NumpyHandler</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;A wrapper around NumpyHandler to deal with scalar types (int, float, etc.).&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ScalarHandler.typestr">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.ScalarHandler.typestr">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">typestr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;scalar&#39;</span></div>
+
+
+<div class="viewcode-block" id="ScalarHandler.metadata">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.ScalarHandler.metadata">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">metadata</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">]</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ScalarMetadata</span><span class="p">]:</span>
+    <span class="n">metadatas</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="n">infos</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">ScalarMetadata</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">metadatas</span>
+    <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ScalarHandler.serialize">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.ScalarHandler.serialize">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Scalar</span><span class="p">],</span>  <span class="c1"># pytype: disable=signature-mismatch</span>
+      <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">],</span>
+      <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">SaveArgs</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">Future</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;See superclass documentation.&quot;&quot;&quot;</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">infos</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ScalarHandler.deserialize">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.ScalarHandler.deserialize">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">deserialize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">],</span>
+      <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">RestoreArgs</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Scalar</span><span class="p">]:</span>  <span class="c1"># pytype: disable=signature-mismatch</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;See superclass documentation.&quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">infos</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Restored result is not a scalar.&#39;</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+      <span class="c1"># Cast to the intended `restore_type` if it is provided.</span>
+      <span class="k">return</span> <span class="p">[</span>
+          <span class="n">a</span><span class="o">.</span><span class="n">restore_type</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">restore_type</span> <span class="k">else</span> <span class="n">r</span>
+          <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
+      <span class="p">]</span>
+    <span class="k">return</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="ScalarHandler.memory_size">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.ScalarHandler.memory_size">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">memory_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Scalar</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>  <span class="c1"># pytype: disable=signature-mismatch</span>
+    <span class="n">actual_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">multihost</span><span class="o">.</span><span class="n">process_index</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">write_sizes</span> <span class="o">=</span> <span class="n">actual_sizes</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">write_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+    <span class="n">read_sizes</span> <span class="o">=</span> <span class="n">actual_sizes</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">write_sizes</span><span class="p">,</span> <span class="n">read_sizes</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="StringHandler">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.StringHandler">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StringHandler</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">TypeHandler</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;TypeHandler for strings.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StringHandler.__init__">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.StringHandler.__init__">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">=</span> <span class="n">filename</span> <span class="ow">or</span> <span class="s1">&#39;_strings.json&#39;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_ts_context</span> <span class="o">=</span> <span class="n">ts_utils</span><span class="o">.</span><span class="n">get_ts_context</span><span class="p">(</span><span class="n">use_ocdbt</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_get_json_tspec</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">info</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets Tensorstore spec in JSON format.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">parent_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Must provide info.parent_dir.&#39;</span><span class="p">)</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">parent_dir</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span>
+    <span class="n">kvstore_tspec</span> <span class="o">=</span> <span class="n">ts_utils</span><span class="o">.</span><span class="n">build_kvstore_tspec</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">use_ocdbt</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">tspec</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;driver&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;kvstore&#39;</span><span class="p">:</span> <span class="n">kvstore_tspec</span><span class="p">,</span>
+        <span class="s1">&#39;json_pointer&#39;</span><span class="p">:</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">tspec</span>
+
+<div class="viewcode-block" id="StringHandler.typestr">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.StringHandler.typestr">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">typestr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;string&#39;</span></div>
+
+
+<div class="viewcode-block" id="StringHandler.metadata">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.StringHandler.metadata">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">metadata</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">]</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">StringMetadata</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">infos</span><span class="p">:</span>
+      <span class="k">await</span> <span class="n">info</span><span class="o">.</span><span class="n">await_path_creation</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">StringMetadata</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">parent_dir</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">infos</span>
+    <span class="p">]</span></div>
+
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_convert_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensorstore</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tensorstore</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_background_serialize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+      <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">],</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Writes strings using Tensorstore in the background thread.&quot;&quot;&quot;</span>
+    <span class="n">types</span><span class="o">.</span><span class="n">check_input_arguments</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">infos</span><span class="p">)</span>
+    <span class="n">write_coros</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">txn</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">Transaction</span><span class="p">()</span>
+    <span class="k">for</span> <span class="p">(</span>
+        <span class="n">info</span><span class="p">,</span>
+        <span class="n">value</span><span class="p">,</span>
+    <span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">infos</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+      <span class="k">await</span> <span class="n">info</span><span class="o">.</span><span class="n">await_path_creation</span><span class="p">()</span>
+      <span class="n">tspec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json_tspec</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">multihost</span><span class="o">.</span><span class="n">process_index</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ts</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+            <span class="n">tspec</span><span class="p">,</span>
+            <span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ts_context</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">write_coros</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">with_transaction</span><span class="p">(</span><span class="n">txn</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>  <span class="c1"># pytype: disable=attribute-error</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">write_coros</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">txn</span><span class="o">.</span><span class="n">commit_async</span><span class="p">()</span>
+
+<div class="viewcode-block" id="StringHandler.serialize">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.StringHandler.serialize">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+      <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">],</span>
+      <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">SaveArgs</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">Future</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;See superclass documentation.&quot;&quot;&quot;</span>
+    <span class="k">del</span> <span class="n">args</span>
+    <span class="c1"># Copy is not needed since strings are passed by value.</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">future</span><span class="o">.</span><span class="n">CommitFutureAwaitingContractedSignals</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_background_serialize</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">infos</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;string_type_handler&#39;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="StringHandler.deserialize">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.StringHandler.deserialize">[docs]</a>
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">deserialize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">],</span>
+      <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">RestoreArgs</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;See superclass documentation.&quot;&quot;&quot;</span>
+    <span class="k">del</span> <span class="n">args</span>
+    <span class="n">types</span><span class="o">.</span><span class="n">check_input_arguments</span><span class="p">(</span><span class="n">infos</span><span class="p">)</span>
+    <span class="n">open_futures</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">infos</span><span class="p">:</span>
+      <span class="k">await</span> <span class="n">info</span><span class="o">.</span><span class="n">await_path_creation</span><span class="p">()</span>
+      <span class="n">tspec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json_tspec</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+      <span class="n">open_future</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+          <span class="n">tspec</span><span class="p">,</span> <span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">read</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ts_context</span>
+      <span class="p">)</span>
+      <span class="n">open_futures</span> <span class="o">+=</span> <span class="p">[</span><span class="n">open_future</span><span class="p">]</span>
+    <span class="n">tensorstores</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">open_futures</span><span class="p">)</span>
+    <span class="n">read_ops</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_string</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tensorstores</span><span class="p">]</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">read_ops</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StringHandler.memory_size">
+<a class="viewcode-back" href="../../../../../api_reference/checkpoint.type_handlers.html#orbax.checkpoint.type_handlers.StringHandler.memory_size">[docs]</a>
+  <span class="k">def</span><span class="w"> </span><span class="nf">memory_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+    <span class="n">actual_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">multihost</span><span class="o">.</span><span class="n">process_index</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">write_sizes</span> <span class="o">=</span> <span class="n">actual_sizes</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">write_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+    <span class="n">read_sizes</span> <span class="o">=</span> <span class="n">actual_sizes</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">write_sizes</span><span class="p">,</span> <span class="n">read_sizes</span><span class="p">))</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_placeholder</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+  <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">PLACEHOLDER</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PlaceholderHandler</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">TypeHandler</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;TypeHandler for placeholders.&quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">typestr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">PLACEHOLDER_TYPESTR</span>
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Placeholders do not have metadata.&#39;</span><span class="p">)</span>
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">serialize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+      <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ParamInfo</span><span class="p">],</span>
+      <span class="n">args</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">SaveArgs</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">Future</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;See superclass documentation.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Placeholders cannot be serialized.&#39;</span><span class="p">)</span>
+
+  <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">deserialize</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">infos</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ParamInfo</span><span class="p">],</span>
+      <span class="n">args</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">RestoreArgs</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;See superclass documentation.&quot;&quot;&quot;</span>
+    <span class="k">del</span> <span class="n">args</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">PLACEHOLDER</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">infos</span><span class="p">)</span>
+
+
+<span class="c1"># TODO(b/253238305) Deprecate when all checkpoints have saved types.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">default_restore_type</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">RestoreArgs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">ArrayRestoreArgs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span>
+  <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">RestoreArgs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported restore_args type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Orbax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Google.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

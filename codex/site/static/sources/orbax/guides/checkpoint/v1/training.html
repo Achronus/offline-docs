@@ -1,0 +1,1437 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Checkpointing in a Training Loop &#8212; Orbax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/katex-math.css?v=91adb8b6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../_static/katex.min.js?v=3f697ebd"></script>
+    <script src="../../../_static/auto-render.min.js?v=ed6e749d"></script>
+    <script src="../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/checkpoint/v1/training';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Asynchronous Checkpointing" href="async_checkpointing.html" />
+    <link rel="prev" title="Working with PyTree Checkpoints" href="checkpointing_pytrees.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/orbax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="orbax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/checkpoint/v1/training.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Orbax  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="orbax_checkpoint_101.html">Introduction to Checkpointing with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpointables.html">Working with Checkpointables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpointing_pytrees.html">Working with PyTree Checkpoints</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Checkpointing in a Training Loop</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpoint_format.html">Checkpoint Format Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customization.html">Customizing Checkpointing Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="partial_saving.html">Partial Saving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_surgery.html">Model Surgery</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.v1.html">orbax.checkpoint V1 API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.arrays.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.arrays</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.errors</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.handlers.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.handlers</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.handler_registration.html">CheckpointableHandler Registration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.options.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.options</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.partial.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.partial</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.path.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.path</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.checkpointer.html">Training Checkpointer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.save_decision_policies</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.errors.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.training.errors</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.v1.training.types.html">Training Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.tree.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/checkpoint.v1.multihost.html"><code class="docutils literal notranslate"><span class="pre">ocp.v1.multihost</span></code> module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Migrating to Orbax V1</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="orbax_v0_to_v1_migration.html">Orbax v0 to v1 Migration Guide</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../index.v0.html">Legacy API (V0)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../orbax_checkpoint_101.html">Checkpointing with Orbax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../orbax_checkpoint_api_overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_refactor.html">Using the Refactored CheckpointManager  API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpointing_pytrees.html">Checkpointing PyTrees of Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../checkpoint_format.html">Checkpoint Format Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../optimized_checkpointing.html">Optimized Checkpointing with Tensorstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transformations.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preemption_checkpointing.html">Preemption Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../async_checkpointing.html">Asynchronous Checkpointing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../debug_guide.html">Debugging Guide</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api_reference/checkpoint.html">orbax.checkpoint API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.abstract_checkpoint_manager.html">AbstractCheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpoint_manager.html">CheckpointManager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpointers.html">Checkpointers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.handlers.html">CheckpointHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.args.html">CheckpointArgs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.type_handlers.html">TypeHandlers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.atomicity.html">Atomicity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.atomicity_types.html">Atomicity Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.step.html">Step entities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.path.deleter.html">Checkpoint Deleter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.preservation_policy.html">Preservation Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.save_decision_policy.html">Save Decision Policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.checkpoint_utils.html">Checkpointing Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.transform_utils.html">PyTree Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.msgpack_utils.html">Msgpack utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.multihost.html">Multi–host Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.tree.html">Tree Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.metadata.html">Metadata Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.logging.html">Checkpoint logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.options.html">Checkpointing Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.handlers.handler_registration.html">Handler Registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/checkpoint.arrays.html">Arrays</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Exporting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../export/orbax_export_101.html">Exporting with Orbax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="checkpointing_and_exporting_jax_models.html">Checkpointing and Exporting JAX Models: An End-to-End Guide with Orbax</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/export.html">orbax.export API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.dtensor_utils.html">DTensor utilities for multi–device/host export</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.export_manager.html">ExportManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.jax_module.html">JaxModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.serving_config.html">ServingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.utils.html">General Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.validate.validation_manager.html">ValidationManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/export.validate.validation_report.html">ValidationReport</a></li>
+
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Additional Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">Contributors</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/guides/checkpoint/v1/training.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Checkpointing in a Training Loop</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checkpointer-apis">Checkpointer APIs</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#saving">Saving</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#querying-available-checkpoints">Querying Available Checkpoints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inspecting-checkpoint-metadata">Inspecting Checkpoint Metadata</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#garbage-collection">Garbage Collection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading">Loading</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checkpointables-and-dataset-checkpointing"><span class="xref std std-doc">Checkpointables and Dataset Checkpointing</span></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-with-mnist-data">Training with MNIST Data</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="checkpointing-in-a-training-loop">
+<h1>Checkpointing in a Training Loop<a class="headerlink" href="#checkpointing-in-a-training-loop" title="Link to this heading">#</a></h1>
+<p>This guide covers the usage of the <code class="docutils literal notranslate"><span class="pre">training</span></code> module, designed around the basic
+concept of a training loop. <br><br> Note: We use the <code class="docutils literal notranslate"><span class="pre">--xla_force_host_platform_device_count=8</span></code> flag to emulate multiple devices in our single-CPU environment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;XLA_FLAGS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;--xla_force_host_platform_device_count=8&#39;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint</span><span class="w"> </span><span class="kn">import</span> <span class="n">v1</span> <span class="k">as</span> <span class="n">ocp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">etils</span><span class="w"> </span><span class="kn">import</span> <span class="n">epath</span>
+
+<span class="n">training</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">training</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
+<p>Let’s dive in with a simple training loop example.</p>
+<p>We will use the <code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code> API provided by the <code class="docutils literal notranslate"><span class="pre">training</span></code> module. The
+<code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code> must be configured with a <strong>root directory</strong>, which represents a
+working directory where all checkpoints will be saved throughout the course of
+an experiment.</p>
+<p>The root directory is not itself a checkpoint; rather, it is a <em>container</em> of
+checkpoints.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root_directory</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/training/my-checkpoints-1&#39;</span><span class="p">)</span>
+<span class="n">root_directory</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will assume the existence of a training state containing the keys <code class="docutils literal notranslate"><span class="pre">params</span></code>
+and <code class="docutils literal notranslate"><span class="pre">opt_state</span></code>, which are trees of <code class="docutils literal notranslate"><span class="pre">jax.Array</span></code>. The state also contains a key
+<code class="docutils literal notranslate"><span class="pre">step</span></code>, which is represented as an integer.</p>
+<p>Note that the arrays in the state will be sharded using a fully-replicated
+sharding, but the example would work equally well with any other sharding.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">pytree</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;layer0&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;opt_state&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">16</span><span class="p">)],</span>
+<span class="p">}</span>
+<span class="n">sharding</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">(),</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,)),</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">PartitionSpec</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">pytree</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">device_put</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sharding</span><span class="p">),</span> <span class="n">pytree</span><span class="p">)</span>
+<span class="n">pytree</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s set up our fake training loop. We will add a “training step function” that
+just increments the step. In reality, this would also compute gradients and
+update model parameters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+  <span class="n">state</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can create a <code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code> to begin saving a sequence of checkpoints.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+  <span class="n">num_steps</span> <span class="o">=</span> <span class="mi">10</span>
+  <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
+    <span class="n">saved</span> <span class="o">=</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">pytree</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">saved</span>
+    <span class="n">pytree</span> <span class="o">=</span> <span class="n">train_step</span><span class="p">(</span><span class="n">pytree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">load</span></code> with no arguments will automatically restore the latest saved
+checkpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">ckptr</span><span class="o">.</span><span class="n">load</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;opt_state&#39;: [Array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15],      dtype=int32)], &#39;params&#39;: {&#39;layer0&#39;: Array([[ 0,  1],
+       [ 2,  3],
+       [ 4,  5],
+       [ 6,  7],
+       [ 8,  9],
+       [10, 11],
+       [12, 13],
+       [14, 15]], dtype=int32)}, &#39;step&#39;: 9}
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/docs/checkouts/readthedocs.org/user_builds/orbax/envs/latest/lib/python3.12/site-packages/orbax/checkpoint/_src/serialization/jax_array_handlers.py:743: UserWarning: Sharding info not provided when restoring. Populating sharding info from sharding file. Please note restoration time will be slightly increased due to reading from file. Note also that this option is unsafe when restoring on a different topology than the checkpoint was saved with.
+  warnings.warn(
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="checkpointer-apis">
+<h2>Checkpointer APIs<a class="headerlink" href="#checkpointer-apis" title="Link to this heading">#</a></h2>
+<p>Now, let’s get into a bit more detail about how to interact with the
+<code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code>.</p>
+<p>In general, we recommend using <code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code> as a context manager, as shown in
+the examples below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Checkpointer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+<p>You can use it without the context manager, but make sure to call <code class="docutils literal notranslate"><span class="pre">close()</span></code>
+before the program exits to ensure the completion of any outstanding operations
+and to ensure resource cleanup.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ckptr</span> <span class="o">=</span> <span class="n">Checkpointer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">ckptr</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<section id="saving">
+<h3>Saving<a class="headerlink" href="#saving" title="Link to this heading">#</a></h3>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">save</span></code> in the training loop automatically calls <code class="docutils literal notranslate"><span class="pre">should_save</span></code>, which
+determines whether or not a checkpoint should be saved at the given step, based
+on the configured saving frequency. If a save is performed <code class="docutils literal notranslate"><span class="pre">save</span></code> returns
+<code class="docutils literal notranslate"><span class="pre">True</span></code>; otherwise it returns <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Whether or not a save should be performed can be controlled via
+<a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html#orbax.checkpoint.experimental.v1.training.save_decision_policies.SaveDecisionPolicy" title="orbax.checkpoint.experimental.v1.training.save_decision_policies.SaveDecisionPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SaveDecisionPolicy</span></code></a>.</p>
+<p>By default, <a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html#orbax.checkpoint.experimental.v1.training.save_decision_policies.ContinuousCheckpointingPolicy" title="orbax.checkpoint.experimental.v1.training.save_decision_policies.ContinuousCheckpointingPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContinuousCheckpointingPolicy</span></code></a> is configured, which always saves
+<em>unless</em> a save is already ongoing.</p>
+<p>Other pre-configured policies include: - <a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html#orbax.checkpoint.experimental.v1.training.save_decision_policies.FixedIntervalPolicy" title="orbax.checkpoint.experimental.v1.training.save_decision_policies.FixedIntervalPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">FixedIntervalPolicy</span></code></a>: Saves every <code class="docutils literal notranslate"><span class="pre">n</span></code>
+steps. - <a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html#orbax.checkpoint.experimental.v1.training.save_decision_policies.InitialSavePolicy" title="orbax.checkpoint.experimental.v1.training.save_decision_policies.InitialSavePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">InitialSavePolicy</span></code></a>: Saves on the first step. -
+<a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html#orbax.checkpoint.experimental.v1.training.save_decision_policies.PreemptionCheckpointingPolicy" title="orbax.checkpoint.experimental.v1.training.save_decision_policies.PreemptionCheckpointingPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">PreemptionCheckpointingPolicy</span></code></a>: Saves on a step where a preemption signal is
+received by the JAX distributed system. This is useful for saving whenever a job
+is automatically restarted by the system. - <a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html#orbax.checkpoint.experimental.v1.training.save_decision_policies.SpecificStepsPolicy" title="orbax.checkpoint.experimental.v1.training.save_decision_policies.SpecificStepsPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpecificStepsPolicy</span></code></a>: Saves on the
+specific set of configured steps.</p>
+<p>The policies can be used in conjunction via <a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html#orbax.checkpoint.experimental.v1.training.save_decision_policies.AnySavePolicy" title="orbax.checkpoint.experimental.v1.training.save_decision_policies.AnySavePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnySavePolicy</span></code></a>, which performs a
+save if any of the sub-policies would perform a save at the given step.</p>
+<p>You may always implement your own policy. See <a class="reference internal" href="../../../api_reference/checkpoint.v1.training.save_decision_policies.html#orbax.checkpoint.experimental.v1.training.save_decision_policies.SaveDecisionPolicy" title="orbax.checkpoint.experimental.v1.training.save_decision_policies.SaveDecisionPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SaveDecisionPolicy</span></code></a> for details.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root_directory</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/training/my-checkpoints-2&#39;</span><span class="p">)</span>
+<span class="n">root_directory</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span>
+    <span class="n">root_directory</span><span class="p">,</span>
+    <span class="n">save_decision_policy</span><span class="o">=</span><span class="n">training</span><span class="o">.</span><span class="n">save_decision_policies</span><span class="o">.</span><span class="n">FixedIntervalPolicy</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+  <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">ckptr</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">pytree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>ls<span class="w"> </span><span class="o">{</span>root_directory<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0  3  6  9
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/docs/.asdf/installs/python/3.12.12/lib/python3.12/pty.py:95: RuntimeWarning: os.fork() was called. os.fork() is incompatible with multithreaded code, and JAX is multithreaded, so this will likely lead to a deadlock.
+  pid, fd = os.forkpty()
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now let’s exercise some additional save features. These include:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">custom_metadata</span></code>: A JSON-formatted object intended for storing any
+user-specified properties. Custom metadata can be specified at both the root
+directory level and the individual checkpoint level. At the root level, the
+metadata should pertain to all checkpoints. For example, the experiment name
+is shared by all checkpoints within the root directory, while a property
+like <code class="docutils literal notranslate"><span class="pre">is_final</span></code> has different values for different checkpoints.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">override</span></code>: Deletes and overwrites any existing checkpoint at the provided
+step.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">force</span></code>: Performs a save at the current step regardless of what would
+ordinarily be dictated by the <code class="docutils literal notranslate"><span class="pre">SaveDecisionPolicy</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metrics</span></code>: A JSON-formatted object storing evaluation metrics for the
+current step. This can be useful for ordering and garbage collecting
+checkpoints; more on that below.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root_directory</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/training/my-checkpoints-3&#39;</span><span class="p">)</span>
+<span class="n">root_directory</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span>
+    <span class="n">root_directory</span><span class="p">,</span>
+    <span class="n">save_decision_policy</span><span class="o">=</span><span class="n">training</span><span class="o">.</span><span class="n">save_decision_policies</span><span class="o">.</span><span class="n">FixedIntervalPolicy</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+    <span class="n">custom_metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;experiment_name&#39;</span><span class="p">:</span> <span class="s1">&#39;my-experiment&#39;</span><span class="p">},</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+  <span class="n">num_steps</span> <span class="o">=</span> <span class="mi">10</span>
+  <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
+    <span class="n">is_final</span> <span class="o">=</span> <span class="n">step</span> <span class="o">==</span> <span class="n">num_steps</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">ckptr</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+        <span class="n">step</span><span class="p">,</span>
+        <span class="n">pytree</span><span class="p">,</span>
+        <span class="n">metrics</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;accuracy&#39;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">},</span>
+        <span class="n">custom_metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;is_final&#39;</span><span class="p">:</span> <span class="n">is_final</span><span class="p">},</span>
+        <span class="n">force</span><span class="o">=</span><span class="n">is_final</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>ls<span class="w"> </span><span class="o">{</span>root_directory<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0  3  6  9  metadata
+</pre></div>
+</div>
+</div>
+</div>
+<p>We will learn more about how to access some of the attributes that we saved in
+the sections below.</p>
+</section>
+<section id="querying-available-checkpoints">
+<h3>Querying Available Checkpoints<a class="headerlink" href="#querying-available-checkpoints" title="Link to this heading">#</a></h3>
+<p>We can learn about which checkpoints are available by using <code class="docutils literal notranslate"><span class="pre">latest</span></code> and
+<code class="docutils literal notranslate"><span class="pre">checkpoints</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ckptr</span> <span class="o">=</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Each of these APIs returns <code class="docutils literal notranslate"><span class="pre">CheckpointMetadata</span></code> objects, which store a number of
+properties describing each checkpoint. Some metadata properties are more
+expensive to retrieve than others though. The <code class="docutils literal notranslate"><span class="pre">latest</span></code> and <code class="docutils literal notranslate"><span class="pre">checkpoints</span></code> APIs
+just store a limited set of cheaply-retrievable properties, like the <code class="docutils literal notranslate"><span class="pre">step</span></code>.
+These APIs also make use of caching as much as possible, to avoid repeated disk
+reads.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Returns CheckpointMetadata or None, if no checkpoints are found.</span>
+<span class="n">latest</span> <span class="o">=</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">latest</span>
+<span class="k">assert</span> <span class="n">latest</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">latest</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">latest</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9
+CheckpointMetadata({&#39;commit_timestamp_nsecs&#39;: &#39;1779910879372587008&#39;,
+ &#39;custom_metadata&#39;: &#39;None&#39;,
+ &#39;init_timestamp_nsecs&#39;: &#39;None&#39;,
+ &#39;metadata&#39;: &#39;None&#39;,
+ &#39;metrics&#39;: &quot;{&#39;accuracy&#39;: 0.85}&quot;,
+ &#39;step&#39;: &#39;9&#39;})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inspecting-checkpoint-metadata">
+<h3>Inspecting Checkpoint Metadata<a class="headerlink" href="#inspecting-checkpoint-metadata" title="Link to this heading">#</a></h3>
+<p>In many cases, we wish to cheaply gain information about checkpoint properties
+without loading the entire model. Using the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> API, we can learn
+about the tree structure of our PyTree, as well as information about each array
+in the tree.</p>
+<p>Like loading methods, metadata methods accept either no argument, or an argument
+representing the step to retrieve metadata for.</p>
+<p>For example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loads metadata from the latest checkpoint.</span>
+<span class="n">ckptr</span><span class="o">.</span><span class="n">metadata</span><span class="p">()</span>
+<span class="c1"># Loads metadata corresponding to the first step.</span>
+<span class="n">ckptr</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="n">ckptr</span><span class="o">.</span><span class="n">checkpoints</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="c1"># Loads metadata from a specific integer step.</span>
+<span class="n">ckptr</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:TensorStore data files not found in checkpoint path /tmp/training/my-checkpoints-3/9. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:TensorStore data files not found in checkpoint path /tmp/training/my-checkpoints-3/0. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:TensorStore data files not found in checkpoint path /tmp/training/my-checkpoints-3/3. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s examine the output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ckptr</span><span class="o">.</span><span class="n">metadata</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:TensorStore data files not found in checkpoint path /tmp/training/my-checkpoints-3/9. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CheckpointMetadata({&#39;commit_timestamp_nsecs&#39;: &#39;1779910879372587219&#39;,
+ &#39;custom_metadata&#39;: &quot;{&#39;is_final&#39;: True}&quot;,
+ &#39;init_timestamp_nsecs&#39;: &#39;1779910879300335161&#39;,
+ &#39;metadata&#39;: &quot;{&#39;opt_state&#39;: [ArrayMetadata(shape=(16,), dtype=dtype(&#39;int32&#39;), &quot;
+             &#39;sharding_metadata=NamedShardingMetadata(shape=[8], &#39;
+             &quot;axis_names=[&#39;x&#39;], axis_types=(Auto,), partition_spec=()) &quot;
+             &#39;device_mesh=DeviceMetadataMesh(mesh=[DeviceMetadata(id=0), &#39;
+             &#39;DeviceMetadata(id=1), DeviceMetadata(id=2), &#39;
+             &#39;DeviceMetadata(id=3), DeviceMetadata(id=4), &#39;
+             &#39;DeviceMetadata(id=5), DeviceMetadata(id=6), &#39;
+             &#39;DeviceMetadata(id=7)]), &#39;
+             &#39;storage_metadata=StorageMetadata(chunk_shape=(2,), &#39;
+             &quot;write_shape=(2,)))], &#39;params&#39;: {&#39;layer0&#39;: &quot;
+             &quot;ArrayMetadata(shape=(8, 2), dtype=dtype(&#39;int32&#39;), &quot;
+             &#39;sharding_metadata=NamedShardingMetadata(shape=[8], &#39;
+             &quot;axis_names=[&#39;x&#39;], axis_types=(Auto,), partition_spec=()) &quot;
+             &#39;device_mesh=DeviceMetadataMesh(mesh=[DeviceMetadata(id=0), &#39;
+             &#39;DeviceMetadata(id=1), DeviceMetadata(id=2), &#39;
+             &#39;DeviceMetadata(id=3), DeviceMetadata(id=4), &#39;
+             &#39;DeviceMetadata(id=5), DeviceMetadata(id=6), &#39;
+             &#39;DeviceMetadata(id=7)]), &#39;
+             &#39;storage_metadata=StorageMetadata(chunk_shape=(1, 2), &#39;
+             &quot;write_shape=(1, 2)))}, &#39;step&#39;: 0}&quot;,
+ &#39;metrics&#39;: &quot;{&#39;accuracy&#39;: 0.85}&quot;,
+ &#39;step&#39;: &#39;9&#39;})
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s dig into a few specific fields. In particular, we can access
+<code class="docutils literal notranslate"><span class="pre">custom_metadata</span></code> and <code class="docutils literal notranslate"><span class="pre">metrics</span></code> that were saved previously.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">ckptr</span><span class="o">.</span><span class="n">metadata</span><span class="p">()</span><span class="o">.</span><span class="n">metrics</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ckptr</span><span class="o">.</span><span class="n">metadata</span><span class="p">()</span><span class="o">.</span><span class="n">custom_metadata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:TensorStore data files not found in checkpoint path /tmp/training/my-checkpoints-3/9. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:TensorStore data files not found in checkpoint path /tmp/training/my-checkpoints-3/9. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;accuracy&#39;: 0.85}
+{&#39;is_final&#39;: True}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Within the metadata object, there is another field called <code class="docutils literal notranslate"><span class="pre">metadata</span></code>. This
+stores information specific to the structure of the object we saved. In this
+case, it describes the structure of the PyTree and array properties.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
+
+<span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">ckptr</span><span class="o">.</span><span class="n">metadata</span><span class="p">()</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:TensorStore data files not found in checkpoint path /tmp/training/my-checkpoints-3/9. This may be a sign of a malformed checkpoint, unless your checkpoint consists entirely of strings or other non-standard PyTree leaves.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;opt_state&#39;: [ArrayMetadata(shape=(16,),
+                             dtype=dtype(&#39;int32&#39;),
+                             sharding_metadata=NamedShardingMetadata(shape=[8], axis_names=[&#39;x&#39;], axis_types=(Auto,), partition_spec=()) device_mesh=DeviceMetadataMesh(mesh=[DeviceMetadata(id=0), DeviceMetadata(id=1), DeviceMetadata(id=2), DeviceMetadata(id=3), DeviceMetadata(id=4), DeviceMetadata(id=5), DeviceMetadata(id=6), DeviceMetadata(id=7)]),
+                             storage_metadata=StorageMetadata(chunk_shape=(2,),
+                                                              write_shape=(2,)))],
+ &#39;params&#39;: {&#39;layer0&#39;: ArrayMetadata(shape=(8, 2),
+                                    dtype=dtype(&#39;int32&#39;),
+                                    sharding_metadata=NamedShardingMetadata(shape=[8], axis_names=[&#39;x&#39;], axis_types=(Auto,), partition_spec=()) device_mesh=DeviceMetadataMesh(mesh=[DeviceMetadata(id=0), DeviceMetadata(id=1), DeviceMetadata(id=2), DeviceMetadata(id=3), DeviceMetadata(id=4), DeviceMetadata(id=5), DeviceMetadata(id=6), DeviceMetadata(id=7)]),
+                                    storage_metadata=StorageMetadata(chunk_shape=(1,
+                                                                                  2),
+                                                                     write_shape=(1,
+                                                                                  2)))},
+ &#39;step&#39;: 0}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we can also retrieve the root-level metadata. Recall that this metadata
+is intended to describe the entire sequence of checkpoints, rather than just a
+single checkpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ckptr</span><span class="o">.</span><span class="n">root_metadata</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RootMetadata({&#39;custom_metadata&#39;: &quot;{&#39;experiment_name&#39;: &#39;my-experiment&#39;}&quot;,
+ &#39;directory&#39;: &#39;/tmp/training/my-checkpoints-3&#39;})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="garbage-collection">
+<h3>Garbage Collection<a class="headerlink" href="#garbage-collection" title="Link to this heading">#</a></h3>
+<p>Garbage collection is important to avoid accumulating too many old checkpoints
+and running out of disk space.</p>
+<p>To control this behavior, we have an object (fairly similar to
+<code class="docutils literal notranslate"><span class="pre">SaveDecisionPolicy</span></code>) above, called <code class="docutils literal notranslate"><span class="pre">PreservationPolicy</span></code>. This class tells the
+<code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code> which checkpoints should be protected from garbage collection.</p>
+<p>By default, the <code class="docutils literal notranslate"><span class="pre">PreservationPolicy</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">PreserveAll</span></code> (no garbage
+collection), because we do not want users to lose any valuable data. However,
+for anything other than toy use cases,
+you should make sure to configure a more restrictive <code class="docutils literal notranslate"><span class="pre">PreservationPolicy</span></code>.</p>
+<p>Our <code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code> below is implicitly configured with <code class="docutils literal notranslate"><span class="pre">PreserveAll</span></code>, so all 10
+steps should be present at first.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root_directory</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/training/my-checkpoints-gc&#39;</span><span class="p">)</span>
+<span class="n">root_directory</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+  <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">ckptr</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">pytree</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">step</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">checkpoints</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we create a new <code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code> with a new <code class="docutils literal notranslate"><span class="pre">PreservationPolicy</span></code> configured,
+the same 10 checkpoints should still be present. Once we
+save a new step, any steps indicated for cleanup by the policy will be removed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span>
+    <span class="n">root_directory</span><span class="p">,</span>
+    <span class="n">preservation_policy</span><span class="o">=</span><span class="n">training</span><span class="o">.</span><span class="n">preservation_policies</span><span class="o">.</span><span class="n">AnyPreservationPolicy</span><span class="p">([</span>
+        <span class="n">training</span><span class="o">.</span><span class="n">preservation_policies</span><span class="o">.</span><span class="n">LatestN</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">training</span><span class="o">.</span><span class="n">preservation_policies</span><span class="o">.</span><span class="n">EveryNSteps</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="p">]),</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">step</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">checkpoints</span><span class="p">])</span>
+  <span class="k">assert</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">latest</span><span class="o">.</span><span class="n">step</span> <span class="o">==</span> <span class="mi">9</span>
+  <span class="n">ckptr</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">pytree</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">step</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">checkpoints</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+[0, 4, 8, 9, 10]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Typically, the latest <code class="docutils literal notranslate"><span class="pre">n</span></code> checkpoints are preserved (<code class="docutils literal notranslate"><span class="pre">LatestN</span></code>) along with
+checkpoints at some regular, but longer interval (<code class="docutils literal notranslate"><span class="pre">EveryNSteps</span></code> or
+<code class="docutils literal notranslate"><span class="pre">EveryNSeconds</span></code>). The latter can be useful for performing evals and maintaining
+a record of the experiment’s progress.</p>
+</section>
+<section id="loading">
+<h3>Loading<a class="headerlink" href="#loading" title="Link to this heading">#</a></h3>
+<p>As we saw above with the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> methods, we can load in a variety of ways.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loads from the latest checkpoint.</span>
+<span class="n">ckptr</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="c1"># Loads the first available checkpoint in the root directory.</span>
+<span class="n">ckptr</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ckptr</span><span class="o">.</span><span class="n">checkpoints</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="c1"># Loads from a specific integer step.</span>
+<span class="n">ckptr</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>When dealing with PyTrees, particularly PyTrees with sharded <code class="docutils literal notranslate"><span class="pre">jax.Array</span></code> leaves,
+it is important for any non-toy use cases to specify an “abstract PyTree” that
+is used to guide restoration. Checkpoints are complicated objects. The abstract
+PyTree acts as an assertion to verify that the checkpoint has structure you
+expect and that arrays have the correct shapes.</p>
+<p>The abstract PyTree can also be used to instruct Orbax how to load the PyTree.
+The <code class="docutils literal notranslate"><span class="pre">dtype</span></code> property may be used to cast arrays, while the <code class="docutils literal notranslate"><span class="pre">sharding</span></code> property
+is used to correctly place array shards on devices.</p>
+<p>We should define an abstract tree with the same structure as the tree we
+originally saved. For the leaves, we specify different shardings than we
+originally saved with, and different dtypes as well, causing the loaded arrays
+to be cast and resharded when loading.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sharding</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">(),</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,)),</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">PartitionSpec</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">abstract_state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;layer0&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">sharding</span><span class="p">),</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;opt_state&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">((</span><span class="mi">16</span><span class="p">,),</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">sharding</span><span class="p">)],</span>
+    <span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ckptr</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">abstract_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;opt_state&#39;: [Array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10., 11., 12.,
+         13., 14., 15.], dtype=float32)],
+ &#39;params&#39;: {&#39;layer0&#39;: Array([[ 0.,  1.],
+         [ 2.,  3.],
+         [ 4.,  5.],
+         [ 6.,  7.],
+         [ 8.,  9.],
+         [10., 11.],
+         [12., 13.],
+         [14., 15.]], dtype=float32)},
+ &#39;step&#39;: 10}
+</pre></div>
+</div>
+</div>
+</div>
+<p>More details on working with PyTrees in such a manner can be found at <a class="reference internal" href="checkpointing_pytrees.html"><span class="doc">Checkpointing PyTrees</span></a>.</p>
+</section>
+<section id="checkpointables-and-dataset-checkpointing">
+<h3><a class="reference internal" href="checkpointables.html"><span class="doc">Checkpointables and Dataset Checkpointing</span></a><a class="headerlink" href="#checkpointables-and-dataset-checkpointing" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Checkpointer</span></code> supports the concept of <code class="docutils literal notranslate"><span class="pre">checkpointables</span></code>. See the documentation
+on “Working with Checkpointables” for more information.</p>
+<p>In simplified terms, a “checkpointable” refers to a distinct piece of the
+overall checkpoint, which can be thought of as a bundle. The <code class="docutils literal notranslate"><span class="pre">PyTree</span></code> training
+state is one such checkpointable. The dataset iterator is another. Checkpointing
+the position of the dataset iterator can be useful to ensure training resumes
+where we were interrupted not just for the model parameters, but for the data as
+well.</p>
+<p>We can see this concept in concrete terms using a Grain dataset iterator. See
+<a class="reference external" href="https://google-grain.readthedocs.io/en/latest/index.html">Grain documentation</a>
+for more information. For our purposes, we can construct a toy dataset iterator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">grain</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">grain</span><span class="o">.</span><span class="n">MapDataset</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+
+<span class="n">pytree</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;layer0&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;opt_state&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">16</span><span class="p">)],</span>
+<span class="p">}</span>
+<span class="n">sharding</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span>
+    <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">(),</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,)),</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">PartitionSpec</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">pytree</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">device_put</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sharding</span><span class="p">),</span> <span class="n">pytree</span><span class="p">)</span>
+<span class="n">pytree</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">ds</span><span class="p">):</span>
+  <span class="nb">next</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>  <span class="c1"># Advances the dataset iterator</span>
+  <span class="n">state</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can save ten checkpoints in sequence, including the dataset iterator,
+advancing the iterator once per step. At each step, the dataset iterator points
+to <code class="docutils literal notranslate"><span class="pre">[step*3,</span> <span class="pre">step*3+1,</span> <span class="pre">step*3+2]</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">root_directory</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/training/my-checkpoints-4&#39;</span><span class="p">)</span>
+<span class="n">root_directory</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">num_steps</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="k">with</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+  <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
+    <span class="n">ckptr</span><span class="o">.</span><span class="n">save_checkpointables</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">pytree</span><span class="o">=</span><span class="n">pytree</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">))</span>
+    <span class="n">pytree</span> <span class="o">=</span> <span class="n">train_step</span><span class="p">(</span><span class="n">pytree</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>After loading at step <code class="docutils literal notranslate"><span class="pre">5</span></code>, <code class="docutils literal notranslate"><span class="pre">new_dataset</span></code> points to position <code class="docutils literal notranslate"><span class="pre">5</span></code> of the iterator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_dataset</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span>
+    <span class="n">grain</span><span class="o">.</span><span class="n">MapDataset</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Initial position: </span><span class="si">{</span><span class="nb">next</span><span class="p">(</span><span class="n">new_dataset</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+  <span class="n">ckptr</span><span class="o">.</span><span class="n">load_checkpointables</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">pytree</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">new_dataset</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Loaded from checkpoint: </span><span class="si">{</span><span class="nb">next</span><span class="p">(</span><span class="n">new_dataset</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initial position: [0, 1, 2]
+Loaded from checkpoint: [15, 16, 17]
+</pre></div>
+</div>
+</div>
+</div>
+<p>It’s important to note that dataset loading is stateful. You need to instantiate
+an iterator object, pass it to <code class="docutils literal notranslate"><span class="pre">load_checkpointables</span></code>, and the checkpoint state
+will be restored into the iterator state of the dataset object.</p>
+</section>
+</section>
+<section id="training-with-mnist-data">
+<h2>Training with MNIST Data<a class="headerlink" href="#training-with-mnist-data" title="Link to this heading">#</a></h2>
+<p>In the past examples, we’ve used incomplete data to demonstrate Orbax functionality. Here, it’s useful to demonstrate checkpointing during training loops involving real-world training data (though the example is still simplified for demonstration purposes).</p>
+<p>We’ll define our own loss function and simulate a MNIST model training loop. These functions are pulled from the <a class="reference external" href="https://flax.readthedocs.io/en/latest/mnist_tutorial.html">Flax docs</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">flax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.training.model_helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">DotReluDot</span>  <span class="c1"># Don&#39;t rely on this module!</span>
+
+<span class="n">flax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;flax_always_shard_variable&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">DotReluDot</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">]:</span>
+  <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">])</span>
+  <span class="n">loss</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">softmax_cross_entropy_with_integer_labels</span><span class="p">(</span>
+      <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+  <span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+  <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">logits</span>
+
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">DotReluDot</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">ModelAndOptimizer</span><span class="p">,</span>
+    <span class="n">batch</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+<span class="p">):</span>
+  <span class="n">grad_fn</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">has_aux</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">logits</span><span class="p">),</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">grad_fn</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
+  <span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grads</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>It’s worth mentioning that <code class="docutils literal notranslate"><span class="pre">DotReluDot</span></code> is an example layer that subclasses <code class="docutils literal notranslate"><span class="pre">nnx.Module</span></code> and is capable of incorporating sharding information to accelerate the training process. Let’s recreate a sharded environment for sake of demonstration.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jax.sharding</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;You have 8 “fake” JAX devices now: </span><span class="si">{</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span>
+    <span class="n">devices</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">())</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="c1"># Can be customized to run across multiple devices</span>
+    <span class="n">axis_names</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>You have 8 “fake” JAX devices now: [CpuDevice(id=0), CpuDevice(id=1), CpuDevice(id=2), CpuDevice(id=3), CpuDevice(id=4), CpuDevice(id=5), CpuDevice(id=6), CpuDevice(id=7)]
+Mesh(&#39;data&#39;: 4, &#39;model&#39;: 2, axis_types=(Auto, Auto))
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s go ahead and import the MNIST dataset using the <code class="docutils literal notranslate"><span class="pre">Grain</span></code> library:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint.experimental.v1._src.training.model_helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_dataset</span>
+
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">32</span>
+
+<span class="n">train_ds</span> <span class="o">=</span> <span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+<span class="n">test_ds</span> <span class="o">=</span> <span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:Variant folder /home/docs/tensorflow_datasets/mnist/3.0.1 has no dataset_info.json
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-05-27 19:41:27.422075: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Before we start the training loop, let’s initialize an abstract version of our checkpoint state, without initializing any real array values. We do this for both the model and optimizer.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an abstract model</span>
+<span class="n">abs_model</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">eval_shape</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">DotReluDot</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="n">abs_model_state</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">abs_model</span><span class="p">)</span>
+<span class="n">abs_model_state</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">s</span><span class="p">),</span>
+    <span class="n">abs_model_state</span><span class="p">,</span>
+    <span class="n">nnx</span><span class="o">.</span><span class="n">get_named_sharding</span><span class="p">(</span><span class="n">abs_model_state</span><span class="p">,</span> <span class="n">mesh</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># Create an abstract optimizer</span>
+<span class="n">abs_model_tmp</span> <span class="o">=</span> <span class="n">DotReluDot</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">abs_optimizer</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">eval_shape</span><span class="p">(</span>
+    <span class="k">lambda</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">ModelAndOptimizer</span><span class="p">(</span><span class="n">abs_model_tmp</span><span class="p">,</span> <span class="n">optax</span><span class="o">.</span><span class="n">adamw</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="c1"># Store the abstract model and optimizer as one object</span>
+<span class="n">abs_state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">abs_model_state</span><span class="p">,</span>
+    <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">abs_optimizer</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">OptState</span><span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can define our main <code class="docutils literal notranslate"><span class="pre">train()</span></code> function, throughout which we will demonstrate checkpointing. A couple notes: <br></p>
+<ul class="simple">
+<li><p>We use <code class="docutils literal notranslate"><span class="pre">FixedIntervalPolicy</span></code> so that our checkpoint is saved every 10 training steps.</p></li>
+<li><p>We use <code class="docutils literal notranslate"><span class="pre">nnx.state()</span></code> to convert the model object (DotReluDot) and optimizer to a checkpointable PyTree, which can then be checkpointed with <code class="docutils literal notranslate"><span class="pre">ckptr.save()</span></code></p></li>
+</ul>
+<p>When actually loading a checkpoint, we do the following:</p>
+<ul class="simple">
+<li><p>If a checkpoint exists in our current checkpoints directory, we restore the latest one.</p></li>
+<li><p>If no checkpoints exist in our directory and the user provides a path to another directory, we load the checkpoint saved at that path.</p></li>
+<li><p>If no checkpoints have been saved, this indicates we’re entering the training loop for the first time, so we don’t restore a model or optimizer.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">orbax.checkpoint</span><span class="w"> </span><span class="kn">import</span> <span class="n">v1</span> <span class="k">as</span> <span class="n">ocp</span>
+
+<span class="n">training</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">training</span>
+<span class="n">root_directory</span> <span class="o">=</span> <span class="n">epath</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/training/my-checkpoints-5&#39;</span><span class="p">)</span>
+<span class="n">root_directory</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">train_steps</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Limited number of training steps for speed.</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.005</span>
+<span class="n">momentum</span> <span class="o">=</span> <span class="mf">0.9</span>
+<span class="n">model_depth</span> <span class="o">=</span> <span class="mi">1024</span>
+<span class="n">save_interval</span> <span class="o">=</span> <span class="mi">10</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">init_or_restore</span><span class="p">(</span>
+    <span class="n">ckptr</span><span class="p">:</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">,</span> <span class="n">abs_state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">ckpt_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DotReluDot</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">ModelAndOptimizer</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+  <span class="n">model</span> <span class="o">=</span> <span class="n">DotReluDot</span><span class="p">(</span><span class="n">model_depth</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+  <span class="n">optimizer</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">ModelAndOptimizer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optax</span><span class="o">.</span><span class="n">adamw</span><span class="p">(</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">momentum</span><span class="p">))</span>
+
+  <span class="k">if</span> <span class="n">ckpt_path</span> <span class="ow">or</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">latest</span><span class="p">:</span>
+    <span class="c1"># If a checkpoint already exists, we restore it.</span>
+    <span class="k">if</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">latest</span><span class="p">:</span>
+      <span class="n">loaded_state</span> <span class="o">=</span> <span class="n">ckptr</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">abstract_state</span><span class="o">=</span><span class="n">abs_state</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">loaded_state</span> <span class="o">=</span> <span class="n">ocp</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">ckpt_path</span><span class="p">,</span> <span class="n">abstract_state</span><span class="o">=</span><span class="n">abs_state</span><span class="p">)</span>
+    <span class="c1"># Update model and optimizer separately</span>
+    <span class="n">nnx</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">loaded_state</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>
+    <span class="n">nnx</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">loaded_state</span><span class="p">[</span><span class="s1">&#39;optimizer&#39;</span><span class="p">])</span>
+    <span class="n">last_step</span> <span class="o">=</span> <span class="n">loaded_state</span><span class="p">[</span><span class="s1">&#39;optimizer&#39;</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">last_step</span> <span class="o">=</span> <span class="mi">0</span>
+
+  <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">last_step</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="n">stop_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ckpt_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+  <span class="c1"># If step_to_restore is provided, use that to load this specific checkpoint.</span>
+  <span class="c1"># Otherwise, load the latest checkpoint; if none exists, start from scratch.</span>
+  <span class="k">with</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span>
+      <span class="n">root_directory</span><span class="p">,</span>
+      <span class="n">save_decision_policy</span><span class="o">=</span><span class="n">training</span><span class="o">.</span><span class="n">save_decision_policies</span><span class="o">.</span><span class="n">FixedIntervalPolicy</span><span class="p">(</span>
+          <span class="n">save_interval</span>
+      <span class="p">),</span>
+  <span class="p">)</span> <span class="k">as</span> <span class="n">ckptr</span><span class="p">:</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">last_step</span> <span class="o">=</span> <span class="n">init_or_restore</span><span class="p">(</span><span class="n">ckptr</span><span class="p">,</span> <span class="n">abs_state</span><span class="p">,</span> <span class="n">ckpt_path</span><span class="p">)</span>
+
+    <span class="c1"># Main training loop</span>
+    <span class="k">with</span> <span class="n">mesh</span><span class="p">:</span>
+      <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">last_step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">&gt;=</span> <span class="n">train_steps</span> <span class="ow">or</span> <span class="p">(</span><span class="n">stop_fn</span> <span class="ow">and</span> <span class="n">stop_fn</span><span class="p">(</span><span class="n">step</span><span class="p">)):</span>
+          <span class="k">break</span>
+
+        <span class="n">train_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
+        <span class="c1"># Save the combined state</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">model</span><span class="p">),</span>
+            <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">OptState</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">ckptr</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We invoke the <code class="docutils literal notranslate"><span class="pre">train()</span></code> function. In doing so, we demonstrate a “failure” causing our main training loop to stop at step 52.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">simulated_failure</span><span class="p">(</span><span class="n">step</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">step</span> <span class="o">==</span> <span class="mi">52</span>
+
+<span class="n">train</span><span class="p">(</span><span class="n">stop_fn</span><span class="o">=</span><span class="n">simulated_failure</span><span class="p">)</span>
+<span class="n">latest</span> <span class="o">=</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span><span class="o">.</span><span class="n">latest</span>
+<span class="k">assert</span> <span class="n">latest</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">latest</span><span class="o">.</span><span class="n">step</span> <span class="o">==</span> <span class="mi">50</span>
+<span class="o">!</span>ls<span class="w"> </span><span class="o">{</span>root_directory<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5131/1523164441.py:47: DeprecationWarning: `with mesh:` context manager has been deprecated. Please use `with jax.set_mesh(mesh):` instead.
+  with mesh:
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10  20	30  40	50
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/docs/.asdf/installs/python/3.12.12/lib/python3.12/pty.py:95: RuntimeWarning: os.fork() was called. os.fork() is incompatible with multithreaded code, and JAX is multithreaded, so this will likely lead to a deadlock.
+  pid, fd = os.forkpty()
+</pre></div>
+</div>
+</div>
+</div>
+<p>We want to recover from our last saved checkpoint (step 50), which is restored automatically. We now continue training until step 80, which we can consider a “planned” exit rather than a failure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="n">train</span><span class="p">(</span><span class="n">stop_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">80</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>From our latest checkpoint (step 80), let’s assume we want to fine-tune the model. We restore from our latest checkpoint, and continue training until we reach the maximum number of steps.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">latest</span> <span class="o">=</span> <span class="n">training</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">root_directory</span><span class="p">)</span><span class="o">.</span><span class="n">latest</span>
+<span class="k">assert</span> <span class="n">latest</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">latest</span><span class="o">.</span><span class="n">step</span> <span class="o">==</span> <span class="mi">80</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">root_directory</span> <span class="o">/</span> <span class="s1">&#39;80&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+<span class="n">train</span><span class="p">(</span><span class="n">ckpt_path</span><span class="o">=</span><span class="n">root_directory</span> <span class="o">/</span> <span class="s1">&#39;80&#39;</span><span class="p">)</span>
+<span class="o">!</span>ls<span class="w"> </span><span class="o">{</span>root_directory<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_5131/1523164441.py:29: DeprecationWarning: &#39;.value&#39; access is now deprecated. For Variable[Array] instances use:
+
+  variable[...]
+
+For other Variable types use:
+
+  variable.get_value()
+
+  last_step = loaded_state[&#39;optimizer&#39;][&#39;step&#39;].value
+/tmp/ipykernel_5131/1523164441.py:47: DeprecationWarning: `with mesh:` context manager has been deprecated. Please use `with jax.set_mesh(mesh):` instead.
+  with mesh:
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10  20	30  40	50  60	70  80	90
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="checkpointing_pytrees.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Working with PyTree Checkpoints</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="async_checkpointing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Asynchronous Checkpointing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checkpointer-apis">Checkpointer APIs</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#saving">Saving</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#querying-available-checkpoints">Querying Available Checkpoints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inspecting-checkpoint-metadata">Inspecting Checkpoint Metadata</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#garbage-collection">Garbage Collection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading">Loading</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checkpointables-and-dataset-checkpointing"><span class="xref std std-doc">Checkpointables and Dataset Checkpointing</span></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-with-mnist-data">Training with MNIST Data</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Orbax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Google.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
