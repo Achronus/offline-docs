@@ -1,0 +1,735 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Using the Muon Optimizer in Optax &#8212; Optax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_contributors.css?v=fe9086e2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/katex-math.css?v=05624691" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=1d6acab0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../../_static/katex.min.js?v=5cc8ed51"></script>
+    <script src="../../../_static/auto-render.min.js?v=af98beb9"></script>
+    <script src="../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_collections/examples/contrib/muon';</script>
+    <link rel="icon" href="../../../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Reduce on Plateau Learning Rate Scheduler" href="reduce_on_plateau.html" />
+    <link rel="prev" title="Differentially private convolutional neural network on MNIST." href="differentially_private_sgd.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  <script async type="text/javascript" src="/sources/optax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="optax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_collections/examples/contrib/muon.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="Optax  documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="Optax  documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">🚀 Getting started</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../gallery.html">🖼️ Example gallery</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../README.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../adversarial_training.html">Adversarial training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cifar10_resnet.html">ResNet on CIFAR10 with Flax NNX and Optax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_example.html">Simple NN with Flax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../freezing_parameters.html">Freezing Parameters in Optax</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="../gradient_accumulation.html">Gradient Accumulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gradient_accumulation_and_microbatching.html">Summary</a></li>
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="../lbfgs.html">L-BFGS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../linear_assignment_problem.html">Linear assignment problem</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="../lookahead_mnist.html">Lookahead Optimizer on MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../meta_learning.html">Meta-Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mlp_mnist.html">MLP MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nanolm.html">Character-level Transformer on Tiny Shakespeare</a></li>
+
+
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="../ogda_example.html">Optimistic Gradient Descent in a Bilinear Min-Max Problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../perturbations.html">Perturbed optimizers</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="README.html">Contrib Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="differentially_private_sgd.html">Differentially private convolutional neural network on MNIST.</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Using the Muon Optimizer in Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reduce_on_plateau.html">Reduce on Plateau Learning Rate Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rosenbrock_ademamix.html">Recreate AdeMAMix Rosenbrock Plot from Paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sam.html">Sharpness-Aware Minimization (SAM)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">🛠️ Development</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../api/assignment.html">Assignment problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/combining_optimizers.html">Combining Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/optimizer_wrappers.html">Optimizer Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/optimizer_schedules.html">Optimizer Schedules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apply_updates.html">Apply Updates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/perturbations.html">Perturbations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/losses.html">Losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/utilities.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/microbatching.html">Microbatching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/contrib.html">🔧 Contrib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/experimental.html">🧪 Experimental</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google-deepmind/optax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/_collections/examples/contrib/muon.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Using the Muon Optimizer in Optax</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-muon-configuration">1. Default Muon Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-muon-weight-dimension-numbers-for-explicit-selection-and-higher-rank-tensors">2. Using <code class="docutils literal notranslate"><span class="pre">muon_weight_dimension_numbers</span></code> for Explicit Selection and Higher-Rank Tensors</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="using-the-muon-optimizer-in-optax">
+<h1>Using the Muon Optimizer in Optax<a class="headerlink" href="#using-the-muon-optimizer-in-optax" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://colab.sandbox.google.com/github/google-deepmind/optax/blob/main/examples/contrib/muon.ipynb"><img alt="Open in Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>This notebook demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">optax.contrib.muon</span></code> optimizer. We’ll cover three main use cases:</p>
+<ol class="arabic simple">
+<li><p><strong>Default Muon:</strong> Automatically applying Muon to 2D matrices and AdamW to all other parameters.</p></li>
+<li><p><strong>Masked Muon:</strong> Using <code class="docutils literal notranslate"><span class="pre">muon_weight_mask</span></code> to explicitly select which parameters are optimized by Muon.</p></li>
+<li><p><strong>Muon with Reshaping:</strong> Using <code class="docutils literal notranslate"><span class="pre">muon_weight_specs</span></code> to apply Muon to higher-dimensional parameters (tensors) by specifying how they should be reshaped.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a sample PyTree of parameters with different dimensions</span>
+<span class="n">keys</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1024</span><span class="p">))</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;layer1&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">keys</span><span class="p">),</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">)),</span>  <span class="c1"># 2D matrix</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">keys</span><span class="p">),</span> <span class="p">(</span><span class="mi">64</span><span class="p">,)),</span>  <span class="c1"># 1D vector</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;layer2&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">keys</span><span class="p">),</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">)),</span>  <span class="c1"># 2D matrix</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;layer3_conv&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">keys</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>  <span class="c1"># 4D tensor</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+
+<span class="c1"># A simple loss function: sum of squares of parameters.</span>
+<span class="c1"># The gradient of this loss is just the parameters themselves.</span>
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">leaves</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">print_state</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;State variables using the muon transform ---------------------------&quot;</span>
+    <span class="p">)</span>
+    <span class="n">pprint</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">)):</span> <span class="s2">&quot;MUON&quot;</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten_with_path</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">inner_states</span><span class="p">[</span><span class="s2">&quot;muon&quot;</span><span class="p">])[</span>
+                <span class="mi">0</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;ns_coeffs&quot;</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;State variables using the adam transform ---------------------------&quot;</span>
+    <span class="p">)</span>
+    <span class="n">pprint</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">)):</span> <span class="s2">&quot;ADAM&quot;</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten_with_path</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">inner_states</span><span class="p">[</span><span class="s2">&quot;adam&quot;</span><span class="p">])[</span>
+                <span class="mi">0</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;ns_coeffs&quot;</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="default-muon-configuration">
+<h2>1. Default Muon Configuration<a class="headerlink" href="#default-muon-configuration" title="Link to this heading">#</a></h2>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">muon</span></code> partitions parameters based on their dimensionality. Parameters with <code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">==</span> <span class="pre">2</span></code> (matrices) are optimized with Muon, while all others are handled by a standard AdamW optimizer.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use muon with default partitioning (ndim == 2 for muon)</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">muon</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="n">opt_state</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">print_state</span><span class="p">(</span><span class="n">opt_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State variables using the muon transform ---------------------------
+{&quot;.inner_state[0].mu[&#39;layer1&#39;][&#39;w&#39;]&quot;: &#39;MUON&#39;,
+ &quot;.inner_state[0].mu[&#39;layer2&#39;][&#39;w&#39;]&quot;: &#39;MUON&#39;}
+
+State variables using the adam transform ---------------------------
+{&quot;.inner_state[0].mu[&#39;layer1&#39;][&#39;b&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].mu[&#39;layer3_conv&#39;][&#39;w&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].nu[&#39;layer1&#39;][&#39;b&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].nu[&#39;layer3_conv&#39;][&#39;w&#39;]&quot;: &#39;ADAM&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-muon-weight-dimension-numbers-for-explicit-selection-and-higher-rank-tensors">
+<h2>2. Using <code class="docutils literal notranslate"><span class="pre">muon_weight_dimension_numbers</span></code> for Explicit Selection and Higher-Rank Tensors<a class="headerlink" href="#using-muon-weight-dimension-numbers-for-explicit-selection-and-higher-rank-tensors" title="Link to this heading">#</a></h2>
+<p>The core Muon algorithm (specifically, the Newton-Schulz iteration) operates on 2D matrices. To apply it to tensors of rank &gt; 2, you must provide a <code class="docutils literal notranslate"><span class="pre">MuonDimensionNumbers</span></code> that tells the optimizer how to reshape the tensor into a 2D matrix (<code class="docutils literal notranslate"><span class="pre">(reduction_dim,</span> <span class="pre">output_dim)</span></code>).</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">reduction_axes</span></code>: A tuple of axis indices that will be flattened into the first dimension of the matrix.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_axes</span></code>: A tuple of axis indices that will be flattened into the second dimension.</p></li>
+</ul>
+<p>Any remaining axes are treated as batch dimensions, and the operation is applied independently across them.</p>
+<p>You can override the default behavior using <code class="docutils literal notranslate"><span class="pre">muon_weight_dimension_numbers</span></code>. This is a PyTree with the same (or a prefix) structure as your parameters, containing <code class="docutils literal notranslate"><span class="pre">MuonDimensionNumbers</span></code> named tuples. If a leaf is a <code class="docutils literal notranslate"><span class="pre">MuonDimensionNumbers</span></code> tuple, the corresponding parameter is handled by Muon; if <code class="docutils literal notranslate"><span class="pre">None</span></code>, it’s handled by AdamW.</p>
+<p>Let’s apply Muon <em>only</em> to <code class="docutils literal notranslate"><span class="pre">'layer1'</span></code>’s weights and use AdamW for everything else, including the other 2D matrix in <code class="docutils literal notranslate"><span class="pre">'layer2'</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;optax.contrib.MuonDimensionNumbers doctring:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">optax</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">MuonDimensionNumbers</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>optax.contrib.MuonDimensionNumbers doctring:
+
+Specification for which weight axes participate in matrix projection.
+
+  Muon defines an orthogonalization for 2D matrix weights for matrix-vector
+  products:
+
+  .. math::
+    x W = y
+
+  where the first matrix dimension is the reduction axis and the second matrix
+  dimension is the output axis. Thus, the default spec consists of 0 and 1
+  reduction and output axes respectively.
+
+  .. warning::
+    The batch axes are implicit, all axes not specified as reduction or output
+    axes are considered batch axes and will be considered independently in the
+    orthogonalization (via jax.vmap).
+  
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mask to apply Muon ONLY to layer1&#39;s weights.</span>
+<span class="n">weight_dim_nums</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;layer1&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="c1"># default for 2D is `optax.contrib.MuonDimensionNumbers(0, 1)`</span>
+        <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">MuonDimensionNumbers</span><span class="p">(),</span>
+        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;layer2&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;layer3_conv&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">muon</span><span class="p">(</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">muon_weight_dimension_numbers</span><span class="o">=</span><span class="n">weight_dim_nums</span>
+<span class="p">)</span>
+<span class="n">opt_state</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="n">print_state</span><span class="p">(</span><span class="n">opt_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State variables using the muon transform ---------------------------
+{&quot;.inner_state[0].mu[&#39;layer1&#39;][&#39;w&#39;]&quot;: &#39;MUON&#39;}
+
+State variables using the adam transform ---------------------------
+{&quot;.inner_state[0].mu[&#39;layer1&#39;][&#39;b&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].mu[&#39;layer2&#39;][&#39;w&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].mu[&#39;layer3_conv&#39;][&#39;w&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].nu[&#39;layer1&#39;][&#39;b&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].nu[&#39;layer2&#39;][&#39;w&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].nu[&#39;layer3_conv&#39;][&#39;w&#39;]&quot;: &#39;ADAM&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s apply Muon to our 4D convolutional weight tensor from <code class="docutils literal notranslate"><span class="pre">layer3_conv</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We want to apply Muon to the 4D convolutional kernel in &#39;layer3_conv&#39;.</span>
+<span class="c1"># The shape is (4, 3, 3, 16). Let&#39;s treat the first three axes (4*3*3=36)</span>
+<span class="c1"># as the &#39;reduction&#39; dimension and the last axis (16) as the &#39;output&#39; dimension.</span>
+
+<span class="c1">#  Define the corresponding MuonDimensionNumbers for the selected tensors.</span>
+<span class="c1">#  The structure must match parameters. Use None for non-Muon params.</span>
+<span class="n">weight_dim_nums</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;layer1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">MuonDimensionNumbers</span><span class="p">((</span><span class="mi">0</span><span class="p">,),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)),</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+    <span class="s2">&quot;layer2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+    <span class="s2">&quot;layer3_conv&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">MuonDimensionNumbers</span><span class="p">(</span>
+            <span class="n">reduction_axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">output_axis</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+        <span class="p">),</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">muon</span><span class="p">(</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">muon_weight_dimension_numbers</span><span class="o">=</span><span class="n">weight_dim_nums</span>
+<span class="p">)</span>
+<span class="n">opt_state</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">print_state</span><span class="p">(</span><span class="n">opt_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State variables using the muon transform ---------------------------
+{&quot;.inner_state[0].mu[&#39;layer1&#39;][&#39;w&#39;]&quot;: &#39;MUON&#39;,
+ &quot;.inner_state[0].mu[&#39;layer3_conv&#39;][&#39;w&#39;]&quot;: &#39;MUON&#39;}
+
+State variables using the adam transform ---------------------------
+{&quot;.inner_state[0].mu[&#39;layer1&#39;][&#39;b&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].mu[&#39;layer2&#39;][&#39;w&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].nu[&#39;layer1&#39;][&#39;b&#39;]&quot;: &#39;ADAM&#39;,
+ &quot;.inner_state[0].nu[&#39;layer2&#39;][&#39;w&#39;]&quot;: &#39;ADAM&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="differentially_private_sgd.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Differentially private convolutional neural network on MNIST.</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="reduce_on_plateau.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Reduce on Plateau Learning Rate Scheduler</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-muon-configuration">1. Default Muon Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-muon-weight-dimension-numbers-for-explicit-selection-and-higher-rank-tensors">2. Using <code class="docutils literal notranslate"><span class="pre">muon_weight_dimension_numbers</span></code> for Explicit Selection and Higher-Rank Tensors</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Optax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2021, DeepMind.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

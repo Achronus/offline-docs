@@ -1,0 +1,1025 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Character-level Transformer on Tiny Shakespeare &#8212; Optax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx_contributors.css?v=fe9086e2" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/katex-math.css?v=05624691" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=1d6acab0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../_static/katex.min.js?v=5cc8ed51"></script>
+    <script src="../../_static/auto-render.min.js?v=af98beb9"></script>
+    <script src="../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_collections/examples/nanolm';</script>
+    <link rel="icon" href="../../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Optimistic Gradient Descent in a Bilinear Min-Max Problem" href="ogda_example.html" />
+    <link rel="prev" title="MLP MNIST" href="mlp_mnist.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  <script async type="text/javascript" src="/sources/optax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="optax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_collections/examples/nanolm.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="Optax  documentation - Home"/>
+    <img src="../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="Optax  documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">🚀 Getting started</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../gallery.html">🖼️ Example gallery</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="README.html">Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="adversarial_training.html">Adversarial training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cifar10_resnet.html">ResNet on CIFAR10 with Flax NNX and Optax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flax_example.html">Simple NN with Flax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="freezing_parameters.html">Freezing Parameters in Optax</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="gradient_accumulation.html">Gradient Accumulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gradient_accumulation_and_microbatching.html">Summary</a></li>
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="lbfgs.html">L-BFGS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linear_assignment_problem.html">Linear assignment problem</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="lookahead_mnist.html">Lookahead Optimizer on MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="meta_learning.html">Meta-Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mlp_mnist.html">MLP MNIST</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Character-level Transformer on Tiny Shakespeare</a></li>
+
+
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="ogda_example.html">Optimistic Gradient Descent in a Bilinear Min-Max Problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="perturbations.html">Perturbed optimizers</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="contrib/README.html">Contrib Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="contrib/differentially_private_sgd.html">Differentially private convolutional neural network on MNIST.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contrib/muon.html">Using the Muon Optimizer in Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contrib/reduce_on_plateau.html">Reduce on Plateau Learning Rate Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contrib/rosenbrock_ademamix.html">Recreate AdeMAMix Rosenbrock Plot from Paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contrib/sam.html">Sharpness-Aware Minimization (SAM)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">🛠️ Development</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../api/assignment.html">Assignment problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/combining_optimizers.html">Combining Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/optimizer_wrappers.html">Optimizer Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/optimizer_schedules.html">Optimizer Schedules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/apply_updates.html">Apply Updates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/perturbations.html">Perturbations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/losses.html">Losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/utilities.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/microbatching.html">Microbatching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/contrib.html">🔧 Contrib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/experimental.html">🧪 Experimental</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google-deepmind/optax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/_collections/examples/nanolm.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Character-level Transformer on Tiny Shakespeare</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Character-level Transformer on Tiny Shakespeare</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#hyperparameters-and-dataset-download">Hyperparameters and dataset download</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preparation">Data preparation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#nanolm-model-definition">NanoLM Model Definition</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#state-optimizer-and-loss-definition">State, Optimizer, and Loss Definition</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#model-training">Model training</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#text-generation">Text generation</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="character-level-transformer-on-tiny-shakespeare">
+<h1>Character-level Transformer on Tiny Shakespeare<a class="headerlink" href="#character-level-transformer-on-tiny-shakespeare" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://colab.sandbox.google.com/github/google-deepmind/optax/blob/main/examples/nanolm.ipynb"><img alt="Open in Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>This example demonstrates how to train a small-scale transformer-based language model (inspired by NanoGPT) on the Tiny Shakespeare dataset.  The core idea is to train a model that can predict the next character in a sequence of text based on the characters that came before it.</p>
+<p><strong>Why the Tiny Shakespeare Dataset?</strong></p>
+<ul class="simple">
+<li><p><strong>Manageable Size:</strong>  Since we’re building a small-scale model, the Tiny Shakespeare dataset provides a suitable training corpus without overwhelming computational resources.</p></li>
+<li><p><strong>Linguistic Complexity:</strong> Shakespeare’s works offer a rich vocabulary and interesting grammatical patterns, making the dataset a good testbed for our model’s language learning abilities.</p></li>
+<li><p><strong>Accessibility:</strong> Easily accessible through <a class="reference external" href="https://www.tensorflow.org/datasets">TensorFlow Datasets</a>.</p></li>
+</ul>
+<p><strong>Libraries Used</strong></p>
+<ul class="simple">
+<li><p><strong>JAX:</strong> Provides the foundation for numerical computations and automatic differentiation.</p></li>
+<li><p><strong>Tensorflow Datasets (<code class="docutils literal notranslate"><span class="pre">tfds</span></code>)</strong> Offers easy access to the Tiny Shakespeare dataset.</p></li>
+<li><p><strong>Flax’s Linen Module:</strong> Provides building blocks for defining our neural network architecture.</p></li>
+<li><p><strong>Optax:</strong> Contains a library of optimization algorithms for training the model’s parameters. In this example we’ll use the <a class="reference internal" href="../../api/optimizers.html#optax.adamw" title="optax.adamw"><code class="xref py py-func docutils literal notranslate"><span class="pre">optax.adamw()</span></code></a> solver.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">flax.linen</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow_datasets</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tfds</span>
+
+<span class="c1"># platform check</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JAX running on&quot;</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>JAX running on GPU
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="hyperparameters-and-dataset-download">
+<h1>Hyperparameters and dataset download<a class="headerlink" href="#hyperparameters-and-dataset-download" title="Link to this heading">#</a></h1>
+<p>Next, we set some important hyperparameters. This includes hyperparameters for the training process such as the learning rate <code class="docutils literal notranslate"><span class="pre">LEARNING_RATE</span></code> and the batch size <code class="docutils literal notranslate"><span class="pre">BATCH_SIZE</span></code>, as well as model parameters such as the context window size <code class="docutils literal notranslate"><span class="pre">BLOCK_SIZE</span></code> and the number of layers <code class="docutils literal notranslate"><span class="pre">NUM_LAYERS</span></code>.</p>
+<p>After setting these, we load the Tiny Shakespeare dataset and print the length of the training set, which is around one million characters, and that of the validation set (around 50k characters). Finally, we print a small snippet of the train set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @markdown Random seed:</span>
+<span class="n">SEED</span> <span class="o">=</span> <span class="mi">42</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Learning rate passed to the optimizer:</span>
+<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">5e-3</span> <span class="c1"># @param{type:&quot;number&quot;}</span>
+<span class="c1"># @markdown Batch size:</span>
+<span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">128</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Number of training iterations:</span>
+<span class="n">N_ITERATIONS</span> <span class="o">=</span> <span class="mi">50_000</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Number of training iterations between two consecutive evaluations:</span>
+<span class="n">N_FREQ_EVAL</span> <span class="o">=</span> <span class="mi">2_000</span> <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Rate for dropout in the transformer model</span>
+<span class="n">DROPOUT_RATE</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># @param{type:&quot;number&quot;}</span>
+<span class="c1"># @markdown Context window for the transformer model</span>
+<span class="n">BLOCK_SIZE</span> <span class="o">=</span> <span class="mi">64</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Number of layer for the transformer model</span>
+<span class="n">NUM_LAYERS</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Size of the embedding for the transformer model</span>
+<span class="n">EMBED_SIZE</span> <span class="o">=</span> <span class="mi">256</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Number of heads for the transformer model</span>
+<span class="n">NUM_HEADS</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Size of the heads for the transformer model</span>
+<span class="n">HEAD_SIZE</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">tfds</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;tiny_shakespeare&quot;</span><span class="p">)</span>
+
+<span class="c1"># combine train and test examples into a single string</span>
+<span class="n">text_train</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">as_numpy_iterator</span><span class="p">():</span>
+  <span class="n">text_train</span> <span class="o">+=</span> <span class="n">example</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+
+<span class="c1"># similarly, create a single string for validation</span>
+<span class="n">text_validation</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;validation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">as_numpy_iterator</span><span class="p">():</span>
+  <span class="n">text_validation</span> <span class="o">+=</span> <span class="n">example</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Length of text for training: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">text_train</span><span class="p">)</span><span class="si">:</span><span class="s2">_</span><span class="si">}</span><span class="s2"> characters&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Length of text for validation: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">text_validation</span><span class="p">)</span><span class="si">:</span><span class="s2">_</span><span class="si">}</span><span class="s2"> characters&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Length of text for training: 1_059_624 characters
+Length of text for validation: 55_770 characters
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># small sample of the train set</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">text_train</span><span class="p">[:</span><span class="mi">1000</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>First Citizen:
+Before we proceed any further, hear me speak.
+
+All:
+Speak, speak.
+
+First Citizen:
+You are all resolved rather to die than to famish?
+
+All:
+Resolved. resolved.
+
+First Citizen:
+First, you know Caius Marcius is chief enemy to the people.
+
+All:
+We know&#39;t, we know&#39;t.
+
+First Citizen:
+Let us kill him, and we&#39;ll have corn at our own price.
+Is&#39;t a verdict?
+
+All:
+No more talking on&#39;t; let it be done: away, away!
+
+Second Citizen:
+One word, good citizens.
+
+First Citizen:
+We are accounted poor citizens, the patricians good.
+What authority surfeits on would relieve us: if they
+would yield us but the superfluity, while it were
+wholesome, we might guess they relieved us humanely;
+but they think we are too dear: the leanness that
+afflicts us, the object of our misery, is as an
+inventory to particularise their abundance; our
+sufferance is a gain to them Let us revenge this with
+our pikes, ere we become rakes: for the gods know I
+speak this in hunger for bread, not in thirst for revenge.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="data-preparation">
+<h1>Data preparation<a class="headerlink" href="#data-preparation" title="Link to this heading">#</a></h1>
+<p>To prepare the data for the model, we first create a vocabulary consisting of all the unique characters in the dataset. We print that vocabulary and its size.</p>
+<p>We then define encoding and decoding functions to convert text into sequences of integers (representing our characters) and vice versa.</p>
+<p>Finally, we define a function <code class="docutils literal notranslate"><span class="pre">get_batch</span></code> that returns random mini-batches of data. This function uses JAX’s <a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.lax.dynamic_slice.html#jax.lax.dynamic_slice" title="(in JAX)"><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.lax.dynamic_slice()</span></code></a> function to efficiently handle sequences of varying lengths within batches. The <code class="docutils literal notranslate"><span class="pre">&#64;jax.jit</span></code> decorator compiles this function for faster execution. The function randomly samples a batch from the data and prepares input sequences (<code class="docutils literal notranslate"><span class="pre">x</span></code>) and target sequences (<code class="docutils literal notranslate"><span class="pre">y</span></code>). The target sequence is simply the input sequence shifted by one position, as the goal of the language model is to predict the next character given the previous ones.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vocab</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">text_train</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Vocabulary:, &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">vocab</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Length of vocabulary: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vocab</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Vocabulary:,  
+ !$&amp;&#39;,-.3:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+Length of vocabulary:  65
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a mapping from characters to integers</span>
+<span class="n">stoi</span> <span class="o">=</span> <span class="p">{</span><span class="n">ch</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vocab</span><span class="p">)}</span>
+<span class="n">itos</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">ch</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vocab</span><span class="p">)}</span>
+<span class="n">encode</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="p">[</span>
+    <span class="n">stoi</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span>
+<span class="p">]</span>  <span class="c1"># encoder: take a string, output a list of integers</span>
+<span class="n">decode</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">itos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">l</span><span class="p">]</span>
+<span class="p">)</span>  <span class="c1"># decoder: take a list of integers, output a string</span>
+
+<span class="c1"># encode train and validation data</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">encode</span><span class="p">(</span><span class="n">text_train</span><span class="p">))</span>
+<span class="n">eval_data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">encode</span><span class="p">(</span><span class="n">text_validation</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dynamic_slice_vmap</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">dynamic_slice</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+
+
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_batch</span><span class="p">(</span><span class="n">random_key</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Prepares a random batch of training data.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">      random_key: A random seed for sampling a batch.</span>
+<span class="sd">      data: The complete training dataset.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">      x: Input sequences.</span>
+<span class="sd">      y: Target sequences (shifted inputs).</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">ix</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span>
+      <span class="n">random_key</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">minval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="n">BLOCK_SIZE</span>
+  <span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">dynamic_slice_vmap</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="p">(</span><span class="n">BLOCK_SIZE</span><span class="p">,))</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">dynamic_slice_vmap</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ix</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">BLOCK_SIZE</span><span class="p">,))</span>
+  <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="nanolm-model-definition">
+<h1>NanoLM Model Definition<a class="headerlink" href="#nanolm-model-definition" title="Link to this heading">#</a></h1>
+<p>The NanoLM model itself is defined as a Flax Linen module.  The core of the model is a Transformer architecture, designed for sequence-to-sequence tasks like language modeling. Key parameters of the model, such as the number of layers, attention heads, and embedding size, are specified here.</p>
+<p>Inside the model’s <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method, we first embed our input characters into vector representations. Positional embeddings are added to provide the model with a sense of order in the sequence. The core of the Transformer consists of multiple layers. Each layer has two main components:</p>
+<ul class="simple">
+<li><p><strong>Multi-Head Attention</strong>: This mechanism allows the model to “attend” to different parts of the input sequence, improving its understanding of context and relationships within the text. In the code this is implemented through the <code class="xref py py-class docutils literal notranslate"><span class="pre">flax.linen.MultiHeadDotProductAttention</span></code> class.</p></li>
+<li><p><strong>Feedforward Network</strong>: This network processes the output of the attention layer, applying non-linear transformations to further learn complex patterns in the data. This is implemented through the <code class="xref py py-class docutils literal notranslate"><span class="pre">flax.linen.Sequential</span></code> class.</p></li>
+</ul>
+<p>Normalization and dropout (for regularization) are used within the layers to improve training stability.  Finally, a dense layer maps the model’s output to the vocabulary size, producing probabilities for each character as the next potential character.</p>
+<p>The generate function enables the model to create new text sequences. It iteratively generates one character at a time, conditioned on the previously generated text.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NanoLM</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;NanoLM model.&quot;&quot;&quot;</span>
+  <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span>
+  <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span>
+  <span class="n">num_heads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
+  <span class="n">head_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">32</span>
+  <span class="n">dropout_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span>
+  <span class="n">embed_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span>
+  <span class="n">block_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <span class="n">seq_len</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_size</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embed</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_size</span>
+    <span class="p">)(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">seq_len</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span><span class="p">):</span>
+      <span class="n">x_norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">nn</span><span class="o">.</span><span class="n">MultiHeadDotProductAttention</span><span class="p">(</span>
+          <span class="n">num_heads</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span>
+          <span class="n">qkv_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">head_size</span><span class="p">,</span>
+          <span class="n">out_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">head_size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span>
+          <span class="n">dropout_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout_rate</span><span class="p">,</span>
+      <span class="p">)(</span>
+          <span class="n">x_norm</span><span class="p">,</span>
+          <span class="n">x_norm</span><span class="p">,</span>
+          <span class="n">mask</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]))),</span>
+          <span class="n">deterministic</span><span class="o">=</span><span class="ow">not</span> <span class="n">training</span><span class="p">,</span>
+      <span class="p">)</span>
+
+      <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span>
+          <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_size</span><span class="p">),</span>
+          <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">,</span>
+          <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout_rate</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="ow">not</span> <span class="n">training</span><span class="p">),</span>
+          <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_size</span><span class="p">),</span>
+      <span class="p">])(</span><span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">()(</span><span class="n">x</span><span class="p">))</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+  <span class="nd">@functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="s2">&quot;length&quot;</span><span class="p">))</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_scan_generate</span><span class="p">(</span><span class="n">carry</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+      <span class="n">random_key</span><span class="p">,</span> <span class="n">context</span> <span class="o">=</span> <span class="n">carry</span>
+      <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+      <span class="n">rng</span><span class="p">,</span> <span class="n">rng_subkey</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">random_key</span><span class="p">)</span>
+      <span class="n">new_token</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">categorical</span><span class="p">(</span>
+          <span class="n">rng_subkey</span><span class="p">,</span> <span class="n">logits</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="p">)</span>
+      <span class="n">context</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">context</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:],</span> <span class="n">new_token</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+      <span class="k">return</span> <span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">context</span><span class="p">),</span> <span class="n">new_token</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">new_tokens</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span>
+        <span class="n">_scan_generate</span><span class="p">,</span>
+        <span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">int32</span><span class="p">)),</span>
+        <span class="p">(),</span>
+        <span class="n">length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_tokens</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="state-optimizer-and-loss-definition">
+<h1>State, Optimizer, and Loss Definition<a class="headerlink" href="#state-optimizer-and-loss-definition" title="Link to this heading">#</a></h1>
+<p>This section initializes the model’s parameters, defines the loss function used for language modeling, and sets up the training and evaluation processes.</p>
+<p>In this case the loss function <code class="docutils literal notranslate"><span class="pre">loss_fun</span></code> is the cross-entropy. It uses dropout for regularization, introduced via the <code class="docutils literal notranslate"><span class="pre">rngs={&quot;dropout&quot;:</span> <span class="pre">dropout_key}</span></code> argument. We also define a function for evaluating the model’s performance on unseen data (<code class="docutils literal notranslate"><span class="pre">eval_step</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">NanoLM</span><span class="p">(</span>
+    <span class="n">vocab_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">vocab</span><span class="p">),</span>
+    <span class="n">num_layers</span><span class="o">=</span><span class="n">NUM_LAYERS</span><span class="p">,</span>
+    <span class="n">num_heads</span><span class="o">=</span><span class="n">NUM_HEADS</span><span class="p">,</span>
+    <span class="n">head_size</span><span class="o">=</span><span class="n">HEAD_SIZE</span><span class="p">,</span>
+    <span class="n">dropout_rate</span><span class="o">=</span><span class="n">DROPOUT_RATE</span><span class="p">,</span>
+    <span class="n">embed_size</span><span class="o">=</span><span class="n">EMBED_SIZE</span><span class="p">,</span>
+    <span class="n">block_size</span><span class="o">=</span><span class="n">BLOCK_SIZE</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fun</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dropout_key</span><span class="p">):</span>
+  <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dropout&quot;</span><span class="p">:</span> <span class="n">dropout_key</span><span class="p">})</span>
+  <span class="k">return</span> <span class="n">optax</span><span class="o">.</span><span class="n">softmax_cross_entropy_with_integer_labels</span><span class="p">(</span>
+      <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">y</span>
+  <span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">eval_step</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+  <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">optax</span><span class="o">.</span><span class="n">softmax_cross_entropy_with_integer_labels</span><span class="p">(</span>
+      <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">y</span>
+  <span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">key</span><span class="p">,</span> <span class="n">subkey</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+<span class="n">var_params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">,</span>
+    <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+    <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We’ve now instantiated a NanoLM model with the following number of parameters</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">var_params</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total number of parameters: </span><span class="si">{</span><span class="n">n_params</span><span class="si">:</span><span class="s2">_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total number of parameters: 3_408_513
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="model-training">
+<h1>Model training<a class="headerlink" href="#model-training" title="Link to this heading">#</a></h1>
+<p>We start by creating an optimizer and instantiating its state. In this case we’ll use <a class="reference internal" href="../../api/optimizers.html#optax.adamw" title="optax.adamw"><code class="xref py py-func docutils literal notranslate"><span class="pre">optax.adamw()</span></code></a> but it’s possible to replace this with other optax optimizers.</p>
+<p>We then proceeded to the training loop. For maximum efficiency we extracted the most computationally intensive tasks inside the <code class="docutils literal notranslate"><span class="pre">step</span></code> function and just-in-time compile this function using <code class="docutils literal notranslate"><span class="pre">&#64;jax.jit</span></code>. This allows JAX to perform some optimizations in our code and generally achieve a much higher efficiency than without.</p>
+<p>Inside the training loop, we call the aforementioned <code class="docutils literal notranslate"><span class="pre">step</span></code> functions, as well as computing accuracy on a validation set every <code class="docutils literal notranslate"><span class="pre">N_FREQ_EVAL</span></code> iterations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># To run with SGD instead of adam, replace `adam` with `sgd`</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">adamw</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
+
+<span class="n">opt_state</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">var_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">time</span>
+
+<span class="n">all_train_losses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">all_eval_losses</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># we define one iteration of the optimizer and JIT this function</span>
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">):</span>
+  <span class="n">key</span><span class="p">,</span> <span class="n">subkey</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+  <span class="n">batch</span> <span class="o">=</span> <span class="n">get_batch</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">train_data</span><span class="p">)</span>
+  <span class="n">loss</span><span class="p">,</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">loss_fun</span><span class="p">)(</span><span class="n">params</span><span class="p">,</span> <span class="o">*</span><span class="n">batch</span><span class="p">,</span> <span class="n">subkey</span><span class="p">)</span>
+  <span class="n">updates</span><span class="p">,</span> <span class="n">opt_state</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+  <span class="n">params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">apply_updates</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">params</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">loss</span>
+
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_ITERATIONS</span><span class="p">):</span>
+  <span class="n">var_params</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">step</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">var_params</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">)</span>
+  <span class="n">all_train_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+
+  <span class="c1"># once every N_FREQ_EVAL we compute loss on the validation set</span>
+  <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="n">N_FREQ_EVAL</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">key</span><span class="p">,</span> <span class="n">subkey</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="n">eval_loss</span> <span class="o">=</span> <span class="n">eval_step</span><span class="p">(</span><span class="n">var_params</span><span class="p">,</span> <span class="o">*</span><span class="n">get_batch</span><span class="p">(</span><span class="n">subkey</span><span class="p">,</span> <span class="n">eval_data</span><span class="p">))</span>
+    <span class="n">all_eval_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eval_loss</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="se">\t</span><span class="s2"> train loss: </span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="se">\t</span><span class="s2"> eval loss: </span><span class="si">{</span><span class="n">eval_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step: 0	 train loss: 4.586461067199707	 eval loss: 6.037547588348389
+Step: 2000	 train loss: 1.3876519203186035	 eval loss: 1.4252502918243408
+Step: 4000	 train loss: 1.280821442604065	 eval loss: 1.4000993967056274
+Step: 6000	 train loss: 1.1978516578674316	 eval loss: 1.4045076370239258
+Step: 8000	 train loss: 1.177159070968628	 eval loss: 1.387284278869629
+Step: 10000	 train loss: 1.1472305059432983	 eval loss: 1.423332929611206
+Step: 12000	 train loss: 1.107376217842102	 eval loss: 1.4390857219696045
+Step: 14000	 train loss: 1.096900224685669	 eval loss: 1.474606990814209
+Step: 16000	 train loss: 1.0772775411605835	 eval loss: 1.4595460891723633
+Step: 18000	 train loss: 1.050074577331543	 eval loss: 1.4540534019470215
+Step: 20000	 train loss: 1.0540519952774048	 eval loss: 1.4794009923934937
+Step: 22000	 train loss: 1.035787582397461	 eval loss: 1.5094046592712402
+Step: 24000	 train loss: 1.0402700901031494	 eval loss: 1.5403311252593994
+Step: 26000	 train loss: 1.0363699197769165	 eval loss: 1.5168808698654175
+Step: 28000	 train loss: 1.0000224113464355	 eval loss: 1.5624736547470093
+Step: 30000	 train loss: 0.9905486106872559	 eval loss: 1.5720288753509521
+Step: 32000	 train loss: 0.9986284971237183	 eval loss: 1.526949167251587
+Step: 34000	 train loss: 0.9822986125946045	 eval loss: 1.5732147693634033
+Step: 36000	 train loss: 0.9837050437927246	 eval loss: 1.6341228485107422
+Step: 38000	 train loss: 0.9723658561706543	 eval loss: 1.542256474494934
+Step: 40000	 train loss: 0.9632444977760315	 eval loss: 1.5658419132232666
+Step: 42000	 train loss: 0.9664344787597656	 eval loss: 1.6112396717071533
+Step: 44000	 train loss: 0.9476494789123535	 eval loss: 1.6128767728805542
+Step: 46000	 train loss: 0.9473679065704346	 eval loss: 1.5689520835876465
+Step: 48000	 train loss: 0.9642226696014404	 eval loss: 1.5935924053192139
+CPU times: user 15min 19s, sys: 9min 8s, total: 24min 27s
+Wall time: 22min 48s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Convergence of adamw (train loss)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">all_train_losses</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_eval_losses</span><span class="p">)</span> <span class="o">*</span> <span class="n">N_FREQ_EVAL</span><span class="p">,</span> <span class="n">N_FREQ_EVAL</span><span class="p">),</span>
+    <span class="n">all_eval_losses</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span>
+    <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;steps&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/44394d62237b861d5ef5e9377a8e0b77ea6578dc74ad86a064ab9462a9b7f618.png" src="../../_images/44394d62237b861d5ef5e9377a8e0b77ea6578dc74ad86a064ab9462a9b7f618.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="text-generation">
+<h1>Text generation<a class="headerlink" href="#text-generation" title="Link to this heading">#</a></h1>
+<p>Finally, after training, we use the generate function to let the NanoGPT model demonstrate its ability to create text that resembles Shakespeare, albeit in a miniature form.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s now generate some text</span>
+<span class="n">key</span><span class="p">,</span> <span class="n">subkey</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">var_params</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">decode</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GREMIO:
+So called, officer:
+Peace, for me would be a mighty heart, and I&#39;ll do
+any good.
+
+MERCUTIO:
+Ay, look&#39;d dead made.
+
+VALERIA:
+Rather is in the present book of love
+Than piece thy thoughts to shame, but yet book known
+Where my Edward, whom I so could do it to him;
+And see how the government of your blood,
+Congeal&#39;d your kingdom then we resign your highness;
+Unless you scarcely know how I came, his wife;
+And I may contain a little of England&#39;s heart
+After a king of disdain! supect, tribunes,
+The sun under thine is too large:
+The senators do add to their trenches stretch&#39;d,
+With such as a toy, or be it known, I would
+See my shame home, sweet friends, we are too dear:
+Tell me consul, what&#39;s become the soldiers?
+
+SOMERSET:
+So fled; alas! much is possess&#39;d by this means?
+Away with the nightingale. He hast he wounded his sceptre
+And hide his heir: go hence, to have his hearts
+To close our bloods, for the climate to be
+Ere one would be so often been seen, a greater stranger
+Can have you 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="mlp_mnist.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">MLP MNIST</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ogda_example.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Optimistic Gradient Descent in a Bilinear Min-Max Problem</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Character-level Transformer on Tiny Shakespeare</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#hyperparameters-and-dataset-download">Hyperparameters and dataset download</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-preparation">Data preparation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#nanolm-model-definition">NanoLM Model Definition</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#state-optimizer-and-loss-definition">State, Optimizer, and Loss Definition</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#model-training">Model training</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#text-generation">Text generation</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Optax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2021, DeepMind.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

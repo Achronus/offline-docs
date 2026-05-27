@@ -1,0 +1,1331 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Optimizer Schedules &#8212; Optax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_contributors.css?v=fe9086e2" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/katex-math.css?v=05624691" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1d6acab0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/katex.min.js?v=5cc8ed51"></script>
+    <script src="../_static/auto-render.min.js?v=af98beb9"></script>
+    <script src="../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/optimizer_schedules';</script>
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Apply Updates" href="apply_updates.html" />
+    <link rel="prev" title="Optimizer Wrappers" href="optimizer_wrappers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  <script async type="text/javascript" src="/sources/optax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="optax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/api/optimizer_schedules.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt="Optax  documentation - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="Optax  documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">🚀 Getting started</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../gallery.html">🖼️ Example gallery</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../_collections/examples/README.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/adversarial_training.html">Adversarial training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/cifar10_resnet.html">ResNet on CIFAR10 with Flax NNX and Optax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/flax_example.html">Simple NN with Flax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/freezing_parameters.html">Freezing Parameters in Optax</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/gradient_accumulation.html">Gradient Accumulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/gradient_accumulation_and_microbatching.html">Summary</a></li>
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/lbfgs.html">L-BFGS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/linear_assignment_problem.html">Linear assignment problem</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/lookahead_mnist.html">Lookahead Optimizer on MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/meta_learning.html">Meta-Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/mlp_mnist.html">MLP MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/nanolm.html">Character-level Transformer on Tiny Shakespeare</a></li>
+
+
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/ogda_example.html">Optimistic Gradient Descent in a Bilinear Min-Max Problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/perturbations.html">Perturbed optimizers</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../_collections/examples/contrib/README.html">Contrib Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/differentially_private_sgd.html">Differentially private convolutional neural network on MNIST.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/muon.html">Using the Muon Optimizer in Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/reduce_on_plateau.html">Reduce on Plateau Learning Rate Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/rosenbrock_ademamix.html">Recreate AdeMAMix Rosenbrock Plot from Paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/sam.html">Sharpness-Aware Minimization (SAM)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">🛠️ Development</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="assignment.html">Assignment problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combining_optimizers.html">Combining Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizer_wrappers.html">Optimizer Wrappers</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Optimizer Schedules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apply_updates.html">Apply Updates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losses.html">Losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microbatching.html">Microbatching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">🔧 Contrib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimental.html">🧪 Experimental</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google-deepmind/optax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/optimizer_schedules.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Optimizer Schedules</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.Schedule"><code class="docutils literal notranslate"><span class="pre">Schedule</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-schedule">Constant schedule</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.constant_schedule"><code class="docutils literal notranslate"><span class="pre">constant_schedule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.warmup_constant_schedule"><code class="docutils literal notranslate"><span class="pre">warmup_constant_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cosine-decay-schedule">Cosine decay schedule</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.cosine_decay_schedule"><code class="docutils literal notranslate"><span class="pre">cosine_decay_schedule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.cosine_onecycle_schedule"><code class="docutils literal notranslate"><span class="pre">cosine_onecycle_schedule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.warmup_cosine_decay_schedule"><code class="docutils literal notranslate"><span class="pre">warmup_cosine_decay_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exponential-decay-schedule">Exponential decay schedule</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.exponential_decay"><code class="docutils literal notranslate"><span class="pre">exponential_decay()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.warmup_exponential_decay_schedule"><code class="docutils literal notranslate"><span class="pre">warmup_exponential_decay_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#join-schedules">Join schedules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.join_schedules"><code class="docutils literal notranslate"><span class="pre">join_schedules()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inject-hyperparameters">Inject hyperparameters</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.inject_hyperparams"><code class="docutils literal notranslate"><span class="pre">inject_hyperparams()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.InjectHyperparamsState"><code class="docutils literal notranslate"><span class="pre">InjectHyperparamsState</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-schedules">Linear schedules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.linear_onecycle_schedule"><code class="docutils literal notranslate"><span class="pre">linear_onecycle_schedule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.linear_schedule"><code class="docutils literal notranslate"><span class="pre">linear_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#piecewise-schedules">Piecewise schedules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.piecewise_constant_schedule"><code class="docutils literal notranslate"><span class="pre">piecewise_constant_schedule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.piecewise_interpolate_schedule"><code class="docutils literal notranslate"><span class="pre">piecewise_interpolate_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#polynomial-schedules">Polynomial schedules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.polynomial_schedule"><code class="docutils literal notranslate"><span class="pre">polynomial_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduce-on-plateau">Reduce on plateau</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.contrib.reduce_on_plateau"><code class="docutils literal notranslate"><span class="pre">reduce_on_plateau()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#warm-restarts">Warm restarts</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.sgdr_schedule"><code class="docutils literal notranslate"><span class="pre">sgdr_schedule()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="optimizer-schedules">
+<h1>Optimizer Schedules<a class="headerlink" href="#optimizer-schedules" title="Link to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.schedules.constant_schedule" title="optax.schedules.constant_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">constant_schedule</span></code></a>(value)</p></td>
+<td><p>Constructs a constant schedule.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.schedules.cosine_decay_schedule" title="optax.schedules.cosine_decay_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cosine_decay_schedule</span></code></a>(init_value, decay_steps)</p></td>
+<td><p>Returns a function which implements cosine learning rate decay.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.schedules.cosine_onecycle_schedule" title="optax.schedules.cosine_onecycle_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cosine_onecycle_schedule</span></code></a>(transition_steps, ...)</p></td>
+<td><p>Returns a function which implements the onecycle learning rate schedule.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.schedules.exponential_decay" title="optax.schedules.exponential_decay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exponential_decay</span></code></a>(init_value, ...[, ...])</p></td>
+<td><p>Constructs a schedule with either continuous or discrete exponential decay.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.schedules.join_schedules" title="optax.schedules.join_schedules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">join_schedules</span></code></a>(schedules, boundaries)</p></td>
+<td><p>Sequentially apply multiple schedules.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.schedules.linear_onecycle_schedule" title="optax.schedules.linear_onecycle_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_onecycle_schedule</span></code></a>(transition_steps, ...)</p></td>
+<td><p>Returns a learning rate with three linear phases.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.schedules.linear_schedule" title="optax.schedules.linear_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_schedule</span></code></a>(init_value, end_value, ...)</p></td>
+<td><p>Schedule with linear transition from <code class="docutils literal notranslate"><span class="pre">init_value</span></code> to <code class="docutils literal notranslate"><span class="pre">end_value</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.schedules.piecewise_constant_schedule" title="optax.schedules.piecewise_constant_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">piecewise_constant_schedule</span></code></a>(init_value[, ...])</p></td>
+<td><p>Piecewise constant schedule with scaled jumps at specific boundaries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.schedules.piecewise_interpolate_schedule" title="optax.schedules.piecewise_interpolate_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">piecewise_interpolate_schedule</span></code></a>(...[, ...])</p></td>
+<td><p>Piecewise interpolated schedule with linear or cosine transitions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.schedules.polynomial_schedule" title="optax.schedules.polynomial_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">polynomial_schedule</span></code></a>(init_value, end_value, ...)</p></td>
+<td><p>Constructs a schedule with polynomial transition from init to end value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.schedules.sgdr_schedule" title="optax.schedules.sgdr_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgdr_schedule</span></code></a>(cosine_kwargs)</p></td>
+<td><p>SGD with warm restarts.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.schedules.warmup_constant_schedule" title="optax.schedules.warmup_constant_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">warmup_constant_schedule</span></code></a>(init_value, ...)</p></td>
+<td><p>Linear warmup followed by constant schedule i.e no decay.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.schedules.warmup_cosine_decay_schedule" title="optax.schedules.warmup_cosine_decay_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">warmup_cosine_decay_schedule</span></code></a>(init_value, ...)</p></td>
+<td><p>Linear warmup followed by cosine decay.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.schedules.warmup_exponential_decay_schedule" title="optax.schedules.warmup_exponential_decay_schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">warmup_exponential_decay_schedule</span></code></a>(...[, ...])</p></td>
+<td><p>Linear warmup followed by exponential decay.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.schedules.Schedule" title="optax.schedules.Schedule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Schedule</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.schedules.InjectHyperparamsState" title="optax.schedules.InjectHyperparamsState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InjectHyperparamsState</span></code></a>(count, hyperparams, ...)</p></td>
+<td><p>Deprecated class kept for backwards compatibility.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.schedules.inject_hyperparams" title="optax.schedules.inject_hyperparams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inject_hyperparams</span></code></a>(inner_factory[, ...])</p></td>
+<td><p>Wrapper to injects stateful hyperparameters into GradientTransformations.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.schedules.Schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">Schedule</span></span><a class="headerlink" href="#optax.schedules.Schedule" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.extend.linear_util.Callable.html#jax.extend.linear_util.Callable" title="(in JAX)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.numpy.number.html#jax.numpy.number" title="(in JAX)"><code class="xref py py-class docutils literal notranslate"><span class="pre">number</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">complex</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.numpy.number.html#jax.numpy.number" title="(in JAX)"><code class="xref py py-class docutils literal notranslate"><span class="pre">number</span></code></a> | <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">complex</span></code>]</p>
+</dd></dl>
+
+<section id="constant-schedule">
+<h2>Constant schedule<a class="headerlink" href="#constant-schedule" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.constant_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">constant_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L31#L48"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.constant_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Constructs a constant schedule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – value to be held constant throughout.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">schedule_fn</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">constant_schedule</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schedule_fn</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schedule_fn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.warmup_constant_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">warmup_constant_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L596#L616"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.warmup_constant_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Linear warmup followed by constant schedule i.e no decay.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_value</strong> – Initial value for the scalar to be annealed.</p></li>
+<li><p><strong>peak_value</strong> – Peak value for scalar to be annealed at end of warmup.</p></li>
+<li><p><strong>warmup_steps</strong> – Positive integer, the length of the linear warmup.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="cosine-decay-schedule">
+<h2>Cosine decay schedule<a class="headerlink" href="#cosine-decay-schedule" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.cosine_decay_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">cosine_decay_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L329#L390"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.cosine_decay_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Returns a function which implements cosine learning rate decay.</p>
+<p>This schedule smoothly decreases the learning rate over a specified number of
+steps (<code class="docutils literal notranslate"><span class="pre">decay_steps</span></code>). The decay follows a cosine function, with an optional
+exponent to modify the decay curve. A minimum value (<code class="docutils literal notranslate"><span class="pre">alpha</span></code>) ensures the
+learning rate does not drop entirely to zero.</p>
+<p>More precisely, the learning rate at iteration <span class="math">\(t\)</span> is given by:</p>
+<div class="math">
+\[\begin{cases}
+  \alpha I + (1 - \alpha) I  \left[ \frac{1}{2} \left( 1+ \cos \left( \pi\,\frac{t}{T} \right) \right) \right] ^p  & \text{, if } t \leq T \\
+  \alpha I  & \text{, if } t > T
+\end{cases}
+
+\]</div>
+<p>where <span class="math">\(T\)</span> is the number of decay steps (<code class="docutils literal notranslate"><span class="pre">decay_steps</span></code>), <span class="math">\(p\)</span> is
+the <code class="docutils literal notranslate"><span class="pre">exponent</span></code> and <span class="math">\(I\)</span> is the initial value (<code class="docutils literal notranslate"><span class="pre">init_value</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_value</strong> – An initial value for the learning rate.</p></li>
+<li><p><strong>decay_steps</strong> – Positive integer - the number of steps for which to apply
+the decay for.</p></li>
+<li><p><strong>alpha</strong> – The minimum value of the multiplier used to adjust the
+learning rate. Defaults to 0.0.</p></li>
+<li><p><strong>exponent</strong> – The default decay is <code class="docutils literal notranslate"><span class="pre">0.5</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">cos(pi</span> <span class="pre">*</span> <span class="pre">t/T))</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">t</span></code> is the current timestep and <code class="docutils literal notranslate"><span class="pre">T</span></code> is the <code class="docutils literal notranslate"><span class="pre">decay_steps</span></code>. The
+exponent modifies this to be <code class="docutils literal notranslate"><span class="pre">(0.5</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">cos(pi</span> <span class="pre">*</span> <span class="pre">t/T)))</span> <span class="pre">**</span> <span class="pre">exponent</span></code>.
+Defaults to 1.0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Loshchilov et al., <a class="reference external" href="https://arxiv.org/abs/1608.03983">SGDR: Stochastic Gradient Descent with Warm Restarts</a>, 2017</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.cosine_onecycle_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">cosine_onecycle_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transition_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">div_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_div_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L544#L593"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.cosine_onecycle_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Returns a function which implements the onecycle learning rate schedule.</p>
+<p>This schedule increases the learning rate and then decreases it in a
+cosine-like manner. The number of steps over which the learning rate increases
+is determined by the <code class="docutils literal notranslate"><span class="pre">pct_start</span></code> argument. The maximum value of the learning
+rate is determined by the <code class="docutils literal notranslate"><span class="pre">peak_value</span></code> argument, the initial value of the
+learning rate is determined through the formula <code class="docutils literal notranslate"><span class="pre">init_value</span> <span class="pre">=</span> <span class="pre">peak_value</span> <span class="pre">/</span>
+<span class="pre">div_factor</span></code>, and the final value is determined by the <code class="docutils literal notranslate"><span class="pre">final_div_factor</span></code>
+argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>transition_steps</strong> – Number of steps over which annealing takes place.</p></li>
+<li><p><strong>peak_value</strong> – Maximum value attained by schedule at pct_start percent of the
+cycle (in number of steps).</p></li>
+<li><p><strong>pct_start</strong> – The percentage of the cycle (in number of steps) spent increasing
+the learning rate.</p></li>
+<li><p><strong>div_factor</strong> – Determines the initial value via <code class="docutils literal notranslate"><span class="pre">init_value</span> <span class="pre">=</span> <span class="pre">peak_value</span> <span class="pre">/</span>
+<span class="pre">div_factor</span></code>.</p></li>
+<li><p><strong>final_div_factor</strong> – Determines the final value via <code class="docutils literal notranslate"><span class="pre">final_value</span> <span class="pre">=</span> <span class="pre">init_value</span>
+<span class="pre">/</span> <span class="pre">final_div_factor</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Smith et al, <a class="reference external" href="https://arxiv.org/abs/1708.07120">Super-Convergence: Very Fast Training of Neural Networks Using
+Large Learning Rates</a>, 2017</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.warmup_cosine_decay_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">warmup_cosine_decay_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L619#L659"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.warmup_cosine_decay_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Linear warmup followed by cosine decay.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_value</strong> – Initial value for the scalar to be annealed.</p></li>
+<li><p><strong>peak_value</strong> – Peak value for scalar to be annealed at end of warmup.</p></li>
+<li><p><strong>warmup_steps</strong> – Positive integer, the length of the linear warmup.</p></li>
+<li><p><strong>decay_steps</strong> – Positive integer, the total length of the schedule. Note that
+this includes the warmup time, so the number of steps during which cosine
+annealing is applied is <code class="docutils literal notranslate"><span class="pre">decay_steps</span> <span class="pre">-</span> <span class="pre">warmup_steps</span></code>.</p></li>
+<li><p><strong>end_value</strong> – End value of the scalar to be annealed.</p></li>
+<li><p><strong>exponent</strong> – The default decay is <code class="docutils literal notranslate"><span class="pre">0.5</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">cos(pi</span> <span class="pre">t/T))</span></code>, where <code class="docutils literal notranslate"><span class="pre">t</span></code> is
+the current timestep and <code class="docutils literal notranslate"><span class="pre">T</span></code> is <code class="docutils literal notranslate"><span class="pre">decay_steps</span></code>. The exponent modifies
+this to be <code class="docutils literal notranslate"><span class="pre">(0.5</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">cos(pi</span> <span class="pre">*</span> <span class="pre">t/T)))</span> <span class="pre">**</span> <span class="pre">exponent</span></code>. Defaults to 1.0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="exponential-decay-schedule">
+<h2>Exponential decay schedule<a class="headerlink" href="#exponential-decay-schedule" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.exponential_decay">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">exponential_decay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transition_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transition_begin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">staircase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L251#L326"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.exponential_decay" title="Link to this definition">#</a></dt>
+<dd><p>Constructs a schedule with either continuous or discrete exponential decay.</p>
+<p>This function applies an exponential decay function to a provided initial
+value. When <code class="docutils literal notranslate"><span class="pre">count</span> <span class="pre">&gt;=</span> <span class="pre">transition_begin</span></code> the function returns the decayed
+value as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rate_factor</span> <span class="o">=</span> <span class="p">((</span><span class="n">count</span> <span class="o">-</span> <span class="n">transition_begin</span><span class="p">)</span> <span class="o">/</span> <span class="n">transition_steps</span><span class="p">)</span>
+<span class="n">decayed_value</span> <span class="o">=</span> <span class="n">init_value</span> <span class="o">*</span> <span class="p">(</span><span class="n">decay_rate</span> <span class="o">**</span> <span class="n">rate_factor</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If the argument <code class="docutils literal notranslate"><span class="pre">staircase</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> then <code class="docutils literal notranslate"><span class="pre">count</span> <span class="pre">/</span> <span class="pre">transition_steps</span></code> is
+an integer division and the decayed value follows a staircase function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_value</strong> – the initial learning rate.</p></li>
+<li><p><strong>transition_steps</strong> – must be positive. See the decay computation above.</p></li>
+<li><p><strong>decay_rate</strong> – must not be zero. The decay rate.</p></li>
+<li><p><strong>transition_begin</strong> – must be positive. After how many steps to start annealing
+(before this many steps the scalar value is held fixed at <cite>init_value</cite>).</p></li>
+<li><p><strong>staircase</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, decay the values at discrete intervals.</p></li>
+<li><p><strong>end_value</strong> – the value at which the exponential decay stops. When <code class="docutils literal notranslate"><span class="pre">decay_rate</span>
+<span class="pre">&lt;</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">end_value</span></code> is treated as a lower bound, otherwise as an upper
+bound. Has no effect when <code class="docutils literal notranslate"><span class="pre">decay_rate</span> <span class="pre">=</span> <span class="pre">0</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.warmup_exponential_decay_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">warmup_exponential_decay_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transition_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transition_begin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">staircase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L662#L707"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.warmup_exponential_decay_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Linear warmup followed by exponential decay.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_value</strong> – Initial value for the scalar to be annealed.</p></li>
+<li><p><strong>peak_value</strong> – Peak value for scalar to be annealed at end of warmup.</p></li>
+<li><p><strong>warmup_steps</strong> – Positive integer, the length of the linear warmup.</p></li>
+<li><p><strong>transition_steps</strong> – must be positive.
+See <a class="reference internal" href="#optax.schedules.exponential_decay" title="optax.schedules.exponential_decay"><code class="xref py py-func docutils literal notranslate"><span class="pre">optax.schedules.exponential_decay()</span></code></a> for more details.</p></li>
+<li><p><strong>decay_rate</strong> – must not be zero. The decay rate.</p></li>
+<li><p><strong>transition_begin</strong> – must be positive. After how many steps to start annealing
+(before this many steps the scalar value is held fixed at <code class="docutils literal notranslate"><span class="pre">peak_value</span></code>).</p></li>
+<li><p><strong>staircase</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, decay the values at discrete intervals.</p></li>
+<li><p><strong>end_value</strong> – the value at which the exponential decay stops. When <code class="docutils literal notranslate"><span class="pre">decay_rate</span>
+<span class="pre">&lt;</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">end_value</span></code> is treated as a lower bound, otherwise as an upper
+bound. Has no effect when <code class="docutils literal notranslate"><span class="pre">decay_rate</span> <span class="pre">=</span> <span class="pre">0</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="join-schedules">
+<h2>Join schedules<a class="headerlink" href="#join-schedules" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.join_schedules">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">join_schedules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schedules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">base.Schedule</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_join.py#L24#L47"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.join_schedules" title="Link to this definition">#</a></dt>
+<dd><p>Sequentially apply multiple schedules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schedules</strong> – A list of callables (expected to be optax schedules). Each
+schedule will receive a step count indicating the number of steps since
+the previous boundary transition.</p></li>
+<li><p><strong>boundaries</strong> – A list of integers (of length one less than schedules) that
+indicate when to transition between schedules.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function that maps step counts to values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>schedule</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="inject-hyperparameters">
+<h2>Inject hyperparameters<a class="headerlink" href="#inject-hyperparameters" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.inject_hyperparams">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">inject_hyperparams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inner_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax._src.base.GradientTransformation"><span class="pre">base.GradientTransformation</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparam_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jnp.dtype</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax._src.base.GradientTransformationExtraArgs"><span class="pre">base.GradientTransformationExtraArgs</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_inject.py#L65#L220"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.inject_hyperparams" title="Link to this definition">#</a></dt>
+<dd><p>Wrapper to injects stateful hyperparameters into GradientTransformations.</p>
+<p>This wrapper allows you to pass schedules (i.e. a function that returns a
+numeric value given a step count) instead of constants for
+hyperparameters. You may only schedule numeric hyperparameters (i.e. boolean
+flags cannot be scheduled).</p>
+<p>This function supports both passing simple schedules
+that are function exclusively of the step count and also passing stateful
+schedules that rely on a complex internal state. The state updating can rely
+on additional information fed to gradient transformations via extra_args.</p>
+<p>For example, to use <a class="reference internal" href="transformations.html#optax.scale_by_adam" title="optax.scale_by_adam"><code class="xref py py-func docutils literal notranslate"><span class="pre">optax.scale_by_adam()</span></code></a> with a piecewise linear
+schedule for beta_1 and constant for beta_2:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># create a learning rate that increases linearly from 0.1 to 1.0</span>
+<span class="gp">... </span><span class="c1"># over 100 iterations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">linear_schedule</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">piecewise_interpolate_schedule</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">init_value</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">boundaries_and_scales</span><span class="o">=</span><span class="p">{</span><span class="mi">100</span><span class="p">:</span> <span class="mf">1.</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scheduled_adam</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">inject_hyperparams</span><span class="p">(</span><span class="n">optax</span><span class="o">.</span><span class="n">scale_by_adam</span><span class="p">)(</span>
+<span class="gp">... </span>    <span class="n">b1</span><span class="o">=</span><span class="n">linear_schedule</span><span class="p">,</span> <span class="n">b2</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You may manually change numeric hyperparameters that were not scheduled
+through the <code class="docutils literal notranslate"><span class="pre">hyperparams</span></code> dict in the <a class="reference internal" href="#optax.schedules.InjectHyperparamsState" title="optax.schedules.InjectHyperparamsState"><code class="xref py py-class docutils literal notranslate"><span class="pre">InjectHyperparamsState</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="p">,</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">scheduled_adam</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">updates</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">scheduled_adam</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span><span class="o">.</span><span class="n">hyperparams</span><span class="p">[</span><span class="s1">&#39;b2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.95</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">updates</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">scheduled_adam</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">updates</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>  <span class="c1"># uses b2 = 0.95</span>
+</pre></div>
+</div>
+<p>Manually overriding scheduled hyperparameters will have no effect (e.g.
+in the code sample above, you cannot manually adjust <code class="docutils literal notranslate"><span class="pre">b1</span></code>).</p>
+<p>For mixed precision training, you may want hyperparameters to match a
+specific dtype. To avoid automatic casting to the parameter’s highest
+precision dtype, pass the hyperparameter as a strongly typed JAX array:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">scheduled_adam</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">inject_hyperparams</span><span class="p">(</span><span class="n">optax</span><span class="o">.</span><span class="n">scale_by_adam</span><span class="p">)(</span>
+<span class="gp">... </span>    <span class="n">b1</span><span class="o">=</span><span class="n">linear_schedule</span><span class="p">,</span> <span class="n">b2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inner_factory</strong> – a function that returns the inner
+<code class="docutils literal notranslate"><span class="pre">optax.GradientTransformation</span></code> with dynamic hyperparameters.</p></li>
+<li><p><strong>static_args</strong> – a string or iterable of strings specifying which callable
+parameters are not schedules. inject_hyperparams treats all callables as
+schedules by default, so if a hyperparameter is a non-schedule callable,
+you must specify that using this argument.</p></li>
+<li><p><strong>hyperparam_dtype</strong> – Optional datatype override. If specified, all float
+hyperparameters will be cast to this type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A callable that returns a
+<a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax.GradientTransformationExtraArgs"><code class="xref py py-class docutils literal notranslate"><span class="pre">optax.GradientTransformationExtraArgs</span></code></a>. This callable accepts
+the same arguments as <code class="docutils literal notranslate"><span class="pre">inner_factory</span></code>, except you may provide schedules
+in place of the constant arguments.</p>
+</dd>
+</dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.1.9: </span>New parameter <code class="docutils literal notranslate"><span class="pre">hyperparam_dtype</span></code>, the returned callable outputs a
+<code class="docutils literal notranslate"><span class="pre">GradientTransformationExtraArgs</span></code> instead of a <code class="docutils literal notranslate"><span class="pre">GradientTransformation</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="optax.schedules.InjectHyperparamsState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">InjectHyperparamsState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jnp.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparams</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">jax.typing.ArrayLike</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">base.OptState</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_inject.py#L44#L53"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.InjectHyperparamsState" title="Link to this definition">#</a></dt>
+<dd><p>Deprecated class kept for backwards compatibility.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1.9: </span>Use <code class="xref py py-class docutils literal notranslate"><span class="pre">InjectStatefulHyperparamsState</span></code> instead.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="linear-schedules">
+<h2>Linear schedules<a class="headerlink" href="#linear-schedules" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.linear_onecycle_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">linear_onecycle_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transition_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct_final</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">div_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_div_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L485#L541"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.linear_onecycle_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Returns a learning rate with three linear phases.</p>
+<ul class="simple">
+<li><p><em>Phase 1</em>, from iteration 0 to <code class="docutils literal notranslate"><span class="pre">pct_start</span> <span class="pre">*</span> <span class="pre">transition_steps</span></code>. The
+learning rate increases linearly from <code class="docutils literal notranslate"><span class="pre">peak_value</span> <span class="pre">/</span> <span class="pre">div_factor</span></code> to
+<code class="docutils literal notranslate"><span class="pre">peak_value</span></code>.</p></li>
+<li><p><em>Phase 2</em>, from iteration <code class="docutils literal notranslate"><span class="pre">pct_start</span> <span class="pre">*</span> <span class="pre">transition_steps</span></code> to
+<code class="docutils literal notranslate"><span class="pre">pct_final</span> <span class="pre">*</span> <span class="pre">transition_steps</span></code>. The learning rate decreases linearly from
+<code class="docutils literal notranslate"><span class="pre">peak_value</span></code> back to the initial <code class="docutils literal notranslate"><span class="pre">peak_value/div_factor</span></code>.</p></li>
+<li><p><em>Phase 3</em>: For the remaining steps, the learning rate interpolates between
+<code class="docutils literal notranslate"><span class="pre">peak_value/div_factor</span></code> and <code class="docutils literal notranslate"><span class="pre">peak_value</span> <span class="pre">/</span> <span class="pre">final_div_factor</span></code>. If
+<code class="docutils literal notranslate"><span class="pre">final_div_factor</span></code> is larger than <code class="docutils literal notranslate"><span class="pre">div_factor</span></code>, this is a decreasing
+phase.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>transition_steps</strong> – Number of steps over which annealing takes place.</p></li>
+<li><p><strong>peak_value</strong> – Maximum value attained by schedule at pct_start percent of the
+cycle (in number of steps).</p></li>
+<li><p><strong>pct_start</strong> – The percentage of the cycle (in number of steps) spent increasing
+the learning rate.</p></li>
+<li><p><strong>pct_final</strong> – The percentage of the cycle (in number of steps) spent increasing
+to <code class="docutils literal notranslate"><span class="pre">peak_value</span></code> then decreasing back to <code class="docutils literal notranslate"><span class="pre">init_value</span></code>.</p></li>
+<li><p><strong>div_factor</strong> – Determines the initial value via <code class="docutils literal notranslate"><span class="pre">init_value</span> <span class="pre">=</span> <span class="pre">peak_value</span> <span class="pre">/</span>
+<span class="pre">div_factor</span></code>.</p></li>
+<li><p><strong>final_div_factor</strong> – Determines the final value via <code class="docutils literal notranslate"><span class="pre">final_value</span> <span class="pre">=</span> <span class="pre">init_value</span>
+<span class="pre">/</span> <span class="pre">final_div_factor</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Smith et al, <a class="reference external" href="https://arxiv.org/abs/1708.07120">Super-Convergence: Very Fast Training of Neural Networks Using
+Large Learning Rates</a>, 2017</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.linear_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">linear_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transition_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transition_begin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L149#L201"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.linear_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Schedule with linear transition from <code class="docutils literal notranslate"><span class="pre">init_value</span></code> to <code class="docutils literal notranslate"><span class="pre">end_value</span></code>.</p>
+<p>More precisely, the learning rate at iteration <span class="math">\(t\)</span> is given by:</p>
+<div class="math">
+\[\begin{cases}
+  I, & \text{if } t < B \\
+  I + \frac{t - B}{T} (E - I), & \text{if } B \leq t < B + T \\
+  E, & \text{if } t \geq B + T
+\end{cases}
+
+\]</div>
+<p>where <span class="math">\(I\)</span> is the initial value, <span class="math">\(E\)</span> is the end value,
+<span class="math">\(B\)</span> is the transition begin, and <span class="math">\(T\)</span> is the transition steps.</p>
+<p>This schedule is equivalent to <code class="xref py py-func docutils literal notranslate"><span class="pre">optax.polynomial_schedule()</span></code> with
+<code class="docutils literal notranslate"><span class="pre">power=1</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_value</strong> – initial value for the scalar to be annealed.</p></li>
+<li><p><strong>end_value</strong> – end value of the scalar to be annealed.</p></li>
+<li><p><strong>transition_steps</strong> – number of steps over which annealing takes place. The
+scalar starts changing at <code class="docutils literal notranslate"><span class="pre">transition_begin</span></code> steps and completes the
+transition by <code class="docutils literal notranslate"><span class="pre">transition_begin</span> <span class="pre">+</span> <span class="pre">transition_steps</span></code> steps. If
+<code class="docutils literal notranslate"><span class="pre">transition_steps</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>, then the entire annealing process is disabled
+and the value is held fixed at <code class="docutils literal notranslate"><span class="pre">init_value</span></code>.</p></li>
+<li><p><strong>transition_begin</strong> – must be positive. After how many steps to start annealing
+(before this many steps the scalar value is held fixed at <code class="docutils literal notranslate"><span class="pre">init_value</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">schedule_fn</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">linear_schedule</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">init_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">end_value</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">transition_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schedule_fn</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># learning rate on the first iteration</span>
+<span class="go">Array(1., dtype=float32, weak_type=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schedule_fn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># learning rate on the last iteration</span>
+<span class="go">Array(0.01, dtype=float32, weak_type=True)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="piecewise-schedules">
+<h2>Piecewise schedules<a class="headerlink" href="#piecewise-schedules" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.piecewise_constant_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">piecewise_constant_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries_and_scales</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L204#L248"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.piecewise_constant_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Piecewise constant schedule with scaled jumps at specific boundaries.</p>
+<p>At each step <cite>t</cite>, this schedule returns <cite>init_value</cite> scaled by the product
+of all factors <cite>f_i</cite> such that <cite>t &gt;= b_i</cite>, where <cite>(b_i, f_i)</cite> are the
+entries in <cite>boundaries_and_scales</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_value</strong> – The starting value of the schedule.</p></li>
+<li><p><strong>boundaries_and_scales</strong> – Dictionary of <cite>{step: scale}</cite> where <cite>scale</cite> is
+multiplied into the schedule value at the given <cite>step</cite>. All <cite>scale</cite> values
+must be non-negative.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function that maps step index to schedule value.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sched</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">piecewise_constant_schedule</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">init_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">boundaries_and_scales</span><span class="o">=</span><span class="p">{</span><span class="mi">100</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">200</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sched</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>   <span class="c1"># before first boundary</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sched</span><span class="p">(</span><span class="mi">150</span><span class="p">))</span>  <span class="c1"># after first boundary</span>
+<span class="go">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sched</span><span class="p">(</span><span class="mi">250</span><span class="p">))</span>  <span class="c1"># after second boundary</span>
+<span class="go">0.001</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.piecewise_interpolate_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">piecewise_interpolate_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interpolate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundaries_and_scales</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L410#L482"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.piecewise_interpolate_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Piecewise interpolated schedule with linear or cosine transitions.</p>
+<p>This schedule interpolates smoothly between values scaled at specified
+step boundaries. The interpolation occurs <strong>between the accumulated scaled
+values</strong>, not the raw multiplicative scales themselves.</p>
+<p>At each boundary, the scaling factor is multiplied into the current value.
+Between these boundaries, the schedule applies either linear or cosine
+interpolation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interpolate_type</strong> – Either <cite>‘linear’</cite> or <cite>‘cosine’</cite>, specifying the
+interpolation method used between boundary segments.</p></li>
+<li><p><strong>init_value</strong> – Starting value for the schedule.</p></li>
+<li><p><strong>boundaries_and_scales</strong> – A dictionary <cite>{step: scale}</cite> that defines the
+boundaries and their corresponding multiplicative scaling factors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function that maps step counts to interpolated values.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sched</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">piecewise_interpolate_schedule</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">interpolate_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">init_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">boundaries_and_scales</span><span class="o">=</span><span class="p">{</span><span class="mi">4</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step </span><span class="si">{</span><span class="n">step</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">sched</span><span class="p">(</span><span class="n">step</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">Step 0: 1.000000</span>
+<span class="go">Step 2: 0.550000</span>
+<span class="go">Step 4: 0.100000</span>
+<span class="go">Step 6: 0.050500</span>
+<span class="go">Step 8: 0.001000</span>
+<span class="go">Step 10: 0.001000</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This schedule accumulates scaling factors and then interpolates between
+those accumulated values. It does <em>not</em> interpolate directly between the
+provided scales. This behavior can appear counterintuitive but allows
+for smooth and controlled transitions in learning rates.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="polynomial-schedules">
+<h2>Polynomial schedules<a class="headerlink" href="#polynomial-schedules" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.polynomial_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">polynomial_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transition_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transition_begin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L51#L146"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.polynomial_schedule" title="Link to this definition">#</a></dt>
+<dd><p>Constructs a schedule with polynomial transition from init to end value.</p>
+<p>This function transitions the learning rate from an initial value
+(<code class="docutils literal notranslate"><span class="pre">init_value</span></code>) to a final value (<code class="docutils literal notranslate"><span class="pre">end_value</span></code>) over a specified number of
+steps (<code class="docutils literal notranslate"><span class="pre">transition_steps</span></code>) with a polynomial function of power <code class="docutils literal notranslate"><span class="pre">power</span></code>.
+The transition can optionally begin after a specified number of initial steps
+(<code class="docutils literal notranslate"><span class="pre">transition_begin</span></code>).</p>
+<p>More precisely, the learning rate at iteration <span class="math">\(t\)</span> is given by:</p>
+<div class="math">
+\[\begin{cases}
+  I, & \text{if } t < B \\
+  (I - E) \left( 1 - \frac{t - B}{T} \right)^{P} + E, &
+    \text{if } B \leq t < B + T \\
+  E, & \text{if } t \geq B + T
+\end{cases}
+
+\]</div>
+<p>where <span class="math">\(I\)</span> is the initial value, <span class="math">\(E\)</span> is the end value,
+<span class="math">\(B\)</span> is the transition begin, <span class="math">\(T\)</span> is the transition steps,
+and <span class="math">\(P\)</span> is the power used for the polynomial transition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_value</strong> – initial value for the scalar to be annealed.</p></li>
+<li><p><strong>end_value</strong> – end value of the scalar to be annealed.</p></li>
+<li><p><strong>power</strong> – the power of the polynomial used to transition from init to end.</p></li>
+<li><p><strong>transition_steps</strong> – number of steps over which annealing takes place.
+The scalar starts changing at <code class="docutils literal notranslate"><span class="pre">transition_begin</span></code> steps and completes
+the transition by <code class="docutils literal notranslate"><span class="pre">transition_begin</span> <span class="pre">+</span> <span class="pre">transition_steps</span></code> steps.
+If <code class="docutils literal notranslate"><span class="pre">transition_steps</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>, then the entire annealing process is
+disabled and the value is held fixed at <code class="docutils literal notranslate"><span class="pre">init_value</span></code>.</p></li>
+<li><p><strong>transition_begin</strong> – must be positive. After how many steps to start annealing
+(before this many steps the scalar value is held fixed at <code class="docutils literal notranslate"><span class="pre">init_value</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">schedule_fn</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">polynomial_schedule</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">init_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">end_value</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">transition_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schedule_fn</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># learning rate on the first iteration</span>
+<span class="go">Array(1., dtype=float32, weak_type=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schedule_fn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># learning rate on the last iteration</span>
+<span class="go">Array(0.01, dtype=float32, weak_type=True)</span>
+</pre></div>
+</div>
+<p>The following example uses a non-zero <code class="docutils literal notranslate"><span class="pre">transition_begin</span></code>. In this case
+the learning rate is kept constant for the first <code class="docutils literal notranslate"><span class="pre">transition_begin</span></code>
+iterations:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">schedule_fn</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">polynomial_schedule</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">init_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">end_value</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">transition_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">transition_begin</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">power</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">110</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="o">*</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;count:</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1"> value:</span><span class="si">{</span><span class="n">schedule_fn</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">count:0 value:1.0000</span>
+<span class="go">count:5 value:1.0000</span>
+<span class="go">count:6 value:0.9803</span>
+<span class="go">count:104 value:0.0101</span>
+<span class="go">count:105 value:0.0100</span>
+<span class="go">count:110 value:0.0100</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="reduce-on-plateau">
+<h2>Reduce on plateau<a class="headerlink" href="#reduce-on-plateau" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.contrib.reduce_on_plateau">
+<span class="sig-prename descclassname"><span class="pre">optax.contrib.</span></span><span class="sig-name descname"><span class="pre">reduce_on_plateau</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patience</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooldown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accumulation_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax._src.base.GradientTransformationExtraArgs"><span class="pre">base.GradientTransformationExtraArgs</span></a></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/contrib/_reduce_on_plateau.py#L42#L197"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.contrib.reduce_on_plateau" title="Link to this definition">#</a></dt>
+<dd><p>Reduce learning rate when a metric has stopped improving.</p>
+<p>Models often benefit from reducing the learning rate once learning stagnates.
+This scheduler reads a metrics quantity and if no improvement is seen for
+a <code class="docutils literal notranslate"><span class="pre">patience</span></code> number of epochs, the learning rate is reduced.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factor</strong> – Factor by which to reduce the learning rate. new_scale = scale *
+factor.</p></li>
+<li><p><strong>patience</strong> – Number of iterations with no improvement after which learning rate
+will be reduced.</p></li>
+<li><p><strong>rtol</strong> – Relative tolerance for measuring new optimum.</p></li>
+<li><p><strong>atol</strong> – Absolute tolerance for measuring new optimum.</p></li>
+<li><p><strong>cooldown</strong> – Number of iterations to wait before resuming normal operation
+after scale has been reduced.</p></li>
+<li><p><strong>accumulation_size</strong> – Number of values to aggregate before applying the logic
+of reduce on plateau. If the value fed to the optimizer is a test value,
+simply take 1 (default). If the value fed to the optimizer is the loss on
+a the current minibatch, consider using a larger accumulation size.</p></li>
+<li><p><strong>min_scale</strong> – Scale at which the learning rate decay stops.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax.GradientTransformationExtraArgs"><code class="xref py py-class docutils literal notranslate"><span class="pre">optax.GradientTransformationExtraArgs</span></code></a> object.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../_collections/examples/contrib/reduce_on_plateau.html"><span class="doc">Reduce on Plateau Learning Rate Scheduler</span></a> example.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+</section>
+<section id="warm-restarts">
+<h2>Warm restarts<a class="headerlink" href="#warm-restarts" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.schedules.sgdr_schedule">
+<span class="sig-prename descclassname"><span class="pre">optax.schedules.</span></span><span class="sig-name descname"><span class="pre">sgdr_schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cosine_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">jax.typing.ArrayLike</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">base.Schedule</span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/schedules/_schedule.py#L710#L739"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.schedules.sgdr_schedule" title="Link to this definition">#</a></dt>
+<dd><p>SGD with warm restarts.</p>
+<p>This learning rate schedule applies multiple joined cosine decay cycles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cosine_kwargs</strong> – An Iterable of dicts, where each element specifies the
+arguments to pass to each cosine decay cycle. The <code class="docutils literal notranslate"><span class="pre">decay_steps</span></code> kwarg
+will specify how long each cycle lasts for, and therefore when to
+transition to the next cycle.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>schedule</dt><dd><p>A function that maps step counts to values</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Loshchilov et al., <a class="reference external" href="https://arxiv.org/abs/1608.03983">SGDR: Stochastic Gradient Descent with Warm Restarts</a>, 2017</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="optimizer_wrappers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Optimizer Wrappers</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="apply_updates.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Apply Updates</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.Schedule"><code class="docutils literal notranslate"><span class="pre">Schedule</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-schedule">Constant schedule</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.constant_schedule"><code class="docutils literal notranslate"><span class="pre">constant_schedule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.warmup_constant_schedule"><code class="docutils literal notranslate"><span class="pre">warmup_constant_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cosine-decay-schedule">Cosine decay schedule</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.cosine_decay_schedule"><code class="docutils literal notranslate"><span class="pre">cosine_decay_schedule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.cosine_onecycle_schedule"><code class="docutils literal notranslate"><span class="pre">cosine_onecycle_schedule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.warmup_cosine_decay_schedule"><code class="docutils literal notranslate"><span class="pre">warmup_cosine_decay_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exponential-decay-schedule">Exponential decay schedule</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.exponential_decay"><code class="docutils literal notranslate"><span class="pre">exponential_decay()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.warmup_exponential_decay_schedule"><code class="docutils literal notranslate"><span class="pre">warmup_exponential_decay_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#join-schedules">Join schedules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.join_schedules"><code class="docutils literal notranslate"><span class="pre">join_schedules()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inject-hyperparameters">Inject hyperparameters</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.inject_hyperparams"><code class="docutils literal notranslate"><span class="pre">inject_hyperparams()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.InjectHyperparamsState"><code class="docutils literal notranslate"><span class="pre">InjectHyperparamsState</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-schedules">Linear schedules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.linear_onecycle_schedule"><code class="docutils literal notranslate"><span class="pre">linear_onecycle_schedule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.linear_schedule"><code class="docutils literal notranslate"><span class="pre">linear_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#piecewise-schedules">Piecewise schedules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.piecewise_constant_schedule"><code class="docutils literal notranslate"><span class="pre">piecewise_constant_schedule()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.piecewise_interpolate_schedule"><code class="docutils literal notranslate"><span class="pre">piecewise_interpolate_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#polynomial-schedules">Polynomial schedules</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.polynomial_schedule"><code class="docutils literal notranslate"><span class="pre">polynomial_schedule()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduce-on-plateau">Reduce on plateau</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.contrib.reduce_on_plateau"><code class="docutils literal notranslate"><span class="pre">reduce_on_plateau()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#warm-restarts">Warm restarts</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.schedules.sgdr_schedule"><code class="docutils literal notranslate"><span class="pre">sgdr_schedule()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Optax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2021, DeepMind.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

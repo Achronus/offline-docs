@@ -1,0 +1,701 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Combining Optimizers &#8212; Optax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_contributors.css?v=fe9086e2" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/katex-math.css?v=05624691" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1d6acab0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/katex.min.js?v=5cc8ed51"></script>
+    <script src="../_static/auto-render.min.js?v=af98beb9"></script>
+    <script src="../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/combining_optimizers';</script>
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Optimizer Wrappers" href="optimizer_wrappers.html" />
+    <link rel="prev" title="Transformations" href="transformations.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  <script async type="text/javascript" src="/sources/optax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="optax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/api/combining_optimizers.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt="Optax  documentation - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="Optax  documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">🚀 Getting started</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../gallery.html">🖼️ Example gallery</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../_collections/examples/README.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/adversarial_training.html">Adversarial training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/cifar10_resnet.html">ResNet on CIFAR10 with Flax NNX and Optax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/flax_example.html">Simple NN with Flax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/freezing_parameters.html">Freezing Parameters in Optax</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/gradient_accumulation.html">Gradient Accumulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/gradient_accumulation_and_microbatching.html">Summary</a></li>
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/lbfgs.html">L-BFGS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/linear_assignment_problem.html">Linear assignment problem</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/lookahead_mnist.html">Lookahead Optimizer on MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/meta_learning.html">Meta-Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/mlp_mnist.html">MLP MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/nanolm.html">Character-level Transformer on Tiny Shakespeare</a></li>
+
+
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/ogda_example.html">Optimistic Gradient Descent in a Bilinear Min-Max Problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/perturbations.html">Perturbed optimizers</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../_collections/examples/contrib/README.html">Contrib Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/differentially_private_sgd.html">Differentially private convolutional neural network on MNIST.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/muon.html">Using the Muon Optimizer in Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/reduce_on_plateau.html">Reduce on Plateau Learning Rate Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/rosenbrock_ademamix.html">Recreate AdeMAMix Rosenbrock Plot from Paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/sam.html">Sharpness-Aware Minimization (SAM)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">🛠️ Development</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="assignment.html">Assignment problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transformations.html">Transformations</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Combining Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizer_wrappers.html">Optimizer Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizer_schedules.html">Optimizer Schedules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apply_updates.html">Apply Updates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losses.html">Losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microbatching.html">Microbatching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">🔧 Contrib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimental.html">🧪 Experimental</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google-deepmind/optax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/combining_optimizers.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Combining Optimizers</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chain">Chain</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.chain"><code class="docutils literal notranslate"><span class="pre">chain()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.named_chain"><code class="docutils literal notranslate"><span class="pre">named_chain()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#partition">Partition</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.partition"><code class="docutils literal notranslate"><span class="pre">partition()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.PartitionState"><code class="docutils literal notranslate"><span class="pre">PartitionState</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="combining-optimizers">
+<h1>Combining Optimizers<a class="headerlink" href="#combining-optimizers" title="Link to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.chain" title="optax.chain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chain</span></code></a>(*args)</p></td>
+<td><p>Applies a list of chainable update transformations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.named_chain" title="optax.named_chain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">named_chain</span></code></a>(*args)</p></td>
+<td><p>Applies a list of named chainable update transformations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.partition" title="optax.partition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">partition</span></code></a>(transforms, param_labels, *[, ...])</p></td>
+<td><p>Partitions params and applies a different transformation to each subset.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="chain">
+<h2>Chain<a class="headerlink" href="#chain" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.chain">
+<span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax._src.base.GradientTransformation"><span class="pre">base.GradientTransformation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax._src.base.GradientTransformationExtraArgs"><span class="pre">base.GradientTransformationExtraArgs</span></a></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_combining.py#L26#L99"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.chain" title="Link to this definition">#</a></dt>
+<dd><p>Applies a list of chainable update transformations.</p>
+<p>This function creates a new <a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax.GradientTransformation"><code class="xref py py-func docutils literal notranslate"><span class="pre">optax.GradientTransformation()</span></code></a> that applies
+a sequence of gradient transformations in order. The <code class="docutils literal notranslate"><span class="pre">init</span></code> function of the
+new transformation constructs the optimizer state by concatenating the states
+of the individual transforms, while the <code class="docutils literal notranslate"><span class="pre">update</span></code> function applies the
+updates in the given order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> – an arbitrary number of <code class="docutils literal notranslate"><span class="pre">transform</span></code>-s of
+<a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax.GradientTransformation"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientTransformation</span></code></a> or
+<a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax.GradientTransformationExtraArgs"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientTransformationExtraArgs</span></code></a>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax.GradientTransformationExtraArgs"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientTransformationExtraArgs</span></code></a>, created by chaining the input
+transformations. Note that independent of the argument types, the resulting
+transformation always supports extra args. Any extra arguments passed to the
+returned transformation will be passed only to those transformations in the
+chain that support extra args.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>A transform that scales by -0.1 the adam update:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform1</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">scale_by_adam</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform2</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chained_transform</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">transform1</span><span class="p">,</span> <span class="n">transform2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">chained_transform</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">updates</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">updates</span><span class="p">,</span> <span class="n">new_state</span> <span class="o">=</span> <span class="n">chained_transform</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">updates</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>An optimizer in the chain might require extra args:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opt1</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>    <span class="c1"># scale incoming gradients</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opt2</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">polyak_sgd</span><span class="p">()</span>  <span class="c1"># requires a `value` extra arg for `update`</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chained_transform</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">opt1</span><span class="p">,</span> <span class="n">opt2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">chained_transform</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">extra_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">updates</span><span class="p">,</span> <span class="n">new_state</span> <span class="o">=</span> <span class="n">chained_transform</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="mf">0.7</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_args</span>  <span class="c1"># extra args for all transforms</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.named_chain">
+<span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">named_chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax._src.base.GradientTransformation"><span class="pre">base.GradientTransformation</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax._src.base.GradientTransformationExtraArgs"><span class="pre">base.GradientTransformationExtraArgs</span></a></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_combining.py#L102#L169"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.named_chain" title="Link to this definition">#</a></dt>
+<dd><p>Applies a list of named chainable update transformations.</p>
+<p>A variant of <a class="reference internal" href="#optax.chain" title="optax.chain"><code class="xref py py-func docutils literal notranslate"><span class="pre">optax.chain()</span></code></a> that allows to name each transformation.</p>
+<p>Here the <code class="docutils literal notranslate"><span class="pre">args</span></code> are <code class="docutils literal notranslate"><span class="pre">(name,</span> <span class="pre">transformation)</span></code> pairs, constituted of a
+string <code class="docutils literal notranslate"><span class="pre">name</span></code> and an associated transformation <code class="docutils literal notranslate"><span class="pre">transformation</span></code>. The
+gradient transformation must be an instance of <a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax.GradientTransformation"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientTransformation</span></code></a>
+or <a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax.GradientTransformationExtraArgs"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientTransformationExtraArgs</span></code></a>.</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">name</span></code> is used as key for the state of the corresponding transformation
+within the <code class="docutils literal notranslate"><span class="pre">named_chain</span></code> state. Thus the state of the transformation
+with a given <code class="docutils literal notranslate"><span class="pre">name</span></code> can be easily retrieved as <code class="docutils literal notranslate"><span class="pre">opt_state[name]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> – an arbitrary number of <code class="docutils literal notranslate"><span class="pre">(name,</span> <span class="pre">transform)</span></code> pairs, constituted of a
+string <code class="docutils literal notranslate"><span class="pre">name</span></code> and an associated transformation <code class="docutils literal notranslate"><span class="pre">transform</span></code>. The latter
+is a <a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax.GradientTransformation"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientTransformation</span></code></a> or
+<a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax.GradientTransformationExtraArgs"><code class="xref py py-class docutils literal notranslate"><span class="pre">GradientTransformationExtraArgs</span></code></a>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A single (init_fn, update_fn) tuple.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opt1</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>    <span class="c1"># scale incoming gradients</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opt2</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">polyak_sgd</span><span class="p">()</span>  <span class="c1"># requires a `value` extra arg for `update`</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chained_transform</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">named_chain</span><span class="p">((</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span> <span class="n">opt1</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;sgd&quot;</span><span class="p">,</span> <span class="n">opt2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">chained_transform</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">extra_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">updates</span><span class="p">,</span> <span class="n">new_state</span> <span class="o">=</span> <span class="n">chained_transform</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="mf">0.7</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_args</span>  <span class="c1"># extra args for all transforms</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">tuple</span><span class="p">(</span><span class="n">new_state</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="p">(</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span> <span class="s2">&quot;sgd&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="partition">
+<h2>Partition<a class="headerlink" href="#partition" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.partition">
+<span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">partition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transforms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">Hashable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax._src.base.GradientTransformation"><span class="pre">base.GradientTransformation</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">base.PyTree</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">base.PyTree</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">base.PyTree</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_compatible_extra_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax._src.base.GradientTransformationExtraArgs"><span class="pre">base.GradientTransformationExtraArgs</span></a></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_combining.py#L176#L289"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.partition" title="Link to this definition">#</a></dt>
+<dd><p>Partitions params and applies a different transformation to each subset.</p>
+<p>Sometimes you may want to apply different transformations to different
+parameters. For example, you may want to apply Adam to the weights of a
+neural network, but SGD to the biases. This function allows you to do that.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>transforms</strong> – A mapping from labels to transformations. Each transformation
+will be only be applied to parameters with the same label.</p></li>
+<li><p><strong>param_labels</strong> – A PyTree that is the same shape or a prefix of the
+parameters/updates (or a function that returns one given the parameters as
+input). The leaves of this PyTree correspond to the keys of the transforms
+(therefore the values at the leaves must be a subset of the keys).</p></li>
+<li><p><strong>mask_compatible_extra_args</strong> – Whether to also apply the same masking to
+extra_arg fields with the same tree structure as params/updates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax.GradientTransformationExtraArgs"><code class="xref py py-func docutils literal notranslate"><span class="pre">optax.GradientTransformationExtraArgs()</span></code></a> that implements an <code class="docutils literal notranslate"><span class="pre">init</span></code>
+and <code class="docutils literal notranslate"><span class="pre">update</span></code> function.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Below is an example where we apply Adam to the weights and SGD to the biases
+of a 2-layer neural network:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">map_nested_fn</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+<span class="gp">... </span><span class="w">  </span><span class="sd">&#39;&#39;&#39;Recursively apply `fn` to key-value pairs of a nested dict.&#39;&#39;&#39;</span>
+<span class="gp">... </span>  <span class="k">def</span><span class="w"> </span><span class="nf">map_fn</span><span class="p">(</span><span class="n">nested_dict</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="n">map_fn</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="n">fn</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+<span class="gp">... </span>            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">nested_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">map_fn</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;linear_1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;w&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)),</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">)},</span>
+<span class="gp">... </span>          <span class="s1">&#39;linear_2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;w&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gradients</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">ones_like</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>  <span class="c1"># dummy gradients</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">label_fn</span> <span class="o">=</span> <span class="n">map_nested_fn</span><span class="p">(</span><span class="k">lambda</span> <span class="n">k</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">k</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span><span class="s1">&#39;w&#39;</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">sgd</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)},</span> <span class="n">label_fn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">updates</span><span class="p">,</span> <span class="n">new_state</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">apply_updates</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Instead of providing a <code class="docutils literal notranslate"><span class="pre">label_fn</span></code>, you may provide a PyTree of labels
+directly.  Also, this PyTree may be a prefix of the parameters PyTree. This
+is demonstrated in the GAN pseudocode below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">generator_params</span> <span class="o">=</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">discriminator_params</span> <span class="o">=</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_params</span> <span class="o">=</span> <span class="p">(</span><span class="n">generator_params</span><span class="p">,</span> <span class="n">discriminator_params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">param_labels</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;generator&#39;</span><span class="p">,</span> <span class="s1">&#39;discriminator&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">{</span><span class="s1">&#39;generator&#39;</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span> <span class="s1">&#39;discriminator&#39;</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">param_labels</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you would like to not optimize some parameters, you may wrap
+<a class="reference internal" href="#optax.partition" title="optax.partition"><code class="xref py py-func docutils literal notranslate"><span class="pre">optax.partition()</span></code></a> with <a class="reference internal" href="transformations.html#optax.masked" title="optax.masked"><code class="xref py py-func docutils literal notranslate"><span class="pre">optax.masked()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="optax.PartitionState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">PartitionState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inner_states</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_combining.py#L172#L173"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.PartitionState" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="transformations.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Transformations</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="optimizer_wrappers.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Optimizer Wrappers</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chain">Chain</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.chain"><code class="docutils literal notranslate"><span class="pre">chain()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.named_chain"><code class="docutils literal notranslate"><span class="pre">named_chain()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#partition">Partition</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.partition"><code class="docutils literal notranslate"><span class="pre">partition()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.PartitionState"><code class="docutils literal notranslate"><span class="pre">PartitionState</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Optax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2021, DeepMind.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

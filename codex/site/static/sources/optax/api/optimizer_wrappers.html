@@ -1,0 +1,1038 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Optimizer Wrappers &#8212; Optax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_contributors.css?v=fe9086e2" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/katex-math.css?v=05624691" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=1d6acab0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/katex.min.js?v=5cc8ed51"></script>
+    <script src="../_static/auto-render.min.js?v=af98beb9"></script>
+    <script src="../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/optimizer_wrappers';</script>
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Optimizer Schedules" href="optimizer_schedules.html" />
+    <link rel="prev" title="Combining Optimizers" href="combining_optimizers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  <script async type="text/javascript" src="/sources/optax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="optax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/api/optimizer_wrappers.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt="Optax  documentation - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="Optax  documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">🚀 Getting started</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../gallery.html">🖼️ Example gallery</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../_collections/examples/README.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/adversarial_training.html">Adversarial training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/cifar10_resnet.html">ResNet on CIFAR10 with Flax NNX and Optax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/flax_example.html">Simple NN with Flax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/freezing_parameters.html">Freezing Parameters in Optax</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/gradient_accumulation.html">Gradient Accumulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/gradient_accumulation_and_microbatching.html">Summary</a></li>
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/lbfgs.html">L-BFGS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/linear_assignment_problem.html">Linear assignment problem</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/lookahead_mnist.html">Lookahead Optimizer on MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/meta_learning.html">Meta-Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/mlp_mnist.html">MLP MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/nanolm.html">Character-level Transformer on Tiny Shakespeare</a></li>
+
+
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/ogda_example.html">Optimistic Gradient Descent in a Bilinear Min-Max Problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/perturbations.html">Perturbed optimizers</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../_collections/examples/contrib/README.html">Contrib Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/differentially_private_sgd.html">Differentially private convolutional neural network on MNIST.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/muon.html">Using the Muon Optimizer in Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/reduce_on_plateau.html">Reduce on Plateau Learning Rate Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/rosenbrock_ademamix.html">Recreate AdeMAMix Rosenbrock Plot from Paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../_collections/examples/contrib/sam.html">Sharpness-Aware Minimization (SAM)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">🛠️ Development</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="assignment.html">Assignment problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combining_optimizers.html">Combining Optimizers</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Optimizer Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizer_schedules.html">Optimizer Schedules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apply_updates.html">Apply Updates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="losses.html">Losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="microbatching.html">Microbatching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">🔧 Contrib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimental.html">🧪 Experimental</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google-deepmind/optax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/optimizer_wrappers.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Optimizer Wrappers</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-if-finite">Apply if finite</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.apply_if_finite"><code class="docutils literal notranslate"><span class="pre">apply_if_finite()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.ApplyIfFiniteState"><code class="docutils literal notranslate"><span class="pre">ApplyIfFiniteState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.ApplyIfFiniteState.notfinite_count"><code class="docutils literal notranslate"><span class="pre">ApplyIfFiniteState.notfinite_count</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.ApplyIfFiniteState.last_finite"><code class="docutils literal notranslate"><span class="pre">ApplyIfFiniteState.last_finite</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.ApplyIfFiniteState.total_notfinite"><code class="docutils literal notranslate"><span class="pre">ApplyIfFiniteState.total_notfinite</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flatten">Flatten</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lookahead">Lookahead</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.lookahead"><code class="docutils literal notranslate"><span class="pre">lookahead()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadParams"><code class="docutils literal notranslate"><span class="pre">LookaheadParams</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadParams.fast"><code class="docutils literal notranslate"><span class="pre">LookaheadParams.fast</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadParams.slow"><code class="docutils literal notranslate"><span class="pre">LookaheadParams.slow</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadState"><code class="docutils literal notranslate"><span class="pre">LookaheadState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadState.fast_state"><code class="docutils literal notranslate"><span class="pre">LookaheadState.fast_state</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadState.steps_since_sync"><code class="docutils literal notranslate"><span class="pre">LookaheadState.steps_since_sync</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masked-update">Masked update</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.masked"><code class="docutils literal notranslate"><span class="pre">masked()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MaskedState"><code class="docutils literal notranslate"><span class="pre">MaskedState</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-step-update">Multi-step update</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiSteps"><code class="docutils literal notranslate"><span class="pre">MultiSteps</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState"><code class="docutils literal notranslate"><span class="pre">MultiStepsState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState.mini_step"><code class="docutils literal notranslate"><span class="pre">MultiStepsState.mini_step</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState.gradient_step"><code class="docutils literal notranslate"><span class="pre">MultiStepsState.gradient_step</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState.inner_opt_state"><code class="docutils literal notranslate"><span class="pre">MultiStepsState.inner_opt_state</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState.acc_grads"><code class="docutils literal notranslate"><span class="pre">MultiStepsState.acc_grads</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState.skip_state"><code class="docutils literal notranslate"><span class="pre">MultiStepsState.skip_state</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.ShouldSkipUpdateFunction"><code class="docutils literal notranslate"><span class="pre">ShouldSkipUpdateFunction</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.skip_large_updates"><code class="docutils literal notranslate"><span class="pre">skip_large_updates()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.skip_not_finite"><code class="docutils literal notranslate"><span class="pre">skip_not_finite()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="optimizer-wrappers">
+<h1>Optimizer Wrappers<a class="headerlink" href="#optimizer-wrappers" title="Link to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.apply_if_finite" title="optax.apply_if_finite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_if_finite</span></code></a>(inner, max_consecutive_errors)</p></td>
+<td><p>A function that wraps an optimizer to make it robust to a few NaNs or Infs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.ApplyIfFiniteState" title="optax.ApplyIfFiniteState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ApplyIfFiniteState</span></code></a>(notfinite_count, ...)</p></td>
+<td><p>State of the <cite>GradientTransformation</cite> returned by <cite>apply_if_finite</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.flatten" title="optax.flatten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flatten</span></code></a>(inner)</p></td>
+<td><p>Flattens parameters and gradients for init and update of inner transform.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.lookahead" title="optax.lookahead"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lookahead</span></code></a>(fast_optimizer, sync_period, ...)</p></td>
+<td><p>Lookahead optimizer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.LookaheadParams" title="optax.LookaheadParams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LookaheadParams</span></code></a>(fast, slow)</p></td>
+<td><p>Holds a pair of slow and fast parameters for the lookahead optimizer.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.LookaheadState" title="optax.LookaheadState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LookaheadState</span></code></a>(fast_state, steps_since_sync)</p></td>
+<td><p>State of the <cite>GradientTransformation</cite> returned by <cite>lookahead</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="transformations.html#optax.masked" title="optax.masked"><code class="xref py py-obj docutils literal notranslate"><span class="pre">masked</span></code></a>(inner, mask, *[, ...])</p></td>
+<td><p>Mask updates so only some are transformed, the rest are passed through.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.MaskedState" title="optax.MaskedState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MaskedState</span></code></a>(inner_state)</p></td>
+<td><p>Maintains inner transform state for masked transformations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.MultiSteps" title="optax.MultiSteps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiSteps</span></code></a>(opt, every_k_schedule, ...)</p></td>
+<td><p>An optimizer wrapper to accumulate gradients over multiple steps.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.MultiStepsState" title="optax.MultiStepsState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiStepsState</span></code></a>(mini_step, gradient_step, ...)</p></td>
+<td><p>State of the <cite>GradientTransformation</cite> returned by <cite>MultiSteps</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.ShouldSkipUpdateFunction" title="optax.ShouldSkipUpdateFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShouldSkipUpdateFunction</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#optax.skip_large_updates" title="optax.skip_large_updates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_large_updates</span></code></a>(updates, gradient_step, ...)</p></td>
+<td><p>Returns True if the global norm square of <cite>updates</cite> is small enough.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#optax.skip_not_finite" title="optax.skip_not_finite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_not_finite</span></code></a>(updates, gradient_step, params)</p></td>
+<td><p>Returns True iff any of the <cite>updates</cite> contains an inf or a NaN.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="apply-if-finite">
+<h2>Apply if finite<a class="headerlink" href="#apply-if-finite" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.apply_if_finite">
+<span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">apply_if_finite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax.GradientTransformation"><span class="pre">optax.GradientTransformation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_consecutive_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax.GradientTransformation"><span class="pre">optax.GradientTransformation</span></a></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_conditionality.py#L204#L271"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.apply_if_finite" title="Link to this definition">#</a></dt>
+<dd><p>A function that wraps an optimizer to make it robust to a few NaNs or Infs.</p>
+<p>The purpose of this function is to prevent any optimization to happen if the
+gradients contain NaNs or Infs. That is, when a NaN or Inf is detected in the
+gradients, the wrapped optimizer ignores that gradient update. If the NaNs or
+Infs persist after a given number of updates, the wrapped optimizer gives up
+and accepts the update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inner</strong> – Inner transformation to be wrapped.</p></li>
+<li><p><strong>max_consecutive_errors</strong> – Maximum number of consecutive gradient updates
+containing NaNs or Infs that the wrapped optimizer will ignore. After that
+many ignored updates, the optimizer will give up and accept.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>New <a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax.GradientTransformationExtraArgs"><code class="xref py py-class docutils literal notranslate"><span class="pre">optax.GradientTransformationExtraArgs</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="optax.ApplyIfFiniteState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">ApplyIfFiniteState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">notfinite_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_finite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_notfinite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_conditionality.py#L184#L201"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.ApplyIfFiniteState" title="Link to this definition">#</a></dt>
+<dd><p>State of the <cite>GradientTransformation</cite> returned by <cite>apply_if_finite</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.ApplyIfFiniteState.notfinite_count">
+<span class="sig-name descname"><span class="pre">notfinite_count</span></span><a class="headerlink" href="#optax.ApplyIfFiniteState.notfinite_count" title="Link to this definition">#</a></dt>
+<dd><p>Number of consecutive gradient updates containing an Inf or
+a NaN. This number is reset to 0 whenever a gradient update without an Inf
+or a NaN is done.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.ApplyIfFiniteState.last_finite">
+<span class="sig-name descname"><span class="pre">last_finite</span></span><a class="headerlink" href="#optax.ApplyIfFiniteState.last_finite" title="Link to this definition">#</a></dt>
+<dd><p>Whether or not the last gradient update contained an Inf or a
+NaN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.ApplyIfFiniteState.total_notfinite">
+<span class="sig-name descname"><span class="pre">total_notfinite</span></span><a class="headerlink" href="#optax.ApplyIfFiniteState.total_notfinite" title="Link to this definition">#</a></dt>
+<dd><p>Total number of gradient updates containing an Inf or a NaN
+since this optimizer was initialised. This number is never reset.
+inner_state: The state of the inner <cite>GradientTransformation</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="flatten">
+<h2>Flatten<a class="headerlink" href="#flatten" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.flatten">
+<span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax._src.base.GradientTransformation"><span class="pre">base.GradientTransformation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax._src.base.GradientTransformationExtraArgs"><span class="pre">base.GradientTransformationExtraArgs</span></a></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_layouts.py#L23#L76"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.flatten" title="Link to this definition">#</a></dt>
+<dd><p>Flattens parameters and gradients for init and update of inner transform.</p>
+<p>This can reduce the overhead of performing many calculations on lots of small
+variables, at the cost of slightly increased memory usage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inner</strong> – Inner transformation to flatten inputs for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>New <a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax.GradientTransformationExtraArgs"><code class="xref py py-class docutils literal notranslate"><span class="pre">optax.GradientTransformationExtraArgs</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="lookahead">
+<h2>Lookahead<a class="headerlink" href="#lookahead" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.lookahead">
+<span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">lookahead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fast_optimizer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax.GradientTransformation"><span class="pre">optax.GradientTransformation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sync_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slow_step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax.GradientTransformation"><span class="pre">optax.GradientTransformation</span></a></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/_src/lookahead.py#L63#L155"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.lookahead" title="Link to this definition">#</a></dt>
+<dd><p>Lookahead optimizer.</p>
+<p>Performs steps with a fast optimizer and periodically updates a set of slow
+parameters. Optionally resets the fast optimizer state after synchronization
+by calling the init function of the fast optimizer.</p>
+<p>Updates returned by the lookahead optimizer should not be modified before they
+are applied, otherwise fast and slow parameters are not synchronized
+correctly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fast_optimizer</strong> – The optimizer to use in the inner loop of lookahead.</p></li>
+<li><p><strong>sync_period</strong> – Number of fast optimizer steps to take before synchronizing
+parameters. Must be &gt;= 1.</p></li>
+<li><p><strong>slow_step_size</strong> – Step size of the slow parameter updates.</p></li>
+<li><p><strong>reset_state</strong> – Whether to reset the optimizer state of the fast optimizer
+after each synchronization.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax.GradientTransformation"><code class="xref py py-class docutils literal notranslate"><span class="pre">optax.GradientTransformation</span></code></a> with init and update functions. The
+updates passed to the update function should be calculated using the fast
+lookahead parameters only.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fast_opt</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">sgd</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opt</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">lookahead</span><span class="p">(</span><span class="n">fast_opt</span><span class="p">,</span> <span class="n">sync_period</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">slow_step_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">LookaheadParams</span><span class="o">.</span><span class="n">init_synced</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate gradients wrt the fast parameters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grads</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">)(</span><span class="n">params</span><span class="o">.</span><span class="n">fast</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">updates</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">apply_updates</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate the eval loss wrt the slow parameters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss_fn</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">slow</span><span class="p">)</span>
+<span class="go">Array(2., dtype=float32)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<p>Zhang et al, <a class="reference external" href="https://arxiv.org/abs/1907.08610">Lookahead Optimizer: k steps forward, 1 step back</a>, 2019</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="optax.LookaheadParams">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">LookaheadParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fast</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="transformations.html#optax.Params" title="optax.Params"><span class="pre">optax.Params</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">slow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="transformations.html#optax.Params" title="optax.Params"><span class="pre">optax.Params</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/_src/lookahead.py#L38#L60"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.LookaheadParams" title="Link to this definition">#</a></dt>
+<dd><p>Holds a pair of slow and fast parameters for the lookahead optimizer.</p>
+<p>Gradients should always be calculated with the fast parameters (i.e.,
+<cite>params.fast</cite>). The slow parameters should be used for testing and inference
+as they generalize better. See the reference for a detailed discussion.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.LookaheadParams.fast">
+<span class="sig-name descname"><span class="pre">fast</span></span><a class="headerlink" href="#optax.LookaheadParams.fast" title="Link to this definition">#</a></dt>
+<dd><p>Fast parameters (use these for gradient computation).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>base.Params</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.LookaheadParams.slow">
+<span class="sig-name descname"><span class="pre">slow</span></span><a class="headerlink" href="#optax.LookaheadParams.slow" title="Link to this definition">#</a></dt>
+<dd><p>Slow parameters (use these for inference).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>base.Params</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">References</p>
+<p>Zhang et al, <a class="reference external" href="https://arxiv.org/abs/1907.08610">Lookahead Optimizer: k steps forward, 1 step back</a>, 2019</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="optax.LookaheadState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">LookaheadState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fast_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="transformations.html#optax.OptState" title="optax.OptState"><span class="pre">optax.OptState</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps_since_sync</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/_src/lookahead.py#L25#L35"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.LookaheadState" title="Link to this definition">#</a></dt>
+<dd><p>State of the <cite>GradientTransformation</cite> returned by <cite>lookahead</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.LookaheadState.fast_state">
+<span class="sig-name descname"><span class="pre">fast_state</span></span><a class="headerlink" href="#optax.LookaheadState.fast_state" title="Link to this definition">#</a></dt>
+<dd><p>Optimizer state of the fast optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>base.OptState</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.LookaheadState.steps_since_sync">
+<span class="sig-name descname"><span class="pre">steps_since_sync</span></span><a class="headerlink" href="#optax.LookaheadState.steps_since_sync" title="Link to this definition">#</a></dt>
+<dd><p>Number of fast optimizer steps taken since slow and fast
+parameters were synchronized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.Array.html#jax.Array" title="(in JAX)">jax.Array</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="masked-update">
+<h2>Masked update<a class="headerlink" href="#masked-update" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.masked">
+<span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">masked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="transformations.html#optax.GradientTransformation" title="optax._src.base.GradientTransformation"><span class="pre">base.GradientTransformation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">base.PyTree</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">base.Params</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">base.PyTree</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_compatible_extra_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax._src.base.GradientTransformationExtraArgs"><span class="pre">base.GradientTransformationExtraArgs</span></a></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_masking.py#L47#L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.masked" title="Link to this definition">#</a></dt>
+<dd><p>Mask updates so only some are transformed, the rest are passed through.</p>
+<p>For example, it is common to skip weight decay for BatchNorm scale and all
+bias parameters. Since in many networks, these are the only 1D parameters,
+you may for instance create a mask function to mask them out as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mask_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="n">weight_decay</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">masked</span><span class="p">(</span><span class="n">optax</span><span class="o">.</span><span class="n">add_decayed_weights</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span> <span class="n">mask_fn</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You may alternatively create the mask pytree upfront:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mask</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="n">weight_decay</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">masked</span><span class="p">(</span><span class="n">optax</span><span class="o">.</span><span class="n">add_decayed_weights</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span> <span class="n">mask</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the <code class="docutils literal notranslate"><span class="pre">inner</span></code> transform, state will only be stored for the parameters that
+have a mask value of <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<p>Note that, when using <code class="docutils literal notranslate"><span class="pre">tree_map_params</span></code>, it may be required to pass the
+argument <cite>is_leaf=lambda v: isinstance(v, optax.MaskedNode)</cite>, if the tree
+map needs to take additional arguments with the same shape as the original
+input tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inner</strong> – Inner transformation to mask.</p></li>
+<li><p><strong>mask</strong> – a PyTree with same structure as (or a prefix of) the params PyTree, or
+a Callable that returns such a pytree given the params/updates. The leaves
+should be booleans, <code class="docutils literal notranslate"><span class="pre">True</span></code> for leaves/subtrees you want to apply the
+transformation to, and <code class="docutils literal notranslate"><span class="pre">False</span></code> for those you want to skip. The mask must
+be static for the gradient transformation to be jit-compilable.</p></li>
+<li><p><strong>mask_compatible_extra_args</strong> – whether to also apply the same masking to
+extra_arg fields with the same tree structure as params/updates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>New <a class="reference internal" href="transformations.html#optax.GradientTransformationExtraArgs" title="optax.GradientTransformationExtraArgs"><code class="xref py py-class docutils literal notranslate"><span class="pre">optax.GradientTransformationExtraArgs</span></code></a> wrapping <code class="docutils literal notranslate"><span class="pre">inner</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="optax.MaskedState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">MaskedState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inner_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_masking.py#L25#L28"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.MaskedState" title="Link to this definition">#</a></dt>
+<dd><p>Maintains inner transform state for masked transformations.</p>
+</dd></dl>
+
+</section>
+<section id="multi-step-update">
+<h2>Multi-step update<a class="headerlink" href="#multi-step-update" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="optax.MultiSteps">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">MultiSteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">opt:</span> <span class="pre">optax.GradientTransformation,</span> <span class="pre">every_k_schedule:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">~collections.abc.Callable[[TypeAliasForwardRef('jax.typing.ArrayLike')],</span> <span class="pre">TypeAliasForwardRef('jax.typing.ArrayLike')],</span> <span class="pre">use_grad_mean:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">should_skip_update_fn:</span> <span class="pre">~optax.transforms._accumulation.ShouldSkipUpdateFunction</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">accumulator_dtype:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">type[~typing.Any]</span> <span class="pre">|</span> <span class="pre">~numpy.dtype</span> <span class="pre">|</span> <span class="pre">~jax._src.typing.SupportsDType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'jax.numpy.float32'&gt;</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_accumulation.py#L239#L427"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.MultiSteps" title="Link to this definition">#</a></dt>
+<dd><p>An optimizer wrapper to accumulate gradients over multiple steps.</p>
+<p>This wrapper collects together the updates passed to its <code class="docutils literal notranslate"><span class="pre">update</span></code> function
+over consecutive steps until a given number of scheduled steps is reached.
+In each of these intermediate steps, the returned value from the optimizer is
+a tree of zeros of the same shape of the updates passed as input.</p>
+<p>Once the scheduled number of intermediate ‘mini-steps’ has been reached, the
+gradients accumulated to the current time will be passed to the wrapped
+optimizer’s update function, (with the inner optimizer’s state being updated
+appropriately) and then returned to the caller. The wrapper’s accumulated
+gradients are then set back to zero and the process starts again.</p>
+<p>The number of mini-steps per gradient update is controlled by a function, and
+can vary over training, this also allows varying batch size over training.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="optax.MultiStepsState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">MultiStepsState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mini_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_opt_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc_grads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">base.ArrayTree</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_accumulation.py#L218#L236"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.MultiStepsState" title="Link to this definition">#</a></dt>
+<dd><p>State of the <cite>GradientTransformation</cite> returned by <cite>MultiSteps</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.MultiStepsState.mini_step">
+<span class="sig-name descname"><span class="pre">mini_step</span></span><a class="headerlink" href="#optax.MultiStepsState.mini_step" title="Link to this definition">#</a></dt>
+<dd><p>current mini-step counter. At an update, this either increases by
+1 or is reset to 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>jax.typing.ArrayLike</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.MultiStepsState.gradient_step">
+<span class="sig-name descname"><span class="pre">gradient_step</span></span><a class="headerlink" href="#optax.MultiStepsState.gradient_step" title="Link to this definition">#</a></dt>
+<dd><p>gradient step counter. This only increases after enough
+mini-steps have been accumulated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>jax.typing.ArrayLike</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.MultiStepsState.inner_opt_state">
+<span class="sig-name descname"><span class="pre">inner_opt_state</span></span><a class="headerlink" href="#optax.MultiStepsState.inner_opt_state" title="Link to this definition">#</a></dt>
+<dd><p>the state of the wrapped optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.MultiStepsState.acc_grads">
+<span class="sig-name descname"><span class="pre">acc_grads</span></span><a class="headerlink" href="#optax.MultiStepsState.acc_grads" title="Link to this definition">#</a></dt>
+<dd><p>accumulated gradients over multiple mini-steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="optax.MultiStepsState.skip_state">
+<span class="sig-name descname"><span class="pre">skip_state</span></span><a class="headerlink" href="#optax.MultiStepsState.skip_state" title="Link to this definition">#</a></dt>
+<dd><p>an arbitrarily py tree. This is only relevant when passing a
+<cite>should_skip_update_fn</cite> to <cite>MultiSteps</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>base.ArrayTree</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="optax.ShouldSkipUpdateFunction">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">ShouldSkipUpdateFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_accumulation.py#L134#L157"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.ShouldSkipUpdateFunction" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.skip_large_updates">
+<span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">skip_large_updates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="transformations.html#optax.Updates" title="optax.Updates"><span class="pre">optax.Updates</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TypeAliasForwardRef</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'optax.Params'</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_squared_norm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">TypeAliasForwardRef</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'optax.ArrayTree'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_accumulation.py#L190#L215"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.skip_large_updates" title="Link to this definition">#</a></dt>
+<dd><p>Returns True if the global norm square of <cite>updates</cite> is small enough.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>updates</strong> – see <a class="reference internal" href="#optax.ShouldSkipUpdateFunction" title="optax.ShouldSkipUpdateFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShouldSkipUpdateFunction</span></code></a>.</p></li>
+<li><p><strong>gradient_step</strong> – see <a class="reference internal" href="#optax.ShouldSkipUpdateFunction" title="optax.ShouldSkipUpdateFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShouldSkipUpdateFunction</span></code></a>.</p></li>
+<li><p><strong>params</strong> – see <a class="reference internal" href="#optax.ShouldSkipUpdateFunction" title="optax.ShouldSkipUpdateFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShouldSkipUpdateFunction</span></code></a>.</p></li>
+<li><p><strong>max_squared_norm</strong> – max square norm that can be accepted in updates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>First element is a scalar array of type bool.</p></li>
+<li><p>Second element is a dictionary with keys:
+- <cite>should_skip</cite>: iff ||updates||^2 is greater than <cite>max_squared_norm</cite>.
+- <cite>norm_squared</cite>: overall norm square of the <cite>updates</cite>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="optax.skip_not_finite">
+<span class="sig-prename descclassname"><span class="pre">optax.</span></span><span class="sig-name descname"><span class="pre">skip_not_finite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="transformations.html#optax.Updates" title="optax.Updates"><span class="pre">optax.Updates</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jax.typing.ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TypeAliasForwardRef</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'optax.Params'</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">TypeAliasForwardRef</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'optax.ArrayTree'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference external" href="https://github.com/google-deepmind/optax/tree/main/optax/transforms/_accumulation.py#L160#L187"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#optax.skip_not_finite" title="Link to this definition">#</a></dt>
+<dd><p>Returns True iff any of the <cite>updates</cite> contains an inf or a NaN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>updates</strong> – see <cite>ShouldSkipUpdateFunction</cite>.</p></li>
+<li><p><strong>gradient_step</strong> – see <cite>ShouldSkipUpdateFunction</cite>.</p></li>
+<li><p><strong>params</strong> – see <cite>ShouldSkipUpdateFunction</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>First element is a scalar array of type bool.</p></li>
+<li><p>Second element is a dictionary with keys:
+- <cite>should_skip</cite>: True iff <cite>updates</cite> contains an inf or a NaN.
+- <cite>num_not_finite</cite>: total number of inf and NaN found in <cite>updates</cite>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="combining_optimizers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Combining Optimizers</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="optimizer_schedules.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Optimizer Schedules</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-if-finite">Apply if finite</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.apply_if_finite"><code class="docutils literal notranslate"><span class="pre">apply_if_finite()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.ApplyIfFiniteState"><code class="docutils literal notranslate"><span class="pre">ApplyIfFiniteState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.ApplyIfFiniteState.notfinite_count"><code class="docutils literal notranslate"><span class="pre">ApplyIfFiniteState.notfinite_count</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.ApplyIfFiniteState.last_finite"><code class="docutils literal notranslate"><span class="pre">ApplyIfFiniteState.last_finite</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.ApplyIfFiniteState.total_notfinite"><code class="docutils literal notranslate"><span class="pre">ApplyIfFiniteState.total_notfinite</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flatten">Flatten</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lookahead">Lookahead</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.lookahead"><code class="docutils literal notranslate"><span class="pre">lookahead()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadParams"><code class="docutils literal notranslate"><span class="pre">LookaheadParams</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadParams.fast"><code class="docutils literal notranslate"><span class="pre">LookaheadParams.fast</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadParams.slow"><code class="docutils literal notranslate"><span class="pre">LookaheadParams.slow</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadState"><code class="docutils literal notranslate"><span class="pre">LookaheadState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadState.fast_state"><code class="docutils literal notranslate"><span class="pre">LookaheadState.fast_state</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.LookaheadState.steps_since_sync"><code class="docutils literal notranslate"><span class="pre">LookaheadState.steps_since_sync</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masked-update">Masked update</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.masked"><code class="docutils literal notranslate"><span class="pre">masked()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MaskedState"><code class="docutils literal notranslate"><span class="pre">MaskedState</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-step-update">Multi-step update</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiSteps"><code class="docutils literal notranslate"><span class="pre">MultiSteps</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState"><code class="docutils literal notranslate"><span class="pre">MultiStepsState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState.mini_step"><code class="docutils literal notranslate"><span class="pre">MultiStepsState.mini_step</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState.gradient_step"><code class="docutils literal notranslate"><span class="pre">MultiStepsState.gradient_step</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState.inner_opt_state"><code class="docutils literal notranslate"><span class="pre">MultiStepsState.inner_opt_state</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState.acc_grads"><code class="docutils literal notranslate"><span class="pre">MultiStepsState.acc_grads</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.MultiStepsState.skip_state"><code class="docutils literal notranslate"><span class="pre">MultiStepsState.skip_state</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.ShouldSkipUpdateFunction"><code class="docutils literal notranslate"><span class="pre">ShouldSkipUpdateFunction</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.skip_large_updates"><code class="docutils literal notranslate"><span class="pre">skip_large_updates()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax.skip_not_finite"><code class="docutils literal notranslate"><span class="pre">skip_not_finite()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Optax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2021, DeepMind.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

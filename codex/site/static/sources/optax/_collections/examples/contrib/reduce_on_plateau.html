@@ -1,0 +1,1072 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Reduce on Plateau Learning Rate Scheduler &#8212; Optax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_contributors.css?v=fe9086e2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/katex-math.css?v=05624691" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=1d6acab0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../../_static/katex.min.js?v=5cc8ed51"></script>
+    <script src="../../../_static/auto-render.min.js?v=af98beb9"></script>
+    <script src="../../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_collections/examples/contrib/reduce_on_plateau';</script>
+    <link rel="icon" href="../../../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Recreate AdeMAMix Rosenbrock Plot from Paper" href="rosenbrock_ademamix.html" />
+    <link rel="prev" title="Using the Muon Optimizer in Optax" href="muon.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  <script async type="text/javascript" src="/sources/optax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="optax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_collections/examples/contrib/reduce_on_plateau.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="Optax  documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="Optax  documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">🚀 Getting started</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../gallery.html">🖼️ Example gallery</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../README.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../adversarial_training.html">Adversarial training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cifar10_resnet.html">ResNet on CIFAR10 with Flax NNX and Optax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_example.html">Simple NN with Flax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../freezing_parameters.html">Freezing Parameters in Optax</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="../gradient_accumulation.html">Gradient Accumulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gradient_accumulation_and_microbatching.html">Summary</a></li>
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="../lbfgs.html">L-BFGS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../linear_assignment_problem.html">Linear assignment problem</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="../lookahead_mnist.html">Lookahead Optimizer on MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../meta_learning.html">Meta-Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mlp_mnist.html">MLP MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nanolm.html">Character-level Transformer on Tiny Shakespeare</a></li>
+
+
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="../ogda_example.html">Optimistic Gradient Descent in a Bilinear Min-Max Problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../perturbations.html">Perturbed optimizers</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="README.html">Contrib Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="differentially_private_sgd.html">Differentially private convolutional neural network on MNIST.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="muon.html">Using the Muon Optimizer in Optax</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Reduce on Plateau Learning Rate Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rosenbrock_ademamix.html">Recreate AdeMAMix Rosenbrock Plot from Paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sam.html">Sharpness-Aware Minimization (SAM)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">🛠️ Development</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../api/assignment.html">Assignment problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/combining_optimizers.html">Combining Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/optimizer_wrappers.html">Optimizer Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/optimizer_schedules.html">Optimizer Schedules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apply_updates.html">Apply Updates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/perturbations.html">Perturbations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/losses.html">Losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/utilities.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/microbatching.html">Microbatching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/contrib.html">🔧 Contrib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/experimental.html">🧪 Experimental</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google-deepmind/optax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/_collections/examples/contrib/reduce_on_plateau.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Reduce on Plateau Learning Rate Scheduler</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-and-model-setup">Data and model setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduce-on-average-training-loss">Reduce on average training loss</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduce-on-test-loss-plateau">Reduce on test loss plateau</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="reduce-on-plateau-learning-rate-scheduler">
+<h1>Reduce on Plateau Learning Rate Scheduler<a class="headerlink" href="#reduce-on-plateau-learning-rate-scheduler" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://colab.sandbox.google.com/github/google-deepmind/optax/blob/main/examples/contrib/reduce_on_plateau.ipynb"><img alt="Open in Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>In this notebook, we explore the power of <a class="reference internal" href="../../../api/optimizer_schedules.html#optax.contrib.reduce_on_plateau" title="optax.contrib.reduce_on_plateau"><code class="xref py py-func docutils literal notranslate"><span class="pre">optax.contrib.reduce_on_plateau()</span></code></a> scheduler, which reduces the learning rate when a metric has stopped improving. We will be solving a classification task by training a simple Multilayer Perceptron (MLP) on the fashion MNIST dataset.</p>
+<p>To run the colab locally you need install the
+<code class="docutils literal notranslate"><span class="pre">grain</span></code>, <code class="docutils literal notranslate"><span class="pre">tensorflow-datasets</span></code> packages via <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">linen</span> <span class="k">as</span> <span class="n">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">grain</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow_datasets</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tfds</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax.tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">optax</span><span class="w"> </span><span class="kn">import</span> <span class="n">contrib</span>
+
+<span class="c1"># Show on which platform JAX is running.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JAX running on&quot;</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>JAX running on TPU
+</pre></div>
+</div>
+</div>
+</div>
+<section id="data-and-model-setup">
+<h2>Data and model setup<a class="headerlink" href="#data-and-model-setup" title="Link to this heading">#</a></h2>
+<p>Fashion MNIST is a dataset of 28x28 grayscale image, associated with a label from 10 classes. We now load the dataset using <code class="docutils literal notranslate"><span class="pre">tensorflow_datasets</span></code>, apply min-max normalization to the images, shuffle the data in the train set and create batches of size <code class="docutils literal notranslate"><span class="pre">BATCH_SIZE</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @markdown Number of samples in each batch:</span>
+<span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">128</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_source</span><span class="p">,</span> <span class="n">test_source</span> <span class="o">=</span> <span class="n">tfds</span><span class="o">.</span><span class="n">data_source</span><span class="p">(</span><span class="s2">&quot;fashion_mnist&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">])</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">grain</span><span class="o">.</span><span class="n">MapDataset</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="n">train_source</span><span class="p">)</span>
+<span class="n">test_loader</span> <span class="o">=</span> <span class="n">grain</span><span class="o">.</span><span class="n">MapDataset</span><span class="o">.</span><span class="n">source</span><span class="p">(</span><span class="n">test_source</span><span class="p">)</span>
+
+<span class="n">train_loader_batched</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">train_loader</span>
+    <span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]))</span>
+    <span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">drop_remainder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">test_loader_batched</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">test_loader</span>
+    <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]))</span>
+    <span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">drop_remainder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">IMG_SIZE</span> <span class="o">=</span> <span class="n">train_source</span><span class="o">.</span><span class="n">dataset_info</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">NUM_CLASSES</span> <span class="o">=</span> <span class="n">train_source</span><span class="o">.</span><span class="n">dataset_info</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_classes</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The data is ready! Next let’s define a model. Optax is agnostic to which (if any) neural network library is used. Here we use Flax to implement a simple MLP.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MLP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;A simple multilayer perceptron model for image classification.&quot;&quot;&quot;</span>
+  <span class="n">hidden_sizes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="c1"># Flattens images in the batch.</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">])(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">])(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">NUM_CLASSES</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">net</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">()</span>
+
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_accuracy</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Computes loss and accuracy over a mini-batch.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    params: parameters of the model.</span>
+<span class="sd">    data: tuple of (inputs, labels).</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    loss: float</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">inputs</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">data</span>
+  <span class="n">logits</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">apply</span><span class="p">({</span><span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">params</span><span class="p">},</span> <span class="n">inputs</span><span class="p">)</span>
+  <span class="n">loss</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">softmax_cross_entropy_with_integer_labels</span><span class="p">(</span>
+      <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span>
+  <span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+  <span class="n">accuracy</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">labels</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="n">accuracy</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next we initialize network parameters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">fake_data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="n">IMG_SIZE</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">init_params</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">init</span><span class="p">({</span><span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="p">},</span> <span class="n">fake_data</span><span class="p">)[</span><span class="s2">&quot;params&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dataset_stats</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Computes loss and accuracy over the dataset `data_loader`.&quot;&quot;&quot;</span>
+  <span class="n">all_accuracy</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">all_loss</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
+    <span class="n">batch_loss</span><span class="p">,</span> <span class="n">batch_aux</span> <span class="o">=</span> <span class="n">loss_accuracy</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
+    <span class="n">all_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch_loss</span><span class="p">)</span>
+    <span class="n">all_accuracy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch_aux</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">])</span>
+  <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_loss</span><span class="p">),</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_accuracy</span><span class="p">)}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="reduce-on-average-training-loss">
+<h2>Reduce on average training loss<a class="headerlink" href="#reduce-on-average-training-loss" title="Link to this heading">#</a></h2>
+<p>In this section, we consider an implementation that reduces the learning rate according to an average training loss value agglomerated for some accumulation size hyperparameter. In the next section, we consider an implementation that
+reduces the learning rate according to the test loss.</p>
+<p>In both examples, we consider an adam optimizer with a given learning rate that will be scaled by reduce on plateau over a total of 50 epochs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @markdown Total number of epochs to train for:</span>
+<span class="n">N_EPOCHS</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown The base learning rate for the optimizer:</span>
+<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># @param{type:&quot;number&quot;}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We set up the hyperparameters of reduce on plateau in this example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @markdown Number of epochs with no improvement after which learning rate will be reduced:</span>
+<span class="n">PATIENCE</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Number of epochs to wait before resuming normal operation after the learning rate reduction:</span>
+<span class="n">COOLDOWN</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Factor by which to reduce the learning rate:</span>
+<span class="n">FACTOR</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># @param{type:&quot;number&quot;}</span>
+<span class="c1"># @markdown Relative tolerance for measuring the new optimum:</span>
+<span class="n">RTOL</span> <span class="o">=</span> <span class="mf">1e-4</span>  <span class="c1"># @param{type:&quot;number&quot;}</span>
+<span class="c1"># @markdown Number of iterations to accumulate an average value:</span>
+<span class="n">ACCUMULATION_SIZE</span> <span class="o">=</span> <span class="mi">200</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We chain the base optimizer (adam) and the reduce on plateau transformation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">opt</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span>
+    <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="n">LEARNING_RATE</span><span class="p">),</span>
+    <span class="n">contrib</span><span class="o">.</span><span class="n">reduce_on_plateau</span><span class="p">(</span>
+        <span class="n">patience</span><span class="o">=</span><span class="n">PATIENCE</span><span class="p">,</span>
+        <span class="n">cooldown</span><span class="o">=</span><span class="n">COOLDOWN</span><span class="p">,</span>
+        <span class="n">factor</span><span class="o">=</span><span class="n">FACTOR</span><span class="p">,</span>
+        <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">,</span>
+        <span class="n">accumulation_size</span><span class="o">=</span><span class="n">ACCUMULATION_SIZE</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="n">opt_state</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">init_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the training step, we feed the current value of the loss to the chained optimizer. This value is used to compute an average on ACCUMULATION_SIZE number of iterations by reduce on plateau.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Performs a one step update.&quot;&quot;&quot;</span>
+  <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">aux</span><span class="p">),</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">loss_accuracy</span><span class="p">,</span> <span class="n">has_aux</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span>
+      <span class="n">params</span><span class="p">,</span> <span class="n">batch</span>
+  <span class="p">)</span>
+  <span class="n">updates</span><span class="p">,</span> <span class="n">opt_state</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+  <span class="n">params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">apply_updates</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">params</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">aux</span>
+
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">init_params</span>
+
+<span class="c1"># Computes metrics at initialization.</span>
+<span class="n">train_stats</span> <span class="o">=</span> <span class="n">dataset_stats</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">test_loader_batched</span><span class="p">)</span>
+<span class="n">train_accuracy</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_stats</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">]]</span>
+<span class="n">train_losses</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_stats</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">]]</span>
+
+<span class="n">test_stats</span> <span class="o">=</span> <span class="n">dataset_stats</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">test_loader_batched</span><span class="p">)</span>
+<span class="n">test_accuracy</span> <span class="o">=</span> <span class="p">[</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">]]</span>
+<span class="n">test_losses</span> <span class="o">=</span> <span class="p">[</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]]</span>
+
+<span class="n">lr_scale_history</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_EPOCHS</span><span class="p">):</span>
+  <span class="n">train_accuracy_epoch</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">train_losses_epoch</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">train_batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader_batched</span><span class="p">):</span>
+    <span class="n">params</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">train_loss</span><span class="p">,</span> <span class="n">train_aux</span> <span class="o">=</span> <span class="n">train_step</span><span class="p">(</span>
+        <span class="n">params</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">train_batch</span>
+    <span class="p">)</span>
+    <span class="n">train_accuracy_epoch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_aux</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">])</span>
+    <span class="n">train_losses_epoch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_loss</span><span class="p">)</span>
+
+  <span class="n">mean_train_accuracy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">train_accuracy_epoch</span><span class="p">)</span>
+  <span class="n">mean_train_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">train_losses_epoch</span><span class="p">)</span>
+
+  <span class="c1"># fetch the scaling factor from the reduce_on_plateau transform</span>
+  <span class="n">lr_scale</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">opt_state</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">)</span>
+  <span class="n">lr_scale_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lr_scale</span><span class="p">)</span>
+
+  <span class="n">train_accuracy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_train_accuracy</span><span class="p">)</span>
+  <span class="n">train_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_train_loss</span><span class="p">)</span>
+
+  <span class="n">test_stats</span> <span class="o">=</span> <span class="n">dataset_stats</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">test_loader_batched</span><span class="p">)</span>
+  <span class="n">test_accuracy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">])</span>
+  <span class="n">test_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">])</span>
+  <span class="nb">print</span><span class="p">(</span>
+      <span class="sa">f</span><span class="s2">&quot;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">N_EPOCHS</span><span class="si">}</span><span class="s2">, mean train accuracy:&quot;</span>
+      <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">mean_train_accuracy</span><span class="si">}</span><span class="s2">, lr scale: </span><span class="si">{</span><span class="n">optax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">opt_state</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;scale&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+  <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/50, mean train accuracy: 0.795105516910553, lr scale: 1.0
+Epoch 2/50, mean train accuracy: 0.8480902910232544, lr scale: 1.0
+Epoch 3/50, mean train accuracy: 0.8569210767745972, lr scale: 1.0
+Epoch 4/50, mean train accuracy: 0.8639156222343445, lr scale: 1.0
+Epoch 5/50, mean train accuracy: 0.8677049875259399, lr scale: 1.0
+Epoch 6/50, mean train accuracy: 0.870559573173523, lr scale: 1.0
+Epoch 7/50, mean train accuracy: 0.8726295232772827, lr scale: 1.0
+Epoch 8/50, mean train accuracy: 0.8741152286529541, lr scale: 1.0
+Epoch 9/50, mean train accuracy: 0.8764022588729858, lr scale: 1.0
+Epoch 10/50, mean train accuracy: 0.8745325803756714, lr scale: 1.0
+Epoch 11/50, mean train accuracy: 0.8848991990089417, lr scale: 0.5
+Epoch 12/50, mean train accuracy: 0.890257716178894, lr scale: 0.5
+Epoch 13/50, mean train accuracy: 0.8912426829338074, lr scale: 0.5
+Epoch 14/50, mean train accuracy: 0.8928118348121643, lr scale: 0.5
+Epoch 15/50, mean train accuracy: 0.8932792544364929, lr scale: 0.5
+Epoch 16/50, mean train accuracy: 0.8935129642486572, lr scale: 0.5
+Epoch 17/50, mean train accuracy: 0.8973023295402527, lr scale: 0.5
+Epoch 18/50, mean train accuracy: 0.8988214731216431, lr scale: 0.5
+Epoch 19/50, mean train accuracy: 0.8978365659713745, lr scale: 0.5
+Epoch 20/50, mean train accuracy: 0.8976195454597473, lr scale: 0.5
+Epoch 21/50, mean train accuracy: 0.8993222713470459, lr scale: 0.5
+Epoch 22/50, mean train accuracy: 0.8984041213989258, lr scale: 0.5
+Epoch 23/50, mean train accuracy: 0.9016092419624329, lr scale: 0.5
+Epoch 24/50, mean train accuracy: 0.8995225429534912, lr scale: 0.5
+Epoch 25/50, mean train accuracy: 0.9009414911270142, lr scale: 0.5
+Epoch 26/50, mean train accuracy: 0.9032785892486572, lr scale: 0.5
+Epoch 27/50, mean train accuracy: 0.9015925526618958, lr scale: 0.5
+Epoch 28/50, mean train accuracy: 0.9078024625778198, lr scale: 0.25
+Epoch 29/50, mean train accuracy: 0.9122095108032227, lr scale: 0.25
+Epoch 30/50, mean train accuracy: 0.9130609035491943, lr scale: 0.25
+Epoch 31/50, mean train accuracy: 0.9130942821502686, lr scale: 0.25
+Epoch 32/50, mean train accuracy: 0.9132111668586731, lr scale: 0.25
+Epoch 33/50, mean train accuracy: 0.9133947491645813, lr scale: 0.25
+Epoch 34/50, mean train accuracy: 0.915831983089447, lr scale: 0.125
+Epoch 35/50, mean train accuracy: 0.9186698794364929, lr scale: 0.125
+Epoch 36/50, mean train accuracy: 0.9189369678497314, lr scale: 0.125
+Epoch 37/50, mean train accuracy: 0.9192207455635071, lr scale: 0.125
+Epoch 38/50, mean train accuracy: 0.9194210767745972, lr scale: 0.125
+Epoch 39/50, mean train accuracy: 0.9209067821502686, lr scale: 0.125
+Epoch 40/50, mean train accuracy: 0.920255720615387, lr scale: 0.125
+Epoch 41/50, mean train accuracy: 0.9212740659713745, lr scale: 0.125
+Epoch 42/50, mean train accuracy: 0.9211404919624329, lr scale: 0.125
+Epoch 43/50, mean train accuracy: 0.9217247366905212, lr scale: 0.125
+Epoch 44/50, mean train accuracy: 0.9235109686851501, lr scale: 0.0625
+Epoch 45/50, mean train accuracy: 0.9244624972343445, lr scale: 0.0625
+Epoch 46/50, mean train accuracy: 0.9247462749481201, lr scale: 0.0625
+Epoch 47/50, mean train accuracy: 0.9258146286010742, lr scale: 0.03125
+Epoch 48/50, mean train accuracy: 0.926315426826477, lr scale: 0.03125
+Epoch 49/50, mean train accuracy: 0.9263654947280884, lr scale: 0.03125
+Epoch 50/50, mean train accuracy: 0.926315426826477, lr scale: 0.03125
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span>
+    <span class="n">lr_scale_history</span><span class="p">,</span> <span class="n">train_losses</span><span class="p">,</span> <span class="n">train_accuracy</span><span class="p">,</span> <span class="n">test_losses</span><span class="p">,</span> <span class="n">test_accuracy</span>
+  <span class="p">):</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">})</span>
+
+  <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+  <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lr_scale_history</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;LR Scale&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;LR Scale&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Epoch&quot;</span><span class="p">)</span>
+
+  <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">train_losses</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+      <span class="n">jnp</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">train_losses</span><span class="p">)),</span>
+      <span class="nb">min</span><span class="p">(</span><span class="n">train_losses</span><span class="p">),</span>
+      <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Min&quot;</span><span class="p">,</span>
+      <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Train loss&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Epoch&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Train Loss&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">train_accuracy</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+      <span class="n">jnp</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">train_accuracy</span><span class="p">)),</span>
+      <span class="nb">max</span><span class="p">(</span><span class="n">train_accuracy</span><span class="p">),</span>
+      <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Max&quot;</span><span class="p">,</span>
+      <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Train acc&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Epoch&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Train acc&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test_losses</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+      <span class="n">jnp</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">test_losses</span><span class="p">)),</span>
+      <span class="nb">min</span><span class="p">(</span><span class="n">test_losses</span><span class="p">),</span>
+      <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Min&quot;</span><span class="p">,</span>
+      <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Test loss&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Epoch&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Test Loss&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test_accuracy</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+      <span class="n">jnp</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">test_accuracy</span><span class="p">)),</span>
+      <span class="nb">max</span><span class="p">(</span><span class="n">test_accuracy</span><span class="p">),</span>
+      <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Max&quot;</span><span class="p">,</span>
+      <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Test acc&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Test Acc&quot;</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+  <span class="n">axs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Epoch&quot;</span><span class="p">)</span>
+
+  <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+  <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">lr_scale_history</span><span class="p">,</span> <span class="n">train_losses</span><span class="p">,</span> <span class="n">train_accuracy</span><span class="p">,</span> <span class="n">test_losses</span><span class="p">,</span> <span class="n">test_accuracy</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../../_images/4551da1a5f466a35bb9cb93e0829ba6e373c83ff2bd7e8357be4feb2897308a0.png"><img alt="../../../_images/4551da1a5f466a35bb9cb93e0829ba6e373c83ff2bd7e8357be4feb2897308a0.png" height="298" src="../../../_images/4551da1a5f466a35bb9cb93e0829ba6e373c83ff2bd7e8357be4feb2897308a0.png" width="1414" />
+</a>
+</div>
+</div>
+</section>
+<section id="reduce-on-test-loss-plateau">
+<h2>Reduce on test loss plateau<a class="headerlink" href="#reduce-on-test-loss-plateau" title="Link to this heading">#</a></h2>
+<p>Here we consider an implementation that reduces the learning rate according to the test loss value. In this example, the accumulation size is just one as we manually gather the test loss outside of the transformation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @markdown Number of epochs with no improvement after which learning rate will be reduced:</span>
+<span class="n">PATIENCE</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Number of epochs to wait before resuming normal operation after the learning rate reduction:</span>
+<span class="n">COOLDOWN</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># @param{type:&quot;integer&quot;}</span>
+<span class="c1"># @markdown Factor by which to reduce the learning rate:</span>
+<span class="n">FACTOR</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># @param{type:&quot;number&quot;}</span>
+<span class="c1"># @markdown Relative tolerance for measuring the new optimum:</span>
+<span class="n">RTOL</span> <span class="o">=</span> <span class="mf">1e-4</span>  <span class="c1"># @param{type:&quot;number&quot;}</span>
+<span class="c1"># @markdown Number of iterations to accumulate an average value:</span>
+<span class="n">ACCUMULATION_SIZE</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The base optimizer is still adam.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
+<span class="n">solver_state</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">init_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the next cell, we initialize the <code class="docutils literal notranslate"><span class="pre">contrib.reduce_on_plateau</span></code> scheduler, which reduces learning rate when a monitored metric (the test loss here) has stopped improving. We will be using this scheduler to scale the updates, produced by the regular Adam optimizer.</p>
+<p>Note that the initial scale for the scheduler is not explicitly set, so it will default to 1.0, which means there will be no scaling of the learning rate initially.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">transform</span> <span class="o">=</span> <span class="n">contrib</span><span class="o">.</span><span class="n">reduce_on_plateau</span><span class="p">(</span>
+    <span class="n">patience</span><span class="o">=</span><span class="n">PATIENCE</span><span class="p">,</span>
+    <span class="n">cooldown</span><span class="o">=</span><span class="n">COOLDOWN</span><span class="p">,</span>
+    <span class="n">factor</span><span class="o">=</span><span class="n">FACTOR</span><span class="p">,</span>
+    <span class="n">rtol</span><span class="o">=</span><span class="n">RTOL</span><span class="p">,</span>
+    <span class="n">accumulation_size</span><span class="o">=</span><span class="n">ACCUMULATION_SIZE</span>
+    <span class="p">)</span>
+
+<span class="c1"># Creates initial state for `contrib.reduce_on_plateau` transformation.</span>
+<span class="n">transform_state</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">init_params</span><span class="p">)</span>
+<span class="n">transform_state</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ReduceLROnPlateauState(scale=Array(1., dtype=float32), best_value=Array(inf, dtype=float32), plateau_count=Array(0, dtype=int32), cooldown_count=Array(0, dtype=int32), count=Array(0, dtype=int32), avg_value=Array(0., dtype=float32))
+</pre></div>
+</div>
+</div>
+</div>
+<p>The next cell trains the model for <code class="docutils literal notranslate"><span class="pre">N_EPOCHS</span></code> epochs. At the end of each epoch, the learning rate scaling value is updated based on the loss computed on the test set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">solver_state</span><span class="p">,</span> <span class="n">transform_state</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Performs a one step update.&quot;&quot;&quot;</span>
+  <span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">aux</span><span class="p">),</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">loss_accuracy</span><span class="p">,</span> <span class="n">has_aux</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span>
+      <span class="n">params</span><span class="p">,</span> <span class="n">batch</span>
+  <span class="p">)</span>
+  <span class="c1"># Computes updates scaled by the learning rate that was used to initialize</span>
+  <span class="c1"># the `solver`.</span>
+  <span class="n">updates</span><span class="p">,</span> <span class="n">solver_state</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">solver_state</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+  <span class="c1"># Scales updates, produced by `solver`, by the scaling value.</span>
+  <span class="n">updates</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">transform_state</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+  <span class="n">params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">apply_updates</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">params</span><span class="p">,</span> <span class="n">solver_state</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">aux</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">init_params</span>
+
+<span class="c1"># Computes metrics at initialization.</span>
+<span class="n">train_stats</span> <span class="o">=</span> <span class="n">dataset_stats</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">test_loader_batched</span><span class="p">)</span>
+<span class="n">train_accuracy</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_stats</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">]]</span>
+<span class="n">train_losses</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_stats</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">]]</span>
+
+<span class="n">test_stats</span> <span class="o">=</span> <span class="n">dataset_stats</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">test_loader_batched</span><span class="p">)</span>
+<span class="n">test_accuracy</span> <span class="o">=</span> <span class="p">[</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">]]</span>
+<span class="n">test_losses</span> <span class="o">=</span> <span class="p">[</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]]</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">init_params</span>
+<span class="n">lr_scale_history</span> <span class="o">=</span> <span class="p">[</span><span class="n">transform_state</span><span class="o">.</span><span class="n">scale</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_EPOCHS</span><span class="p">):</span>
+  <span class="n">train_accuracy_epoch</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">train_losses_epoch</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">for</span> <span class="n">train_batch</span> <span class="ow">in</span> <span class="n">train_loader_batched</span><span class="p">:</span>
+    <span class="n">params</span><span class="p">,</span> <span class="n">solver_state</span><span class="p">,</span> <span class="n">train_loss</span><span class="p">,</span> <span class="n">train_aux</span> <span class="o">=</span> <span class="n">train_step</span><span class="p">(</span>
+        <span class="n">params</span><span class="p">,</span> <span class="n">solver_state</span><span class="p">,</span> <span class="n">transform_state</span><span class="p">,</span> <span class="n">train_batch</span>
+    <span class="p">)</span>
+    <span class="n">train_accuracy_epoch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_aux</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">])</span>
+    <span class="n">train_losses_epoch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_loss</span><span class="p">)</span>
+
+  <span class="n">mean_train_accuracy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">train_accuracy_epoch</span><span class="p">)</span>
+  <span class="n">mean_train_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">train_losses_epoch</span><span class="p">)</span>
+
+  <span class="c1"># Adjusts the learning rate scaling value using the loss computed on the</span>
+  <span class="c1"># test set.</span>
+  <span class="n">_</span><span class="p">,</span> <span class="n">transform_state</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+      <span class="n">updates</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">transform_state</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span>
+  <span class="p">)</span>
+  <span class="n">lr_scale_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transform_state</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
+
+  <span class="n">train_accuracy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_train_accuracy</span><span class="p">)</span>
+  <span class="n">train_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_train_loss</span><span class="p">)</span>
+
+  <span class="n">test_stats</span> <span class="o">=</span> <span class="n">dataset_stats</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">test_loader_batched</span><span class="p">)</span>
+  <span class="n">test_accuracy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">])</span>
+  <span class="n">test_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">])</span>
+
+  <span class="n">test_stats</span> <span class="o">=</span> <span class="n">dataset_stats</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">test_loader_batched</span><span class="p">)</span>
+  <span class="n">test_accuracy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">])</span>
+  <span class="n">test_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_stats</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">])</span>
+
+  <span class="nb">print</span><span class="p">(</span>
+      <span class="sa">f</span><span class="s2">&quot;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">N_EPOCHS</span><span class="si">}</span><span class="s2">, mean train accuracy:&quot;</span>
+      <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">mean_train_accuracy</span><span class="si">}</span><span class="s2">, lr scale: </span><span class="si">{</span><span class="n">transform_state</span><span class="o">.</span><span class="n">scale</span><span class="si">}</span><span class="s2">&quot;</span>
+  <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/50, mean train accuracy: 0.8026175498962402, lr scale: 1.0
+Epoch 2/50, mean train accuracy: 0.8529981374740601, lr scale: 1.0
+Epoch 3/50, mean train accuracy: 0.8595252633094788, lr scale: 1.0
+Epoch 4/50, mean train accuracy: 0.8676048517227173, lr scale: 1.0
+Epoch 5/50, mean train accuracy: 0.8701255321502686, lr scale: 1.0
+Epoch 6/50, mean train accuracy: 0.8744324445724487, lr scale: 1.0
+Epoch 7/50, mean train accuracy: 0.8766693472862244, lr scale: 1.0
+Epoch 8/50, mean train accuracy: 0.8782885670661926, lr scale: 1.0
+Epoch 9/50, mean train accuracy: 0.8821113705635071, lr scale: 1.0
+Epoch 10/50, mean train accuracy: 0.8826956748962402, lr scale: 1.0
+Epoch 11/50, mean train accuracy: 0.8834802508354187, lr scale: 1.0
+Epoch 12/50, mean train accuracy: 0.8812767267227173, lr scale: 1.0
+Epoch 13/50, mean train accuracy: 0.8834134340286255, lr scale: 1.0
+Epoch 14/50, mean train accuracy: 0.8843482732772827, lr scale: 1.0
+Epoch 15/50, mean train accuracy: 0.8863682150840759, lr scale: 1.0
+Epoch 16/50, mean train accuracy: 0.8878372311592102, lr scale: 0.5
+Epoch 17/50, mean train accuracy: 0.8978866338729858, lr scale: 0.5
+Epoch 18/50, mean train accuracy: 0.9000734686851501, lr scale: 0.5
+Epoch 19/50, mean train accuracy: 0.9014756679534912, lr scale: 0.5
+Epoch 20/50, mean train accuracy: 0.9022436141967773, lr scale: 0.5
+Epoch 21/50, mean train accuracy: 0.9031950831413269, lr scale: 0.25
+Epoch 22/50, mean train accuracy: 0.9104066491127014, lr scale: 0.25
+Epoch 23/50, mean train accuracy: 0.9114916920661926, lr scale: 0.25
+Epoch 24/50, mean train accuracy: 0.9116252660751343, lr scale: 0.25
+Epoch 25/50, mean train accuracy: 0.9115418195724487, lr scale: 0.25
+Epoch 26/50, mean train accuracy: 0.9132612347602844, lr scale: 0.25
+Epoch 27/50, mean train accuracy: 0.9135617017745972, lr scale: 0.25
+Epoch 28/50, mean train accuracy: 0.9140791893005371, lr scale: 0.125
+Epoch 29/50, mean train accuracy: 0.9189369678497314, lr scale: 0.125
+Epoch 30/50, mean train accuracy: 0.9193376302719116, lr scale: 0.125
+Epoch 31/50, mean train accuracy: 0.9191539883613586, lr scale: 0.125
+Epoch 32/50, mean train accuracy: 0.9194544553756714, lr scale: 0.125
+Epoch 33/50, mean train accuracy: 0.919921875, lr scale: 0.0625
+Epoch 34/50, mean train accuracy: 0.9227597713470459, lr scale: 0.0625
+Epoch 35/50, mean train accuracy: 0.9232605695724487, lr scale: 0.0625
+Epoch 36/50, mean train accuracy: 0.9238114356994629, lr scale: 0.0625
+Epoch 37/50, mean train accuracy: 0.924161970615387, lr scale: 0.0625
+Epoch 38/50, mean train accuracy: 0.9249966740608215, lr scale: 0.03125
+Epoch 39/50, mean train accuracy: 0.9259148240089417, lr scale: 0.03125
+Epoch 40/50, mean train accuracy: 0.9260316491127014, lr scale: 0.03125
+Epoch 41/50, mean train accuracy: 0.9264823794364929, lr scale: 0.03125
+Epoch 42/50, mean train accuracy: 0.9266993999481201, lr scale: 0.03125
+Epoch 43/50, mean train accuracy: 0.9270666241645813, lr scale: 0.015625
+Epoch 44/50, mean train accuracy: 0.9275173544883728, lr scale: 0.015625
+Epoch 45/50, mean train accuracy: 0.9278512001037598, lr scale: 0.015625
+Epoch 46/50, mean train accuracy: 0.9276843070983887, lr scale: 0.015625
+Epoch 47/50, mean train accuracy: 0.9279513955116272, lr scale: 0.015625
+Epoch 48/50, mean train accuracy: 0.9277176856994629, lr scale: 0.0078125
+Epoch 49/50, mean train accuracy: 0.9284188151359558, lr scale: 0.0078125
+Epoch 50/50, mean train accuracy: 0.9285857081413269, lr scale: 0.0078125
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">lr_scale_history</span><span class="p">,</span> <span class="n">train_losses</span><span class="p">,</span> <span class="n">train_accuracy</span><span class="p">,</span> <span class="n">test_losses</span><span class="p">,</span> <span class="n">test_accuracy</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../../../_images/ca81746dc88288f76c549ab154ce1ff04b85e3166b4476fcc03cf0381ca31c64.png"><img alt="../../../_images/ca81746dc88288f76c549ab154ce1ff04b85e3166b4476fcc03cf0381ca31c64.png" height="298" src="../../../_images/ca81746dc88288f76c549ab154ce1ff04b85e3166b4476fcc03cf0381ca31c64.png" width="1415" />
+</a>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="muon.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Using the Muon Optimizer in Optax</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="rosenbrock_ademamix.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Recreate AdeMAMix Rosenbrock Plot from Paper</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-and-model-setup">Data and model setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduce-on-average-training-loss">Reduce on average training loss</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduce-on-test-loss-plateau">Reduce on test loss plateau</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Optax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2021, DeepMind.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

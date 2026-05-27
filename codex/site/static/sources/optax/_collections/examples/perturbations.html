@@ -1,0 +1,1045 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Perturbed optimizers &#8212; Optax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx_contributors.css?v=fe9086e2" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/katex-math.css?v=05624691" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=1d6acab0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../_static/katex.min.js?v=5cc8ed51"></script>
+    <script src="../../_static/auto-render.min.js?v=af98beb9"></script>
+    <script src="../../_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_collections/examples/perturbations';</script>
+    <link rel="icon" href="../../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Contrib Examples" href="contrib/README.html" />
+    <link rel="prev" title="Optimistic Gradient Descent in a Bilinear Min-Max Problem" href="ogda_example.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  <script async type="text/javascript" src="/sources/optax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="optax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_collections/examples/perturbations.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="Optax  documentation - Home"/>
+    <img src="../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="Optax  documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">🚀 Getting started</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../gallery.html">🖼️ Example gallery</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="README.html">Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="adversarial_training.html">Adversarial training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cifar10_resnet.html">ResNet on CIFAR10 with Flax NNX and Optax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flax_example.html">Simple NN with Flax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="freezing_parameters.html">Freezing Parameters in Optax</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="gradient_accumulation.html">Gradient Accumulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gradient_accumulation_and_microbatching.html">Summary</a></li>
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="lbfgs.html">L-BFGS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linear_assignment_problem.html">Linear assignment problem</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="lookahead_mnist.html">Lookahead Optimizer on MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="meta_learning.html">Meta-Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mlp_mnist.html">MLP MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nanolm.html">Character-level Transformer on Tiny Shakespeare</a></li>
+
+
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="ogda_example.html">Optimistic Gradient Descent in a Bilinear Min-Max Problem</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Perturbed optimizers</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="contrib/README.html">Contrib Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="contrib/differentially_private_sgd.html">Differentially private convolutional neural network on MNIST.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contrib/muon.html">Using the Muon Optimizer in Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contrib/reduce_on_plateau.html">Reduce on Plateau Learning Rate Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contrib/rosenbrock_ademamix.html">Recreate AdeMAMix Rosenbrock Plot from Paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contrib/sam.html">Sharpness-Aware Minimization (SAM)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">🛠️ Development</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../api/assignment.html">Assignment problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/combining_optimizers.html">Combining Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/optimizer_wrappers.html">Optimizer Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/optimizer_schedules.html">Optimizer Schedules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/apply_updates.html">Apply Updates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/perturbations.html">Perturbations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/losses.html">Losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/utilities.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/microbatching.html">Microbatching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/contrib.html">🔧 Contrib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/experimental.html">🧪 Experimental</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google-deepmind/optax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/_collections/examples/perturbations.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Perturbed optimizers</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Perturbed optimizers</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#argmax-one-hot">Argmax one-hot</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-hot-function">One-hot function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-hot-with-pertubations">One-hot with pertubations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gradients-for-one-hot-with-perturbations">Gradients for one-hot with perturbations</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#differentiable-ranking">Differentiable ranking</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ranking-function">Ranking function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ranking-with-perturbations">Ranking with perturbations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gradients-for-ranking-with-perturbations">Gradients for ranking with perturbations</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#general-input-outputs-pytrees">General input / outputs (Pytrees)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tree-argmax">Tree argmax</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scalar-loss">Scalar loss</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-computation">Gradient computation</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="perturbed-optimizers">
+<h1>Perturbed optimizers<a class="headerlink" href="#perturbed-optimizers" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://colab.sandbox.google.com/github/google-deepmind/optax/blob/main/examples/perturbations.ipynb"><img alt="Open in Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>We review in this notebook a universal method to transform any function <span class="math">\(f\)</span> mapping a pytree to another pytree to a differentiable approximation <span class="math">\(f_\varepsilon\)</span>, using pertutbations following the method of <a class="reference external" href="https://arxiv.org/abs/2002.08676">Berthet et al. (2020)</a>.</p>
+<p>For a random <span class="math">\(Z\)</span> drawn from a distribution with continuous positive distribution <span class="math">\(\mu\)</span> and a function <span class="math">\(f: X \to Y\)</span>, its perturbed approximation defined for any <span class="math">\(x \in X\)</span> by</p>
+<div class="math">
+\[f_\varepsilon(x) = \mathbf{E}[f (x + \varepsilon Z )]\, .\]</div>
+<p>We illustrate here on some examples, including the case of an optimizer function <span class="math">\(y^*\)</span> over <span class="math">\(C\)</span> defined for any cost <span class="math">\(\theta \in \mathbb{R}^d\)</span> by</p>
+<div class="math">
+\[y^*(\theta) = \mathop{\mathrm{arg\,max}}_{y \in C} \langle y, \theta \rangle\, .\]</div>
+<p>In this case, the perturbed optimizer is given by</p>
+<div class="math">
+\[y_\varepsilon^*(\theta) = \mathbf{E}[\mathop{\mathrm{arg\,max}}_{y\in C} \langle y, \theta + \varepsilon Z \rangle]\, .\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">tree_util</span> <span class="k">as</span> <span class="n">jtu</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax.tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">optax</span><span class="w"> </span><span class="kn">import</span> <span class="n">perturbations</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="argmax-one-hot">
+<h1>Argmax one-hot<a class="headerlink" href="#argmax-one-hot" title="Link to this heading">#</a></h1>
+<p>We consider an optimizer, such as the following <code class="docutils literal notranslate"><span class="pre">argmax_one_hot</span></code> function. It transforms a real-valued vector into a binary vector with a 1 in the coefficient with largest magnitude and 0 elsewhere. It corresponds to <span class="math">\(y^*\)</span> for <span class="math">\(C\)</span> being the unit simplex. We run it on an example input <code class="docutils literal notranslate"><span class="pre">values</span></code>.</p>
+<section id="one-hot-function">
+<h2>One-hot function<a class="headerlink" href="#one-hot-function" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">argmax_one_hot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">one_hot</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">values</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">1.9</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">])</span>
+
+<span class="n">one_hot_vec</span> <span class="o">=</span> <span class="n">argmax_one_hot</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">one_hot_vec</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0. 1. 0. 0. 0.]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="one-hot-with-pertubations">
+<h2>One-hot with pertubations<a class="headerlink" href="#one-hot-with-pertubations" title="Link to this heading">#</a></h2>
+<p>Our implementation transforms the <code class="docutils literal notranslate"><span class="pre">argmax_one_hot</span></code> function into a perturbed one that we call <code class="docutils literal notranslate"><span class="pre">pert_one_hot</span></code>. In this case we use Gumbel noise for the perturbation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N_SAMPLES</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">SIGMA</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">GUMBEL</span> <span class="o">=</span> <span class="n">perturbations</span><span class="o">.</span><span class="n">Gumbel</span><span class="p">()</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pert_one_hot</span> <span class="o">=</span> <span class="n">perturbations</span><span class="o">.</span><span class="n">make_perturbed_fun</span><span class="p">(</span><span class="n">fun</span><span class="o">=</span><span class="n">argmax_one_hot</span><span class="p">,</span>
+                                                <span class="n">num_samples</span><span class="o">=</span><span class="n">N_SAMPLES</span><span class="p">,</span>
+                                                <span class="n">sigma</span><span class="o">=</span><span class="n">SIGMA</span><span class="p">,</span>
+                                                <span class="n">noise</span><span class="o">=</span><span class="n">GUMBEL</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this particular case, it is equal to the usual <a class="reference external" href="https://en.wikipedia.org/wiki/Softmax_function">softmax function</a>. This is not always true, in general there is no closed form for <span class="math">\(y_\varepsilon^*\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rngs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">rngs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">pert_argmax</span> <span class="o">=</span> <span class="n">pert_one_hot</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;computation with </span><span class="si">{</span><span class="n">N_SAMPLES</span><span class="si">}</span><span class="s1"> samples, sigma = </span><span class="si">{</span><span class="n">SIGMA</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;perturbed argmax = </span><span class="si">{</span><span class="n">pert_argmax</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">values</span><span class="o">/</span><span class="n">SIGMA</span><span class="p">)</span>
+<span class="n">soft_max</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">values</span><span class="o">/</span><span class="n">SIGMA</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;softmax = </span><span class="si">{</span><span class="n">soft_max</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;square norm of softmax = </span><span class="si">{</span><span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">soft_max</span><span class="p">)</span><span class="si">:</span><span class="s1">.2e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;square norm of difference = </span><span class="si">{</span><span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pert_argmax</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">soft_max</span><span class="p">)</span><span class="si">:</span><span class="s1">.2e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>computation with 100 samples, sigma = 0.5
+perturbed argmax = [0.02       0.87       0.01       0.09999999 0.        ]
+softmax = [0.00549293 0.8152234  0.01222475 0.16459078 0.00246813]
+square norm of softmax = 8.32e-01
+square norm of difference = 8.60e-02
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gradients-for-one-hot-with-perturbations">
+<h2>Gradients for one-hot with perturbations<a class="headerlink" href="#gradients-for-one-hot-with-perturbations" title="Link to this heading">#</a></h2>
+<p>The perturbed optimizer <span class="math">\(y_\varepsilon^*\)</span> is differentiable, and its gradient can be computed with stochastic estimation automatically, using <code class="docutils literal notranslate"><span class="pre">jax.grad</span></code>.</p>
+<p>We create a scalar loss <code class="docutils literal notranslate"><span class="pre">loss_simplex</span></code> of the perturbed optimizer <span class="math">\(y^*_\varepsilon\)</span></p>
+<div class="math">
+\[\ell_\text{simplex}(y_{\text{true}} = y_\varepsilon^*; y_{\text{true}})\]</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">values</span></code> equal to a vector <span class="math">\(\theta\)</span>, we can compute gradients of</p>
+<div class="math">
+\[\ell(\theta) = \ell_\text{simplex}(y_\varepsilon^*(\theta); y_{\text{true}})\]</div>
+<p>with respect to <code class="docutils literal notranslate"><span class="pre">values</span></code>, automatically.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example loss function</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_simplex</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+  <span class="n">n</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">v_true</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
+  <span class="n">y_true</span> <span class="o">=</span> <span class="n">v_true</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v_true</span><span class="p">)</span>
+  <span class="n">y_pred</span> <span class="o">=</span> <span class="n">pert_one_hot</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">loss_simplex</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(0.7062, dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can compute the gradient of <span class="math">\(\ell\)</span> directly</p>
+<div class="math">
+\[\nabla_\theta \ell(\theta) = \partial_\theta y^*_\varepsilon(\theta) \cdot \nabla_1 \ell_{\text{simplex}}(y^*_\varepsilon(\theta); y_{\text{true}})\]</div>
+<p>The computation of the jacobian <span class="math">\(\partial_\theta y^*_\varepsilon(\theta)\)</span> is implemented automatically, using an estimation method given by <a class="reference external" href="https://arxiv.org/abs/2002.08676">Berthet et al. (2020)</a>, [Prop. 3.1].</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Gradient of the loss w.r.t input values</span>
+
+<span class="n">gradient</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_simplex</span><span class="p">)(</span><span class="n">values</span><span class="p">,</span> <span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gradient</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.09853157  0.10874727 -0.11743014 -0.17878106  0.16792142]
+</pre></div>
+</div>
+</div>
+</div>
+<p>We illustrate the use of this method by running 200 steps of gradient descent on <span class="math">\(\theta_t\)</span> so that it minimizes this loss.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Doing 200 steps of gradient descent on the values to have the desired ranks</span>
+
+<span class="n">steps</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">values_t</span> <span class="o">=</span> <span class="n">values</span>
+<span class="n">eta</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="n">grad_func</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_simplex</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+  <span class="n">rngs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="n">values_t</span> <span class="o">=</span> <span class="n">values_t</span> <span class="o">-</span> <span class="n">eta</span> <span class="o">*</span> <span class="n">grad_func</span><span class="p">(</span><span class="n">values_t</span><span class="p">,</span> <span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rngs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">v_true</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">v_true</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v_true</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;initial values = </span><span class="si">{</span><span class="n">values</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;initial one-hot = </span><span class="si">{</span><span class="n">argmax_one_hot</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;initial diff. one-hot = </span><span class="si">{</span><span class="n">pert_one_hot</span><span class="p">(</span><span class="n">rngs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">values</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;values after GD = </span><span class="si">{</span><span class="n">values_t</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ranks after GD = </span><span class="si">{</span><span class="n">argmax_one_hot</span><span class="p">(</span><span class="n">values_t</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;diff. one-hot after GD = </span><span class="si">{</span><span class="n">pert_one_hot</span><span class="p">(</span><span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">values_t</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;target diff. one-hot = </span><span class="si">{</span><span class="n">y_true</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>initial values = [-0.6  1.9 -0.2  1.1 -1. ]
+initial one-hot = [0. 1. 0. 0. 0.]
+initial diff. one-hot = [0.01       0.83       0.01       0.14999999 0.        ]
+
+values after GD = [-0.11097725  0.10103475  0.28753677  0.37479916  0.47736776]
+ranks after GD = [0. 0. 0. 0. 1.]
+diff. one-hot after GD = [0.08       0.17999999 0.21       0.26999998 0.26      ]
+target diff. one-hot = [0.1  0.15 0.2  0.25 0.3 ]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="differentiable-ranking">
+<h1>Differentiable ranking<a class="headerlink" href="#differentiable-ranking" title="Link to this heading">#</a></h1>
+<section id="ranking-function">
+<h2>Ranking function<a class="headerlink" href="#ranking-function" title="Link to this heading">#</a></h2>
+<p>We consider an optimizer, such as the following <code class="docutils literal notranslate"><span class="pre">ranking</span></code> function. It transforms a real-valued vector of size <span class="math">\(n\)</span> into a vector with coefficients being a permutation of <span class="math">\(\{0,\ldots, n-1\}\)</span> corresponding to the order of the coefficients of the original vector. It corresponds to <span class="math">\(y^*\)</span> for <span class="math">\(C\)</span> being the permutahedron. We run it on an example input <code class="docutils literal notranslate"><span class="pre">values</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function outputting a vector of ranks</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ranking</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example on random values</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">values</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;values = </span><span class="si">{</span><span class="n">values</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ranking = </span><span class="si">{</span><span class="n">ranking</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>values = [ 1.6226422   2.0252647  -0.43359444 -0.07861735  0.1760909  -0.97208923]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ranking = [4 5 1 2 3 0]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="ranking-with-perturbations">
+<h2>Ranking with perturbations<a class="headerlink" href="#ranking-with-perturbations" title="Link to this heading">#</a></h2>
+<p>As above, our implementation transforms this function into a perturbed one that we call <code class="docutils literal notranslate"><span class="pre">pert_ranking</span></code>. In this case we use Gumbel noise for the perturbation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N_SAMPLES</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">SIGMA</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">GUMBEL</span> <span class="o">=</span> <span class="n">perturbations</span><span class="o">.</span><span class="n">Gumbel</span><span class="p">()</span>
+
+<span class="n">pert_ranking</span> <span class="o">=</span> <span class="n">perturbations</span><span class="o">.</span><span class="n">make_perturbed_fun</span><span class="p">(</span><span class="n">ranking</span><span class="p">,</span>
+                                                <span class="n">num_samples</span><span class="o">=</span><span class="n">N_SAMPLES</span><span class="p">,</span>
+                                                <span class="n">sigma</span><span class="o">=</span><span class="n">SIGMA</span><span class="p">,</span>
+                                                <span class="n">noise</span><span class="o">=</span><span class="n">GUMBEL</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Expectation of the perturbed ranks on these values</span>
+
+<span class="n">rngs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">diff_ranks</span> <span class="o">=</span> <span class="n">pert_ranking</span><span class="p">(</span><span class="n">rngs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">values</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;values = </span><span class="si">{</span><span class="n">values</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;diff_ranks = </span><span class="si">{</span><span class="n">diff_ranks</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>values = [ 1.6226422   2.0252647  -0.43359444 -0.07861735  0.1760909  -0.97208923]
+diff_ranks = [4.11 4.89 1.17 2.02 2.76 0.05]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gradients-for-ranking-with-perturbations">
+<h2>Gradients for ranking with perturbations<a class="headerlink" href="#gradients-for-ranking-with-perturbations" title="Link to this heading">#</a></h2>
+<p>As above, the perturbed optimizer <span class="math">\(y_\varepsilon^*\)</span> is differentiable, and its gradient can be computed with stochastic estimation automatically, using <code class="docutils literal notranslate"><span class="pre">jax.grad</span></code>.</p>
+<p>We showcase this on a loss of <span class="math">\(y_\varepsilon(\theta)\)</span> that can be directly differentiated w.r.t. the <code class="docutils literal notranslate"><span class="pre">values</span></code> equal to <span class="math">\(\theta\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example loss function</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_example</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+  <span class="n">n</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">y_true</span> <span class="o">=</span> <span class="n">ranking</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+  <span class="n">y_pred</span> <span class="o">=</span> <span class="n">pert_ranking</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">loss_example</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>59.774796
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Gradient of the objective w.r.t input values</span>
+
+<span class="n">gradient</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_example</span><span class="p">)(</span><span class="n">values</span><span class="p">,</span> <span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gradient</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-1.486624   -1.7248265   2.7977767  -0.13454585 -1.9688786  -1.8026488 ]
+</pre></div>
+</div>
+</div>
+</div>
+<p>As above, we showcase this example on gradient descent to minimize this loss.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">steps</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">values_t</span> <span class="o">=</span> <span class="n">values</span>
+<span class="n">eta</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="n">grad_func</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_example</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+  <span class="n">rngs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="n">values_t</span> <span class="o">=</span> <span class="n">values_t</span> <span class="o">-</span> <span class="n">eta</span> <span class="o">*</span> <span class="n">grad_func</span><span class="p">(</span><span class="n">values_t</span><span class="p">,</span> <span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rngs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">ranking</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;initial values = </span><span class="si">{</span><span class="n">values</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;initial ranks = </span><span class="si">{</span><span class="n">ranking</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;initial diff. ranks = </span><span class="si">{</span><span class="n">pert_ranking</span><span class="p">(</span><span class="n">rngs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">values</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;values after GD = </span><span class="si">{</span><span class="n">values_t</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ranks after GD = </span><span class="si">{</span><span class="n">ranking</span><span class="p">(</span><span class="n">values_t</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;diff. ranks after GD = </span><span class="si">{</span><span class="n">pert_ranking</span><span class="p">(</span><span class="n">rngs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">values_t</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;target diff. ranks = </span><span class="si">{</span><span class="n">y_true</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>initial values = [ 1.6226422   2.0252647  -0.43359444 -0.07861735  0.1760909  -0.97208923]
+initial ranks = [4 5 1 2 3 0]
+initial diff. ranks = [4.0899997 4.91      1.1       1.99      2.84      0.07     ]
+
+values after GD = [-1.9037365   1.7597162  -0.8777193   0.09295582  3.3749492   1.4055638 ]
+ranks after GD = [0 4 1 2 5 3]
+diff. ranks after GD = [0.02       3.86       0.98999995 1.99       5.         3.1399999 ]
+target diff. ranks = [0 1 2 3 4 5]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="general-input-outputs-pytrees">
+<h1>General input / outputs (Pytrees)<a class="headerlink" href="#general-input-outputs-pytrees" title="Link to this heading">#</a></h1>
+<p>This method can be applied to any function taking pytrees as input and output in the forward mode, and can also be used to compute derivatives, as illustrated below</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tree_a</span> <span class="o">=</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)),</span>
+          <span class="p">{</span><span class="s1">&#39;k1&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)),</span>
+           <span class="s1">&#39;k2&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))},</span>
+          <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="tree-argmax">
+<h2>Tree argmax<a class="headerlink" href="#tree-argmax" title="Link to this heading">#</a></h2>
+<p>This piecewise constant function applies the argmax to every leaf array of the pytree</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">argmax_tree</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">argmax_one_hot</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">argmax_tree</span><span class="p">(</span><span class="n">tree_a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Array([0., 0., 1.], dtype=float32),
+ {&#39;k1&#39;: Array([0., 1.], dtype=float32), &#39;k2&#39;: Array([1., 0.], dtype=float32)},
+ Array([1., 0., 0., 0.], dtype=float32))
+</pre></div>
+</div>
+</div>
+</div>
+<p>The perturbed approximation applies a perturbed softmax</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N_SAMPLES</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="n">pert_argmax_fun</span> <span class="o">=</span> <span class="n">perturbations</span><span class="o">.</span><span class="n">make_perturbed_fun</span><span class="p">(</span><span class="n">argmax_tree</span><span class="p">,</span>
+                                                   <span class="n">num_samples</span><span class="o">=</span><span class="n">N_SAMPLES</span><span class="p">,</span>
+                                                   <span class="n">sigma</span><span class="o">=</span><span class="n">SIGMA</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pert_argmax_fun</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">tree_a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Array([0.07, 0.35, 0.58], dtype=float32),
+ {&#39;k1&#39;: Array([0.39999998, 0.59999996], dtype=float32),
+  &#39;k2&#39;: Array([0.5, 0.5], dtype=float32)},
+ Array([0.59, 0.24, 0.09, 0.08], dtype=float32))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="scalar-loss">
+<h2>Scalar loss<a class="headerlink" href="#scalar-loss" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pert_loss</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+  <span class="n">pert_softmax</span> <span class="o">=</span> <span class="n">pert_argmax_fun</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+  <span class="n">argmax</span> <span class="o">=</span> <span class="n">argmax_tree</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+  <span class="n">diffs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">4</span><span class="p">),</span> <span class="n">argmax</span><span class="p">,</span> <span class="n">pert_softmax</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">optax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">diffs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">init_loss</span> <span class="o">=</span> <span class="n">pert_loss</span><span class="p">(</span><span class="n">tree_a</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;initial loss value = </span><span class="si">{</span><span class="n">init_loss</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>initial loss value = 0.341
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gradient-computation">
+<h2>Gradient computation<a class="headerlink" href="#gradient-computation" title="Link to this heading">#</a></h2>
+<p>The gradient of the scalar loss can be evaluated</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grad</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">pert_loss</span><span class="p">)(</span><span class="n">tree_a</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gradient of the scalar loss&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">grad</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Gradient of the scalar loss
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Array([ 0.27816886,  0.3429235 , -0.5273831 ], dtype=float32),
+ {&#39;k1&#39;: Array([ 0.3098759 , -0.39455885], dtype=float32),
+  &#39;k2&#39;: Array([-0.35475504,  1.0202795 ], dtype=float32)},
+ Array([0.09084772, 0.21252295, 0.233113  , 0.3052454 ], dtype=float32))
+</pre></div>
+</div>
+</div>
+</div>
+<p>A small step in the gradient direction reduces the value</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eta</span> <span class="o">=</span> <span class="mf">1e-1</span>
+
+<span class="n">loss_step</span> <span class="o">=</span> <span class="n">pert_loss</span><span class="p">(</span><span class="n">optax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">add_scale</span><span class="p">(</span><span class="n">tree_a</span><span class="p">,</span> <span class="o">-</span><span class="n">eta</span><span class="p">,</span> <span class="n">grad</span><span class="p">),</span> <span class="n">rng</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;initial loss value = </span><span class="si">{</span><span class="n">init_loss</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;loss after gradient step = </span><span class="si">{</span><span class="n">loss_step</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>initial loss value = 0.341
+loss after gradient step = 0.210
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ogda_example.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Optimistic Gradient Descent in a Bilinear Min-Max Problem</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="contrib/README.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Contrib Examples</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Perturbed optimizers</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#argmax-one-hot">Argmax one-hot</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-hot-function">One-hot function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-hot-with-pertubations">One-hot with pertubations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gradients-for-one-hot-with-perturbations">Gradients for one-hot with perturbations</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#differentiable-ranking">Differentiable ranking</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ranking-function">Ranking function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ranking-with-perturbations">Ranking with perturbations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gradients-for-ranking-with-perturbations">Gradients for ranking with perturbations</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#general-input-outputs-pytrees">General input / outputs (Pytrees)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tree-argmax">Tree argmax</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scalar-loss">Scalar loss</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-computation">Gradient computation</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Optax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2021, DeepMind.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

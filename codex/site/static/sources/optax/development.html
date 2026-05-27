@@ -1,0 +1,841 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>🛠️ Development &#8212; Optax  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx_contributors.css?v=fe9086e2" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/katex-math.css?v=05624691" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=1d6acab0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/katex.min.js?v=5cc8ed51"></script>
+    <script src="_static/auto-render.min.js?v=af98beb9"></script>
+    <script src="_static/katex_autorenderer.js?v=a111cd5f"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'development';</script>
+    <link rel="icon" href="_static/favicon.svg"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Assignment problem" href="api/assignment.html" />
+    <link rel="prev" title="Sharpness-Aware Minimization (SAM)" href="_collections/examples/contrib/sam.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  <script async type="text/javascript" src="/sources/optax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="optax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/development.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.svg" class="logo__image only-light" alt="Optax  documentation - Home"/>
+    <img src="_static/logo.svg" class="logo__image only-dark pst-js-only" alt="Optax  documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">🚀 Getting started</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gallery.html">🖼️ Example gallery</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="_collections/examples/README.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/adversarial_training.html">Adversarial training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/cifar10_resnet.html">ResNet on CIFAR10 with Flax NNX and Optax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/flax_example.html">Simple NN with Flax.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/freezing_parameters.html">Freezing Parameters in Optax</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/gradient_accumulation.html">Gradient Accumulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/gradient_accumulation_and_microbatching.html">Summary</a></li>
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/lbfgs.html">L-BFGS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/linear_assignment_problem.html">Linear assignment problem</a></li>
+
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/lookahead_mnist.html">Lookahead Optimizer on MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/meta_learning.html">Meta-Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/mlp_mnist.html">MLP MNIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/nanolm.html">Character-level Transformer on Tiny Shakespeare</a></li>
+
+
+
+
+
+
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/ogda_example.html">Optimistic Gradient Descent in a Bilinear Min-Max Problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/perturbations.html">Perturbed optimizers</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="_collections/examples/contrib/README.html">Contrib Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/contrib/differentially_private_sgd.html">Differentially private convolutional neural network on MNIST.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/contrib/muon.html">Using the Muon Optimizer in Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/contrib/reduce_on_plateau.html">Reduce on Plateau Learning Rate Scheduler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/contrib/rosenbrock_ademamix.html">Recreate AdeMAMix Rosenbrock Plot from Paper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_collections/examples/contrib/sam.html">Sharpness-Aware Minimization (SAM)</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">🛠️ Development</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="api/assignment.html">Assignment problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/optimizers.html">Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/transformations.html">Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/combining_optimizers.html">Combining Optimizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/optimizer_wrappers.html">Optimizer Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/optimizer_schedules.html">Optimizer Schedules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/apply_updates.html">Apply Updates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/perturbations.html">Perturbations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/projections.html">Projections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/losses.html">Losses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/utilities.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/microbatching.html">Microbatching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/contrib.html">🔧 Contrib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/experimental.html">🧪 Experimental</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google-deepmind/optax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/development.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>🛠️ Development</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute">How to Contribute</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#can-i-contribute-ai-generated-code">Can I contribute AI generated code?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#improving-the-documentation">Improving the documentation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-doctest">Running doctest</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inclusion-criteria">Inclusion Criteria</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-documents">Design Documents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contributor-license-agreement">Contributor License Agreement</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-team">The Team</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#community-guidelines">Community Guidelines</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="development">
+<h1>🛠️ Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h1>
+<p>We welcome contributions to Optax! Whether you have a bug report, a question,
+a feature suggestion, or code to share, your input is valuable.</p>
+<section id="how-to-contribute">
+<h2>How to Contribute<a class="headerlink" href="#how-to-contribute" title="Link to this heading">#</a></h2>
+<p>For most contributions, the best way to get started is to raise an issue in the
+Github <a class="reference external" href="https://github.com/deepmind/optax/issues">issue tracker</a> describing the
+problem to be solved, or the idea to be worked on. This will enable some
+discussion on the best way to land new features, and can also provide
+opportunities for collaborations with other contributors.</p>
+<p>Some more details on contributing code are provided in the
+<a class="reference external" href="https://github.com/google-deepmind/optax/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>
+file in the source tree.</p>
+<p><strong>Need ideas?</strong> If you would like to get started with contributing to Optax,
+but do not know what to start working on, check out our selection of
+<a class="reference external" href="https://github.com/google-deepmind/optax/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"><em>good first issues</em></a>.</p>
+<p><strong>Generic template.</strong> When contributing with a new function or optimizer, use
+the following template for the docstring (see
+<a class="reference external" href="https://optax.readthedocs.io/en/latest/api/optimizers.html#optax.adam">optax.adam</a>
+for example)</p>
+<ul class="simple">
+<li><p>One-line description</p></li>
+<li><p>Longer description with mathematic description if possible</p></li>
+<li><p>Args section</p></li>
+<li><p>Returns section</p></li>
+<li><p>Examples</p></li>
+<li><p>References</p></li>
+<li><p>Additional notes, warnings</p></li>
+</ul>
+<p>The docs need to be in
+<a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html">reStructuredText format</a>!
+For example references should be written like
+<code class="docutils literal notranslate"><span class="pre">Doe</span> <span class="pre">et</span> <span class="pre">al</span> <span class="pre">`Yet</span> <span class="pre">another</span> <span class="pre">optimizer</span> <span class="pre">&lt;link</span> <span class="pre">to</span> <span class="pre">optimizer&gt;`_,</span> <span class="pre">2042)</span></code>
+(so not in markdown format), same for
+notes and warnings.</p>
+<p>A longer description, references and additional notes may be optional. But
+examples are generally not, they are the best piece of documentation.</p>
+<section id="can-i-contribute-ai-generated-code">
+<h3>Can I contribute AI generated code?<a class="headerlink" href="#can-i-contribute-ai-generated-code" title="Link to this heading">#</a></h3>
+<p>All submissions to Google Open Source projects need to follow Google’s
+<a class="reference external" href="https://cla.developers.google.com/">Contributor License Agreement (CLA)</a>, in
+which contributors agree that their contribution is an original work of
+authorship. This doesn’t prohibit the use of coding assistance tools, but what’s
+submitted does need to be a contributor’s original creation.</p>
+<p>In the Optax project, a main concern with AI-generated contributions is that
+<strong>low-quality AI-generated code imposes a disproportionate review cost</strong>.
+Since the team’s capacity for code review is limited, we have a higher bar
+for accepting AI-generated contributions compared to those written by a human.</p>
+<p>A loose rule of thumb: if the team needs to spend more time reviewing a
+contribution than the contributor spends generating it, then the contribution
+is probably not helpful to the project, and we will likely reject it.</p>
+</section>
+</section>
+<section id="improving-the-documentation">
+<h2>Improving the documentation<a class="headerlink" href="#improving-the-documentation" title="Link to this heading">#</a></h2>
+<p>Documentation is key, and we’re particularly happy to accept documentation improvements.</p>
+<p>Our documentation is written in <a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a>. You can
+build the documentation locally as follows:</p>
+<ol class="arabic simple">
+<li><p><strong>Install Requirements</strong>: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">&quot;.[docs]&quot;</span></code></p></li>
+<li><p><strong>Build the Docs</strong>: From the <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder, run:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code> (builds everything)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html-noplot</span></code> (faster, skips running examples)</p></li>
+</ul>
+</li>
+</ol>
+<section id="running-doctest">
+<h3>Running doctest<a class="headerlink" href="#running-doctest" title="Link to this heading">#</a></h3>
+<p>You can add examples illustrating how to use the functions in docstrings. For
+inspiration see the <code class="docutils literal notranslate"><span class="pre">Examples:</span></code> section of the code source of <code class="docutils literal notranslate"><span class="pre">adam</span></code> in
+<code class="docutils literal notranslate"><span class="pre">optax/_src/alias.py</span></code>.</p>
+<p>To test locally such examples, run
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">doctest</span> <span class="pre">-v</span> <span class="pre">&lt;path_to_your_file&gt;.py</span></code>.</p>
+</section>
+</section>
+<section id="inclusion-criteria">
+<span id="id1"></span><h2>Inclusion Criteria<a class="headerlink" href="#inclusion-criteria" title="Link to this heading">#</a></h2>
+<p>To ensure Optax remains a focused and high-quality library, we have specific
+guidelines for including algorithms in the main <code class="docutils literal notranslate"><span class="pre">optax</span></code> package:</p>
+<ol class="arabic simple">
+<li><p><strong>Established</strong>: Algorithms should generally be published for at least 2
+years, well-cited (100+ citations), and demonstrate broad utility.</p></li>
+<li><p><strong>Significant Improvement</strong>: Minor modifications will be considered
+if they offer clear advantages over widely used methods.</p></li>
+</ol>
+<p>If your algorithm doesn’t meet the main package criteria, the <a class="reference internal" href="api/contrib.html"><span class="doc">🔧 Contrib</span></a>
+directory is perfect for sharing innovative work. Please make sure that all
+common tests (in <code class="docutils literal notranslate"><span class="pre">optax/contrib/_common_test.py</span></code> or <code class="docutils literal notranslate"><span class="pre">optax/_src/alias_test.py</span></code>)
+are passed when you propose a new algorithm. These tests ensure the
+interoperability of algorithms with different features of optax (such as
+gradient accumulation or varying hyperparameters).</p>
+</section>
+<section id="design-documents">
+<h2>Design Documents<a class="headerlink" href="#design-documents" title="Link to this heading">#</a></h2>
+<p>For more complex or involved features, we recommend starting by writing a
+design document, or RFC (“Request For Comments”) before spending significant
+time writing code. This can provide an opportunity for other contributors to
+provide input and find the best way to land new features and also provides a
+reference for future users to understand how the library works.</p>
+<p>For an example of this, see the following
+<a class="reference external" href="https://gist.github.com/wdphy16/118aef6fb5f82c49790d7678cf87da29">[RFC] Proposal for complex-valued optimization in Optax</a> authored by <a class="reference external" href="https://github.com/wdphy16">Dian Wu</a> which led to the addition of
+improved
+<a class="reference external" href="https://optax.readthedocs.io/en/latest/api/contrib.html?complex-valued-optimization#complex-valued-optimization">complex numbers</a> support in Optax.</p>
+</section>
+<section id="contributor-license-agreement">
+<h2>Contributor License Agreement<a class="headerlink" href="#contributor-license-agreement" title="Link to this heading">#</a></h2>
+<p>Contributions to this project must be accompanied by a Contributor License
+Agreement. You (or your employer) retain the copyright to your contribution;
+this simply gives us permission to use and redistribute your contributions as
+part of the project. Head over to <a class="reference external" href="https://cla.developers.google.com/">https://cla.developers.google.com/</a> to see
+your current agreements on file or to sign a new one.</p>
+<p>You generally only need to submit a CLA once, so if you’ve already submitted one
+(even if it was for a different project), you probably don’t need to do it
+again.</p>
+</section>
+<section id="the-team">
+<h2>The Team<a class="headerlink" href="#the-team" title="Link to this heading">#</a></h2>
+<p>Optax is developed by a team of researchers at Google DeepMind and Alphabet, as
+well as a growing community of open-source contributors. The work on Optax is
+part of a wider effort to contribute to making the
+<a class="reference external" href="https://deepmind.google/discover/blog/using-jax-to-accelerate-our-research/">JAX Ecosystem</a>
+the best possible environment for ML/AI research. Below is the list of the top
+(in number of commits) 30 contributors to date:</p>
+<div class="sphinx-contributors sphinx-contributors--avatars docutils container">
+<ul class="sphinx-contributors_list">
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/vroulet"><img alt="vroulet" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/7056736?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/vroulet">vroulet</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/fabianp"><img alt="fabianp" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/277639?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/fabianp">fabianp</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/mtthss"><img alt="mtthss" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/8697939?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/mtthss">mtthss</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/carlosgmartin"><img alt="carlosgmartin" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/8883917?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/carlosgmartin">carlosgmartin</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/rdyro"><img alt="rdyro" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/12161222?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/rdyro">rdyro</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/n2cholas"><img alt="n2cholas" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/12474257?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/n2cholas">n2cholas</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/hbq1"><img alt="hbq1" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/6885137?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/hbq1">hbq1</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/mathDR"><img alt="mathDR" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/2363269?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/mathDR">mathDR</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/GrantMcConachie"><img alt="GrantMcConachie" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/39445771?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/GrantMcConachie">GrantMcConachie</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/mkunesch"><img alt="mkunesch" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/8143835?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/mkunesch">mkunesch</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/joaogui1"><img alt="joaogui1" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/13261989?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/joaogui1">joaogui1</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/rosshemsley"><img alt="rosshemsley" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/586434?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/rosshemsley">rosshemsley</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/cvnad1"><img alt="cvnad1" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/51185970?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/cvnad1">cvnad1</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/tinker495"><img alt="tinker495" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/15957571?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/tinker495">tinker495</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/Saanidhyavats"><img alt="Saanidhyavats" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/50399005?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/Saanidhyavats">Saanidhyavats</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/fabian-sp"><img alt="fabian-sp" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/51907567?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/fabian-sp">fabian-sp</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/emilyfertig"><img alt="emilyfertig" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/26593137?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/emilyfertig">emilyfertig</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/8bitmp3"><img alt="8bitmp3" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/19637339?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/8bitmp3">8bitmp3</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/wdphy16"><img alt="wdphy16" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/43414703?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/wdphy16">wdphy16</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/v0lta"><img alt="v0lta" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/9082330?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/v0lta">v0lta</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/Abhinavcode13"><img alt="Abhinavcode13" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/126642111?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/Abhinavcode13">Abhinavcode13</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/mblondel"><img alt="mblondel" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/233706?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/mblondel">mblondel</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/hmludwig"><img alt="hmludwig" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/23039398?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/hmludwig">hmludwig</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/aryanmahawar205"><img alt="aryanmahawar205" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/138674405?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/aryanmahawar205">aryanmahawar205</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/hawkinsp"><img alt="hawkinsp" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/348932?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/hawkinsp">hawkinsp</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/holounic"><img alt="holounic" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/41171543?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/holounic">holounic</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/amosyou"><img alt="amosyou" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/91300605?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/amosyou">amosyou</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/gautierronan"><img alt="gautierronan" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/25346881?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/gautierronan">gautierronan</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/LukasMut"><img alt="LukasMut" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/25636832?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/LukasMut">LukasMut</a></p>
+</div>
+</li>
+<li class="sphinx-contributors_list__item"><div class="sphinx-contributors_contributor docutils container">
+<a class="reference external image-reference" href="https://github.com/rajasekharporeddy"><img alt="rajasekharporeddy" class="sphinx-contributors_contributor__image" src="https://avatars.githubusercontent.com/u/153593711?v=4" />
+</a>
+<p class="sphinx-contributors_contributor__username"><a class="reference external" href="https://github.com/rajasekharporeddy">rajasekharporeddy</a></p>
+</div>
+</li>
+</ul>
+</div>
+<p>A full list of the contributors to date can be found
+<a class="reference external" href="https://github.com/deepmind/optax/graphs/contributors">here</a>.</p>
+</section>
+<section id="community-guidelines">
+<h2>Community Guidelines<a class="headerlink" href="#community-guidelines" title="Link to this heading">#</a></h2>
+<p>This project follows
+<a class="reference external" href="https://opensource.google.com/conduct/">Google’s Open Source Community Guidelines</a>.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="_collections/examples/contrib/sam.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Sharpness-Aware Minimization (SAM)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api/assignment.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Assignment problem</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-contribute">How to Contribute</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#can-i-contribute-ai-generated-code">Can I contribute AI generated code?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#improving-the-documentation">Improving the documentation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-doctest">Running doctest</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inclusion-criteria">Inclusion Criteria</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-documents">Design Documents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contributor-license-agreement">Contributor License Agreement</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-team">The Team</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#community-guidelines">Community Guidelines</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Optax Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2021, DeepMind.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
