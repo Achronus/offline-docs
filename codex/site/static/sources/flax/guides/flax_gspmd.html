@@ -1,0 +1,1031 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Scale up on multiple devices</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/flax_gspmd';</script>
+    <link rel="icon" href="../_static/flax.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Performance considerations" href="performance.html" />
+    <link rel="prev" title="Advanced Guides" href="../guides_advanced.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/flax_gspmd.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../guides_advanced.html">Advanced Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs_nnx/guides/flax_gspmd.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/guides/flax_gspmd.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Scale up on multiple devices</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shard-a-single-array-model">Shard a single-array model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-with-style">Initialize with style</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-model">Run the model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shard-a-wholesome-model">Shard a wholesome model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#profiling">Profiling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-a-sharded-model-from-a-checkpoint">Load a sharded model from a checkpoint</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#logical-axis-annotation">Logical axis annotation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-use-device-axis-logical-axis">When to use device axis / logical axis</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-sharding">Explicit sharding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-readings">Further readings</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="scale-up-on-multiple-devices">
+<h1>Scale up on multiple devices<a class="headerlink" href="#scale-up-on-multiple-devices" title="Permalink to this heading">#</a></h1>
+<p>This guide demonstrates how to scale up a Flax NNX model on multiple accelerators (GPUs or Google TPUs) using JAX’s parallel programming APIs.</p>
+<p><a class="reference external" href="https://docs.jax.dev/en/latest/sharded-computation.html">Introduction to Parallel Programming</a> is a fantastic guide to learn about the distributed programming essentials of JAX. It describes three parallelism APIs - automatic, explicit and manual - for different levels of control.</p>
+<p>This guide will primarily cover the automatic scenario, which use the <a class="reference external" href="https://jax.readthedocs.io/en/latest/jit-compilation.html"><code class="docutils literal notranslate"><span class="pre">jax.jit</span></code></a> to compile your single-device code as multi-device. You will use <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/spmd.html"><code class="docutils literal notranslate"><span class="pre">flax.nnx.spmd</span></code></a> APIs to annotate your model variables with how it should be sharded.</p>
+<p>If you want to follow explicit sharding style, follow <a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/explicit-sharding.html">JAX Explicit Sharding</a> guide and use JAX’s relevant APIs. No API on Flax side is needed.</p>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from functools import partial
+
+import jax
+from jax import numpy as jnp
+from jax.sharding import PartitionSpec as P, NamedSharding, AxisType
+import optax
+import flax
+from flax import nnx
+
+# Ignore this if you are already running on a TPU or GPU
+if not jax._src.xla_bridge.backends_are_initialized():
+  jax.config.update(&#39;jax_num_cpu_devices&#39;, 8)
+print(f&#39;You have 8 “fake” JAX devices now: {jax.devices()}&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Set up a <code class="docutils literal notranslate"><span class="pre">2x4</span></code> device mesh as the <a class="reference external" href="https://docs.jax.dev/en/latest/sharded-computation.html#key-concept-data-sharding">JAX data sharding tutorial</a> instructs.</p>
+<p>In this guide we use a standard FSDP layout and shard our devices on two axes - <code class="docutils literal notranslate"><span class="pre">data</span></code> and <code class="docutils literal notranslate"><span class="pre">model</span></code>, for doing batch data parallelism and tensor parallelism.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Create an auto-mode mesh of two dimensions and annotate each axis with a name.
+auto_mesh = jax.make_mesh((2, 4), (&#39;data&#39;, &#39;model&#39;))
+</pre></div>
+</div>
+</div>
+</div>
+<blockquote>
+<div><p>Compatibility Note: This guide covers the <a class="reference external" href="https://flax.readthedocs.io/en/latest/flip/4844-var-eager-sharding.html">eager sharding feature</a> that greatly simplifies creating sharded model. If your project already used Flax GSPMD API on version <code class="docutils literal notranslate"><span class="pre">flax&lt;0.12</span></code>, you might have turned the feature off to keep your code working. Users can toggle this feature using the <code class="docutils literal notranslate"><span class="pre">nnx.use_eager_sharding</span></code> function.</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nnx.use_eager_sharding(True)
+assert nnx.using_eager_sharding()
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">nnx.use_eager_sharding</span></code> function can also be used as a context manager to toggle the eager sharding feature within a specific scope.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>with nnx.use_eager_sharding(False):
+  assert not nnx.using_eager_sharding()
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can also enable eager sharding on a per-variable basis by passing <code class="docutils literal notranslate"><span class="pre">eager_sharding=False</span></code> during variable initialization. The mesh can also be passed this way.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nnx.Param(jnp.ones(4,4), out_sharding=(None, &#39;model&#39;), eager_sharding=True, mesh=auto_mesh)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="shard-a-single-array-model">
+<h2>Shard a single-array model<a class="headerlink" href="#shard-a-single-array-model" title="Permalink to this heading">#</a></h2>
+<p>Let’s begin by sharding the simplest component possible - a Flax variable.</p>
+<p>When you define a Flax variable, you can pass in a metadata field called <code class="docutils literal notranslate"><span class="pre">optimizer_sharding</span></code>, to specify how the underlying JAX array should be sharded. This field should be a tuple of names, each of which refer to how an axis of the array should be sharded. This sharding will also apply to any <code class="docutils literal notranslate"><span class="pre">nnx.Optimizer</span></code> created from the variable. To specify a different sharding for optimization, use the <code class="docutils literal notranslate"><span class="pre">opt_sharding</span></code> metadata field.</p>
+<p><strong>You must have an existing device mesh</strong> and create a sharding-annotated <code class="docutils literal notranslate"><span class="pre">nnx.Variable</span></code> within its scope. This allows the result variable to be sharded accordingly on those devices. The device mesh can be your actual accelerator mesh, or a dummy fake CPU mesh like in this notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>rngs = nnx.Rngs(0)
+
+with jax.set_mesh(auto_mesh):
+  w = nnx.Param(
+    rngs.lecun_normal()((4, 8)),
+    out_sharding=(None, &#39;model&#39;)
+  )
+  print(w.sharding.spec)
+  jax.debug.visualize_array_sharding(w)  # already sharded!
+</pre></div>
+</div>
+</div>
+</div>
+<section id="initialize-with-style">
+<h3>Initialize with style<a class="headerlink" href="#initialize-with-style" title="Permalink to this heading">#</a></h3>
+<p>When using existing modules, you can apply <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/spmd.html#flax.nnx.with_partitioning"><code class="docutils literal notranslate"><span class="pre">flax.nnx.with_partitioning</span></code></a> on initializers to achieve the same effect. Here we create a sharded <code class="docutils literal notranslate"><span class="pre">nnx.Linear</span></code> module with only the kernel weight.</p>
+<p>Also, you should use <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code> for the whole initialization for maximum performance. This is because without <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code>, a single-device variable must be created first before we apply sharding constraints and then make it sharded, which is wasteful. <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code> will automatically optimize this out.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@jax.jit
+def init_sharded_linear(key):
+  init_fn = nnx.nn.linear.default_kernel_init
+  # Shard your parameter along `model` dimension, as in model/tensor parallelism
+  return nnx.Linear(4, 8, use_bias=False, rngs=nnx.Rngs(key),
+                    kernel_init=nnx.with_partitioning(init_fn, (None, &#39;model&#39;)))
+
+with jax.set_mesh(auto_mesh):
+  key= rngs()
+  linear = init_sharded_linear(key)
+  assert linear.kernel.sharding.spec == P(None, &#39;model&#39;) # already sharded!
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="run-the-model">
+<h3>Run the model<a class="headerlink" href="#run-the-model" title="Permalink to this heading">#</a></h3>
+<p>If you also shard your input correctly, JAX would be able to carry out the most natural and optimized computation and produce your output as sharded.</p>
+<p>You should still make sure to <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code> for maximum performance, and also to explicitly control how each array is sharded when you want to. We will give an example of that control in the next section.</p>
+<blockquote>
+<div><p>Note: You need to <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code> a pure function that takes the model as an argument, instead of jitting the callable model directly.</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># For simple computations, you can get correctly-sharded output without jitting
+# In this case, (&#39;data&#39;, None) @ (None, &#39;model&#39;) = (&#39;data&#39;, &#39;model&#39;)
+with jax.set_mesh(auto_mesh):
+  # Create your input data, sharded along `data` dimension, as in data parallelism
+  x = jax.device_put(jnp.ones((16, 4)), P(&#39;data&#39;, None))
+
+  # Run the model forward function, jitted
+  y = jax.jit(lambda m, x: m(x))(linear, x)
+  print(y.sharding.spec)                       # sharded: (&#39;data&#39;, &#39;model&#39;)
+  jax.debug.visualize_array_sharding(y)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="shard-a-wholesome-model">
+<h2>Shard a wholesome model<a class="headerlink" href="#shard-a-wholesome-model" title="Permalink to this heading">#</a></h2>
+<p>Now we construct a more wholesome model to show a few advanced tricks. Check out this simple <code class="docutils literal notranslate"><span class="pre">DotReluDot</span></code> module that does two matmuls, and the <code class="docutils literal notranslate"><span class="pre">MultiDotReluDot</span></code> module that creates an arbitrary stack of <code class="docutils literal notranslate"><span class="pre">DotReluDot</span></code> sublayers.</p>
+<p>Make note of the following:</p>
+<ul class="simple">
+<li><p><strong>Additional axis annotation</strong>: Transforms like <code class="docutils literal notranslate"><span class="pre">vmap</span></code> and <code class="docutils literal notranslate"><span class="pre">scan</span></code> will add additional dimensions to the JAX arrays. Unfortunately, in auto sharding mode you will need to use <code class="docutils literal notranslate"><span class="pre">nnx.vmap</span></code> and <code class="docutils literal notranslate"><span class="pre">nnx.scan</span></code> instead of raw JAX transforms, so that both JAX and Flax knows how to shard this dimension. You won’t need this in <a class="reference internal" href="#explicit-sharding"><span class="xref myst">explicit sharding mode</span></a>.</p></li>
+<li><p><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html#constraining-shardings-of-intermediates-in-jitted-code"><code class="docutils literal notranslate"><span class="pre">jax.lax.with_sharding_constraint</span></code></a>: They can help you to enforce specific shardings on intermediate activations. Only works under an auto mode mesh context.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>class DotReluDot(nnx.Module):
+  def __init__(self, depth: int, rngs: nnx.Rngs):
+    init_fn = nnx.initializers.lecun_normal()
+    self.dot1 = nnx.Linear(
+      depth, depth,
+      kernel_init=nnx.with_partitioning(init_fn, (None, &#39;model&#39;)),
+      use_bias=False,  # or use `bias_init` to give it annotation too
+      rngs=rngs)
+    self.w2 = nnx.Param(
+      init_fn(rngs.params(), (depth, depth)),  # RNG key and shape for W2 creation
+      sharding=(&#39;model&#39;, None),
+    )
+
+  def __call__(self, x: jax.Array):
+    y = self.dot1(x)
+    y = jax.nn.relu(y)
+    y = jax.lax.with_sharding_constraint(y, P(&#39;data&#39;, &#39;model&#39;))
+    z = jnp.dot(y, self.w2[...])
+    return z
+
+class MultiDotReluDot(nnx.Module):
+  def __init__(self, depth: int, num_layers: int, rngs: nnx.Rngs):
+    # Annotate the additional axis with sharding=None, meaning it will be
+    # replicated across all devices.
+    @nnx.vmap(transform_metadata={nnx.PARTITION_NAME: None})
+    def create_sublayers(r):
+      return DotReluDot(depth, r)
+    self.layers = create_sublayers(rngs.fork(split=num_layers))
+
+  def __call__(self, x):
+    def scan_over_layers(x, layer):
+      return layer(x), None
+    x, _ = jax.lax.scan(scan_over_layers, x, self.layers)
+    return x
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now a sample training loop, using <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@jax.jit
+def train_step(model, optimizer, x, y):
+  def loss_fn(model: DotReluDot):
+    y_pred = model(x)
+    return jnp.mean((y_pred - y) ** 2)
+
+  loss, grads = jax.value_and_grad(loss_fn)(model)
+  optimizer.update(model, grads)
+  return model, loss
+
+
+with jax.set_mesh(auto_mesh):
+  # Training data
+  input = jax.device_put(rngs.normal((8, 1024)), P(&#39;data&#39;, None))
+  label = jax.device_put(rngs.normal((8, 1024)), P(&#39;data&#39;, None))
+  # Model and optimizer
+  model = MultiDotReluDot(1024, 2, rngs=nnx.Rngs(0))
+  optimizer = nnx.Optimizer(model, optax.adam(1e-3), wrt=nnx.Param)
+
+  # The loop
+  for i in range(5):
+    model, loss = train_step(model, optimizer, input, label)
+    print(loss)    # Model (over-)fitting to the labels quickly.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="profiling">
+<h2>Profiling<a class="headerlink" href="#profiling" title="Permalink to this heading">#</a></h2>
+<p>If you are using a Google TPU pod or a pod slice, you can create a custom <code class="docutils literal notranslate"><span class="pre">block_all()</span></code> utility function, as defined below, to measure the performance:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%%timeit
+
+def block_all(xs):
+  jax.tree_util.tree_map(lambda x: x.block_until_ready(), xs)
+  return xs
+
+with jax.set_mesh(auto_mesh):
+  new_state = block_all(train_step(model, optimizer, input, label))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-a-sharded-model-from-a-checkpoint">
+<h2>Load a sharded model from a checkpoint<a class="headerlink" href="#load-a-sharded-model-from-a-checkpoint" title="Permalink to this heading">#</a></h2>
+<p>Now you learned how to initialize a sharded model without OOM, but what about saving and loading it from a checkpoint on disk? JAX checkpointing libraries, such as <a class="reference external" href="https://orbax.readthedocs.io/en/latest/">Orbax</a>, support loading a model distributedly if a sharding pytree is provided. Below is an example that uses Orbax’s <code class="docutils literal notranslate"><span class="pre">StandardCheckpointer</span></code> API.</p>
+<p>Make sure you save a model’s state, especially if your model shares some variables across modules. Given a You can generate an identical abstract pytree with shardings using Flax’s <code class="docutils literal notranslate"><span class="pre">nnx.get_abstract_model</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import orbax.checkpoint as ocp
+
+# Save the sharded state.
+sharded_state = nnx.state(model)
+path = ocp.test_utils.erase_and_create_empty(&#39;/tmp/my-checkpoints/&#39;)
+checkpointer = ocp.StandardCheckpointer()
+checkpointer.save(path / &#39;checkpoint_name&#39;, sharded_state)
+
+# Load a sharded state from the checkpoint.
+graphdef, abs_state = nnx.get_abstract_model(
+  lambda: MultiDotReluDot(1024, 2, rngs=nnx.Rngs(0)), auto_mesh)
+restored_state = checkpointer.restore(path / &#39;checkpoint_name&#39;,
+                                      target=abs_state)
+restored_model = nnx.merge(graphdef, abs_state)
+print(restored_model.layers.dot1.kernel.sharding.spec)
+print(restored_model.layers.dot1.kernel.shape)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="logical-axis-annotation">
+<h2>Logical axis annotation<a class="headerlink" href="#logical-axis-annotation" title="Permalink to this heading">#</a></h2>
+<p>JAX’s <a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html">automatic</a> <a class="reference external" href="https://jax.readthedocs.io/en/latest/glossary.html#term-SPMD">SPMD</a> encourages users to explore different sharding layouts to find the optimal one. To this end, in Flax you have the option to annotate with more descriptive axis names (not just device mesh axis names like <code class="docutils literal notranslate"><span class="pre">'data'</span></code> and <code class="docutils literal notranslate"><span class="pre">'model'</span></code>), as long as you provide a mapping from your alias to the device mesh axes.</p>
+<p>You can provide the mapping along with the annotation as another metadata of the corresponding <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.Variable"><code class="docutils literal notranslate"><span class="pre">nnx.Variable</span></code></a>, or overwrite it at top-level. Check out the <code class="docutils literal notranslate"><span class="pre">LogicalDotReluDot</span></code> example below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># The mapping from alias annotation to the device mesh.
+sharding_rules = ((&#39;batch&#39;, &#39;data&#39;), (&#39;hidden&#39;, &#39;model&#39;), (&#39;embed&#39;, None))
+
+class LogicalDotReluDot(nnx.Module):
+  def __init__(self, depth: int, rngs: nnx.Rngs):
+    init_fn = nnx.initializers.lecun_normal()
+    self.dot1 = nnx.Linear(
+      depth, depth,
+      kernel_init=nnx.with_partitioning(init_fn, (&#39;embed&#39;, &#39;hidden&#39;)),
+      use_bias=False,  # or use `bias_init` to give it annotation too
+      rngs=rngs)
+    self.w2 = nnx.Param(
+      init_fn(rngs.params(), (depth, depth)),  # RNG key and shape for W2 creation
+      sharding=(&#39;hidden&#39;, &#39;embed&#39;),
+    )
+
+  def __call__(self, x: jax.Array):
+    y = self.dot1(x)
+    y = jax.nn.relu(y)
+    # Unfortunately the logical aliasing doesn&#39;t work on lower-level JAX calls.
+    y = jax.lax.with_sharding_constraint(y, P(&#39;data&#39;, None))
+    z = jnp.dot(y, self.w2[...])
+    return z
+
+class LogicalMultiDotReluDot(nnx.Module):
+  def __init__(self, depth: int, num_layers: int, rngs: nnx.Rngs):
+    @nnx.vmap(transform_metadata={nnx.PARTITION_NAME: None})
+    def create_sublayers(r):
+      return LogicalDotReluDot(depth, r)
+    self.layers = create_sublayers(rngs.fork(split=num_layers))
+
+  def __call__(self, x):
+    def scan_over_layers(x, layer):
+      return layer(x), None
+    x, _ = jax.lax.scan(scan_over_layers, x, self.layers)
+    return x
+</pre></div>
+</div>
+</div>
+</div>
+<p>If you didn’t provide all <code class="docutils literal notranslate"><span class="pre">sharding_rule</span></code> annotations in the model definition, you can apply them at top level by put them into the context via <code class="docutils literal notranslate"><span class="pre">nnx.logical_axis_rules</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>with jax.set_mesh(auto_mesh), nnx.logical_axis_rules(sharding_rules):
+  # Model and optimizer
+  logical_model = LogicalMultiDotReluDot(1024, 2, rngs=nnx.Rngs(0))
+  logical_output = logical_model(input)
+
+# Check out their equivalency with some easier-to-read sharding descriptions.
+assert logical_model.layers.dot1.kernel.sharding.is_equivalent_to(
+  NamedSharding(auto_mesh, P(None, None, &#39;model&#39;)), ndim=3
+)
+assert logical_model.layers.w2.sharding.is_equivalent_to(
+  NamedSharding(auto_mesh, P(None, &#39;model&#39;, None)), ndim=3
+)
+assert logical_output.sharding.is_equivalent_to(
+  NamedSharding(auto_mesh, P(&#39;data&#39;, None)), ndim=2
+)
+</pre></div>
+</div>
+</div>
+</div>
+<section id="when-to-use-device-axis-logical-axis">
+<h3>When to use device axis / logical axis<a class="headerlink" href="#when-to-use-device-axis-logical-axis" title="Permalink to this heading">#</a></h3>
+<p>Choosing when to use a device or logical axis depends on how much you want to control the partitioning of your model:</p>
+<ul class="simple">
+<li><p><strong>Device mesh axis</strong>:</p>
+<ul>
+<li><p>For a simpler model, this can save you a few extra lines of code of converting the logical naming back to the device naming.</p></li>
+<li><p>Shardings of intermediate <em>activation</em> values can only be done via <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.with_sharding_constraint.html"><code class="docutils literal notranslate"><span class="pre">jax.lax.with_sharding_constraint</span></code></a> and device mesh axis. Therefore, if you want super fine-grained control over your model’s sharding, directly using device mesh axis names everywhere might be less confusing.</p></li>
+</ul>
+</li>
+<li><p><strong>Logical naming</strong>: This is helpful if you want to experiment around and find the most optimal partition layout for your <em>model weights</em>.</p></li>
+</ul>
+</section>
+</section>
+<section id="explicit-sharding">
+<h2>Explicit sharding<a class="headerlink" href="#explicit-sharding" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/explicit-sharding.html">Explicit sharding</a>, also called “sharding-in-types”, is a new JAX sharding feature that allows every sharding of every array to be deterministic and explicit. Instead of letting XLA compiler figure out the shardings, you as user would explicitly state the shardings via JAX APIs.</p>
+<p>For education purposes, we provide a simple Flax model example using explicit sharding. Note how you specify shardings for this model:</p>
+<ul class="simple">
+<li><p>Parameters: <code class="docutils literal notranslate"><span class="pre">out_sharding</span></code> argument passed into JAX initializers.</p></li>
+<li><p>Ambigious computations like <code class="docutils literal notranslate"><span class="pre">jnp.dot</span></code>: provide <code class="docutils literal notranslate"><span class="pre">out_sharding</span></code> argument to specify the output sharding.</p></li>
+<li><p>Additional dimension from transforms: use <code class="docutils literal notranslate"><span class="pre">jax.vmap</span></code>’s argument <code class="docutils literal notranslate"><span class="pre">spmd_axis_name</span></code>, instead of Flax lifted transforms.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Explicit axis mesh
+explicit_mesh = jax.make_mesh((2, 4), (&#39;data&#39;, &#39;model&#39;),
+                              axis_types=(AxisType.Explicit, AxisType.Explicit))
+
+class ExplicitDotReluDot(nnx.Module):
+  def __init__(self, depth: int, rngs: nnx.Rngs):
+    init_fn = nnx.initializers.lecun_normal()
+    self.dot1 = nnx.Linear(
+      depth, depth,
+      kernel_init=partial(init_fn, out_sharding=P(None, &#39;model&#39;)),
+      use_bias=False,
+      rngs=rngs)
+    self.w2 = nnx.Param(
+      init_fn(rngs.params(), (depth, depth), out_sharding=P(&#39;model&#39;, None)),
+    )
+    self.b2 = nnx.Param(jnp.zeros((depth, ), out_sharding=P(None,)))
+
+  def __call__(self, x: jax.Array):
+    y = self.dot1(x)
+    y = jax.nn.relu(y)
+    z = jnp.dot(y, self.w2[...], out_sharding=P(&#39;data&#39;, None))
+    z = z + self.b2
+    return z
+
+
+class ExplicitMultiDotReluDot(nnx.Module):
+  def __init__(self, depth: int, num_layers: int, rngs: nnx.Rngs):
+    # Annotate the additional axis with sharding=None, meaning it will be
+    # replicated across all devices.
+    @partial(jax.vmap, spmd_axis_name=None)
+    def create_sublayers(r):
+      return ExplicitDotReluDot(depth, r)
+    self.layers = create_sublayers(rngs.fork(split=num_layers))
+
+  def __call__(self, x):
+    def scan_over_layers(x, layer):
+      return layer(x), None
+    x, _ = jax.lax.scan(scan_over_layers, x, self.layers)
+    return x
+
+
+with jax.set_mesh(explicit_mesh):
+  model = ExplicitMultiDotReluDot(1024, 2, rngs=nnx.Rngs(0))
+  x = jax.device_put(rngs.normal((8, 1024)),
+                     NamedSharding(explicit_mesh, P(&#39;data&#39;, None)))
+  y = model(x)
+
+print(model.layers.dot1.kernel.sharding.spec)
+print(model.layers.w2.sharding.spec)
+assert x.sharding.is_equivalent_to(y.sharding, ndim=2)
+</pre></div>
+</div>
+</div>
+</div>
+<p>One thing easier in explicit mode is that you can obtain the abstract array tree with shardings via <code class="docutils literal notranslate"><span class="pre">jax.eval_shape</span></code>, instead of calling <code class="docutils literal notranslate"><span class="pre">nnx.get_abstract_sharding</span></code>. This is not possible in auto mode.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Get the sharding tree to load checkpoint with
+with jax.set_mesh(explicit_mesh):
+  abs_model = jax.eval_shape(
+    lambda: ExplicitMultiDotReluDot(1024, 2, rngs=nnx.Rngs(0)))
+  print(abs_model.layers.dot1.kernel.sharding.spec)
+  print(abs_model.layers.w2.sharding.spec)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="further-readings">
+<h2>Further readings<a class="headerlink" href="#further-readings" title="Permalink to this heading">#</a></h2>
+<p>JAX has abundant documentation on scaled computing.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://jax.readthedocs.io/en/latest/sharded-computation.html">Introduction to parallel programming</a>: A 101 level tutorial covering the basics of automatic parallelization with <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.jit.html#jax.jit"><code class="docutils literal notranslate"><span class="pre">jax.jit</span></code></a>, semi-automatic parallelization with <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.jit.html"><code class="docutils literal notranslate"><span class="pre">jax.jit</span></code></a> and <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.with_sharding_constraint.html"><code class="docutils literal notranslate"><span class="pre">jax.lax.with_sharding_constraint</span></code></a>, and manual sharding with <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.experimental.shard_map.shard_map.html#jax.experimental.shard_map.shard_map"><code class="docutils literal notranslate"><span class="pre">shard_map</span></code></a>.</p></li>
+<li><p><a class="reference external" href="https://jax.readthedocs.io/en/latest/multi_process.html">JAX in multi-process environments</a>.</p></li>
+<li><p><a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html">Distributed arrays and automatic parallelization</a>: A more detailed tutorial about parallelization with <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.jit.html#jax.jit"><code class="docutils literal notranslate"><span class="pre">jax.jit</span></code></a> and <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.with_sharding_constraint.html"><code class="docutils literal notranslate"><span class="pre">jax.lax.with_sharding_constraint</span></code></a>.</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../guides_advanced.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Advanced Guides</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="performance.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Performance considerations</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shard-a-single-array-model">Shard a single-array model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-with-style">Initialize with style</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-model">Run the model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shard-a-wholesome-model">Shard a wholesome model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#profiling">Profiling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-a-sharded-model-from-a-checkpoint">Load a sharded model from a checkpoint</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#logical-axis-annotation">Logical axis annotation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-use-device-axis-logical-axis">When to use device axis / logical axis</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-sharding">Explicit sharding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-readings">Further readings</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

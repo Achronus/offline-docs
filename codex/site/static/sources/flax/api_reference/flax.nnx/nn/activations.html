@@ -1,0 +1,1232 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Activation functions</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/flax.nnx/nn/activations';</script>
+    <link rel="icon" href="../../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Attention" href="attention.html" />
+    <link rel="prev" title="nn" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/api_reference/flax.nnx/nn/activations.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../../../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../index.html">flax.nnx</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../module.html">module</a></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">nn</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/api_reference/flax.nnx/nn/activations.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Activation functions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.celu"><code class="docutils literal notranslate"><span class="pre">celu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.elu"><code class="docutils literal notranslate"><span class="pre">elu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.gelu"><code class="docutils literal notranslate"><span class="pre">gelu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.glu"><code class="docutils literal notranslate"><span class="pre">glu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.hard_sigmoid"><code class="docutils literal notranslate"><span class="pre">hard_sigmoid()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.hard_silu"><code class="docutils literal notranslate"><span class="pre">hard_silu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.hard_swish"><code class="docutils literal notranslate"><span class="pre">hard_swish()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.hard_tanh"><code class="docutils literal notranslate"><span class="pre">hard_tanh()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.leaky_relu"><code class="docutils literal notranslate"><span class="pre">leaky_relu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.log_sigmoid"><code class="docutils literal notranslate"><span class="pre">log_sigmoid()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.log_softmax"><code class="docutils literal notranslate"><span class="pre">log_softmax()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.logsumexp"><code class="docutils literal notranslate"><span class="pre">logsumexp()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.one_hot"><code class="docutils literal notranslate"><span class="pre">one_hot()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.relu"><code class="docutils literal notranslate"><span class="pre">relu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.selu"><code class="docutils literal notranslate"><span class="pre">selu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.sigmoid"><code class="docutils literal notranslate"><span class="pre">sigmoid()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.silu"><code class="docutils literal notranslate"><span class="pre">silu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.soft_sign"><code class="docutils literal notranslate"><span class="pre">soft_sign()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.softmax"><code class="docutils literal notranslate"><span class="pre">softmax()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.softplus"><code class="docutils literal notranslate"><span class="pre">softplus()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.standardize"><code class="docutils literal notranslate"><span class="pre">standardize()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.swish"><code class="docutils literal notranslate"><span class="pre">swish()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.tanh"><code class="docutils literal notranslate"><span class="pre">tanh()</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-flax.nnx">
+<span id="activation-functions"></span><h1>Activation functions<a class="headerlink" href="#module-flax.nnx" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.celu">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">celu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#celu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.celu" title="Permalink to this definition">#</a></dt>
+<dd><p>Continuously-differentiable exponential linear unit activation.</p>
+<p>Computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathrm{celu}(x) = \begin{cases}
+  x, &amp; x &gt; 0\\
+  \alpha \left(\exp(\frac{x}{\alpha}) - 1\right), &amp; x \le 0
+\end{cases}\end{split}\]</div>
+<p>For more information, see
+<a class="reference external" href="https://arxiv.org/abs/1704.07483">Continuously Differentiable Exponential Linear Units</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input array</p></li>
+<li><p><strong>alpha</strong> – array or scalar (default: 1.0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.elu">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">elu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#elu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.elu" title="Permalink to this definition">#</a></dt>
+<dd><p>Exponential linear unit activation function.</p>
+<p>Computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathrm{elu}(x) = \begin{cases}
+  x, &amp; x &gt; 0\\
+  \alpha \left(\exp(x) - 1\right), &amp; x \le 0
+\end{cases}\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input array</p></li>
+<li><p><strong>alpha</strong> – scalar or array of alpha values (default: 1.0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.selu" title="flax.nnx.selu"><code class="xref py py-func docutils literal notranslate"><span class="pre">selu()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.gelu">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">gelu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approximate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#gelu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.gelu" title="Permalink to this definition">#</a></dt>
+<dd><p>Gaussian error linear unit activation function.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">approximate=False</span></code>, computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{gelu}(x) = \frac{x}{2} \left(\mathrm{erfc} \left(
+  \frac{-x}{\sqrt{2}} \right) \right)\]</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">approximate=True</span></code>, uses the approximate formulation of GELU:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{gelu}(x) = \frac{x}{2} \left(1 + \mathrm{tanh} \left(
+  \sqrt{\frac{2}{\pi}} \left(x + 0.044715 x^3 \right) \right) \right)\]</div>
+<p>For more information, see <a class="reference external" href="https://arxiv.org/abs/1606.08415">Gaussian Error Linear Units (GELUs)</a>, section 2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input array</p></li>
+<li><p><strong>approximate</strong> – whether to use the approximate or exact formulation.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.glu">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">glu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#glu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.glu" title="Permalink to this definition">#</a></dt>
+<dd><p>Gated linear unit activation function.</p>
+<p>Computes the function:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{glu}(x) =  x\left[\ldots, 0:\frac{n}{2}, \ldots\right] \cdot
+  \mathrm{sigmoid} \left( x\left[\ldots, \frac{n}{2}:n, \ldots\right]
+    \right)\]</div>
+<p>where the array is split into two along <code class="docutils literal notranslate"><span class="pre">axis</span></code>. The size of the <code class="docutils literal notranslate"><span class="pre">axis</span></code>
+dimension must be divisible by two.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input array</p></li>
+<li><p><strong>axis</strong> – the axis along which the split should be computed (default: -1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.sigmoid" title="flax.nnx.sigmoid"><code class="xref py py-func docutils literal notranslate"><span class="pre">sigmoid()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.hard_sigmoid">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">hard_sigmoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#hard_sigmoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.hard_sigmoid" title="Permalink to this definition">#</a></dt>
+<dd><p>Hard Sigmoid activation function.</p>
+<p>Computes the element-wise function</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{hard\_sigmoid}(x) = \frac{\mathrm{relu6}(x + 3)}{6}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">relu6()</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.hard_silu">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">hard_silu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#hard_silu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.hard_silu" title="Permalink to this definition">#</a></dt>
+<dd><p>Hard SiLU (swish) activation function</p>
+<p>Computes the element-wise function</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{hard\_silu}(x) = x \cdot \mathrm{hard\_sigmoid}(x)\]</div>
+<p>Both <a class="reference internal" href="#flax.nnx.hard_silu" title="flax.nnx.hard_silu"><code class="xref py py-func docutils literal notranslate"><span class="pre">hard_silu()</span></code></a> and <a class="reference internal" href="#flax.nnx.hard_swish" title="flax.nnx.hard_swish"><code class="xref py py-func docutils literal notranslate"><span class="pre">hard_swish()</span></code></a> are aliases for the same
+function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.hard_sigmoid" title="flax.nnx.hard_sigmoid"><code class="xref py py-func docutils literal notranslate"><span class="pre">hard_sigmoid()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.hard_swish">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">hard_swish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flax.nnx.hard_swish" title="Permalink to this definition">#</a></dt>
+<dd><p>Hard SiLU (swish) activation function</p>
+<p>Computes the element-wise function</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{hard\_silu}(x) = x \cdot \mathrm{hard\_sigmoid}(x)\]</div>
+<p>Both <a class="reference internal" href="#flax.nnx.hard_silu" title="flax.nnx.hard_silu"><code class="xref py py-func docutils literal notranslate"><span class="pre">hard_silu()</span></code></a> and <a class="reference internal" href="#flax.nnx.hard_swish" title="flax.nnx.hard_swish"><code class="xref py py-func docutils literal notranslate"><span class="pre">hard_swish()</span></code></a> are aliases for the same
+function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.hard_sigmoid" title="flax.nnx.hard_sigmoid"><code class="xref py py-func docutils literal notranslate"><span class="pre">hard_sigmoid()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.hard_tanh">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">hard_tanh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#hard_tanh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.hard_tanh" title="Permalink to this definition">#</a></dt>
+<dd><p>Hard <span class="math notranslate nohighlight">\(\mathrm{tanh}\)</span> activation function.</p>
+<p>Computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathrm{hard\_tanh}(x) = \begin{cases}
+  -1, &amp; x &lt; -1\\
+  x, &amp; -1 \le x \le 1\\
+  1, &amp; 1 &lt; x
+\end{cases}\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.leaky_relu">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">leaky_relu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negative_slope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#leaky_relu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.leaky_relu" title="Permalink to this definition">#</a></dt>
+<dd><p>Leaky rectified linear unit activation function.</p>
+<p>Computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathrm{leaky\_relu}(x) = \begin{cases}
+  x, &amp; x \ge 0\\
+  \alpha x, &amp; x &lt; 0
+\end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> = <code class="code docutils literal notranslate"><span class="pre">negative_slope</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input array</p></li>
+<li><p><strong>negative_slope</strong> – array or scalar specifying the negative slope (default: 0.01)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.relu" title="flax.nnx.relu"><code class="xref py py-func docutils literal notranslate"><span class="pre">relu()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.log_sigmoid">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">log_sigmoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#log_sigmoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.log_sigmoid" title="Permalink to this definition">#</a></dt>
+<dd><p>Log-sigmoid activation function.</p>
+<p>Computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{log\_sigmoid}(x) = \log(\mathrm{sigmoid}(x)) = -\log(1 + e^{-x})\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.sigmoid" title="flax.nnx.sigmoid"><code class="xref py py-func docutils literal notranslate"><span class="pre">sigmoid()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.log_softmax">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">log_softmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#log_softmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.log_softmax" title="Permalink to this definition">#</a></dt>
+<dd><p>Log-Softmax function.</p>
+<p>Computes the logarithm of the <code class="code docutils literal notranslate"><span class="pre">softmax</span></code> function, which rescales
+elements to the range <span class="math notranslate nohighlight">\([-\infty, 0)\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{log\_softmax}(x)_i = \log \left( \frac{\exp(x_i)}{\sum_j \exp(x_j)}
+\right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input array</p></li>
+<li><p><strong>axis</strong> – the axis or axes along which the <code class="code docutils literal notranslate"><span class="pre">log_softmax</span></code> should be
+computed. Either an integer, tuple of integers, or <code class="docutils literal notranslate"><span class="pre">None</span></code> (all axes).</p></li>
+<li><p><strong>where</strong> – Elements to include in the <code class="code docutils literal notranslate"><span class="pre">log_softmax</span></code>. The output for any
+masked-out element is minus infinity.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If any input values are <code class="docutils literal notranslate"><span class="pre">+inf</span></code>, the result will be all <code class="docutils literal notranslate"><span class="pre">NaN</span></code>: this reflects the
+fact that <code class="docutils literal notranslate"><span class="pre">inf</span> <span class="pre">/</span> <span class="pre">inf</span></code> is not well-defined in the context of floating-point math.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.softmax" title="flax.nnx.softmax"><code class="xref py py-func docutils literal notranslate"><span class="pre">softmax()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.logsumexp">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">logsumexp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepdims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_sign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/ops/special.html#logsumexp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.logsumexp" title="Permalink to this definition">#</a></dt>
+<dd><p>Log-sum-exp reduction.</p>
+<p>JAX implementation of <code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.special.logsumexp()</span></code>.</p>
+<div class="math notranslate nohighlight">
+\[\operatorname{logsumexp} a = \log \sum_i b_i \exp a_i\]</div>
+<p>where the <span class="math notranslate nohighlight">\(i\)</span> indices range over one or more dimensions to be reduced.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – the input array</p></li>
+<li><p><strong>axis</strong> – int or sequence of ints, default=None. Axis along which the sum to be
+computed. If None, the sum is computed along all the axes.</p></li>
+<li><p><strong>b</strong> – scaling factors for the exponentials. Must be broadcastable to the shape of <cite>a</cite>.</p></li>
+<li><p><strong>keepdims</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the axes that are reduced are left in the output as
+dimensions of size 1.</p></li>
+<li><p><strong>return_sign</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the output will be a <code class="docutils literal notranslate"><span class="pre">(result,</span> <span class="pre">sign)</span></code> pair,
+where <code class="docutils literal notranslate"><span class="pre">sign</span></code> is the sign of the sums and <code class="docutils literal notranslate"><span class="pre">result</span></code> contains the
+logarithms of their absolute values. If <code class="docutils literal notranslate"><span class="pre">False</span></code> only <code class="docutils literal notranslate"><span class="pre">result</span></code> is
+returned and it will contain NaN values if the sums are negative.</p></li>
+<li><p><strong>where</strong> – Elements to include in the reduction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Either an array <code class="docutils literal notranslate"><span class="pre">result</span></code> or a pair of arrays <code class="docutils literal notranslate"><span class="pre">(result,</span> <span class="pre">sign)</span></code>, depending
+on the value of the <code class="docutils literal notranslate"><span class="pre">return_sign</span></code> argument.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.nn.logmeanexp()</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.one_hot">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">one_hot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#one_hot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.one_hot" title="Permalink to this definition">#</a></dt>
+<dd><p>One-hot encodes the given indices.</p>
+<p>Each index in the input <code class="docutils literal notranslate"><span class="pre">x</span></code> is encoded as a vector of zeros of length
+<code class="docutils literal notranslate"><span class="pre">num_classes</span></code> with the element at <code class="docutils literal notranslate"><span class="pre">index</span></code> set to one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">one_hot</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">Array([[1., 0., 0.],</span>
+<span class="go">       [0., 1., 0.],</span>
+<span class="go">       [0., 0., 1.]], dtype=float32)</span>
+</pre></div>
+</div>
+<p>Indices outside the range <span class="math notranslate nohighlight">\([0, \text{num\_classes})\)</span> will be encoded as zeros:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">one_hot</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">Array([[0., 0., 0.],</span>
+<span class="go">       [0., 0., 0.]], dtype=float32)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – A tensor of indices.</p></li>
+<li><p><strong>num_classes</strong> – Number of classes in the one-hot dimension.</p></li>
+<li><p><strong>dtype</strong> – optional, a float dtype for the returned values (default <code class="xref py py-obj docutils literal notranslate"><span class="pre">jnp.float_</span></code>).</p></li>
+<li><p><strong>axis</strong> – the axis or axes along which the function should be
+computed.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.relu">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">relu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#relu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.relu" title="Permalink to this definition">#</a></dt>
+<dd><p>Rectified linear unit activation function.</p>
+<p>Computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{relu}(x) = \max(x, 0)\]</div>
+<p>except under differentiation, we take:</p>
+<div class="math notranslate nohighlight">
+\[\nabla \mathrm{relu}(0) = 0\]</div>
+<p>For more information see
+<a class="reference external" href="https://dl.acm.org/doi/10.5555/3540261.3540297">Numerical influence of ReLU’(0) on backpropagation</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]))</span>
+<span class="go">Array([0. , 0. , 0. , 0. , 0.5, 1. , 2. ], dtype=float32)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">relu6()</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.selu">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">selu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#selu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.selu" title="Permalink to this definition">#</a></dt>
+<dd><p>Scaled exponential linear unit activation.</p>
+<p>Computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathrm{selu}(x) = \lambda \begin{cases}
+  x, &amp; x &gt; 0\\
+  \alpha e^x - \alpha, &amp; x \le 0
+\end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\lambda = 1.0507009873554804934193349852946\)</span> and
+<span class="math notranslate nohighlight">\(\alpha = 1.6732632423543772848170429916717\)</span>.</p>
+<p>For more information, see
+<a class="reference external" href="https://arxiv.org/abs/1706.02515">Self-Normalizing Neural Networks</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.elu" title="flax.nnx.elu"><code class="xref py py-func docutils literal notranslate"><span class="pre">elu()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.sigmoid">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">sigmoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#sigmoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.sigmoid" title="Permalink to this definition">#</a></dt>
+<dd><p>Sigmoid activation function.</p>
+<p>Computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{sigmoid}(x) = \frac{1}{1 + e^{-x}}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.log_sigmoid" title="flax.nnx.log_sigmoid"><code class="xref py py-func docutils literal notranslate"><span class="pre">log_sigmoid()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.identity">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.identity" title="Permalink to this definition">#</a></dt>
+<dd><p>Identity activation function.</p>
+<p>Returns the argument unmodified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The argument <cite>x</cite> unmodified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]))</span>
+<span class="go">Array([-2. , -1. , -0.5, 0. , 0.5, 1. , 2. ], dtype=float32)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.silu">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">silu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#silu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.silu" title="Permalink to this definition">#</a></dt>
+<dd><p>SiLU (aka swish) activation function.</p>
+<p>Computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{silu}(x) = x \cdot \mathrm{sigmoid}(x) = \frac{x}{1 + e^{-x}}\]</div>
+<p><a class="reference internal" href="#flax.nnx.swish" title="flax.nnx.swish"><code class="xref py py-func docutils literal notranslate"><span class="pre">swish()</span></code></a> and <a class="reference internal" href="#flax.nnx.silu" title="flax.nnx.silu"><code class="xref py py-func docutils literal notranslate"><span class="pre">silu()</span></code></a> are both aliases for the same function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.sigmoid" title="flax.nnx.sigmoid"><code class="xref py py-func docutils literal notranslate"><span class="pre">sigmoid()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.soft_sign">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">soft_sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#soft_sign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.soft_sign" title="Permalink to this definition">#</a></dt>
+<dd><p>Soft-sign activation function.</p>
+<p>Computes the element-wise function</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{soft\_sign}(x) = \frac{x}{|x| + 1}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.softmax">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">softmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#softmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.softmax" title="Permalink to this definition">#</a></dt>
+<dd><p>Softmax function.</p>
+<p>Computes the function which rescales elements to the range <span class="math notranslate nohighlight">\([0, 1]\)</span>
+such that the elements along <code class="code docutils literal notranslate"><span class="pre">axis</span></code> sum to <span class="math notranslate nohighlight">\(1\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{softmax}(x) = \frac{\exp(x_i)}{\sum_j \exp(x_j)}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input array</p></li>
+<li><p><strong>axis</strong> – the axis or axes along which the softmax should be computed. The
+softmax output summed across these dimensions should sum to <span class="math notranslate nohighlight">\(1\)</span>.
+Either an integer, tuple of integers, or <code class="docutils literal notranslate"><span class="pre">None</span></code> (all axes).</p></li>
+<li><p><strong>where</strong> – Elements to include in the <code class="code docutils literal notranslate"><span class="pre">softmax</span></code>. The output for any
+masked-out element is zero.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If any input values are <code class="docutils literal notranslate"><span class="pre">+inf</span></code>, the result will be all <code class="docutils literal notranslate"><span class="pre">NaN</span></code>: this reflects the
+fact that <code class="docutils literal notranslate"><span class="pre">inf</span> <span class="pre">/</span> <span class="pre">inf</span></code> is not well-defined in the context of floating-point math.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.log_softmax" title="flax.nnx.log_softmax"><code class="xref py py-func docutils literal notranslate"><span class="pre">log_softmax()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.softplus">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">softplus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#softplus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.softplus" title="Permalink to this definition">#</a></dt>
+<dd><p>Softplus activation function.</p>
+<p>Computes the element-wise function</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{softplus}(x) = \log(1 + e^x)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.standardize">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fast'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jax/_src/nn/functions.html#standardize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.standardize" title="Permalink to this definition">#</a></dt>
+<dd><p>Standardizes input to zero mean and unit variance.</p>
+<p>The standardization is given by:</p>
+<div class="math notranslate nohighlight">
+\[x_{std} = \frac{x - \langle x\rangle}{\sqrt{\langle(x - \langle x\rangle)^2\rangle + \epsilon}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\langle x\rangle\)</span> indicates the mean of <span class="math notranslate nohighlight">\(x\)</span>, and <span class="math notranslate nohighlight">\(\epsilon\)</span> is
+a small correction factor introduced to avoid division by zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input array to be standardized.</p></li>
+<li><p><strong>axis</strong> – integer, tuple of integers, or <code class="docutils literal notranslate"><span class="pre">None</span></code> (all axes), representing the
+axes along which to standardize. Defaults to the last axis (<code class="docutils literal notranslate"><span class="pre">-1</span></code>).</p></li>
+<li><p><strong>mean</strong> – optionally specify the mean used for standardization. If not specified,
+then <code class="docutils literal notranslate"><span class="pre">x.mean(axis,</span> <span class="pre">where=where)</span></code> will be used.</p></li>
+<li><p><strong>variance</strong> – optionally specify the variance used for standardization. If not
+specified, then <code class="docutils literal notranslate"><span class="pre">x.var(axis,</span> <span class="pre">where=where)</span></code> will be used.</p></li>
+<li><p><strong>epsilon</strong> – correction factor added to variance to avoid division by zero; defaults
+to <code class="docutils literal notranslate"><span class="pre">1E-5</span></code>.</p></li>
+<li><p><strong>where</strong> – optional boolean mask specifying which elements to use when computing
+the mean and variance.</p></li>
+<li><p><strong>algorithm</strong> – variance computation algorithm. <code class="docutils literal notranslate"><span class="pre">&quot;fast&quot;</span></code> uses <code class="docutils literal notranslate"><span class="pre">mean(x^2)</span> <span class="pre">-</span> <span class="pre">mean(x)^2</span></code>
+which may be faster but can suffer from catastrophic cancellation and produce
+different results in eager vs JIT contexts. <code class="docutils literal notranslate"><span class="pre">&quot;stable&quot;</span></code> uses the two-pass
+formula <code class="docutils literal notranslate"><span class="pre">mean((x</span> <span class="pre">-</span> <span class="pre">mean(x))^2)</span></code> which is numerically stable. Default is
+<code class="docutils literal notranslate"><span class="pre">&quot;fast&quot;</span></code> for backward compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of the same shape as <code class="docutils literal notranslate"><span class="pre">x</span></code> containing the standardized input.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.swish">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">swish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flax.nnx.swish" title="Permalink to this definition">#</a></dt>
+<dd><p>SiLU (aka swish) activation function.</p>
+<p>Computes the element-wise function:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{silu}(x) = x \cdot \mathrm{sigmoid}(x) = \frac{x}{1 + e^{-x}}\]</div>
+<p><a class="reference internal" href="#flax.nnx.swish" title="flax.nnx.swish"><code class="xref py py-func docutils literal notranslate"><span class="pre">swish()</span></code></a> and <a class="reference internal" href="#flax.nnx.silu" title="flax.nnx.silu"><code class="xref py py-func docutils literal notranslate"><span class="pre">silu()</span></code></a> are both aliases for the same function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#flax.nnx.sigmoid" title="flax.nnx.sigmoid"><code class="xref py py-func docutils literal notranslate"><span class="pre">sigmoid()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.tanh">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">tanh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flax.nnx.tanh" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate element-wise hyperbolic tangent of input.</p>
+<p>JAX implementation of <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.tanh</span></code>.</p>
+<p>The hyperbolic tangent is defined by:</p>
+<div class="math notranslate nohighlight">
+\[tanh(x) = \frac{sinh(x)}{cosh(x)} = \frac{e^x - e^{-x}}{e^x + e^{-x}}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – input array or scalar.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array containing the hyperbolic tangent of each element of <code class="docutils literal notranslate"><span class="pre">x</span></code>, promoting
+to inexact dtype.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">jnp.tanh</span></code> is equivalent to computing <code class="docutils literal notranslate"><span class="pre">-1j</span> <span class="pre">*</span> <span class="pre">jnp.tan(1j</span> <span class="pre">*</span> <span class="pre">x)</span></code>.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.numpy.sinh()</span></code>: Computes the element-wise hyperbolic sine of the input.</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.numpy.cosh()</span></code>: Computes the element-wise hyperbolic cosine of the
+input.</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.numpy.arctanh()</span></code>:  Computes the element-wise inverse of hyperbolic
+tangent of the input.</p></li>
+</ul>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>               <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">jnp</span><span class="o">.</span><span class="n">printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="n">jnp</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">Array([[-0.762,  0.   ,  0.762],</span>
+<span class="go">       [ 0.995, -0.964,  1.   ]], dtype=float32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">jnp</span><span class="o">.</span><span class="n">printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+<span class="go">Array([[-0.762+0.j,  0.   -0.j,  0.762-0.j],</span>
+<span class="go">       [ 0.995-0.j, -0.964+0.j,  1.   -0.j]],      dtype=complex64, weak_type=True)</span>
+</pre></div>
+</div>
+<p>For complex-valued input:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">jnp</span><span class="o">.</span><span class="n">printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="n">jnp</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="mi">2</span><span class="o">-</span><span class="mi">5</span><span class="n">j</span><span class="p">)</span>
+<span class="go">Array(1.031+0.021j, dtype=complex64, weak_type=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">jnp</span><span class="o">.</span><span class="n">printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">-</span><span class="mi">5</span><span class="n">j</span><span class="p">))</span>
+<span class="go">Array(1.031+0.021j, dtype=complex64, weak_type=True)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">nn</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="attention.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Attention</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.celu"><code class="docutils literal notranslate"><span class="pre">celu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.elu"><code class="docutils literal notranslate"><span class="pre">elu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.gelu"><code class="docutils literal notranslate"><span class="pre">gelu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.glu"><code class="docutils literal notranslate"><span class="pre">glu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.hard_sigmoid"><code class="docutils literal notranslate"><span class="pre">hard_sigmoid()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.hard_silu"><code class="docutils literal notranslate"><span class="pre">hard_silu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.hard_swish"><code class="docutils literal notranslate"><span class="pre">hard_swish()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.hard_tanh"><code class="docutils literal notranslate"><span class="pre">hard_tanh()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.leaky_relu"><code class="docutils literal notranslate"><span class="pre">leaky_relu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.log_sigmoid"><code class="docutils literal notranslate"><span class="pre">log_sigmoid()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.log_softmax"><code class="docutils literal notranslate"><span class="pre">log_softmax()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.logsumexp"><code class="docutils literal notranslate"><span class="pre">logsumexp()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.one_hot"><code class="docutils literal notranslate"><span class="pre">one_hot()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.relu"><code class="docutils literal notranslate"><span class="pre">relu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.selu"><code class="docutils literal notranslate"><span class="pre">selu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.sigmoid"><code class="docutils literal notranslate"><span class="pre">sigmoid()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.identity"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.silu"><code class="docutils literal notranslate"><span class="pre">silu()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.soft_sign"><code class="docutils literal notranslate"><span class="pre">soft_sign()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.softmax"><code class="docutils literal notranslate"><span class="pre">softmax()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.softplus"><code class="docutils literal notranslate"><span class="pre">softplus()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.standardize"><code class="docutils literal notranslate"><span class="pre">standardize()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.swish"><code class="docutils literal notranslate"><span class="pre">swish()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.tanh"><code class="docutils literal notranslate"><span class="pre">tanh()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,796 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Transfer learning</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/training_techniques/transfer_learning';</script>
+    <link rel="icon" href="../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Save and load checkpoints" href="use_checkpointing.html" />
+    <link rel="prev" title="Learning rate scheduling" href="lr_schedule.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax-linen" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/training_techniques/transfer_learning.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax.readthedocs.io/en/latest/index.html"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the old Flax Linen API. <span style="color: lightgray;">[Explore the new <b>Flax NNX</b> API ✨]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flax_fundamentals/flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../flax_fundamentals/index.html">Flax fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/index.html">JAX 101</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/state_params.html">Managing Parameters and State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/setup_or_nncompact.html"><code class="docutils literal notranslate"><span class="pre">setup</span></code> vs <code class="docutils literal notranslate"><span class="pre">compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/arguments.html">Dealing with Flax Module arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/rng_guide.html">Randomness and PRNGs in Flax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../data_preprocessing/index.html">Data preprocessing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/full_eval.html">Processing the entire Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/loading_datasets.html">Loading datasets</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">Training techniques</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="batch_norm.html">Batch normalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dropout.html">Dropout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lr_schedule.html">Learning rate scheduling</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Transfer learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="use_checkpointing.html">Save and load checkpoints</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../parallel_training/index.html">Parallel training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/ensembling.html">Ensembling on multiple devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/flax_on_pjit.html">Scale up Flax Modules on multiple devices</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../model_inspection/index.html">Model inspection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/model_surgery.html">Model surgery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/extracting_intermediates.html">Extracting intermediate values</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../converting_and_upgrading/index.html">Converting and upgrading</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/haiku_migration_guide.html">Migrating from Haiku to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/convert_pytorch_to_flax.html">Convert PyTorch models to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/orbax_upgrade_guide.html">Migrate checkpointing to Orbax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/optax_update_guide.html">Upgrading my codebase to Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/linen_upgrade_guide.html">Upgrading my codebase to Linen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/rnncell_upgrade_guide.html">RNNCellBase Upgrade Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/regular_dict_upgrade_guide.html">Migrate to regular dicts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../quantization/index.html">Quantization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quantization/fp8_basics.html">User Guide on Using FP8</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../flax_sharp_bits.html">The Sharp Bits</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/core_examples.html">Core examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/google_research_examples.html">Google Research examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/repositories_that_use_flax.html">Repositories that use Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/community_examples.html">Community examples</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../developer_notes/index.html">Developer notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/module_lifecycle.html">The Flax Module lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/lift.html">Lifted transformations</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/google/flax/tree/main/docs/flip">FLIPs</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.cursor.html">flax.cursor package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.errors.html">flax.errors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.jax_utils.html">flax.jax_utils package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_reference/flax.linen/index.html">flax.linen</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/module.html">Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/init_apply.html">Init/Apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/activation_functions.html">Activation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/initializers.html">Initializers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/transformations.html">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/inspection.html">Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/variable.html">Variable dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/spmd.html">SPMD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/decorators.html">Decorators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/profiling.html">Profiling</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.serialization.html">flax.serialization package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.traceback_util.html">flax.traceback_util package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/index.html">Flax NNX</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs/guides/training_techniques/transfer_learning.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/guides/training_techniques/transfer_learning.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Transfer learning</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-function-for-model-loading">Create a function for model loading</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-a-submodule">Extracting a submodule</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-classifier">Creating a classifier</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transfering-the-parameters">Transfering the parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization">Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax-multi-transform"><strong>optax.multi_transform</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-trainstate">Creating the <code class="docutils literal notranslate"><span class="pre">TrainState</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="transfer-learning">
+<h1>Transfer learning<a class="headerlink" href="#transfer-learning" title="Permalink to this heading">#</a></h1>
+<p>This guide demonstrates various parts of the transfer learning workflow with Flax. Depending on the task, a pretrained model can be used just as a feature extractor or it can be fine-tuned as part of a larger model.</p>
+<p>This guide demonstrates how to:</p>
+<ul class="simple">
+<li><p>Load a pretrained model from HuggingFace <a class="reference external" href="https://huggingface.co/docs/transformers/index">Transformers</a> and extract a specific sub-module from that pretrained model.</p></li>
+<li><p>Create a classifier model.</p></li>
+<li><p>Transfer the pretrained parameters to the new model structure.</p></li>
+<li><p>Create an optimizer for training different parts of the model separately with <a class="reference external" href="https://optax.readthedocs.io/">Optax</a>.</p></li>
+<li><p>Set up the model for training.</p></li>
+</ul>
+<details><summary><b>Performance Note</b></summary>
+<p>Depending on your task, some of the content in this guide may be suboptimal. For example, if you are only going to train a linear classifier on top of a pretrained model, it may be better to just extract the feature embeddings once, which can result in much faster training, and you can use specialized algorithms for linear regression or logistic classification. This guide shows how to do transfer learning with all the model parameters.</p>
+</details><br><section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
+<div class="cell tag_skip-execution docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note that the Transformers library doesn&#39;t use the latest Flax version.</span>
+<span class="o">!</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-q<span class="w"> </span><span class="s2">&quot;transformers[flax]&quot;</span>
+<span class="c1"># Install/upgrade Flax and JAX. For JAX installation with GPU/TPU support,</span>
+<span class="c1"># visit https://github.com/jax-ml/jax#installation.</span>
+<span class="o">!</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>-q<span class="w"> </span>flax<span class="w"> </span>jax<span class="w"> </span>jaxlib
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="create-a-function-for-model-loading">
+<h2>Create a function for model loading<a class="headerlink" href="#create-a-function-for-model-loading" title="Permalink to this heading">#</a></h2>
+<p>To load a pre-trained classifier, for convenience first create a function that returns a <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/flax_fundamentals/flax_basics.html#module-basics">Flax <code class="docutils literal notranslate"><span class="pre">Module</span></code></a> and its pretrained variables.</p>
+<p>In the code below, the <code class="docutils literal notranslate"><span class="pre">load_model</span></code> function uses HuggingFace’s <code class="docutils literal notranslate"><span class="pre">FlaxCLIPVisionModel</span></code> model from the <a class="reference external" href="https://huggingface.co/docs/transformers/index">Transformers</a> library and extracts a <code class="docutils literal notranslate"><span class="pre">FlaxCLIPModule</span></code> module.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">clear_output</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">FlaxCLIPModel</span>
+
+<span class="c1"># Note: FlaxCLIPModel is not a Flax Module</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_model</span><span class="p">():</span>
+  <span class="n">clip</span> <span class="o">=</span> <span class="n">FlaxCLIPModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;openai/clip-vit-base-patch32&#39;</span><span class="p">)</span>
+  <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># Clear the loading messages</span>
+  <span class="n">module</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">module</span> <span class="c1"># Extract the Flax Module</span>
+  <span class="n">variables</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">clip</span><span class="o">.</span><span class="n">params</span><span class="p">}</span> <span class="c1"># Extract the parameters</span>
+  <span class="k">return</span> <span class="n">module</span><span class="p">,</span> <span class="n">variables</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">FlaxCLIPVisionModel</span></code> itself is not a Flax <code class="docutils literal notranslate"><span class="pre">Module</span></code> which is why we need to do this extra step.</p>
+<section id="extracting-a-submodule">
+<h3>Extracting a submodule<a class="headerlink" href="#extracting-a-submodule" title="Permalink to this heading">#</a></h3>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">load_model</span></code> from the snippet above returns the <code class="docutils literal notranslate"><span class="pre">FlaxCLIPModule</span></code>, which is composed of <code class="docutils literal notranslate"><span class="pre">text_model</span></code> and <code class="docutils literal notranslate"><span class="pre">vision_model</span></code> submodules.</p>
+<p>An easy way to extract the <code class="docutils literal notranslate"><span class="pre">vision_model</span></code> sub-Module defined inside <code class="docutils literal notranslate"><span class="pre">.setup()</span></code> and its variables is to use <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.bind"><code class="docutils literal notranslate"><span class="pre">flax.linen.Module.bind</span></code></a> on the <code class="docutils literal notranslate"><span class="pre">clip</span></code> Module immediately followed by <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.unbind"><code class="docutils literal notranslate"><span class="pre">flax.linen.Module.unbind</span></code></a> on the <code class="docutils literal notranslate"><span class="pre">vision_model</span></code> sub-Module.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">flax.linen</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+
+<span class="n">clip</span><span class="p">,</span> <span class="n">clip_variables</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">()</span>
+<span class="n">vision_model</span><span class="p">,</span> <span class="n">vision_model_vars</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">clip_variables</span><span class="p">)</span><span class="o">.</span><span class="n">vision_model</span><span class="o">.</span><span class="n">unbind</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-a-classifier">
+<h3>Creating a classifier<a class="headerlink" href="#creating-a-classifier" title="Permalink to this heading">#</a></h3>
+<p>To create a classifier define a new Flax <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/flax_fundamentals/flax_basics.html#module-basics"><code class="docutils literal notranslate"><span class="pre">Module</span></code></a> consisting of a <code class="docutils literal notranslate"><span class="pre">backbone</span></code> (the pretrained vision model) and a <code class="docutils literal notranslate"><span class="pre">head</span></code> (the classifier) submodules.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Classifier</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span>
+  <span class="n">backbone</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span>
+  
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backbone</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">pooler_output</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="n">kernel_init</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">zeros</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To construct a classifier <code class="docutils literal notranslate"><span class="pre">model</span></code>, the <code class="docutils literal notranslate"><span class="pre">vision_model</span></code> Module is passed as the <code class="docutils literal notranslate"><span class="pre">backbone</span></code> to <code class="docutils literal notranslate"><span class="pre">Classifier</span></code>. Then the model’s <code class="docutils literal notranslate"><span class="pre">params</span></code> can be randomly initialized by passing fake data that is used to infer the parameter shapes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_classes</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Classifier</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">backbone</span><span class="o">=</span><span class="n">vision_model</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="transfering-the-parameters">
+<h2>Transfering the parameters<a class="headerlink" href="#transfering-the-parameters" title="Permalink to this heading">#</a></h2>
+<p>Since <code class="docutils literal notranslate"><span class="pre">params</span></code> are currently random, the pretrained parameters from <code class="docutils literal notranslate"><span class="pre">vision_model_vars</span></code> have to be transfered to the <code class="docutils literal notranslate"><span class="pre">params</span></code> structure at the appropriate location (i.e. the <code class="docutils literal notranslate"><span class="pre">backbone</span></code>):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;backbone&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vision_model_vars</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Note:</strong> if the model contains other variable collections such as <code class="docutils literal notranslate"><span class="pre">batch_stats</span></code>, these have to be transfered as well.</p>
+</section>
+<section id="optimization">
+<h2>Optimization<a class="headerlink" href="#optimization" title="Permalink to this heading">#</a></h2>
+<p>If you need to to train different parts of the model separately, you have three options:</p>
+<ol class="arabic simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">stop_gradient</span></code>.</p></li>
+<li><p>Filter the parameters for <code class="docutils literal notranslate"><span class="pre">jax.grad</span></code>.</p></li>
+<li><p>Use multiple optimizers for different parameters.</p></li>
+</ol>
+<p>For most situations we recommend using multiple optimizers via <a class="reference external" href="https://optax.readthedocs.io/">Optax</a>’s <a class="reference external" href="https://optax.readthedocs.io/en/latest/api.html#optax.multi_transform"><code class="docutils literal notranslate"><span class="pre">multi_transform</span></code></a> as its both efficient and can be easily extended to implement many fine-tunning strategies.</p>
+<section id="optax-multi-transform">
+<h3><strong>optax.multi_transform</strong><a class="headerlink" href="#optax-multi-transform" title="Permalink to this heading">#</a></h3>
+<p>To use <code class="docutils literal notranslate"><span class="pre">optax.multi_transform</span></code> following must be defined:</p>
+<ol class="arabic simple">
+<li><p>The parameter partitions.</p></li>
+<li><p>A mapping between partitions and their optimizer.</p></li>
+<li><p>A pytree with the same shape as the parameters but its leaves containing the corresponding partition label.</p></li>
+</ol>
+<p>To freeze layers with <code class="docutils literal notranslate"><span class="pre">optax.multi_transform</span></code> for the model above, the following setup can be used:</p>
+<ul class="simple">
+<li><p>Define the <code class="docutils literal notranslate"><span class="pre">trainable</span></code> and <code class="docutils literal notranslate"><span class="pre">frozen</span></code> parameter partitions.</p></li>
+<li><p>For the <code class="docutils literal notranslate"><span class="pre">trainable</span></code> parameters select the Adam (<code class="docutils literal notranslate"><span class="pre">optax.adam</span></code>) optimizer.</p></li>
+</ul>
+<ul class="simple">
+<li><p>For the <code class="docutils literal notranslate"><span class="pre">frozen</span></code> parameters select the <code class="docutils literal notranslate"><span class="pre">optax.set_to_zero</span></code> optimizer. This dummy optimizer zeros-out the gradients so no training is done.</p></li>
+<li><p>Map parameters to partitions using <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.traverse_util.html#flax.traverse_util.path_aware_map"><code class="docutils literal notranslate"><span class="pre">flax.traverse_util.path_aware_map</span></code></a>, mark the leaves from the <code class="docutils literal notranslate"><span class="pre">backbone</span></code> as <code class="docutils literal notranslate"><span class="pre">frozen</span></code>, and the rest as <code class="docutils literal notranslate"><span class="pre">trainable</span></code>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">traverse_util</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+
+<span class="n">partition_optimizers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;trainable&#39;</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="mf">5e-3</span><span class="p">),</span> <span class="s1">&#39;frozen&#39;</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">set_to_zero</span><span class="p">()}</span>
+<span class="n">param_partitions</span> <span class="o">=</span> <span class="n">traverse_util</span><span class="o">.</span><span class="n">path_aware_map</span><span class="p">(</span>
+  <span class="k">lambda</span> <span class="n">path</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="s1">&#39;frozen&#39;</span> <span class="k">if</span> <span class="s1">&#39;backbone&#39;</span> <span class="ow">in</span> <span class="n">path</span> <span class="k">else</span> <span class="s1">&#39;trainable&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="n">tx</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">multi_transform</span><span class="p">(</span><span class="n">partition_optimizers</span><span class="p">,</span> <span class="n">param_partitions</span><span class="p">)</span>
+
+<span class="c1"># visualize a subset of the param_partitions structure</span>
+<span class="n">flat</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">traverse_util</span><span class="o">.</span><span class="n">flatten_dict</span><span class="p">(</span><span class="n">param_partitions</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="n">traverse_util</span><span class="o">.</span><span class="n">unflatten_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">flat</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">flat</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>FrozenDict({
+    backbone: {
+        embeddings: {
+            class_embedding: &#39;frozen&#39;,
+            patch_embedding: {
+                kernel: &#39;frozen&#39;,
+            },
+        },
+    },
+    head: {
+        bias: &#39;trainable&#39;,
+        kernel: &#39;trainable&#39;,
+    },
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p>To implement <a class="reference external" href="https://blog.slavv.com/differential-learning-rates-59eff5209a4f">differential learning rates</a>, the <code class="docutils literal notranslate"><span class="pre">optax.set_to_zero</span></code> can be replaced with any other optimizer, different optimizers and partitioning schemes can be selected depending on the task. For more information on advanced optimizers, refer to Optax’s <a class="reference external" href="https://optax.readthedocs.io/en/latest/api.html#combining-optimizers">Combining Optimizers</a> documentation.</p>
+</section>
+</section>
+<section id="creating-the-trainstate">
+<h2>Creating the <code class="docutils literal notranslate"><span class="pre">TrainState</span></code><a class="headerlink" href="#creating-the-trainstate" title="Permalink to this heading">#</a></h2>
+<p>Once the module, params, and optimizer are defined, the <code class="docutils literal notranslate"><span class="pre">TrainState</span></code> can be constructed as usual:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax.training.train_state</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrainState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">TrainState</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+  <span class="n">apply_fn</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">,</span>
+  <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+  <span class="n">tx</span><span class="o">=</span><span class="n">tx</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since the optimizer takes care of the freezing or fine-tunning strategy, the <code class="docutils literal notranslate"><span class="pre">train_step</span></code> requires no additional changes, training can proceed normally.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="lr_schedule.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Learning rate scheduling</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="use_checkpointing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Save and load checkpoints</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-function-for-model-loading">Create a function for model loading</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-a-submodule">Extracting a submodule</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-classifier">Creating a classifier</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transfering-the-parameters">Transfering the parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization">Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optax-multi-transform"><strong>optax.multi_transform</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-trainstate">Creating the <code class="docutils literal notranslate"><span class="pre">TrainState</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

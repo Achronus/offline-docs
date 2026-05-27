@@ -1,0 +1,696 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>flax.nnx.spmd</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/flax/nnx/spmd';</script>
+    <link rel="icon" href="../../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_modules/flax/nnx/spmd.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../../../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for flax.nnx.spmd</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2024 The Flax Authors.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tp</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">flax.core.spmd</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">core_spmd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx</span><span class="w"> </span><span class="kn">import</span> <span class="n">variablelib</span><span class="p">,</span> <span class="n">graphlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.transforms.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">eval_shape</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+  <span class="n">Sharding</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax.sharding</span><span class="w"> </span><span class="kn">import</span> <span class="n">PartitionSpec</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.deprecations</span><span class="w"> </span><span class="kn">import</span> <span class="n">deprecated</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">tp</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">tp</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span>
+<span class="n">PARTITION_NAME</span> <span class="o">=</span> <span class="s1">&#39;partition_name&#39;</span>
+
+
+<span class="c1"># Transform axis change helpers</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_axis</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">A</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">transform_metadata</span><span class="p">:</span> <span class="n">tp</span><span class="o">.</span><span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span>
+  <span class="n">axis_name</span><span class="p">,</span> <span class="n">other_meta</span> <span class="o">=</span> <span class="n">_get_partition_name_and_metadata</span><span class="p">(</span><span class="n">transform_metadata</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">insert_field</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="n">iterable</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">index</span><span class="p">:</span>
+      <span class="n">iterable</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">iterable</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_add_axis</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">tp</span><span class="o">.</span><span class="n">Any</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">variablelib</span><span class="o">.</span><span class="n">Variable</span><span class="p">):</span>
+      <span class="n">metadata</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">()</span>
+      <span class="k">if</span> <span class="s1">&#39;out_sharding&#39;</span> <span class="ow">in</span> <span class="n">metadata</span> <span class="ow">and</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;out_sharding&#39;</span><span class="p">]:</span>
+        <span class="n">sharding</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;out_sharding&#39;</span><span class="p">]</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">set_metadata</span><span class="p">(</span><span class="n">out_sharding</span><span class="o">=</span><span class="n">insert_field</span><span class="p">(</span><span class="n">sharding</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">))</span>
+
+      <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other_meta</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">t</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+          <span class="n">x</span><span class="o">.</span><span class="n">set_metadata</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">insert_field</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+
+      <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">variablelib</span><span class="o">.</span><span class="n">Variable</span><span class="p">)</span>
+      <span class="n">x</span><span class="o">.</span><span class="n">add_axis</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="n">_add_axis</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">variablelib</span><span class="o">.</span><span class="n">Variable</span><span class="p">)</span>
+  <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">remove_axis</span><span class="p">(</span>
+  <span class="n">tree</span><span class="p">:</span> <span class="n">A</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">transform_metadata</span><span class="p">:</span> <span class="n">tp</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="n">tp</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">tp</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span>
+  <span class="n">axis_name</span><span class="p">,</span> <span class="n">other_meta</span> <span class="o">=</span> <span class="n">_get_partition_name_and_metadata</span><span class="p">(</span><span class="n">transform_metadata</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">remove_field</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="n">iterable</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+    <span class="n">removed</span> <span class="o">=</span> <span class="n">iterable</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">removed</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;Expected to remove </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s1"> at index </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1"> from &#39;</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">fields</span><span class="si">!r}</span><span class="s1">, but found </span><span class="si">{</span><span class="n">removed</span><span class="si">!r}</span><span class="s1">.&#39;</span>
+      <span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">_remove_axis</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">tp</span><span class="o">.</span><span class="n">Any</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">variablelib</span><span class="o">.</span><span class="n">Variable</span><span class="p">):</span>
+      <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;out_sharding&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">out_sharding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">set_metadata</span><span class="p">(</span>
+          <span class="n">out_sharding</span><span class="o">=</span><span class="n">remove_field</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">out_sharding</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">)</span>
+        <span class="p">)</span>
+
+      <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other_meta</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">t</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+          <span class="n">x</span><span class="o">.</span><span class="n">set_metadata</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">remove_field</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+
+      <span class="n">x</span><span class="o">.</span><span class="n">remove_axis</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="n">_remove_axis</span><span class="p">,</span>
+    <span class="n">tree</span><span class="p">,</span>
+    <span class="n">is_leaf</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">variablelib</span><span class="o">.</span><span class="n">Variable</span><span class="p">),</span>
+  <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_partition_name_and_metadata</span><span class="p">(</span>
+  <span class="n">transform_metadata</span><span class="p">:</span> <span class="n">tp</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="n">tp</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">tp</span><span class="o">.</span><span class="n">Any</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">tp</span><span class="o">.</span><span class="n">Mapping</span><span class="p">[</span><span class="n">tp</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">tp</span><span class="o">.</span><span class="n">Any</span><span class="p">]]:</span>
+  <span class="k">if</span> <span class="n">PARTITION_NAME</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">transform_metadata</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+      <span class="s1">&#39;Trying to transform a Partitioned variable but &quot;partition_name&quot; &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;is not specified in transform_metadata: </span><span class="si">{</span><span class="n">transform_metadata</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="p">)</span>
+  <span class="n">other_meta</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">transform_metadata</span><span class="p">)</span>  <span class="c1"># shallow copy</span>
+  <span class="n">other_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">PARTITION_NAME</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">transform_metadata</span><span class="p">[</span><span class="n">PARTITION_NAME</span><span class="p">],</span> <span class="n">other_meta</span>
+
+
+<span class="c1"># Annotation handling</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="with_partitioning"><a class="viewcode-back" href="../../../api_reference/flax.nnx/spmd.html#flax.nnx.with_partitioning">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">with_partitioning</span><span class="p">(</span>
+  <span class="n">initializer</span><span class="p">:</span> <span class="n">F</span><span class="p">,</span>
+  <span class="n">sharding</span><span class="p">:</span> <span class="n">Sharding</span><span class="p">,</span>
+  <span class="n">mesh</span><span class="p">:</span> <span class="n">tp</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="o">**</span><span class="n">metadata</span><span class="p">:</span> <span class="n">tp</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">F</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;A wrapper over any initializer to add sharding annotation data to a `Variable`.&quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">variablelib</span><span class="o">.</span><span class="n">with_metadata</span><span class="p">(</span>
+    <span class="n">initializer</span><span class="p">,</span>
+    <span class="n">out_sharding</span><span class="o">=</span><span class="n">sharding</span><span class="p">,</span>
+    <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">metadata</span><span class="p">,</span>
+  <span class="p">)</span></div>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_var_pspec</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="n">variablelib</span><span class="o">.</span><span class="n">Variable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PartitionSpec</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Given an `nnx.Variable`, return its `PartitionSpec`.&quot;&quot;&quot;</span>
+  <span class="n">metadata</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">()</span>
+  <span class="k">if</span> <span class="s1">&#39;out_sharding&#39;</span> <span class="ow">in</span> <span class="n">metadata</span> <span class="ow">and</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;out_sharding&#39;</span><span class="p">]:</span>
+    <span class="n">sharding</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;out_sharding&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">core_spmd</span><span class="o">.</span><span class="n">get_logical_axis_rules</span><span class="p">()</span> <span class="ow">or</span> <span class="s1">&#39;sharding_rules&#39;</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+      <span class="n">context_rules</span> <span class="o">=</span> <span class="n">core_spmd</span><span class="o">.</span><span class="n">get_logical_axis_rules</span><span class="p">()</span>
+      <span class="n">local_rules</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sharding_rules&#39;</span><span class="p">,</span> <span class="p">())</span>
+      <span class="n">rules</span> <span class="o">=</span> <span class="n">core_spmd</span><span class="o">.</span><span class="n">composite_rules</span><span class="p">(</span><span class="n">context_rules</span><span class="p">,</span> <span class="n">local_rules</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">PartitionSpec</span><span class="p">(</span><span class="o">*</span><span class="n">core_spmd</span><span class="o">.</span><span class="n">from_sharding_rules</span><span class="p">(</span><span class="n">sharding</span><span class="p">,</span> <span class="n">rules</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">PartitionSpec</span><span class="p">(</span><span class="o">*</span><span class="n">sharding</span><span class="p">)</span>
+  <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">):</span>
+      <span class="k">return</span> <span class="n">PartitionSpec</span><span class="p">()</span>
+  <span class="k">return</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="get_partition_spec"><a class="viewcode-back" href="../../../api_reference/flax.nnx/spmd.html#flax.nnx.get_partition_spec">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_partition_spec</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">A</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Extracts a PartitionSpec tree from a PyTree containing ``Variable`` values.&quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">variablelib</span><span class="o">.</span><span class="n">Variable</span><span class="p">):</span>
+      <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">get_var_pspec</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">PartitionSpec</span><span class="p">()</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">variablelib</span><span class="o">.</span><span class="n">Variable</span><span class="p">)</span>
+  <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_named_sharding"><a class="viewcode-back" href="../../../api_reference/flax.nnx/spmd.html#flax.nnx.get_named_sharding">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_named_sharding</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">A</span><span class="p">,</span> <span class="n">mesh</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span>
+  <span class="n">spec</span> <span class="o">=</span> <span class="n">get_partition_spec</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+  <span class="n">sharding</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">p</span><span class="p">),</span> <span class="n">spec</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">sharding</span></div>
+
+
+<span class="c1"># Other utilities</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_abstract_model</span><span class="p">(</span><span class="n">init_fn</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">jax</span><span class="o">.</span><span class="n">set_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">):</span>
+    <span class="n">abs_model</span> <span class="o">=</span> <span class="n">eval_shape</span><span class="p">(</span><span class="n">init_fn</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">gdef</span><span class="p">,</span> <span class="n">abs_state</span> <span class="o">=</span> <span class="n">graphlib</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">abs_model</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
+    <span class="n">abs_state</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+      <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">s</span><span class="p">),</span>
+      <span class="n">abs_state</span><span class="p">,</span> <span class="n">get_named_sharding</span><span class="p">(</span><span class="n">abs_state</span><span class="p">,</span> <span class="n">mesh</span><span class="p">)</span>
+    <span class="p">)</span>
+  <span class="k">return</span> <span class="n">gdef</span><span class="p">,</span> <span class="n">abs_state</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">as_abstract</span><span class="p">(</span>
+    <span class="n">tree</span><span class="p">:</span> <span class="n">A</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Add sharding information to abstract Variables.</span>
+
+<span class="sd">  When creating models with :func:`eval_shape`, Variables are abstract</span>
+<span class="sd">  (backed by ``jax.ShapeDtypeStruct``) and may not carry sharding</span>
+<span class="sd">  information, especially when using meshes with</span>
+<span class="sd">  :attr:`jax.sharding.AxisType.Auto` axes. ``as_abstract`` inspects each</span>
+<span class="sd">  Variable in ``tree`` and, if it has ``out_sharding`` metadata but no</span>
+<span class="sd">  sharding already set, attaches a :class:`jax.sharding.NamedSharding`</span>
+<span class="sd">  derived from the Variable&#39;s ``out_sharding`` and either its ``mesh``</span>
+<span class="sd">  metadata or the current abstract mesh (``jax.sharding.get_abstract_mesh``).</span>
+
+<span class="sd">  Example usage::</span>
+
+<span class="sd">    from flax import nnx</span>
+<span class="sd">    import jax</span>
+
+<span class="sd">    mesh = jax.make_mesh((2, 2), (&#39;a&#39;, &#39;b&#39;),</span>
+<span class="sd">      axis_types=(jax.sharding.AxisType.Auto,) * 2)</span>
+<span class="sd">    with jax.set_mesh(mesh):</span>
+<span class="sd">      abs_model = nnx.eval_shape(</span>
+<span class="sd">        lambda: nnx.Linear(4, 8, rngs=nnx.Rngs(0),</span>
+<span class="sd">          kernel_metadata={&#39;out_sharding&#39;: (&#39;a&#39;, &#39;b&#39;)}))</span>
+<span class="sd">      abs_model = nnx.as_abstract(abs_model)</span>
+<span class="sd">    assert abs_model.kernel.sharding.spec == jax.P(&#39;a&#39;, &#39;b&#39;)</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    tree: A graph node (e.g. an :class:`nnx.Module`) whose Variables should</span>
+<span class="sd">      be annotated with sharding (via ``out_sharding`` metadata).</span>
+<span class="sd">    graph: Forwarded to :func:`nnx.map`. If ``True``, uses graph-mode;</span>
+<span class="sd">      if ``False``, uses tree-mode.</span>
+<span class="sd">  Returns:</span>
+<span class="sd">    A tree with sharding-annotated ShapeDtypeStruct values inside Variables.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">add_sharding</span><span class="p">(</span><span class="n">_path</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">variablelib</span><span class="o">.</span><span class="n">Variable</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span> <span class="o">:=</span> <span class="n">x</span><span class="o">.</span><span class="n">get_value</span><span class="p">(),</span> <span class="s1">&#39;shape&#39;</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;sharding&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">has_metadata</span><span class="p">(</span><span class="s1">&#39;out_sharding&#39;</span><span class="p">)</span>
+    <span class="p">):</span>
+      <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">has_metadata</span><span class="p">(</span><span class="s1">&#39;mesh&#39;</span><span class="p">):</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;mesh&#39;</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">get_abstract_mesh</span><span class="p">()</span>
+      <span class="n">specs</span> <span class="o">=</span> <span class="n">get_var_pspec</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+      <span class="n">sharding</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">specs</span><span class="p">)</span>
+      <span class="n">abs_var</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+          <span class="n">jax</span><span class="o">.</span><span class="n">ShapeDtypeStruct</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">sharding</span><span class="p">)</span>
+      <span class="p">)</span>
+      <span class="k">return</span> <span class="n">abs_var</span>
+    <span class="k">return</span> <span class="n">x</span>
+  <span class="k">return</span> <span class="n">graphlib</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">add_sharding</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
+
+<span class="n">abstract_with_sharding</span> <span class="o">=</span> <span class="n">deprecated</span><span class="p">(</span><span class="n">as_abstract</span><span class="p">)</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

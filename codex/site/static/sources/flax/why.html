@@ -1,0 +1,992 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Why Flax NNX?</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js"></script>
+    <script src="_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'why';</script>
+    <link rel="icon" href="_static/flax.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="JAX/Flax Key Concepts" href="key_concepts.html" />
+    <link rel="prev" title="MNIST tutorial" href="mnist_tutorial.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/why.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="guides/checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/why.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Why Flax NNX?</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introducing-flax-nnx">Introducing Flax NNX</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax-nnx-s-improvements-on-linen">Flax NNX’s improvements on Linen</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inspection">Inspection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-computation">Running computation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#state-handling">State handling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-surgery">Model surgery</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transforms">Transforms</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="why-flax-nnx">
+<h1>Why Flax NNX?<a class="headerlink" href="#why-flax-nnx" title="Permalink to this heading">#</a></h1>
+<p>In 2020, the Flax team released the Flax Linen API to support modeling research on JAX, with a focus on scaling
+and performance. We have learned a lot from users since then. The team introduced certain ideas that have proven to be beneficial to users, such as:</p>
+<ul class="simple">
+<li><p>Organizing variables into <a class="reference external" href="https://flax.readthedocs.io/en/latest/glossary.html#term-Variable-collections">collections</a>.</p></li>
+<li><p>Automatic and efficient <a class="reference external" href="https://flax.readthedocs.io/en/latest/glossary.html#term-RNG-sequences">pseudorandom number generator (PRNG) management</a>.</p></li>
+<li><p><a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/spmd.html#flax.linen.with_partitioning">Variable metadata</a>
+for <a class="reference external" href="https://jax.readthedocs.io/en/latest/glossary.html#term-SPMD">Single Program Multi Data (SPMD)</a> annotations, optimizer metadata, and other use cases.</p></li>
+</ul>
+<p>One of the choices the Flax team made was to use functional (<code class="docutils literal notranslate"><span class="pre">compact</span></code>) semantics for neural network programming via lazy initialization of parameters.
+This made for concise implementation code and aligned the Flax Linen API with Haiku.</p>
+<p>However, this also meant that the semantics of Modules and variables in Flax were non-Pythonic and often surprising. It also led to implementation
+complexity and obscured the core ideas of <a class="reference external" href="https://jax.readthedocs.io/en/latest/glossary.html#term-transformation">transformations (transforms)</a> on neural networks.</p>
+<section id="introducing-flax-nnx">
+<h2>Introducing Flax NNX<a class="headerlink" href="#introducing-flax-nnx" title="Permalink to this heading">#</a></h2>
+<p>Fast forward to 2024, the Flax team developed Flax NNX - an attempt to retain the features that made Flax Linen useful for users, while introducing some new principles.
+The central idea behind Flax NNX is to introduce reference semantics into JAX. The following are its main features:</p>
+<ul class="simple">
+<li><p><strong>NNX is Pythonic</strong>: Regular Python semantics for Modules, including support for mutability and shared references.</p></li>
+<li><p><strong>NNX is simple</strong>: Many of the complex APIs in Flax Linen are either simplified using Python idioms or completely removed.</p></li>
+<li><p><strong>Better JAX integration</strong>: Custom NNX transforms adopt the same APIs as the JAX transforms. And with NNX
+it is easier to use <a class="reference external" href="https://jax.readthedocs.io/en/latest/key-concepts.html#transformations">JAX transforms (higher-order functions)</a> directly.</p></li>
+</ul>
+<p>Here is an example of a simple Flax NNX program that illustrates many of the points from above:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">din</span><span class="p">,</span> <span class="n">dmid</span><span class="p">,</span> <span class="n">dout</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">din</span><span class="p">,</span> <span class="n">dmid</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(</span><span class="n">dmid</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear_out</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dmid</span><span class="p">,</span> <span class="n">dout</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_out</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>  <span class="c1"># Eager initialization</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Optimizer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">),</span> <span class="n">wrt</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">)</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">jit</span>  <span class="c1"># Automatic state management for JAX transforms.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># call methods directly</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+  <span class="n">loss</span><span class="p">,</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">)(</span><span class="n">model</span><span class="p">)</span>
+  <span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>  <span class="c1"># in-place updates</span>
+
+  <span class="k">return</span> <span class="n">loss</span>
+</pre></div>
+</div>
+</section>
+<section id="flax-nnx-s-improvements-on-linen">
+<h2>Flax NNX’s improvements on Linen<a class="headerlink" href="#flax-nnx-s-improvements-on-linen" title="Permalink to this heading">#</a></h2>
+<p>The rest of this document uses various examples that demonstrate how Flax NNX improves on Flax Linen.</p>
+<section id="inspection">
+<h3>Inspection<a class="headerlink" href="#inspection" title="Permalink to this heading">#</a></h3>
+<p>The first improvement is that Flax NNX Modules are regular Python objects. This means that you can easily
+construct and inspect <code class="docutils literal notranslate"><span class="pre">Module</span></code> objects.</p>
+<p>On the other hand, Flax Linen Modules are not easy to inspect and debug because they are lazy, which means some attributes are not available upon construction and are only accessible at runtime.</p>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-0">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Block</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">block</span> <span class="o">=</span> <span class="n">Block</span><span class="p">()</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">block</span><span class="o">.</span><span class="n">linear</span>  <span class="c1"># AttributeError: &quot;Block&quot; object has no attribute &quot;linear&quot;.</span>
+<span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="k">pass</span>
+
+
+
+
+
+<span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="NNX" for="sd-tab-item-1">
+NNX</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Block</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+<span class="n">block</span> <span class="o">=</span> <span class="n">Block</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+
+<span class="n">block</span><span class="o">.</span><span class="n">linear</span>
+<span class="c1"># Linear(</span>
+<span class="c1">#   kernel=Param(</span>
+<span class="c1">#     value=Array(shape=(5, 10), dtype=float32)</span>
+<span class="c1">#   ),</span>
+<span class="c1">#   bias=Param(</span>
+<span class="c1">#     value=Array(shape=(10,), dtype=float32)</span>
+<span class="c1">#   ),</span>
+<span class="c1">#   ...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<p>Notice that in the Flax NNX example above, there is no shape inference - both the input and output shapes must be provided
+to the <code class="docutils literal notranslate"><span class="pre">Linear</span></code> <code class="docutils literal notranslate"><span class="pre">nnx.Module</span></code>. This is a tradeoff that allows for more explicit and predictable behavior.</p>
+</section>
+<section id="running-computation">
+<h3>Running computation<a class="headerlink" href="#running-computation" title="Permalink to this heading">#</a></h3>
+<p>In Flax Linen, all top-level computation must be done through the <code class="docutils literal notranslate"><span class="pre">flax.linen.Module.init</span></code> or <code class="docutils literal notranslate"><span class="pre">flax.linen.Module.apply</span></code> methods, and the
+parameters or any other type of state are handled as a separate structure. This creates an asymmetry between: 1) code that runs inside
+<code class="docutils literal notranslate"><span class="pre">apply</span></code> that can run methods and other <code class="docutils literal notranslate"><span class="pre">Module</span></code> objects directly; and 2) code that runs outside of <code class="docutils literal notranslate"><span class="pre">apply</span></code> that must use the <code class="docutils literal notranslate"><span class="pre">apply</span></code> method.</p>
+<p>In Flax NNX, there’s no special context because parameters are held as attributes and methods can be called directly. That means your NNX Module’s <code class="docutils literal notranslate"><span class="pre">__init__</span></code> and <code class="docutils literal notranslate"><span class="pre">__call__</span></code> methods are not treated differently from other class methods, whereas Flax Linen Module’s <code class="docutils literal notranslate"><span class="pre">setup()</span></code> and <code class="docutils literal notranslate"><span class="pre">__call__</span></code> methods are special.</p>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-2" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-2">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Encoder</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">Decoder</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AutoEncoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">()</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoEncoder</span><span class="p">()</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="p">)[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">},</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">},</span> <span class="n">x</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;encode&#39;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;decoder&#39;</span><span class="p">]},</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-3" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="NNX" for="sd-tab-item-3">
+NNX</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Encoder</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+<span class="n">Decoder</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AutoEncoder</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoEncoder</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<p>In Flax Linen, calling sub-Modules directly is not possible because they are not initialized.
+Therefore, what you must do is construct a new instance and then provide a proper parameter structure.</p>
+<p>But in Flax NNX you can call sub-Modules directly without any issues.</p>
+</section>
+<section id="state-handling">
+<h3>State handling<a class="headerlink" href="#state-handling" title="Permalink to this heading">#</a></h3>
+<p>One of the areas where Flax Linen is notoriously complex is in state handling. When you use either a
+<cite>Dropout</cite> layer, a <cite>BatchNorm</cite> layer, or both, you suddenly have to handle the new state and use it to
+configure the <code class="docutils literal notranslate"><span class="pre">flax.linen.Module.apply</span></code> method.</p>
+<p>In Flax NNX, state is kept inside an <code class="docutils literal notranslate"><span class="pre">nnx.Module</span></code> and is mutable, which means it can just be called directly.</p>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-4" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-4">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Block</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(</span><span class="n">use_running_average</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Block</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">vs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">params</span><span class="p">,</span> <span class="n">batch_stats</span> <span class="o">=</span> <span class="n">vs</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">],</span> <span class="n">vs</span><span class="p">[</span><span class="s1">&#39;batch_stats&#39;</span><span class="p">]</span>
+
+<span class="n">y</span><span class="p">,</span> <span class="n">updates</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+  <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="s1">&#39;batch_stats&#39;</span><span class="p">:</span> <span class="n">batch_stats</span><span class="p">},</span>
+  <span class="n">x</span><span class="p">,</span>
+  <span class="n">rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dropout&#39;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">)},</span>
+  <span class="n">mutable</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;batch_stats&#39;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">batch_stats</span> <span class="o">=</span> <span class="n">updates</span><span class="p">[</span><span class="s1">&#39;batch_stats&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-5" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="NNX" for="sd-tab-item-5">
+NNX</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Block</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Block</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+
+
+
+<span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<p>The main benefit of Flax NNX’s state handling is that you don’t have to change the training code when you add a new stateful layer.</p>
+<p>In addition, in Flax NNX, layers that handle state are also very easy to implement. Below
+is a simplified version of a <code class="docutils literal notranslate"><span class="pre">BatchNorm</span></code> layer that updates the mean and variance every time it is called.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BatchNorm</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">):</span>
+    <span class="c1"># Variables</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">features</span><span class="p">,)))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">features</span><span class="p">,)))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">BatchStat</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">features</span><span class="p">,)))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">var</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">BatchStat</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">features</span><span class="p">,)))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span>  <span class="c1"># Static</span>
+
+<span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+  <span class="n">mean</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">var</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="c1"># ema updates</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="n">mean</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">var</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="n">var</span>
+  <span class="c1"># normalize and scale</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span> <span class="o">+</span> <span class="mf">1e-5</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span>
+</pre></div>
+</div>
+</section>
+<section id="model-surgery">
+<h3>Model surgery<a class="headerlink" href="#model-surgery" title="Permalink to this heading">#</a></h3>
+<p>In Flax Linen, <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/surgery.html">model surgery</a> has historically been challenging because of two reasons:</p>
+<ol class="arabic simple">
+<li><p>Due to lazy initialization, it is not guaranteed that you can replace a sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code> with a new one.</p></li>
+<li><p>The parameter structure is separated from the <code class="docutils literal notranslate"><span class="pre">flax.linen.Module</span></code> structure, which means you have to manually keep them in sync.</p></li>
+</ol>
+<p>In Flax NNX, you can replace sub-Modules directly as per the Python semantics. Since parameters are
+part of the <code class="docutils literal notranslate"><span class="pre">nnx.Module</span></code> structure, they are never out of sync. Below is an example of how you can
+implement a LoRA layer, and then use it to replace a <code class="docutils literal notranslate"><span class="pre">Linear</span></code> layer in an existing model.</p>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-6" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-6">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LoraLinear</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">linear</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span>
+  <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">))</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="o">.</span><span class="n">features</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">@</span> <span class="n">A</span> <span class="o">@</span> <span class="n">B</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">model</span> <span class="o">=</span> <span class="n">Block</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">model</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">LoraLinear</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">linear</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># &lt;-- ERROR</span>
+
+  <span class="n">lora_params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">linear</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+  <span class="n">lora_params</span><span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">]</span>
+  <span class="n">params</span><span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lora_params</span>
+
+<span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-7" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="NNX" for="sd-tab-item-7">
+NNX</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LoraParam</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">):</span> <span class="k">pass</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LoraLinear</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linear</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">linear</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">LoraParam</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">rngs</span><span class="p">(),</span> <span class="p">(</span><span class="n">linear</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span> <span class="n">rank</span><span class="p">)))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">LoraParam</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">rngs</span><span class="p">(),</span> <span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">linear</span><span class="o">.</span><span class="n">out_features</span><span class="p">)))</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span>
+
+<span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Block</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">LoraLinear</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">linear</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+
+
+
+
+
+<span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<p>As shown above, in Flax Linen this doesn’t really work in this case because the <code class="docutils literal notranslate"><span class="pre">linear</span></code> sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code>
+is not available. However, the rest of the code provides an idea of how the <code class="docutils literal notranslate"><span class="pre">params</span></code> structure must be manually updated.</p>
+<p>Performing arbitrary model surgery is not easy in Flax Linen, and currently the
+<a class="reference external" href="https://flax-linen.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.intercept_methods">intercept_methods</a>
+API is the only way to do generic patching of methods. But this API is not very ergonomic.</p>
+<p>In Flax NNX, to do generic model surgery you can just use <code class="docutils literal notranslate"><span class="pre">nnx.iter_graph</span></code>, which is much simpler and easier than in Linen. Below is an example of replacing all <code class="docutils literal notranslate"><span class="pre">nnx.Linear</span></code> layers in a model with custom-made <code class="docutils literal notranslate"><span class="pre">LoraLinear</span></code> NNX layers.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Block</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">nnx</span><span class="o">.</span><span class="n">iter_graph</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="n">module</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+      <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">):</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">LoraLinear</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="transforms">
+<h3>Transforms<a class="headerlink" href="#transforms" title="Permalink to this heading">#</a></h3>
+<p>Flax Linen transforms are very powerful in that they enable fine-grained control over the model’s state.
+However, Flax Linen transforms have drawbacks, such as:</p>
+<ol class="arabic simple">
+<li><p>They expose additional APIs that are not part of JAX, making their behavior confusing and sometimes divergent from their JAX counterparts. This also constrains your ways to interact with <a class="reference external" href="https://jax.readthedocs.io/en/latest/key-concepts.html#transformations">JAX transforms</a> and keep up with JAX API changes.</p></li>
+<li><p>They work on functions with very specific signatures, namely:</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">flax.linen.Module</span></code> must be the first argument.</p></li>
+<li><p>They accept other <code class="docutils literal notranslate"><span class="pre">Module</span></code> objects as arguments but not as return values.</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>They can only be used inside <code class="docutils literal notranslate"><span class="pre">flax.linen.Module.apply</span></code>.</p></li>
+</ol>
+<p>On the other hand, <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/transforms.html">Flax NNX transforms</a>
+are intented to be equivalent to their corresponding <a class="reference external" href="https://jax.readthedocs.io/en/latest/key-concepts.html#transformations">JAX transforms</a>
+with an exception - they can be used on Flax NNX Modules. This means that Flax transforms:</p>
+<ol class="arabic simple">
+<li><p>Have the same API as JAX transforms.</p></li>
+<li><p>Can accept Flax NNX Modules on any argument, and <code class="docutils literal notranslate"><span class="pre">nnx.Module</span></code> objects can be returned from it/them.</p></li>
+<li><p>Can be used anywhere including the training loop.</p></li>
+</ol>
+<p>Below is an example of using <code class="docutils literal notranslate"><span class="pre">vmap</span></code> with Flax NNX to both create a stack of weights by transforming the
+<code class="docutils literal notranslate"><span class="pre">create_weights</span></code> function, which returns some <code class="docutils literal notranslate"><span class="pre">Weights</span></code>, and to apply that stack of weights to a batch
+of inputs individually by transforming the <code class="docutils literal notranslate"><span class="pre">vector_dot</span></code> function, which takes <code class="docutils literal notranslate"><span class="pre">Weights</span></code> as the first
+argument and a batch of inputs as the second argument.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Weights</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">bias</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">kernel</span><span class="p">),</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">bias</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_weights</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">Weights</span><span class="p">(</span>
+    <span class="n">kernel</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="n">seed</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+    <span class="n">bias</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,)),</span>
+  <span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">vector_dot</span><span class="p">(</span><span class="n">weights</span><span class="p">:</span> <span class="n">Weights</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+  <span class="k">assert</span> <span class="n">weights</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Batch dimensions not allowed&#39;</span>
+  <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Batch dimensions not allowed&#39;</span>
+  <span class="k">return</span> <span class="n">x</span> <span class="o">@</span> <span class="n">weights</span><span class="o">.</span><span class="n">kernel</span> <span class="o">+</span> <span class="n">weights</span><span class="o">.</span><span class="n">bias</span>
+
+<span class="n">seeds</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">create_weights</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">)(</span><span class="n">seeds</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">vector_dot</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">weights</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Contrary to Flax Linen transforms, the <code class="docutils literal notranslate"><span class="pre">in_axes</span></code> argument and other APIs do affect how the <code class="docutils literal notranslate"><span class="pre">nnx.Module</span></code> state is transformed.</p>
+<p>In addition, Flax NNX transforms can be used as method decorators, because <code class="docutils literal notranslate"><span class="pre">nnx.Module</span></code> methods are simply
+functions that take a <code class="docutils literal notranslate"><span class="pre">Module</span></code> as the first argument. This means that the previous example can be
+rewritten as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">WeightStack</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="n">seed</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,)))</span>
+
+  <span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Batch dimensions not allowed&#39;</span>
+    <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Batch dimensions not allowed&#39;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span>
+
+<span class="n">weights</span> <span class="o">=</span> <span class="n">WeightStack</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">weights</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="mnist_tutorial.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">MNIST tutorial</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="key_concepts.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">JAX/Flax Key Concepts</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introducing-flax-nnx">Introducing Flax NNX</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax-nnx-s-improvements-on-linen">Flax NNX’s improvements on Linen</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inspection">Inspection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-computation">Running computation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#state-handling">State handling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-surgery">Model surgery</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transforms">Transforms</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

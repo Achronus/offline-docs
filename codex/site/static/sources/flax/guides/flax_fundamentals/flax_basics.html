@@ -1,0 +1,1224 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Flax Basics</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/flax_fundamentals/flax_basics';</script>
+    <link rel="icon" href="../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Guides" href="../index.html" />
+    <link rel="prev" title="Quick start" href="../../quick_start.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax-linen" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/flax_fundamentals/flax_basics.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax.readthedocs.io/en/latest/index.html"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the old Flax Linen API. <span style="color: lightgray;">[Explore the new <b>Flax NNX</b> API ✨]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick start</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Flax Basics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">Flax fundamentals</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/index.html">JAX 101</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Flax Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="state_params.html">Managing Parameters and State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup_or_nncompact.html"><code class="docutils literal notranslate"><span class="pre">setup</span></code> vs <code class="docutils literal notranslate"><span class="pre">compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arguments.html">Dealing with Flax Module arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rng_guide.html">Randomness and PRNGs in Flax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../data_preprocessing/index.html">Data preprocessing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/full_eval.html">Processing the entire Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/loading_datasets.html">Loading datasets</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../training_techniques/index.html">Training techniques</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/batch_norm.html">Batch normalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/dropout.html">Dropout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/lr_schedule.html">Learning rate scheduling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/transfer_learning.html">Transfer learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/use_checkpointing.html">Save and load checkpoints</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../parallel_training/index.html">Parallel training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/ensembling.html">Ensembling on multiple devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/flax_on_pjit.html">Scale up Flax Modules on multiple devices</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../model_inspection/index.html">Model inspection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/model_surgery.html">Model surgery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/extracting_intermediates.html">Extracting intermediate values</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../converting_and_upgrading/index.html">Converting and upgrading</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/haiku_migration_guide.html">Migrating from Haiku to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/convert_pytorch_to_flax.html">Convert PyTorch models to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/orbax_upgrade_guide.html">Migrate checkpointing to Orbax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/optax_update_guide.html">Upgrading my codebase to Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/linen_upgrade_guide.html">Upgrading my codebase to Linen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/rnncell_upgrade_guide.html">RNNCellBase Upgrade Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/regular_dict_upgrade_guide.html">Migrate to regular dicts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../quantization/index.html">Quantization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quantization/fp8_basics.html">User Guide on Using FP8</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../flax_sharp_bits.html">The Sharp Bits</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/core_examples.html">Core examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/google_research_examples.html">Google Research examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/repositories_that_use_flax.html">Repositories that use Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/community_examples.html">Community examples</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../developer_notes/index.html">Developer notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/module_lifecycle.html">The Flax Module lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/lift.html">Lifted transformations</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/google/flax/tree/main/docs/flip">FLIPs</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.cursor.html">flax.cursor package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.errors.html">flax.errors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.jax_utils.html">flax.jax_utils package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_reference/flax.linen/index.html">flax.linen</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/module.html">Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/init_apply.html">Init/Apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/activation_functions.html">Activation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/initializers.html">Initializers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/transformations.html">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/inspection.html">Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/variable.html">Variable dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/spmd.html">SPMD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/decorators.html">Decorators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/profiling.html">Profiling</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.serialization.html">flax.serialization package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.traceback_util.html">flax.traceback_util package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/index.html">Flax NNX</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs/guides/flax_fundamentals/flax_basics.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/guides/flax_fundamentals/flax_basics.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Flax Basics</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-our-environment">Setting up our environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-with-flax">Linear regression with Flax</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-parameters-initialization">Model parameters &amp; initialization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-descent">Gradient descent</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-with-optax">Optimizing with Optax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#serializing-the-result">Serializing the result</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-your-own-models">Defining your own models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-basics">Module basics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-parameters">Module parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-and-collections-of-variables">Variables and collections of variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exporting-to-tensorflow-s-savedmodel-with-jax2tf">Exporting to Tensorflow’s SavedModel with jax2tf</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <p><a class="reference external" href="https://colab.research.google.com/github/google/flax/blob/main/docs/guides/flax_fundamentals/flax_basics.ipynb"><img alt="Open in Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>
+<a class="reference external" href="https://github.com/google/flax/blob/main/docs/guides/flax_fundamentals/flax_basics.ipynb"><img alt="Open On GitHub" src="https://img.shields.io/badge/Open-on%20GitHub-blue?logo=GitHub" /></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="flax-basics">
+<h1>Flax Basics<a class="headerlink" href="#flax-basics" title="Permalink to this heading">#</a></h1>
+<p>This notebook will walk you through the following workflow:</p>
+<ul class="simple">
+<li><p>Instantiating a model from Flax built-in layers or third-party models.</p></li>
+<li><p>Initializing parameters of the model and manually written training.</p></li>
+<li><p>Using optimizers provided by Flax to ease training.</p></li>
+<li><p>Serialization of parameters and other objects.</p></li>
+<li><p>Creating your own models and managing state.</p></li>
+</ul>
+<section id="setting-up-our-environment">
+<h2>Setting up our environment<a class="headerlink" href="#setting-up-our-environment" title="Permalink to this heading">#</a></h2>
+<p>Here we provide the code needed to set up the environment for our notebook.</p>
+<div class="cell tag_skip-execution docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install the latest JAXlib version.</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>-q<span class="w"> </span>pip<span class="w"> </span>jax<span class="w"> </span>jaxlib
+<span class="c1"># Install Flax at head:</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>-q<span class="w"> </span>git+https://github.com/google/flax.git
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Yellow">WARNING: Running pip as root will break packages and permissions. You should install packages reliably by using venv: https://pip.pypa.io/warnings/venv</span>
+<span class=" -Color -Color-Yellow">WARNING: Running pip as root will break packages and permissions. You should install packages reliably by using venv: https://pip.pypa.io/warnings/venv</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span><span class="p">,</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">linen</span> <span class="k">as</span> <span class="n">nn</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="linear-regression-with-flax">
+<h2>Linear regression with Flax<a class="headerlink" href="#linear-regression-with-flax" title="Permalink to this heading">#</a></h2>
+<p>In the previous <em>JAX for the impatient</em> notebook, we finished up with a linear regression example. As we know, linear regression can also be written as a single dense neural network layer, which we will show in the following so that we can compare how it’s done.</p>
+<p>A dense layer is a layer that has a kernel parameter <span class="math notranslate nohighlight">\(W\in\mathcal{M}_{m,n}(\mathbb{R})\)</span> where <span class="math notranslate nohighlight">\(m\)</span> is the number of features as an output of the model, and <span class="math notranslate nohighlight">\(n\)</span> the dimensionality of the input, and a bias parameter <span class="math notranslate nohighlight">\(b\in\mathbb{R}^m\)</span>. The dense layers returns <span class="math notranslate nohighlight">\(Wx+b\)</span> from an input <span class="math notranslate nohighlight">\(x\in\mathbb{R}^n\)</span>.</p>
+<p>This dense layer is already provided by Flax in the <code class="docutils literal notranslate"><span class="pre">flax.linen</span></code> module (here imported as <code class="docutils literal notranslate"><span class="pre">nn</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We create one dense layer instance (taking &#39;features&#39; parameter as input)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Layers (and models in general, we’ll use that word from now on) are subclasses of the <code class="docutils literal notranslate"><span class="pre">linen.Module</span></code> class.</p>
+<section id="model-parameters-initialization">
+<h3>Model parameters &amp; initialization<a class="headerlink" href="#model-parameters-initialization" title="Permalink to this heading">#</a></h3>
+<p>Parameters are not stored with the models themselves. You need to initialize parameters by calling the <code class="docutils literal notranslate"><span class="pre">init</span></code> function, using a PRNGKey and dummy input data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">key1</span><span class="p">,</span> <span class="n">key2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="p">(</span><span class="mi">10</span><span class="p">,))</span> <span class="c1"># Dummy input data</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">key2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="c1"># Initialization call</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span> <span class="c1"># Checking output shapes</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;bias&#39;: (5,), &#39;kernel&#39;: (10, 5)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p><em>Note: JAX and Flax, like NumPy, are row-based systems, meaning that vectors are represented as row vectors and not column vectors. This can be seen in the shape of the kernel here.</em></p>
+<p>The result is what we expect: bias and kernel parameters of the correct size. Under the hood:</p>
+<ul class="simple">
+<li><p>The dummy input data <code class="docutils literal notranslate"><span class="pre">x</span></code> is used to trigger shape inference: we only declared the number of features we wanted in the output of the model, not the size of the input. Flax finds out by itself the correct size of the kernel.</p></li>
+<li><p>The random PRNG key is used to trigger the initialization functions (those have default values provided by the module here).</p></li>
+<li><p>Initialization functions are called to generate the initial set of parameters that the model will use. Those are functions that take as arguments <code class="docutils literal notranslate"><span class="pre">(PRNG</span> <span class="pre">Key,</span> <span class="pre">shape,</span> <span class="pre">dtype)</span></code> and return an Array of shape <code class="docutils literal notranslate"><span class="pre">shape</span></code>.</p></li>
+<li><p>The init function returns the initialized set of parameters (you can also get the output of the forward pass on the dummy input with the same syntax by using the <code class="docutils literal notranslate"><span class="pre">init_with_output</span></code> method instead of <code class="docutils literal notranslate"><span class="pre">init</span></code>.</p></li>
+</ul>
+<p>To conduct a forward pass with the model with a given set of parameters (which are never stored with the model), we just use the <code class="docutils literal notranslate"><span class="pre">apply</span></code> method by providing it the parameters to use as well as the input:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array([-1.471482  , -0.16962777,  0.12994334,  0.5224348 , -1.0919424 ],      dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="gradient-descent">
+<h3>Gradient descent<a class="headerlink" href="#gradient-descent" title="Permalink to this heading">#</a></h3>
+<p>If you jumped here directly without going through the JAX part, here is the linear regression formulation we’re going to use: from a set of data points <span class="math notranslate nohighlight">\(\{(x_i,y_i), i\in \{1,\ldots, k\}, x_i\in\mathbb{R}^n,y_i\in\mathbb{R}^m\}\)</span>, we try to find a set of parameters <span class="math notranslate nohighlight">\(W\in \mathcal{M}_{m,n}(\mathbb{R}), b\in\mathbb{R}^m\)</span> such that the function <span class="math notranslate nohighlight">\(f_{W,b}(x)=Wx+b\)</span> minimizes the mean squared error:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{L}(W,b)\rightarrow\frac{1}{k}\sum_{i=1}^{k} \frac{1}{2}\|y_i-f_{W,b}(x_i)\|^2_2\]</div>
+<p>Here, we see that the tuple <span class="math notranslate nohighlight">\((W,b)\)</span> matches the parameters of the Dense layer. We’ll perform gradient descent using those. Let’s first generate the fake data we’ll use. The data is exactly the same as in the JAX part’s linear regression pytree example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set problem dimensions.</span>
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">x_dim</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">y_dim</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c1"># Generate random ground truth W and b.</span>
+<span class="n">key</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">k1</span><span class="p">,</span> <span class="n">k2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">k1</span><span class="p">,</span> <span class="p">(</span><span class="n">x_dim</span><span class="p">,</span> <span class="n">y_dim</span><span class="p">))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">k2</span><span class="p">,</span> <span class="p">(</span><span class="n">y_dim</span><span class="p">,))</span>
+<span class="c1"># Store the parameters in a FrozenDict pytree.</span>
+<span class="n">true_params</span> <span class="o">=</span> <span class="n">flax</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">freeze</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="n">W</span><span class="p">}})</span>
+
+<span class="c1"># Generate samples with additional noise.</span>
+<span class="n">key_sample</span><span class="p">,</span> <span class="n">key_noise</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">k1</span><span class="p">)</span>
+<span class="n">x_samples</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">key_sample</span><span class="p">,</span> <span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">x_dim</span><span class="p">))</span>
+<span class="n">y_samples</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x_samples</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">key_noise</span><span class="p">,(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">y_dim</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;x shape:&#39;</span><span class="p">,</span> <span class="n">x_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s1">&#39;; y shape:&#39;</span><span class="p">,</span> <span class="n">y_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x shape: (20, 10) ; y shape: (20, 5)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We copy the same training loop that we used in the JAX pytree linear regression example with <code class="docutils literal notranslate"><span class="pre">jax.value_and_grad()</span></code>, but here we can use <code class="docutils literal notranslate"><span class="pre">model.apply()</span></code> instead of having to define our own feed-forward function (<code class="docutils literal notranslate"><span class="pre">predict_pytree()</span></code> in the <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/jax_for_the_impatient.html#linear-regression-with-pytrees">JAX example</a>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Same as JAX version but using model.apply().</span>
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mse</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x_batched</span><span class="p">,</span> <span class="n">y_batched</span><span class="p">):</span>
+  <span class="c1"># Define the squared loss for a single pair (x,y)</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">squared_error</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">pred</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="n">pred</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+  <span class="c1"># Vectorize the previous to compute the average of the loss on all samples.</span>
+  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">squared_error</span><span class="p">)(</span><span class="n">x_batched</span><span class="p">,</span><span class="n">y_batched</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And finally perform the gradient descent.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># Gradient step size.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loss for &quot;true&quot; W,b: &#39;</span><span class="p">,</span> <span class="n">mse</span><span class="p">(</span><span class="n">true_params</span><span class="p">,</span> <span class="n">x_samples</span><span class="p">,</span> <span class="n">y_samples</span><span class="p">))</span>
+<span class="n">loss_grad_fn</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
+
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">update_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">grads</span><span class="p">):</span>
+  <span class="n">params</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span>
+      <span class="k">lambda</span> <span class="n">p</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="n">p</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">g</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">params</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">):</span>
+  <span class="c1"># Perform one gradient update.</span>
+  <span class="n">loss_val</span><span class="p">,</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">loss_grad_fn</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x_samples</span><span class="p">,</span> <span class="n">y_samples</span><span class="p">)</span>
+  <span class="n">params</span> <span class="o">=</span> <span class="n">update_params</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Loss step </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">: &#39;</span><span class="p">,</span> <span class="n">loss_val</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss for &quot;true&quot; W,b:  0.023887426
+Loss step 0:  29.167135
+Loss step 10:  0.6585777
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss step 20:  0.28476626
+Loss step 30:  0.15943418
+Loss step 40:  0.097041994
+Loss step 50:  0.06356498
+Loss step 60:  0.044599865
+Loss step 70:  0.033348825
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss step 80:  0.026425168
+Loss step 90:  0.0220471
+Loss step 100:  0.019225013
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="optimizing-with-optax">
+<h3>Optimizing with Optax<a class="headerlink" href="#optimizing-with-optax" title="Permalink to this heading">#</a></h3>
+<p>Flax used to use its own <code class="docutils literal notranslate"><span class="pre">flax.optim</span></code> package for optimization, but with
+<a class="reference external" href="https://github.com/google/flax/blob/main/docs/flip/1009-optimizer-api.md">FLIP #1009</a>
+this was deprecated in favor of
+<a class="reference external" href="https://github.com/deepmind/optax">Optax</a>.</p>
+<p>Basic usage of Optax is straightforward:</p>
+<ol class="arabic simple">
+<li><p>Choose an optimization method (e.g. <code class="docutils literal notranslate"><span class="pre">optax.adam</span></code>).</p></li>
+<li><p>Create optimizer state from parameters (for the Adam optimizer, this state will contain the <a class="reference external" href="https://optax.readthedocs.io/en/latest/api.html#optax.adam">momentum values</a>).</p></li>
+<li><p>Compute the gradients of your loss with <code class="docutils literal notranslate"><span class="pre">jax.value_and_grad()</span></code>.</p></li>
+<li><p>At every iteration, call the Optax <code class="docutils literal notranslate"><span class="pre">update</span></code> function to update the internal
+optimizer state and create an update to the parameters. Then add the update
+to the parameters with Optax’s <code class="docutils literal notranslate"><span class="pre">apply_updates</span></code> method.</p></li>
+</ol>
+<p>Note that Optax can do a lot more: it’s designed for composing simple gradient
+transformations into more complex transformations that allows to implement a
+wide range of optimizers. There is also support for changing optimizer
+hyperparameters over time (“schedules”), applying different updates to different
+parts of the parameter tree (“masking”) and much more. For details please refer
+to the
+<a class="reference external" href="https://optax.readthedocs.io/en/latest/">official documentation</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="n">tx</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+<span class="n">opt_state</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="n">loss_grad_fn</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">):</span>
+  <span class="n">loss_val</span><span class="p">,</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">loss_grad_fn</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x_samples</span><span class="p">,</span> <span class="n">y_samples</span><span class="p">)</span>
+  <span class="n">updates</span><span class="p">,</span> <span class="n">opt_state</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">)</span>
+  <span class="n">params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">apply_updates</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loss step </span><span class="si">{}</span><span class="s1">: &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">loss_val</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss step 0:  0.019003807
+Loss step 10:  0.20683776
+Loss step 20:  0.058554213
+Loss step 30:  0.03522939
+Loss step 40:  0.020064333
+Loss step 50:  0.016343597
+Loss step 60:  0.014753605
+Loss step 70:  0.014125158
+Loss step 80:  0.013897811
+Loss step 90:  0.013803813
+Loss step 100:  0.013771139
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="serializing-the-result">
+<h3>Serializing the result<a class="headerlink" href="#serializing-the-result" title="Permalink to this heading">#</a></h3>
+<p>Now that we’re happy with the result of our training, we might want to save the model parameters to load them back later. Flax provides a serialization package to enable you to do that.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">serialization</span>
+<span class="n">bytes_output</span> <span class="o">=</span> <span class="n">serialization</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="n">dict_output</span> <span class="o">=</span> <span class="n">serialization</span><span class="o">.</span><span class="n">to_state_dict</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dict output&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dict_output</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Bytes output&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bytes_output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dict output
+{&#39;params&#39;: {&#39;bias&#39;: Array([-2.4378994 , -2.07345   ,  0.18866666, -0.3417453 , -0.7729488 ],      dtype=float32), &#39;kernel&#39;: Array([[ 0.99648696, -0.8406903 , -0.7420565 , -1.1751674 , -0.8821263 ],
+       [ 0.584941  ,  0.69811606, -1.0097518 ,  1.6940995 , -1.9293189 ],
+       [-1.2534726 ,  0.19594055, -1.1317801 ,  0.23212178,  1.7384186 ],
+       [ 0.5463065 ,  0.62694067, -0.48866725,  0.9249355 ,  0.3472474 ],
+       [-0.6366117 , -0.96825665,  0.7716757 ,  1.0612168 ,  0.91696614],
+       [-0.46407026,  0.86654264,  1.676349  , -2.5267088 ,  0.4433027 ],
+       [ 1.8060066 , -1.258742  , -0.5777728 ,  2.2216105 ,  0.76148075],
+       [-0.21333542, -1.6236352 , -0.8071297 , -2.3925493 ,  1.5795202 ],
+       [ 1.4050105 ,  0.3484557 ,  0.02730798,  1.1249974 , -0.21001507],
+       [-0.30623946,  0.7411661 , -0.33605912,  0.46161783,  0.19004522]],      dtype=float32)}}
+Bytes output
+b&#39;\x81\xa6params\x82\xa4bias\xc7!\x01\x93\x91\x05\xa7float32\xc4\x14\x8b\x06\x1c\xc0h\xb3\x04\xc0\xd51A&gt;=\xf9\xae\xbe\xf9\xdfE\xbf\xa6kernel\xc7\xd6\x01\x93\x92\n\x05\xa7float32\xc4\xc8\xc5\x19\x7f?{7W\xbfj\xf7=\xbf\xe3k\x96\xbf\x07\xd3a\xbf\xb2\xbe\x15?\xbc\xb72?\x8c?\x81\xbfA\xd8\xd8?\xec\xf3\xf6\xbf\xcaq\xa0\xbf\xa4\xa4H&gt;,\xde\x90\xbfU\xb1m&gt;\x80\x84\xde?\xbe\xda\x0b?/\x7f ?\x982\xfa\xbe\x93\xc8l?i\xca\xb1&gt;\xfc\xf8&quot;\xbf\xab\xdfw\xbf\x8a\x8cE?\xf4\xd5\x87?K\xbej?\x9e\x9a\xed\xbe\xbd\xd5]?\x9b\x92\xd6?\x99\xb5!\xc0\x92\xf8\xe2&gt;9+\xe7?u\x1e\xa1\xbf\xeb\xe8\x13\xbf\xde.\x0e@g\xf0B?\x9atZ\xbeG\xd3\xcf\xbf\r\xa0N\xbf\x87\x1f\x19\xc0\xb8-\xca?b\xd7\xb3?\xc9h\xb2&gt;\xfb\xb4\xdf&lt;\xea\xff\x8f?1\x0eW\xbek\xcb\x9c\xbe\x10\xbd=?\xf1\x0f\xac\xbe,Y\xec&gt;7\x9bB&gt;&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>To load the model back, you’ll need to use a template of the model parameter structure, like the one you would get from the model initialization. Here, we use the previously generated <code class="docutils literal notranslate"><span class="pre">params</span></code> as a template. Note that this will produce a new variable structure, and not mutate in-place.</p>
+<p><em>The point of enforcing structure through template is to avoid users issues downstream, so you need to first have the right model that generates the parameters structure.</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">serialization</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">bytes_output</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;bias&#39;: array([-2.4378994 , -2.07345   ,  0.18866666, -0.3417453 , -0.7729488 ],
+        dtype=float32),
+  &#39;kernel&#39;: array([[ 0.99648696, -0.8406903 , -0.7420565 , -1.1751674 , -0.8821263 ],
+         [ 0.584941  ,  0.69811606, -1.0097518 ,  1.6940995 , -1.9293189 ],
+         [-1.2534726 ,  0.19594055, -1.1317801 ,  0.23212178,  1.7384186 ],
+         [ 0.5463065 ,  0.62694067, -0.48866725,  0.9249355 ,  0.3472474 ],
+         [-0.6366117 , -0.96825665,  0.7716757 ,  1.0612168 ,  0.91696614],
+         [-0.46407026,  0.86654264,  1.676349  , -2.5267088 ,  0.4433027 ],
+         [ 1.8060066 , -1.258742  , -0.5777728 ,  2.2216105 ,  0.76148075],
+         [-0.21333542, -1.6236352 , -0.8071297 , -2.3925493 ,  1.5795202 ],
+         [ 1.4050105 ,  0.3484557 ,  0.02730798,  1.1249974 , -0.21001507],
+         [-0.30623946,  0.7411661 , -0.33605912,  0.46161783,  0.19004522]],
+        dtype=float32)}}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="defining-your-own-models">
+<h2>Defining your own models<a class="headerlink" href="#defining-your-own-models" title="Permalink to this heading">#</a></h2>
+<p>Flax allows you to define your own models, which should be a bit more complicated than a linear regression. In this section, we’ll show you how to build simple models. To do so, you’ll need to create subclasses of the base <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> class.</p>
+<p><em>Keep in mind that we imported</em> <code class="docutils literal notranslate"><span class="pre">linen</span> <span class="pre">as</span> <span class="pre">nn</span></code> <em>and this only works with the new linen API</em></p>
+<section id="module-basics">
+<h3>Module basics<a class="headerlink" href="#module-basics" title="Permalink to this heading">#</a></h3>
+<p>The base abstraction for models is the <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> class, and every type of predefined layers in Flax (like the previous <code class="docutils literal notranslate"><span class="pre">Dense</span></code>) is a subclass of <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code>. Let’s take a look and start by defining a simple but custom multi-layer perceptron i.e. a sequence of Dense layers interleaved with calls to a non-linear activation function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExplicitMLP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">features</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># we automatically know what to do with lists, dicts of submodules</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">feat</span><span class="p">)</span> <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">]</span>
+    <span class="c1"># for single submodules, we would just write:</span>
+    <span class="c1"># self.layer1 = nn.Dense(feat1)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">inputs</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lyr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">lyr</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">key1</span><span class="p">,</span> <span class="n">key2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ExplicitMLP</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">key2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;initialized parameter shapes:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">flax</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">unfreeze</span><span class="p">(</span><span class="n">params</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>initialized parameter shapes:
+ {&#39;params&#39;: {&#39;layers_0&#39;: {&#39;bias&#39;: (3,), &#39;kernel&#39;: (4, 3)}, &#39;layers_1&#39;: {&#39;bias&#39;: (4,), &#39;kernel&#39;: (3, 4)}, &#39;layers_2&#39;: {&#39;bias&#39;: (5,), &#39;kernel&#39;: (4, 5)}}}
+output:
+ [[ 0.01124354 -0.03278464  0.00390269  0.04394785 -0.02393201]
+ [ 0.          0.          0.          0.          0.        ]
+ [ 0.03575053 -0.04598302  0.06229606  0.08348387 -0.09030373]
+ [ 0.          0.          0.          0.          0.        ]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>As we can see, a <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> subclass is made of:</p>
+<ul class="simple">
+<li><p>A collection of data fields (<code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> are Python dataclasses) - here we only have the <code class="docutils literal notranslate"><span class="pre">features</span></code> field of type <code class="docutils literal notranslate"><span class="pre">Sequence[int]</span></code>.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">setup()</span></code> method that is being called at the end of the <code class="docutils literal notranslate"><span class="pre">__postinit__</span></code> where you can register submodules, variables, parameters you will need in your model.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">__call__</span></code> function that returns the output of the model from a given input.</p></li>
+<li><p>The model structure defines a pytree of parameters following the same tree structure as the model: the params tree contains one <code class="docutils literal notranslate"><span class="pre">layers_n</span></code> sub dict per layer, and each of those contain the parameters of the associated Dense layer. The layout is very explicit.</p></li>
+</ul>
+<p><em>Note: lists are mostly managed as you would expect (WIP), there are corner cases you should be aware of as pointed out</em> <a class="reference external" href="https://github.com/google/flax/issues/524">here</a></p>
+<p>Since the module structure and its parameters are not tied to each other, you can’t directly call <code class="docutils literal notranslate"><span class="pre">model(x)</span></code> on a given input as it will return an error. The <code class="docutils literal notranslate"><span class="pre">__call__</span></code> function is being wrapped up in the <code class="docutils literal notranslate"><span class="pre">apply</span></code> one, which is the one to call on an input:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># Returns an error</span>
+<span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&quot;ExplicitMLP&quot; object has no attribute &quot;layers&quot;. If &quot;layers&quot; is defined in &#39;.setup()&#39;, remember these fields are only accessible from inside &#39;init&#39; or &#39;apply&#39;.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since here we have a very simple model, we could have used an alternative (but equivalent) way of declaring the submodules inline in the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> using the <code class="docutils literal notranslate"><span class="pre">&#64;nn.compact</span></code> annotation like so:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SimpleMLP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">features</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">inputs</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">feat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">):</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;layers_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+      <span class="c1"># providing a name is optional though!</span>
+      <span class="c1"># the default autonames would be &quot;Dense_0&quot;, &quot;Dense_1&quot;, ...</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">key1</span><span class="p">,</span> <span class="n">key2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">SimpleMLP</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">key2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;initialized parameter shapes:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">flax</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">unfreeze</span><span class="p">(</span><span class="n">params</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>initialized parameter shapes:
+ {&#39;params&#39;: {&#39;layers_0&#39;: {&#39;bias&#39;: (3,), &#39;kernel&#39;: (4, 3)}, &#39;layers_1&#39;: {&#39;bias&#39;: (4,), &#39;kernel&#39;: (3, 4)}, &#39;layers_2&#39;: {&#39;bias&#39;: (5,), &#39;kernel&#39;: (4, 5)}}}
+output:
+ [[ 0.01124354 -0.03278464  0.00390269  0.04394785 -0.02393201]
+ [ 0.          0.          0.          0.          0.        ]
+ [ 0.03575053 -0.04598302  0.06229606  0.08348387 -0.09030373]
+ [ 0.          0.          0.          0.          0.        ]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>There are, however, a few differences you should be aware of between the two declaration modes:</p>
+<ul class="simple">
+<li><p>In <code class="docutils literal notranslate"><span class="pre">setup</span></code>, you are able to name some sublayers and keep them around for further use (e.g. encoder/decoder methods in autoencoders).</p></li>
+<li><p>If you want to have multiple methods, then you <strong>need</strong> to declare the module using <code class="docutils literal notranslate"><span class="pre">setup</span></code>, as the <code class="docutils literal notranslate"><span class="pre">&#64;nn.compact</span></code> annotation only allows one method to be annotated.</p></li>
+<li><p>The last initialization will be handled differently. See these notes for more details (TODO: add notes link).</p></li>
+</ul>
+</section>
+<section id="module-parameters">
+<h3>Module parameters<a class="headerlink" href="#module-parameters" title="Permalink to this heading">#</a></h3>
+<p>In the previous MLP example, we relied only on predefined layers and operators (<code class="docutils literal notranslate"><span class="pre">Dense</span></code>, <code class="docutils literal notranslate"><span class="pre">relu</span></code>). Let’s imagine that you didn’t have a Dense layer provided by Flax and you wanted to write it on your own. Here is what it would look like using the <code class="docutils literal notranslate"><span class="pre">&#64;nn.compact</span></code> way to declare a new modules:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SimpleDense</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">features</span><span class="p">:</span> <span class="nb">int</span>
+  <span class="n">kernel_init</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">initializers</span><span class="o">.</span><span class="n">lecun_normal</span><span class="p">()</span>
+  <span class="n">bias_init</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">()</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="n">kernel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;kernel&#39;</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">kernel_init</span><span class="p">,</span> <span class="c1"># Initialization function</span>
+                        <span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">))</span>  <span class="c1"># shape info.</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+    <span class="n">bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;bias&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_init</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">,))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">bias</span>
+    <span class="k">return</span> <span class="n">y</span>
+
+<span class="n">key1</span><span class="p">,</span> <span class="n">key2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">SimpleDense</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">key2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;initialized parameters:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;output:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>initialized parameters:
+ {&#39;params&#39;: {&#39;kernel&#39;: Array([[-0.16403241, -0.23796612,  0.13204622],
+       [-0.5048447 , -0.0334688 ,  0.4769126 ],
+       [-0.17591973, -0.5354523 ,  0.46538806],
+       [-0.8044695 , -0.59131426, -0.49887517]], dtype=float32), &#39;bias&#39;: Array([0., 0., 0.], dtype=float32)}}
+output:
+ [[-0.36732495 -0.39957604  0.24370201]
+ [-0.6533402  -0.56986904  0.6497969 ]
+ [-0.63325995 -0.6073911  -0.09036299]
+ [-1.0470483  -0.9731901   0.4006886 ]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, we see how to both declare and assign a parameter to the model using the <code class="docutils literal notranslate"><span class="pre">self.param</span></code> method. It takes as input <code class="docutils literal notranslate"><span class="pre">(name,</span> <span class="pre">init_fn,</span> <span class="pre">*init_args,</span> <span class="pre">**init_kwargs)</span></code> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> is simply the name of the parameter that will end up in the parameter structure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">init_fn</span></code> is a function with input <code class="docutils literal notranslate"><span class="pre">(PRNGKey,</span> <span class="pre">*init_args,</span> <span class="pre">**init_kwargs)</span></code> returning an Array, with <code class="docutils literal notranslate"><span class="pre">init_args</span></code> and <code class="docutils literal notranslate"><span class="pre">init_kwargs</span></code> being the arguments needed to call the initialisation function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">init_args</span></code> and <code class="docutils literal notranslate"><span class="pre">init_kwargs</span></code> are the arguments to provide to the initialization function.</p></li>
+</ul>
+<p>Such params can also be declared in the <code class="docutils literal notranslate"><span class="pre">setup</span></code> method; it won’t be able to use shape inference because Flax is using lazy initialization at the first call site.</p>
+</section>
+<section id="variables-and-collections-of-variables">
+<h3>Variables and collections of variables<a class="headerlink" href="#variables-and-collections-of-variables" title="Permalink to this heading">#</a></h3>
+<p>As we’ve seen so far, working with models means working with:</p>
+<ul class="simple">
+<li><p>A subclass of <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code>;</p></li>
+<li><p>A pytree of parameters for the model (typically from <code class="docutils literal notranslate"><span class="pre">model.init()</span></code>);</p></li>
+</ul>
+<p>However this is not enough to cover everything that we would need for machine learning, especially neural networks. In some cases, you might want your neural network to keep track of some internal state while it runs (e.g. batch normalization layers). There is a way to declare variables beyond the parameters of the model with the <code class="docutils literal notranslate"><span class="pre">variable</span></code> method.</p>
+<p>For demonstration purposes, we’ll implement a simplified but similar mechanism to batch normalization: we’ll store running averages and subtract those to the input at training time. For proper batchnorm, you should use (and look at) the implementation <a class="reference external" href="https://github.com/google/flax/blob/main/flax/linen/normalization.py">here</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BiasAdderWithRunningMean</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">decay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.99</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="c1"># easy pattern to detect if we&#39;re initializing via empty variable tree</span>
+    <span class="n">is_initialized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_variable</span><span class="p">(</span><span class="s1">&#39;batch_stats&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+    <span class="n">ra_mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span><span class="s1">&#39;batch_stats&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+                            <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">),</span>
+                            <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;bias&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">rng</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">if</span> <span class="n">is_initialized</span><span class="p">:</span>
+      <span class="n">ra_mean</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span> <span class="o">*</span> <span class="n">ra_mean</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="n">ra_mean</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">bias</span>
+
+
+<span class="n">key1</span><span class="p">,</span> <span class="n">key2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">BiasAdderWithRunningMean</span><span class="p">()</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;initialized variables:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span>
+<span class="n">y</span><span class="p">,</span> <span class="n">updated_state</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">mutable</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;batch_stats&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;updated state:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">updated_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>initialized variables:
+ {&#39;batch_stats&#39;: {&#39;mean&#39;: Array([0., 0., 0., 0., 0.], dtype=float32)}, &#39;params&#39;: {&#39;bias&#39;: Array([0., 0., 0., 0., 0.], dtype=float32)}}
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>updated state:
+ {&#39;batch_stats&#39;: {&#39;mean&#39;: Array([[0.01, 0.01, 0.01, 0.01, 0.01]], dtype=float32)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">updated_state</span></code> returns only the state variables that are being mutated by the model while applying it on data. To update the variables and get the new parameters of the model, we can use the following pattern:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]:</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">val</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+  <span class="n">y</span><span class="p">,</span> <span class="n">updated_state</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">mutable</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;batch_stats&#39;</span><span class="p">])</span>
+  <span class="n">old_state</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">flax</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="s1">&#39;params&#39;</span><span class="p">)</span>
+  <span class="n">variables</span> <span class="o">=</span> <span class="n">flax</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">freeze</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">updated_state</span><span class="p">})</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;updated state:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">updated_state</span><span class="p">)</span> <span class="c1"># Shows only the mutable part</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>updated state:
+ {&#39;batch_stats&#39;: {&#39;mean&#39;: Array([[0.01, 0.01, 0.01, 0.01, 0.01]], dtype=float32)}}
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>updated state:
+ {&#39;batch_stats&#39;: {&#39;mean&#39;: Array([[0.0299, 0.0299, 0.0299, 0.0299, 0.0299]], dtype=float32)}}
+updated state:
+ {&#39;batch_stats&#39;: {&#39;mean&#39;: Array([[0.059601, 0.059601, 0.059601, 0.059601, 0.059601]], dtype=float32)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>From this simplified example, you should be able to derive a full BatchNorm implementation, or any layer involving a state. To finish, let’s add an optimizer to see how to play with both parameters updated by an optimizer and state variables.</p>
+<p><em>This example isn’t doing anything and is only for demonstration purposes.</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+<span class="nd">@partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">update_step</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">apply_fn</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="n">y</span><span class="p">,</span> <span class="n">updated_state</span> <span class="o">=</span> <span class="n">apply_fn</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">state</span><span class="p">},</span>
+                                <span class="n">x</span><span class="p">,</span> <span class="n">mutable</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">l</span><span class="p">,</span> <span class="n">updated_state</span>
+
+  <span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">state</span><span class="p">),</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">has_aux</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">params</span><span class="p">)</span>
+  <span class="n">updates</span><span class="p">,</span> <span class="n">opt_state</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">)</span>
+  <span class="n">params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">apply_updates</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">state</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">state</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">flax</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="s1">&#39;params&#39;</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">variables</span>
+<span class="n">tx</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">sgd</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+<span class="n">opt_state</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+  <span class="n">opt_state</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">update_step</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">opt_state</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Updated state: &#39;</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Updated state:  {&#39;batch_stats&#39;: {&#39;mean&#39;: Array([[0.01, 0.01, 0.01, 0.01, 0.01]], dtype=float32)}}
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Updated state:  {&#39;batch_stats&#39;: {&#39;mean&#39;: Array([[0.0199, 0.0199, 0.0199, 0.0199, 0.0199]], dtype=float32)}}
+Updated state:  {&#39;batch_stats&#39;: {&#39;mean&#39;: Array([[0.029701, 0.029701, 0.029701, 0.029701, 0.029701]], dtype=float32)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that the above function has a quite verbose signature and it would not actually
+work with <code class="docutils literal notranslate"><span class="pre">jax.jit()</span></code> because the function arguments are not “valid JAX types”.</p>
+<p>Flax provides a handy wrapper - <code class="docutils literal notranslate"><span class="pre">TrainState</span></code> - that simplifies the above code. Check out <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.training.html#flax.training.train_state.TrainState"><code class="docutils literal notranslate"><span class="pre">flax.training.train_state.TrainState</span></code></a> to learn more.</p>
+</section>
+<section id="exporting-to-tensorflow-s-savedmodel-with-jax2tf">
+<h3>Exporting to Tensorflow’s SavedModel with jax2tf<a class="headerlink" href="#exporting-to-tensorflow-s-savedmodel-with-jax2tf" title="Permalink to this heading">#</a></h3>
+<p>JAX released an experimental converter called <a class="reference external" href="https://github.com/jax-ml/jax/tree/main/jax/jax2tf">jax2tf</a>, which allows converting trained Flax models into Tensorflow’s SavedModel format (so it can be used for <a class="reference external" href="https://www.tensorflow.org/hub">TF Hub</a>, <a class="reference external" href="https://www.tensorflow.org/lite">TF.lite</a>, <a class="reference external" href="https://www.tensorflow.org/js">TF.js</a>, or other downstream applications). The repository contains more documentation and has various examples for Flax.</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../../quick_start.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Quick start</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Guides</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-our-environment">Setting up our environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-with-flax">Linear regression with Flax</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-parameters-initialization">Model parameters &amp; initialization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gradient-descent">Gradient descent</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-with-optax">Optimizing with Optax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#serializing-the-result">Serializing the result</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-your-own-models">Defining your own models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-basics">Module basics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-parameters">Module parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-and-collections-of-variables">Variables and collections of variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exporting-to-tensorflow-s-savedmodel-with-jax2tf">Exporting to Tensorflow’s SavedModel with jax2tf</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

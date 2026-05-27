@@ -1,0 +1,899 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>JAX/Flax Key Concepts</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js"></script>
+    <script src="_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'key_concepts';</script>
+    <link rel="icon" href="_static/flax.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Basic Guides" href="guides_basic.html" />
+    <link rel="prev" title="Why Flax NNX?" href="why.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/key_concepts.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="guides/checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs_nnx/key_concepts.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/key_concepts.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>JAX/Flax Key Concepts</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-jax">What is JAX?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-flax">What is Flax?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pytrees">Pytrees</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#traced-vs-static-data">Traced vs. static data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abstract-arrays">Abstract arrays</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distributed-computing">Distributed computing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transformations">Transformations</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="jax-flax-key-concepts">
+<h1>JAX/Flax Key Concepts<a class="headerlink" href="#jax-flax-key-concepts" title="Permalink to this heading">#</a></h1>
+<p>Flax is a <strong>neural network library</strong> built on top of JAX, a language for <strong>accelerated numerical computations</strong>. In effect, Flax is a pretty thin layer, and you likely will use some JAX APIs directly to do anything more than using the built-in Flax modules.</p>
+<p>This means a <strong>basic understanding on JAX helps you to use Flax well</strong>. You would have better a mental model to understand what’s happening underneath and how to debug a confusing error. This doc aims to clarify a few key concepts and help you build that uniquely-JAX mental model as a practical model developer (pun intended).</p>
+<p><a class="reference external" href="https://docs.jax.dev/en/latest/index.html">JAX documentations</a> are great sources to learn more. We recommend all Flax users to at least read the <a class="reference external" href="https://docs.jax.dev/en/latest/key-concepts.html">JAX Key Concepts</a> doc.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+<span class="c1"># For simulating multi-device environment</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;jax_num_cpu_devices&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="what-is-jax">
+<h2>What is JAX?<a class="headerlink" href="#what-is-jax" title="Permalink to this heading">#</a></h2>
+<p>JAX is the lower level library that does <strong>all the large-scale data computations</strong>. It provides the singular data container, aka the <code class="docutils literal notranslate"><span class="pre">jax.Array</span></code>, and all the ways we possibly deal with them:</p>
+<ul class="simple">
+<li><p><strong>Make arithmetic operations upon the arrays</strong>, including: the <code class="docutils literal notranslate"><span class="pre">jax.numpy</span></code> ops, automatic differentiation (<code class="docutils literal notranslate"><span class="pre">jax.grad</span></code>), batching (<code class="docutils literal notranslate"><span class="pre">jax.vmap</span></code>), and more.</p></li>
+<li><p><strong>Run computation on accelerators</strong>, including: interface with various accelerator platforms and layouts; allocating buffers for arrays; compile and execute computation programs across accelerators.</p></li>
+<li><p><strong>Bundle multiple arrays together</strong> using a simple concept called <a class="reference internal" href="#pytrees"><span class="std std-ref">pytrees</span></a>.</p></li>
+</ul>
+<p>This implies that any error related with accelerators and numericals are probably a JAX issue, or an issue with Flax built-in layers.</p>
+<p>It also means you <em>can</em> build a neural network model with JAX alone, especially if you are comfortable with functional programming. JAX docsite have some <a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/neural_network_with_tfds_data.html">simple examples</a>. The article <a class="reference external" href="https://jaykmody.com/blog/gpt-from-scratch/">GPT in 60 Lines of NumPy</a> also shows how to implement all the key elements of a GPT using JAX.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">jax_linear</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span> <span class="o">+</span> <span class="n">bias</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">42</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> 
+          <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,))}</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">jax_linear</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;kernel&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;bias&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="what-is-flax">
+<h2>What is Flax?<a class="headerlink" href="#what-is-flax" title="Permalink to this heading">#</a></h2>
+<p>Flax is a <strong>neural network toolkit</strong>, offering higher level abstractions that are handy for model developers. Such as:</p>
+<ul class="simple">
+<li><p><strong>Object-oriented <code class="docutils literal notranslate"><span class="pre">Module</span></code> class</strong> to represent layers/models and bookkeep parameters.</p></li>
+<li><p><strong>Modeling utilities</strong> like random number handling, model traversal and surgery, optimizers, advanced parameter bookkeeping, sharding annotations, and more.</p></li>
+<li><p><strong>Some built-in commonly-used</strong> layers, initializers, and model examples.</p></li>
+</ul>
+<p>Take the example below: A Flax layer <code class="docutils literal notranslate"><span class="pre">Linear</span></code>, during initialization, takes one RNG key and automatically initialize all internal parameters as <code class="docutils literal notranslate"><span class="pre">jax.Array</span></code>s. In forward pass, it carries out the exact same computation via JAX APIs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Eligible parameters were created inside `linear`, using one RNG key 42</span>
+<span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">42</span><span class="p">))</span>
+
+<span class="c1"># Flax created a `Param` wrapper over the actual `jax.Array` parameter to track metadata</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">linear</span><span class="o">.</span><span class="n">kernel</span><span class="p">))</span>        <span class="c1"># flax.nnx.Param</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">linear</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>  <span class="c1"># jax.Array</span>
+
+<span class="c1"># The computation of the two are the same</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">flax_y</span> <span class="o">=</span> <span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">jax_y</span> <span class="o">=</span> <span class="n">jax_linear</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">linear</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">linear</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">flax_y</span><span class="p">,</span> <span class="n">jax_y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;flax.nnx.variablelib.Param&#39;&gt;
+&lt;class &#39;jaxlib._jax.ArrayImpl&#39;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="pytrees">
+<h2>Pytrees<a class="headerlink" href="#pytrees" title="Permalink to this heading">#</a></h2>
+<p>Your code likely needs more than one <code class="docutils literal notranslate"><span class="pre">jax.Array</span></code>. A <strong>pytree</strong> is a container structure of multiple pytrees, possibly nested. It is a key and handly concept in the JAX world.</p>
+<p>Many things are pytrees: Python dicts, lists, tuples, dataclasses, and more. The key is that a pytree can be “flattened” into multiple children, which are either pytrees or individual leaves - a <code class="docutils literal notranslate"><span class="pre">jax.Array</span></code> counts as a leaf. Other metadata of a pytree are stored in the <code class="docutils literal notranslate"><span class="pre">PyTreeDef</span></code> object, allowing “unflattening” to restore the old pytree.</p>
+<p>Pytree is the primary data holder in JAX. When JAX transforms see a pytree argument, they automatically trace its internal <code class="docutils literal notranslate"><span class="pre">jax.Array</span></code>s when compiling. Therefore, it’s crucial to organize your data as pytrees. You can use <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.struct.html#flax.struct.dataclass"><code class="docutils literal notranslate"><span class="pre">flax.struct.dataclass</span></code></a> to quickly construct a pytree node dataclass, or register your own classes via JAX API. <a class="reference external" href="https://docs.jax.dev/en/latest/working-with-pytrees.html">JAX pytree documentation</a> has a thorough overview on pytrees and JAX APIs to manipulate them.</p>
+<p>In Flax, a <code class="docutils literal notranslate"><span class="pre">Module</span></code> is a pytree, and variables are its flattenable data. This means you can directly run JAX transforms upon a Flax model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Flatten allows you to see all the content inside a pytree</span>
+<span class="n">arrays</span><span class="p">,</span> <span class="n">treedef</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten_with_path</span><span class="p">(</span><span class="n">linear</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrays</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">kp</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">arrays</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;linear</span><span class="si">{</span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">keystr</span><span class="p">(</span><span class="n">kp</span><span class="p">)</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">treedef</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># Unflatten brings the pytree back intact</span>
+<span class="n">linear</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">treedef</span><span class="p">,</span> <span class="p">[</span><span class="n">value</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">arrays</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>linear.bias.value: [0. 0.]
+linear.kernel.value: [[ 0.04119061 -0.2629074 ]
+ [ 0.6772455   0.2807398 ]
+ [ 0.16276604  0.16813846]
+ [ 0.310975   -0.43336964]]
+treedef = PyTreeDef(CustomNode(Linear[((&#39;_pytree__state&#39;, &#39;bias&#39;, &#39;kernel&#39;), ((&#39;_object__nodes&#39;, frozenset({&#39;kernel&#39;, &#39;_pytree__state&#39;, &#39;bias&#39;})), (&#39;bias_init&#39;, &lt;function zeros at 0x117826700&gt;), (&#39;dot_general&#39;, &lt;function dot_general at 0x1172aa480&gt;), (&#39;dtype&#39;, None), (&#39;in_features&#39;, 4), (&#39;kernel_init&#39;, &lt;function variance_scaling.&lt;locals&gt;.init at 0x120f45260&gt;), (&#39;out_features&#39;, 2), (&#39;param_dtype&#39;, &lt;class &#39;jax.numpy.float32&#39;&gt;), (&#39;precision&#39;, None), (&#39;promote_dtype&#39;, &lt;function promote_dtype at 0x120f45440&gt;), (&#39;use_bias&#39;, True)))], [CustomNode(ObjectState[(False, False)], []), CustomNode(Param[()], [*]), CustomNode(Param[()], [*])]))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">linear</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># JAX transforms works on Flax modules</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="traced-vs-static-data">
+<h2>Traced vs. static data<a class="headerlink" href="#traced-vs-static-data" title="Permalink to this heading">#</a></h2>
+<p>A pytree <em>contains</em> JAX arrays, but a pytree is <em>more than</em> its JAX arrays. For example, a dictionary keeps information like the key of every array, and it might contain entries that are not JAX arrays. From JAX’s standpoint, all data are one of the two types:</p>
+<ul class="simple">
+<li><p><strong>Traced</strong> (“dynamic”) data: JAX will trace them during compilation and optimize the operations upon them. If they stay inside a pytree argument, <code class="docutils literal notranslate"><span class="pre">jax.tree.flatten</span></code> must return them as leaves. They must be data values (<code class="docutils literal notranslate"><span class="pre">jax.Array</span></code>, Numpy array, scalar, etc), and implement basic functionalities like <code class="docutils literal notranslate"><span class="pre">__eq__</span></code> and <code class="docutils literal notranslate"><span class="pre">__hash__</span></code>.</p></li>
+<li><p><strong>“Static”</strong> data: They stay as simple Python objects that don’t get traced by JAX.</p></li>
+</ul>
+<p>In practice, you would want to control what data goes into dynamic, and what to static. Dynamic data and their computation will be optimized by JAX, but you cannot base your code control flow upon its values. Non-data values like strings must stay static.</p>
+<p>Take a Flax model: you would want JAX to only track and optimize its parameters, and the RNG keys. For trivial things like the model hyperparameters (e.g., the param shape, the initializer function), they can stay static to save compilation bandwidth and allow code path customization.</p>
+<p>Current Flax module automatically classifies this for you. Only the <code class="docutils literal notranslate"><span class="pre">jax.Array</span></code> attributes are treated as dynamic data, unless you explicitly wrap a data value using <code class="docutils literal notranslate"><span class="pre">nnx.Variable</span></code> classes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">rngs</span><span class="o">.</span><span class="n">param</span><span class="p">(),</span> <span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">traced_dim</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>  <span class="c1"># This became traced!</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">rng</span> <span class="o">=</span> <span class="n">rngs</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">kp</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten_with_path</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">foo</span><span class="p">))[</span><span class="mi">0</span><span class="p">]:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">keystr</span><span class="p">(</span><span class="n">kp</span><span class="p">)</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;rng&#39;][&#39;default&#39;][&#39;count&#39;].value: 1
+[&#39;rng&#39;][&#39;default&#39;][&#39;key&#39;].value: Array((), dtype=key&lt;fry&gt;) overlaying:
+[0 0]
+[&#39;traced_dim&#39;].value: 4
+[&#39;w&#39;].value: [[ 1.0040143  -0.9063372  -0.7481722  -1.1713669 ]
+ [-0.8712328   0.5888381   0.72392994 -1.0255982 ]
+ [ 1.661628   -1.8910251  -1.2889339   0.13360691]
+ [-1.1530392   0.23929629  1.7448074   0.5050189 ]]
+</pre></div>
+</div>
+</div>
+</div>
+<p>When compiling a function using this pytree, you’ll notice the difference between traced and static values. You can only use static ones in control flows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">jitted</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">dim</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">traced_dim</span><span class="o">.</span><span class="n">value</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>  <span class="c1"># This is being traced</span>
+  <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">dim</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Code path based on static data value works fine.&#39;</span><span class="p">)</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">traced_dim</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This will never run :(&#39;</span><span class="p">)</span>
+  <span class="k">except</span> <span class="n">jax</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">TracerBoolConversionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Code path based on JAX data value throws error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">jitted</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>model.dim = 4
+model.traced_dim.value = JitTracer&lt;~int32[]&gt;
+Code path based on static data value works fine.
+Code path based on JAX data value throws error: Attempted boolean conversion of traced array with shape bool[].
+The error occurred while tracing the function jitted at /var/folders/4c/ylxxyg_n67957jf6616c7z5000gbn1/T/ipykernel_69242/584946237.py:1 for jit. This concrete value was not available in Python because it depends on the value of the argument model.traced_dim.value.
+See https://docs.jax.dev/en/latest/errors.html#jax.errors.TracerBoolConversionError
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="abstract-arrays">
+<h2>Abstract arrays<a class="headerlink" href="#abstract-arrays" title="Permalink to this heading">#</a></h2>
+<p>Abstract array is a JAX class to represent an array not by its value, but simply by its metadata information like shape, dtype and sharding. It is fast and handy because it doesn’t allocate any memory for the array data.</p>
+<p>You can construct an abstract array by calling <a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.ShapeDtypeStruct.html"><code class="docutils literal notranslate"><span class="pre">jax.ShapeDtypeStruct</span></code></a> on your own, or use <a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.eval_shape.html"><code class="docutils literal notranslate"><span class="pre">jax.eval_shape</span></code></a>, which takes a function and arguments and returns the abstract version of its output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">abs_x</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">eval_shape</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">abs_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[ 1.0040143  -0.9063372  -0.7481722  -1.1713669 ]
+ [-0.8712328   0.5888381   0.72392994 -1.0255982 ]
+ [ 1.661628   -1.8910251  -1.2889339   0.13360691]
+ [-1.1530392   0.23929629  1.7448074   0.5050189 ]]
+ShapeDtypeStruct(shape=(4, 4), dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is a good way to dry-run your code and debug a model without any actual compute and memory cost. For example, you can have an overview of the parameters inside this very large model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MLP</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">List</span><span class="p">([</span><span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nlayers</span><span class="p">)])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nlayers</span> <span class="o">=</span> <span class="n">nlayers</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="p">:</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="n">block</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">dim</span><span class="p">,</span> <span class="n">nlayers</span> <span class="o">=</span> <span class="mi">8190</span><span class="p">,</span> <span class="mi">64</span>   <span class="c1"># Some very big numbers</span>
+<span class="nd">@partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">MLP</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">abstract_model</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">eval_shape</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">abstract_model</span><span class="o">.</span><span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear( # Param: 67,084,290 (268.3 MB)
+  bias=Param( # 8,190 (32.8 KB)
+    value=ShapeDtypeStruct(shape=(8190,), dtype=float32)
+  ),
+  kernel=Param( # 67,076,100 (268.3 MB)
+    value=ShapeDtypeStruct(shape=(8190, 8190), dtype=float32)
+  ),
+  bias_init=&lt;function zeros at 0x117826700&gt;,
+  dot_general=&lt;function dot_general at 0x1172aa480&gt;,
+  dtype=None,
+  in_features=8190,
+  kernel_init=&lt;function variance_scaling.&lt;locals&gt;.init at 0x120f45260&gt;,
+  out_features=8190,
+  param_dtype=float32,
+  precision=None,
+  promote_dtype=&lt;function promote_dtype at 0x120f45440&gt;,
+  use_bias=True
+)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Once you have an abstract pytree for your function input or output, it’s easier to describe how you want your data to be sharded. You should use such a pytree with sharding information to instruct your checkpoint loading library to load your arrays distributedly. Our checkpointing guide contains <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/flax_gspmd.html#load-a-sharded-model-from-a-checkpoint">an example of how to do this</a>.</p>
+</section>
+<section id="distributed-computing">
+<h2>Distributed computing<a class="headerlink" href="#distributed-computing" title="Permalink to this heading">#</a></h2>
+<p>Another big use case for abstract pytrees is to tell JAX machinery how you want each array to be sharded during any point of your computation.</p>
+<p>Remember what we mentioned earlier? JAX handles the actual computation and data allocation on accelerators. This means you <strong>must</strong> use some <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code>-compiled function to run any distributed computation task.</p>
+<p>There are a few ways to tell <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code> of your model sharding. The simplest way is to call <code class="docutils literal notranslate"><span class="pre">jax.lax.with_sharding_constraint</span></code> to constraint the so-to-be model with your predetermined model sharding.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Some smaller numbers so that we actually can run it</span>
+<span class="n">dim</span><span class="p">,</span> <span class="n">nlayers</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span> <span class="mi">2</span>
+<span class="n">abstract_model</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">eval_shape</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">init_state</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">))</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">make_mesh</span><span class="p">((</span><span class="n">jax</span><span class="o">.</span><span class="n">device_count</span><span class="p">(),</span> <span class="p">),</span> <span class="s1">&#39;model&#39;</span><span class="p">)</span>
+
+<span class="c1"># Generate sharding for each of your params manually, sharded along the last axis.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_sharding</span><span class="p">(</span><span class="n">abs_x</span><span class="p">):</span>
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">abs_x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">pspec</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">PartitionSpec</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">)</span>  <span class="c1"># kernel</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">pspec</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">PartitionSpec</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,)</span>       <span class="c1"># bias</span>
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">NamedSharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">pspec</span><span class="p">)</span>
+<span class="n">model_shardings</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">make_sharding</span><span class="p">,</span> <span class="n">abstract_model</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_shardings</span><span class="o">.</span><span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">kernel</span><span class="p">)</span>
+
+<span class="nd">@partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sharded_init</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">):</span>
+  <span class="n">model</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">with_sharding_constraint</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_shardings</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">sharded_init</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">)</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">visualize_array_sharding</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">kernel</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Param(
+  value=NamedSharding(mesh=Mesh(&#39;model&#39;: 8, axis_types=(Auto,)), spec=PartitionSpec(None, &#39;model&#39;), memory_kind=unpinned_host)
+)
+</pre></div>
+</div>
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">  CPU 0  </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">  CPU 1  </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">  CPU 2  </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">  CPU 3  </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">  CPU 4  </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">  CPU 5  </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">  CPU 6  </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">  CPU 7  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span><span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+</pre>
+</div></div>
+</div>
+<p>The example below are just to showcase how to do sharding in pure JAX API. Flax offers a small API to annotate the sharding when you define a parameter, so that you don’t have to write an arbitrary <code class="docutils literal notranslate"><span class="pre">make_sharding()</span></code> function at top level. Check out our <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/flax_gspmd.html">GSPMD guide</a> to learn more.</p>
+</section>
+<section id="transformations">
+<h2>Transformations<a class="headerlink" href="#transformations" title="Permalink to this heading">#</a></h2>
+<p>For Flax transforms and their relation with JAX transforms, refer to <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/transforms.html">Flax Transforms</a> doc. This should be a rarer use case now that Flax NNX modules are JAX pytrees.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="why.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Why Flax NNX?</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="guides_basic.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Basic Guides</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-jax">What is JAX?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-flax">What is Flax?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pytrees">Pytrees</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#traced-vs-static-data">Traced vs. static data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abstract-arrays">Abstract arrays</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distributed-computing">Distributed computing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transformations">Transformations</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

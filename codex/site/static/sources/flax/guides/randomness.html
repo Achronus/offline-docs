@@ -1,0 +1,1044 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Randomness</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/randomness';</script>
+    <link rel="icon" href="../_static/flax.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Save and load checkpoints" href="checkpointing.html" />
+    <link rel="prev" title="Filters" href="filters_guide.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/randomness.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../guides_basic.html">Basic Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filters_guide.html">Filters</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs_nnx/guides/randomness.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/guides/randomness.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Randomness</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Randomness</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rngs-rngstream-and-rngstate"><code class="docutils literal notranslate"><span class="pre">Rngs</span></code>, <code class="docutils literal notranslate"><span class="pre">RngStream</span></code>, and <code class="docutils literal notranslate"><span class="pre">RngState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-random-state-with-flax-modules">Using random state with flax Modules.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#default-prng-key-stream">Default PRNG key stream</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jax-random-shorthand-methods">jax.random shorthand methods</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#split-random-state">Split random state</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-random-state">Implicit Random State</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering-random-state">Filtering random state</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reseeding">Reseeding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#splitting-implicit-random-state">Splitting implicit random state</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transforming-implicit-state">Transforming implicit state</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="randomness">
+<h1>Randomness<a class="headerlink" href="#randomness" title="Permalink to this heading">#</a></h1>
+<p>Flax NNX uses the stateful <code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code> class to simplify Jax’s handling of random states. For example, the code below uses a <code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code> object to define a simple linear model with dropout:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">drop</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">))</span>
+
+<span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>  <span class="c1"># pass rngs to initialize parameters</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>  <span class="c1"># convenient jax.random methods</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>  <span class="c1"># pass rngs for dropout masks</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We always pass <code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code> objects to models at initialization (to initialize parameters). For models with nondeterministic outputs like the one above, we also pass <code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code> objects to the model’s <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method.</p>
+<p>The Flax NNX <a class="reference external" href="https://flax.readthedocs.io/en/latest/glossary.html#term-RNG-sequences">pseudorandom number generator (PRNG)</a> system has the following main characteristics:</p>
+<ul class="simple">
+<li><p>It is <strong>explicit</strong>.</p></li>
+<li><p>It is <strong>order-based</strong>.</p></li>
+<li><p>It uses <strong>dynamic counters</strong>.</p></li>
+</ul>
+<blockquote>
+<div><p><strong>Note:</strong> To learn more about random number generation in JAX, the <code class="docutils literal notranslate"><span class="pre">jax.random</span></code> API, and PRNG-generated sequences, check out this <a class="reference external" href="https://jax.readthedocs.io/en/latest/random-numbers.html">JAX PRNG tutorial</a>.</p>
+</div></blockquote>
+<section id="rngs-rngstream-and-rngstate">
+<h2><code class="docutils literal notranslate"><span class="pre">Rngs</span></code>, <code class="docutils literal notranslate"><span class="pre">RngStream</span></code>, and <code class="docutils literal notranslate"><span class="pre">RngState</span></code><a class="headerlink" href="#rngs-rngstream-and-rngstate" title="Permalink to this heading">#</a></h2>
+<p>In Flax NNX, the <code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code> type is the primary convenience API for managing the random state(s). Following Flax Linen’s footsteps, <code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code> have the ability to create multiple named PRNG key <a class="reference external" href="https://jax.readthedocs.io/en/latest/jep/263-prng.html">streams</a>, each with its own state, for the purpose of having tight control over randomness in the context of <a class="reference external" href="https://jax.readthedocs.io/en/latest/key-concepts.html#transformations">JAX transformations (transforms)</a>.</p>
+<p>Here are the main PRNG-related types in Flax NNX:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code></strong>: The main user interface. It defines a set of named <code class="docutils literal notranslate"><span class="pre">nnx.RngStream</span></code> objects.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nnx.RngStream</span></code></strong>: An object that can generate a stream of PRNG keys. It holds a root <code class="docutils literal notranslate"><span class="pre">key</span></code> and a <code class="docutils literal notranslate"><span class="pre">count</span></code> inside an <code class="docutils literal notranslate"><span class="pre">nnx.RngKey</span></code> and <code class="docutils literal notranslate"><span class="pre">nnx.RngCount</span></code> <code class="docutils literal notranslate"><span class="pre">nnx.Variable</span></code>s, respectively. When a new key is generated, the count is incremented.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nnx.RngState</span></code></strong>: The base type for all RNG-related states.</p>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nnx.RngKey</span></code></strong>: NNX Variable type for holding PRNG keys. It includes a <code class="docutils literal notranslate"><span class="pre">tag</span></code> attribute containing the name of the PRNG key stream.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nnx.RngCount</span></code></strong>: NNX Variable type for holding PRNG counts. It includes a <code class="docutils literal notranslate"><span class="pre">tag</span></code> attribute containing the PRNG key stream name.</p></li>
+</ul>
+</li>
+</ul>
+<p>To create an <code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code> object you can simply pass an integer seed or <code class="docutils literal notranslate"><span class="pre">jax.random.key</span></code> instance to any keyword argument of your choice in the constructor.</p>
+<p>Here’s an example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">nnx</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script> (()=>{ if (customElements.get('treescope-container') === undefined) { class TreescopeContainer extends HTMLElement { constructor() { super(); this.attachShadow({mode: "open"}); this.defns = {}; this.state = {}; } } customElements.define("treescope-container", TreescopeContainer); } if (customElements.get('treescope-run-here') === undefined) { class RunHere extends HTMLElement { constructor() { super() } connectedCallback() { const run = child => { const fn = new Function(child.textContent); child.textContent = ""; fn.call(this); this.remove(); }; const child = this.querySelector("script"); if (child) { run(child); } else { new MutationObserver(()=>{ run(this.querySelector("script")); }).observe(this, {childList: true}); } } } customElements.define("treescope-run-here", RunHere); } })(); </script> <treescope-container class="treescope_out_7481eaef4036405faf0b53b7fb6cff5c" style="display:block"></treescope-container> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_7481eaef4036405faf0b53b7fb6cff5c")) .filter((elt) => !elt.dataset.setup) )[0]; root.dataset.setup = 1; const msg = document.createElement("span"); msg.style = "color: #cccccc; font-family: monospace;"; msg.textContent = "(Loading...)"; root.state.loadingMsg = msg; root.shadowRoot.appendChild(msg); root.state.chain = new Promise((resolve, reject) => { const observer = new IntersectionObserver((entries) => { for (const entry of entries) { if (entry.isIntersecting) { resolve(); observer.disconnect(); return; } } }, {rootMargin: "1000px"}); window.setTimeout(() => { observer.observe(root); }, 0); }); root.state.deferring = false; const _insertNode = (node) => { for (let oldScript of node.querySelectorAll("script")) { let newScript = document.createElement("script"); newScript.type = oldScript.type; newScript.textContent = oldScript.textContent; oldScript.parentNode.replaceChild(newScript, oldScript); } if (root.state.loadingMsg) { root.state.loadingMsg.remove(); root.state.loadingMsg = null; } root.shadowRoot.appendChild(node); }; root.defns.insertContent = ((contentNode, compressed) => { if (compressed) { root.state.deferring = true; } if (root.state.deferring) { root.state.chain = (async () => { await root.state.chain; if (compressed) { const encoded = contentNode.textContent; const blob = new Blob([ Uint8Array.from(atob(encoded), (m) => m.codePointAt(0)) ]); const reader = blob.stream().pipeThrough( new DecompressionStream("deflate") ).pipeThrough( new TextDecoderStream("utf-8") ).getReader(); const parts = []; while (true) { const step = await reader.read(); if (step.done) { break; } parts.push(step.value); } const tpl = document.createElement('template'); tpl.innerHTML = parts.join(""); _insertNode(tpl.content); } else { _insertNode(contentNode.content); } })(); } else { _insertNode(contentNode.content); } }); </script></treescope-run-here><div style="display:none"> <script type="application/octet-stream" >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</script> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_7481eaef4036405faf0b53b7fb6cff5c")) .filter((elt) => !elt.dataset['step0']) )[0]; root.dataset['step0'] = 1; root.defns.insertContent( this.parentNode.querySelector('script[type="application/octet-stream"]'), true ); this.parentNode.remove(); </script></treescope-run-here> </div></div><div class="output text_html"><div style="display:none"> <script type="application/octet-stream" >eNrtVslu2zAQvfcrCAVIpSZRJFtyvEVAm7RALj20hx6CwKDIka2GJlWKTmMU+fcOJe+VswDNLT6YIufN8oZ8lIY8vyOlmQs4d3heFoLO+0QqCQ7J+bmTKT3ikIHWwEcpBHHQSnuctSCKeSttx1EUBFkn7nY5D0InGZYFlfhv4yU+UwLdmZpOQZrR7wnIEdwjgAPvS2VcP1OC01TASCoO/Qkt3UTQFESybRkZNR4LqHz6bALsFrjnkQ8e+UOqHH1yQKvfgDwMT+vsVSmECVqWlsZGOCyzzjLMZTEzxMwLJF/FTdW90+izKAGNdfpkeFo5b6epCdM01XDnNJkae7GDrGwIF7QorfFQmAGSqhu7i1vHOCANoPfYsqqe98lPeu9/1JrOG3FVsBVwCbmFuc2e6fnh2Axcb0/oJwLuLX6T5HhNcmdY7NUj1LdsOa5Jg6eVTXLBNchH7U5S9cR1vWPCq4Owzdkj6g40iiKX4/6764AEN3vK3B5QVcnwBdLqsTPWCWkYpWkcQdbuhlEnovysjcqKe1FvLa29x81WvdpkN1jymeXStFteU4NfWmQcQ9wF1uYB0KgXQxpkGV4HnW5wlvE0DBuLfJPem/T+j/TC15Ee7TCAkNIWCyFqsx4N41YXRRi1OmkPMvp60jMaoGSqgBM9kycT0PatxXReLIVBi0LkjJpcyVPFDJiTEn3o1EmYkiWiqB6DueIlOSfXzvPf08fEef7Nswl+8gbYBD/Z2JtBTYMrppUySMJM8tJHSt9w+hW173oDsqCKvVqAFnD/1wz0/DsIYEZp1/FX7RxZs/OP64XAA2CTLOY+swtVGqNngPiVRQMeGQY/cjNxt9xXQTNNx/Y+qeuZ2Uef4d4YuFxMvywQlsMS7eOOguQX9vyvAlu70sQVYEiO8YIBDsP15voC5NhMcPXoyH7yWFxtRPAqMk4/C7CPn+ZXGHzpfZ3fYALrU6qZZnCJytjbwwOrDIcckR33errVllU0P8t1ucxdMUOHtVXDFHVsm/CwvRONTfasUioJoEga9PEXo4O6zw==</script> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_7481eaef4036405faf0b53b7fb6cff5c")) .filter((elt) => !elt.dataset['step1']) )[0]; root.dataset['step1'] = 1; root.defns.insertContent( this.parentNode.querySelector('script[type="application/octet-stream"]'), true ); this.parentNode.remove(); </script></treescope-run-here> </div></div></div>
+</div>
+<p>Notice that the <code class="docutils literal notranslate"><span class="pre">key</span></code> and <code class="docutils literal notranslate"><span class="pre">count</span></code> <code class="docutils literal notranslate"><span class="pre">nnx.Variable</span></code>s contain the PRNG key stream name in a <code class="docutils literal notranslate"><span class="pre">tag</span></code> attribute. This is primarily used for filtering as we’ll see later.</p>
+<p>To generate new keys, you can access one of the streams and use its <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method with no arguments. This will return a new key by using <code class="docutils literal notranslate"><span class="pre">random.fold_in</span></code> with the current <code class="docutils literal notranslate"><span class="pre">key</span></code> and <code class="docutils literal notranslate"><span class="pre">count</span></code>. The <code class="docutils literal notranslate"><span class="pre">count</span></code> is then incremented so that subsequent calls will return new keys.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params_key</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">params</span><span class="p">()</span>
+<span class="n">dropout_key</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">dropout</span><span class="p">()</span>
+
+<span class="n">nnx</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script> (()=>{ if (customElements.get('treescope-container') === undefined) { class TreescopeContainer extends HTMLElement { constructor() { super(); this.attachShadow({mode: "open"}); this.defns = {}; this.state = {}; } } customElements.define("treescope-container", TreescopeContainer); } if (customElements.get('treescope-run-here') === undefined) { class RunHere extends HTMLElement { constructor() { super() } connectedCallback() { const run = child => { const fn = new Function(child.textContent); child.textContent = ""; fn.call(this); this.remove(); }; const child = this.querySelector("script"); if (child) { run(child); } else { new MutationObserver(()=>{ run(this.querySelector("script")); }).observe(this, {childList: true}); } } } customElements.define("treescope-run-here", RunHere); } })(); </script> <treescope-container class="treescope_out_2cab50b777614ca4857d5da1ed5df5a3" style="display:block"></treescope-container> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_2cab50b777614ca4857d5da1ed5df5a3")) .filter((elt) => !elt.dataset.setup) )[0]; root.dataset.setup = 1; const msg = document.createElement("span"); msg.style = "color: #cccccc; font-family: monospace;"; msg.textContent = "(Loading...)"; root.state.loadingMsg = msg; root.shadowRoot.appendChild(msg); root.state.chain = new Promise((resolve, reject) => { const observer = new IntersectionObserver((entries) => { for (const entry of entries) { if (entry.isIntersecting) { resolve(); observer.disconnect(); return; } } }, {rootMargin: "1000px"}); window.setTimeout(() => { observer.observe(root); }, 0); }); root.state.deferring = false; const _insertNode = (node) => { for (let oldScript of node.querySelectorAll("script")) { let newScript = document.createElement("script"); newScript.type = oldScript.type; newScript.textContent = oldScript.textContent; oldScript.parentNode.replaceChild(newScript, oldScript); } if (root.state.loadingMsg) { root.state.loadingMsg.remove(); root.state.loadingMsg = null; } root.shadowRoot.appendChild(node); }; root.defns.insertContent = ((contentNode, compressed) => { if (compressed) { root.state.deferring = true; } if (root.state.deferring) { root.state.chain = (async () => { await root.state.chain; if (compressed) { const encoded = contentNode.textContent; const blob = new Blob([ Uint8Array.from(atob(encoded), (m) => m.codePointAt(0)) ]); const reader = blob.stream().pipeThrough( new DecompressionStream("deflate") ).pipeThrough( new TextDecoderStream("utf-8") ).getReader(); const parts = []; while (true) { const step = await reader.read(); if (step.done) { break; } parts.push(step.value); } const tpl = document.createElement('template'); tpl.innerHTML = parts.join(""); _insertNode(tpl.content); } else { _insertNode(contentNode.content); } })(); } else { _insertNode(contentNode.content); } }); </script></treescope-run-here><div style="display:none"> <script type="application/octet-stream" >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</script> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_2cab50b777614ca4857d5da1ed5df5a3")) .filter((elt) => !elt.dataset['step0']) )[0]; root.dataset['step0'] = 1; root.defns.insertContent( this.parentNode.querySelector('script[type="application/octet-stream"]'), true ); this.parentNode.remove(); </script></treescope-run-here> </div></div><div class="output text_html"><div style="display:none"> <script type="application/octet-stream" >eNrtVstu2zAQvPcrCAVIpSZR6Ei2JdsR0CfQSw/toYcgMChyZathSJWi0xhF/71LyY84lZMUaG/xwRK1s7M7S47siShvSG2XEs49UdaVZMsRUVqBR0px7hXaTAUUYAyIKUtZf1CIOGW9JM5Tlg+SAmIe9Xma0D4feNmkrpjCb8eXhVxLTOf6+hqUnf6Yg5rCLQIEiJHS1g8LLQXLJUyVFjCas9rPJMtBZruRqdWzmYQmZ8TnwK9ABAF5FZCfpKkxIges+YzJr8lpW71phXDJ6trJuEOHbbZVJqWqFpbYZYXiG95c33qdOasWMNiWzyanTfJumVYwy3MDN15XqHMW95BNDOGSVbULHko7RlHtYO/jthwHpAP0EkfW9PMy+8Zuw9fGsGUnriHbANeQK1i66oVZHs7s2A/2UD9CuLf5uyJnW5H3Lqu9ekD6TqzEZ8riaeXzUgoD6sG4lzUz8f3gmIjmIOxqDoi+AYOmKNVs9OKCEnq5p83dC7oqm/yNtYoiYn0aJRRoHJ/FaZQPk4ilA0bTszSnW2vtPW6u680m+721nkWpbHQWdA34b5vs8WJ41i/i3mAYxwMa5YO+AEbxDpIk7aedTT5b79l6/8Z6vf9jPUppEgnGkrzP45iKJKWCFlExZL3hMO4l/8961gDUXFdwYhbqZA7G/WpxU1ZrY7CqkiVnttTqVHML9qTGHHbtZVyrGlHMzMB+FDU5Jxfe03+nj4n39DfPXfCjb4C74EcHezluZQjNjdYWRdh5WYco6TMuP6H3/WBMVlJxVivQCh5+X4BZfgEJ3Grje+FmnFMX9v5IfSvxALgiq3XI3YOmjDULQPwmYgCPDIevpZ37O+kb0sKwmXuftP0s3G3IcW8svFstP6wQTsMaHeKOghJv3fnfELu4NsSXYEmJfHSMl8l2c0MJambn+PToyP3lcbg2iOANMy7fS3C3b5YfkXydfVFeYgGXU+uF4fAOnbF3hgfOGR45IvfS2+XOWDZsYVGael27UYYJ26iBa/SxG8Kv3Z3oHHLgnNJYAE3S4Y/fVPG3MQ==</script> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_2cab50b777614ca4857d5da1ed5df5a3")) .filter((elt) => !elt.dataset['step1']) )[0]; root.dataset['step1'] = 1; root.defns.insertContent( this.parentNode.querySelector('script[type="application/octet-stream"]'), true ); this.parentNode.remove(); </script></treescope-run-here> </div></div></div>
+</div>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">key</span></code> attribute does not change when new PRNG keys are generated.</p>
+<section id="using-random-state-with-flax-modules">
+<h3>Using random state with flax Modules.<a class="headerlink" href="#using-random-state-with-flax-modules" title="Permalink to this heading">#</a></h3>
+<p>Almost all flax Modules require a random state for initialization. In a <code class="docutils literal notranslate"><span class="pre">Linear</span></code> layer, for example, we need to sample the weights and biases from the appropriate Normal distribution. Random state is provided using the <code class="docutils literal notranslate"><span class="pre">rngs</span></code> keyword argument at initialization.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Specifically, this will use the RngSteam <code class="docutils literal notranslate"><span class="pre">rngs.params</span></code> for weight initialization. The <code class="docutils literal notranslate"><span class="pre">params</span></code> stream is also used for initialization of <code class="docutils literal notranslate"><span class="pre">nnx.Conv</span></code>, <code class="docutils literal notranslate"><span class="pre">nnx.ConvTranspose</span></code>, and <code class="docutils literal notranslate"><span class="pre">nnx.Embed</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">nnx.Dropout</span></code> module also requires a random state, but it requires this state at <em>call</em> time rather than initialization. Once again, we can pass it random state using the <code class="docutils literal notranslate"><span class="pre">rngs</span></code> keyword argument.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dropout</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array([2., 0., 2., 2.], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">nnx.Dropout</span></code> layer will use the rng’s <code class="docutils literal notranslate"><span class="pre">dropout</span></code> stream. This also applies to Modules that use <code class="docutils literal notranslate"><span class="pre">Dropout</span></code> as a sub-Module, like <code class="docutils literal notranslate"><span class="pre">nnx.MultiHeadAttention</span></code>.</p>
+<p>To summarize, there are only two standard PRNG key stream names used by Flax NNX’s built-in layers, shown in the table below:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>PRNG key stream name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">params</span></code></p></td>
+<td><p>Used for parameter initialization</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dropout</span></code></p></td>
+<td><p>Used by <code class="docutils literal notranslate"><span class="pre">nnx.Dropout</span></code> to create dropout masks</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="default-prng-key-stream">
+<h3>Default PRNG key stream<a class="headerlink" href="#default-prng-key-stream" title="Permalink to this heading">#</a></h3>
+<p>One of the downsides of having named streams is that the user needs to know all the possible names that a model will use when creating the <code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code> object. While this could be solved with some documentation, Flax NNX provides a <code class="docutils literal notranslate"><span class="pre">default</span></code> stream that can be
+be used as a fallback when a stream is not found. To use the default PRNG key stream, you can simply pass an integer seed or <code class="docutils literal notranslate"><span class="pre">jax.random.key</span></code> as the first positional argument.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">key1</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">params</span><span class="p">()</span> <span class="c1"># Call params.</span>
+<span class="n">key2</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">dropout</span><span class="p">()</span> <span class="c1"># Fallback to the default stream.</span>
+<span class="n">key3</span> <span class="o">=</span> <span class="n">rngs</span><span class="p">()</span> <span class="c1"># Call the default stream directly.</span>
+
+<span class="n">nnx</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script> (()=>{ if (customElements.get('treescope-container') === undefined) { class TreescopeContainer extends HTMLElement { constructor() { super(); this.attachShadow({mode: "open"}); this.defns = {}; this.state = {}; } } customElements.define("treescope-container", TreescopeContainer); } if (customElements.get('treescope-run-here') === undefined) { class RunHere extends HTMLElement { constructor() { super() } connectedCallback() { const run = child => { const fn = new Function(child.textContent); child.textContent = ""; fn.call(this); this.remove(); }; const child = this.querySelector("script"); if (child) { run(child); } else { new MutationObserver(()=>{ run(this.querySelector("script")); }).observe(this, {childList: true}); } } } customElements.define("treescope-run-here", RunHere); } })(); </script> <treescope-container class="treescope_out_f734b9a6441c4de195fe2c734649e978" style="display:block"></treescope-container> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_f734b9a6441c4de195fe2c734649e978")) .filter((elt) => !elt.dataset.setup) )[0]; root.dataset.setup = 1; const msg = document.createElement("span"); msg.style = "color: #cccccc; font-family: monospace;"; msg.textContent = "(Loading...)"; root.state.loadingMsg = msg; root.shadowRoot.appendChild(msg); root.state.chain = new Promise((resolve, reject) => { const observer = new IntersectionObserver((entries) => { for (const entry of entries) { if (entry.isIntersecting) { resolve(); observer.disconnect(); return; } } }, {rootMargin: "1000px"}); window.setTimeout(() => { observer.observe(root); }, 0); }); root.state.deferring = false; const _insertNode = (node) => { for (let oldScript of node.querySelectorAll("script")) { let newScript = document.createElement("script"); newScript.type = oldScript.type; newScript.textContent = oldScript.textContent; oldScript.parentNode.replaceChild(newScript, oldScript); } if (root.state.loadingMsg) { root.state.loadingMsg.remove(); root.state.loadingMsg = null; } root.shadowRoot.appendChild(node); }; root.defns.insertContent = ((contentNode, compressed) => { if (compressed) { root.state.deferring = true; } if (root.state.deferring) { root.state.chain = (async () => { await root.state.chain; if (compressed) { const encoded = contentNode.textContent; const blob = new Blob([ Uint8Array.from(atob(encoded), (m) => m.codePointAt(0)) ]); const reader = blob.stream().pipeThrough( new DecompressionStream("deflate") ).pipeThrough( new TextDecoderStream("utf-8") ).getReader(); const parts = []; while (true) { const step = await reader.read(); if (step.done) { break; } parts.push(step.value); } const tpl = document.createElement('template'); tpl.innerHTML = parts.join(""); _insertNode(tpl.content); } else { _insertNode(contentNode.content); } })(); } else { _insertNode(contentNode.content); } }); </script></treescope-run-here><div style="display:none"> <script type="application/octet-stream" >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</script> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_f734b9a6441c4de195fe2c734649e978")) .filter((elt) => !elt.dataset['step0']) )[0]; root.dataset['step0'] = 1; root.defns.insertContent( this.parentNode.querySelector('script[type="application/octet-stream"]'), true ); this.parentNode.remove(); </script></treescope-run-here> </div></div><div class="output text_html"><div style="display:none"> <script type="application/octet-stream" >eNrtVslu2zAUvPcrCAVIpCZRvMi2YjsC2qQFcumhPfQQBAZFPtlqaFKl6DRCkX/vo2TLS+UsQHuLD5apN2+ZIUfymKf3JDeFgAuHp3kmaDEkUklwSMovnETpCYcEtAY+4a2406etkHWgF/Q7LGy1YtqB/mBAedwNQica5xmV+G3rRT5TAtOZms9BmsmvGcgJPCCAAx9KZVw/UYLTWMBEKg7DGc3dSNAYRLQdmRg1nQooc4ZsBuwOuOeR9x75TcoeQ3JAy8+IPI7Pqu7lKIQJmueWxkY5HLPqMk5ltjDEFBmSL+vG6sFpzFmOgMGqfTQ+K5O321SEaRxruHeaQo1a7CDLGMIFzXIbPBRmhKQqYXdx6xoHpAF0hJKV8xxFP+iD/0FrWjTiymI1cAW5g8J2T3RxODUj19tT+pmCe4ffJDldk9y5LPfqCepbsRTvSYOnlc1SwTXIJ+NOVGriut4J4eVB2ObsEXUPGk2Ryunw3U2LtG/3jLl9QVdF41dYK6FBTFGuOBwEAedBSLvdXhi2E2gNeu1esrbW3uNmp6432W2v+CxSabodr0ng1w4J530aMJ4kLOkHlLdjzoL+eQ+HZD0adpuHfLPem/X+jfVa/8d6/QEbdNthZ0BpGLQ7cdxnrJf0KITnbXzZha+2Xuel1jMaIGcqg1O9kKcz0PatxXSarYxBs0ykjJpUyTPFDJjTHHPo3ImYkjmiqJ6CueY5uSA3zsvf0yfEefmTZxP87BNgE/yssLejigZXTCtlkISZpbmPlL7i8gt63/VGZEkVtVqClnD/5wJ08Q0EMKO06/i1nBMbdv5KvRR4AGyT5dpn9kbZxugFIL6OaMAjw+B7ambuVnpdNNF0ap8n1TwL+9NnuDcGrpbLz0uE5bBC+7ijIPmlPf91YRtXmrgCDEmxXmuEl/F6c30BcmpmePf42P7lsbgqiOC6Mi4/CbA/PxbXWHyVfZPeYgObk6uFZnCFztir4YF1hkOOyU56tdySpa7mJ6nOV71LZpiwjmqYo4+tCI/bO9EosmedUloATdLgjz+BYLy0</script> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_f734b9a6441c4de195fe2c734649e978")) .filter((elt) => !elt.dataset['step1']) )[0]; root.dataset['step1'] = 1; root.defns.insertContent( this.parentNode.querySelector('script[type="application/octet-stream"]'), true ); this.parentNode.remove(); </script></treescope-run-here> </div></div></div>
+</div>
+<p>As shown above, a PRNG key from the <code class="docutils literal notranslate"><span class="pre">default</span></code> stream can also be generated by calling the <code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code> object itself.</p>
+<blockquote>
+<div><p><strong>Note</strong>
+<br> For large projects it is recommended to use named streams to avoid potential conflicts. For small projects or quick prototyping just using the <code class="docutils literal notranslate"><span class="pre">default</span></code> stream is a good choice.</p>
+</div></blockquote>
+</section>
+<section id="jax-random-shorthand-methods">
+<h3>jax.random shorthand methods<a class="headerlink" href="#jax-random-shorthand-methods" title="Permalink to this heading">#</a></h3>
+<p>Since a very common pattern is to sample a key and immediately pass it to a function from <code class="docutils literal notranslate"><span class="pre">jax.random</span></code>, both <code class="docutils literal notranslate"><span class="pre">Rngs</span></code> and <code class="docutils literal notranslate"><span class="pre">RngStream</span></code> expose the same functions as methods with the same signature except they don’t require a key:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># using jax.random</span>
+<span class="n">z1</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">rngs</span><span class="p">(),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">z2</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">bernoulli</span><span class="p">(</span><span class="n">rngs</span><span class="o">.</span><span class="n">params</span><span class="p">(),</span> <span class="mf">0.5</span><span class="p">,</span> <span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
+
+<span class="c1"># shorthand methods</span>
+<span class="n">z1</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>                 <span class="c1"># generates key from rngs.default</span>
+<span class="n">z2</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">bernoulli</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="p">(</span><span class="mi">10</span><span class="p">,))</span> <span class="c1"># generates key from rngs.params</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="split-random-state">
+<h2>Split random state<a class="headerlink" href="#split-random-state" title="Permalink to this heading">#</a></h2>
+<p>Say you want to train a model that uses dropout on a batch of data. You don’t want to use the same random state for every dropout mask in your batch.  Instead, you want to split the random state into separate pieces for each layer. This can be accomplished with the <code class="docutils literal notranslate"><span class="pre">split</span></code> method, as shown below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">drop</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span>  <span class="n">Model</span><span class="p">(</span><span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">model_forward</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dropout_rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">split_rngs</span> <span class="o">=</span> <span class="n">dropout_rngs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="p">(</span><span class="n">dropout_rngs</span><span class="p">,</span> <span class="n">split_rngs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Rngs( # RngState: 2 (12 B)
+   default=RngStream( # RngState: 2 (12 B)
+     tag=&#39;default&#39;,
+     key=RngKey( # 1 (8 B)
+       value=Array((), dtype=key&lt;fry&gt;) overlaying:
+       [0 1],
+       tag=&#39;default&#39;
+     ),
+     count=RngCount( # 1 (4 B)
+       value=Array(1, dtype=uint32),
+       tag=&#39;default&#39;
+     )
+   )
+ ),
+ Rngs( # RngState: 10 (60 B)
+   default=RngStream( # RngState: 10 (60 B)
+     tag=&#39;default&#39;,
+     key=RngKey( # 5 (40 B)
+       value=Array(shape=(5,), dtype=key&lt;fry&gt;),
+       tag=&#39;default&#39;
+     ),
+     count=RngCount( # 5 (20 B)
+       value=Array(shape=(5,), dtype=dtype(&#39;uint32&#39;)),
+       tag=&#39;default&#39;
+     )
+   )
+ ))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_forward</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)),</span> <span class="n">split_rngs</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(5, 10)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The output of <code class="docutils literal notranslate"><span class="pre">rng.split</span></code> is another <code class="docutils literal notranslate"><span class="pre">Rng</span></code> with keys and counts that have an expanded shape. In the example above, the <code class="docutils literal notranslate"><span class="pre">RngKey</span></code> and <code class="docutils literal notranslate"><span class="pre">RngCount</span></code> of <code class="docutils literal notranslate"><span class="pre">dropout_rngs</span></code> have shape <code class="docutils literal notranslate"><span class="pre">()</span></code>, but in <code class="docutils literal notranslate"><span class="pre">split_rngs</span></code> they have shape <code class="docutils literal notranslate"><span class="pre">(5,)</span></code>.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="implicit-random-state">
+<h1>Implicit Random State<a class="headerlink" href="#implicit-random-state" title="Permalink to this heading">#</a></h1>
+<p>So far, we have looked at passing random state directly to each Module when it gets called. But there’s another way to handle call-time randomness in flax: we can bundle the random state into the Module itself. This makes the random state is just another type of Module state. Using implicit random state requires passing the <code class="docutils literal notranslate"><span class="pre">rngs</span></code> keyward argument when initializing the module rather than when calling it. For example, here is how we might construct the simple <code class="docutils literal notranslate"><span class="pre">Module</span></code> we defined earlier using an implicit style.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">drop</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>y.shape = (1, 10)
+</pre></div>
+</div>
+</div>
+</div>
+<p>This implicit state handling style is less verbose than passing RNGs explicitly, and more closely resembles code in other deep learning frameworks like PyTorch. However, as we’ll see in the following sections, using implicit state makes it less obvious how to apply jax transformations to your Modules. With explicit state, you can usually use tranforms like <code class="docutils literal notranslate"><span class="pre">jax.vmap</span></code> directly. With implicit state, you’ll need to some extra tricks with <code class="docutils literal notranslate"><span class="pre">nnx.vmap</span></code> to make everything work. Because of this additional complexity, we recommend that new flax projects stick to the explicit style.</p>
+<section id="filtering-random-state">
+<h2>Filtering random state<a class="headerlink" href="#filtering-random-state" title="Permalink to this heading">#</a></h2>
+<p>Implicit random state can be manipulated using <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/filters_guide.html">Filters</a> just like any other type of state. It can be filtered using types (<code class="docutils literal notranslate"><span class="pre">nnx.RngState</span></code>, <code class="docutils literal notranslate"><span class="pre">nnx.RngKey</span></code>, <code class="docutils literal notranslate"><span class="pre">nnx.RngCount</span></code>) or using strings corresponding to the stream names (refer to <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/filters_guide.html#the-filter-dsl">the Flax NNX <code class="docutils literal notranslate"><span class="pre">Filter</span></code> DSL</a>). Here’s an example using <code class="docutils literal notranslate"><span class="pre">nnx.state</span></code> with various filters to select different substates of the <code class="docutils literal notranslate"><span class="pre">Rngs</span></code> inside a <code class="docutils literal notranslate"><span class="pre">Model</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">rng_state</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">RngState</span><span class="p">)</span> <span class="c1"># All random states.</span>
+<span class="n">key_state</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">RngKey</span><span class="p">)</span> <span class="c1"># Only PRNG keys.</span>
+<span class="n">count_state</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">RngCount</span><span class="p">)</span> <span class="c1"># Only counts.</span>
+<span class="n">rng_dropout_state</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;dropout&#39;</span><span class="p">)</span> <span class="c1"># Only `dropout`.</span>
+
+<span class="n">nnx</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">rng_dropout_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script> (()=>{ if (customElements.get('treescope-container') === undefined) { class TreescopeContainer extends HTMLElement { constructor() { super(); this.attachShadow({mode: "open"}); this.defns = {}; this.state = {}; } } customElements.define("treescope-container", TreescopeContainer); } if (customElements.get('treescope-run-here') === undefined) { class RunHere extends HTMLElement { constructor() { super() } connectedCallback() { const run = child => { const fn = new Function(child.textContent); child.textContent = ""; fn.call(this); this.remove(); }; const child = this.querySelector("script"); if (child) { run(child); } else { new MutationObserver(()=>{ run(this.querySelector("script")); }).observe(this, {childList: true}); } } } customElements.define("treescope-run-here", RunHere); } })(); </script> <treescope-container class="treescope_out_31b36638e29f4ccaa82cbcfaaf31d0c9" style="display:block"></treescope-container> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_31b36638e29f4ccaa82cbcfaaf31d0c9")) .filter((elt) => !elt.dataset.setup) )[0]; root.dataset.setup = 1; const msg = document.createElement("span"); msg.style = "color: #cccccc; font-family: monospace;"; msg.textContent = "(Loading...)"; root.state.loadingMsg = msg; root.shadowRoot.appendChild(msg); root.state.chain = new Promise((resolve, reject) => { const observer = new IntersectionObserver((entries) => { for (const entry of entries) { if (entry.isIntersecting) { resolve(); observer.disconnect(); return; } } }, {rootMargin: "1000px"}); window.setTimeout(() => { observer.observe(root); }, 0); }); root.state.deferring = false; const _insertNode = (node) => { for (let oldScript of node.querySelectorAll("script")) { let newScript = document.createElement("script"); newScript.type = oldScript.type; newScript.textContent = oldScript.textContent; oldScript.parentNode.replaceChild(newScript, oldScript); } if (root.state.loadingMsg) { root.state.loadingMsg.remove(); root.state.loadingMsg = null; } root.shadowRoot.appendChild(node); }; root.defns.insertContent = ((contentNode, compressed) => { if (compressed) { root.state.deferring = true; } if (root.state.deferring) { root.state.chain = (async () => { await root.state.chain; if (compressed) { const encoded = contentNode.textContent; const blob = new Blob([ Uint8Array.from(atob(encoded), (m) => m.codePointAt(0)) ]); const reader = blob.stream().pipeThrough( new DecompressionStream("deflate") ).pipeThrough( new TextDecoderStream("utf-8") ).getReader(); const parts = []; while (true) { const step = await reader.read(); if (step.done) { break; } parts.push(step.value); } const tpl = document.createElement('template'); tpl.innerHTML = parts.join(""); _insertNode(tpl.content); } else { _insertNode(contentNode.content); } })(); } else { _insertNode(contentNode.content); } }); </script></treescope-run-here><div style="display:none"> <script type="application/octet-stream" >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</script> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_31b36638e29f4ccaa82cbcfaaf31d0c9")) .filter((elt) => !elt.dataset['step0']) )[0]; root.dataset['step0'] = 1; root.defns.insertContent( this.parentNode.querySelector('script[type="application/octet-stream"]'), true ); this.parentNode.remove(); </script></treescope-run-here> </div></div><div class="output text_html"><div style="display:none"> <script type="application/octet-stream" >eNqVVEtT2zAQvvdXaMwM2AVMnMTk7ZkW2hkuPbSHHhgmo0ibWEWRXFmheDr8965sx2nAoTSHyNJ+++17p1w8kNwWEmYeF3kmaTEmSivwiOAzb6nNnMMSjAE+7zLK4mF3wJcD6NNed3QZjeIFdHudzmDUoR0vmeYZVdU/YZLm+cxjWiIHXSwMPHjJsbSTH/Qx/GAMLfzOGeG2yGC2Ecr2usHxyk6mFxXH9kD/kul/OBl1h4tL3h3EfDTsD6OIxrQTjYYMAcsRpXznpONLwso/ptdrUHb+KwU1h0cEcOBjpa0fLrXkdCFhrjSHcUpzP5F0ATLZl8ytXq0klDpjlgK7Bx4E5H1AfpPSxpgc0fI3IU8YXWl9L1N7dOhmZWUqVLaxpEyTV/Iu9KPXqlO7gMLKPGavVH6tIC2i1lw8Q5YyhEua5U7o6rot2QvcjuOItIBOMGWlPydJ0xqtuJKsAW4h91A460tTuPbxgwPU/yA86PzfQba0Z33UtXol9D2ZwDdlsVtZKiQ3oF6Ve0k1Ln6wnZf9mAOiH8DgUAi1Gr+7JXFn0I+jfj8m0TDuRZejwah/d8DxlmGzBiBnOoNzs1HnKRjXp8yIbNuFNMukYNQKrS40s2DPc9Shay9hWuWIomYF9obnZEZuvbevjzPivX2M7yaVMa6Z0dqiKZuKPETDX/H6BcfBDyakdggjqkE1PPy5AVN8AwnMauN7YRP03Im9F6pXEteNM1LfQ+YeSjPWbADxjcQALigG34VN/T31hnRp6MqNWOXPxn2GDDNo4bq+fq4RLoYtOsS8g+JXriUaYifXhvgSLBHI15ngMd2VIJSgVjbF19NTt4ocrhIiuGHG6ycJ7vNjcYPkW+1bcYcGnE6uN4bBNe7hgzk8cnvYI6fkmXp13UtLwxYuhcm3tsvIUGEnNbDG1nZJeNqvRGuSAzedZaNiK7d08R+WmG03</script> <treescope-run-here><script type="application/octet-stream"> const root = ( Array.from(document.getElementsByClassName( "treescope_out_31b36638e29f4ccaa82cbcfaaf31d0c9")) .filter((elt) => !elt.dataset['step1']) )[0]; root.dataset['step1'] = 1; root.defns.insertContent( this.parentNode.querySelector('script[type="application/octet-stream"]'), true ); this.parentNode.remove(); </script></treescope-run-here> </div></div></div>
+</div>
+</section>
+<section id="reseeding">
+<h2>Reseeding<a class="headerlink" href="#reseeding" title="Permalink to this heading">#</a></h2>
+<p>In Haiku and Flax Linen, random states are explicitly passed to <code class="docutils literal notranslate"><span class="pre">Module.apply</span></code> each time before you call the model. This makes it easy to control the randomness of the model when needed (for example, for reproducibility).</p>
+<p>In Flax NNX, there are two ways to approach this:</p>
+<ol class="arabic simple">
+<li><p>By passing an <code class="docutils literal notranslate"><span class="pre">nnx.Rngs</span></code> object through the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> stack manually, as shown previously.</p></li>
+<li><p>By using <code class="docutils literal notranslate"><span class="pre">nnx.reseed</span></code> to set the random state of the model to a specific configuration. This option is less intrusive and can be used even if the model is not designed to enable manual control over the random state.</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">nnx.reseed</span></code> is a function that accepts an arbitrary graph node (this includes <a class="reference external" href="https://jax.readthedocs.io/en/latest/working-with-pytrees.html#working-with-pytrees">pytrees</a> of <code class="docutils literal notranslate"><span class="pre">nnx.Module</span></code>s) and some keyword arguments containing the new seed or key value for the <code class="docutils literal notranslate"><span class="pre">nnx.RngStream</span></code>s specified by the argument names. <code class="docutils literal notranslate"><span class="pre">nnx.reseed</span></code> will then traverse the graph and update the random state of the matching <code class="docutils literal notranslate"><span class="pre">nnx.RngStream</span></code>s, this includes both setting the <code class="docutils literal notranslate"><span class="pre">key</span></code> to a possibly new value and resetting the <code class="docutils literal notranslate"><span class="pre">count</span></code> to zero.</p>
+<p>Here’s an example of how to use <code class="docutils literal notranslate"><span class="pre">nnx.reseed</span></code> to reset the random state of the <code class="docutils literal notranslate"><span class="pre">nnx.Dropout</span></code> layer and verify that the computation is identical to the first time the model was called:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+
+<span class="n">y1</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">nnx</span><span class="o">.</span><span class="n">reseed</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># reset dropout RngState</span>
+<span class="n">y3</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">jnp</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span> <span class="c1"># different</span>
+<span class="k">assert</span> <span class="n">jnp</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y3</span><span class="p">)</span>     <span class="c1"># same</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="splitting-implicit-random-state">
+<h2>Splitting implicit random state<a class="headerlink" href="#splitting-implicit-random-state" title="Permalink to this heading">#</a></h2>
+<p>We saw above how to use <code class="docutils literal notranslate"><span class="pre">rng.split</span></code> when passing explicit random state through <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/transforms.html">Flax NNX transforms</a> like <code class="docutils literal notranslate"><span class="pre">nnx.vmap</span></code> or <code class="docutils literal notranslate"><span class="pre">nnx.pmap</span></code>. We can do the same for implicit random state using the <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/view.html">View</a> <code class="docutils literal notranslate"><span class="pre">nnx.with_rngs</span></code>. Consider the example below, which generates a batch of samples from the nondeterministic model we defined above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">in_axes</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">prefix</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;dropout&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">with_rngs</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">only</span><span class="o">=</span><span class="s1">&#39;dropout&#39;</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="n">in_axes</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sample_from_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sample_from_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(5, 1, 10)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The call to the decorator <code class="docutils literal notranslate"><span class="pre">with_rngs</span></code> with the <code class="docutils literal notranslate"><span class="pre">split</span></code> argument makes <code class="docutils literal notranslate"><span class="pre">sample_from_model</span></code> split the rngs of the <code class="docutils literal notranslate"><span class="pre">model</span></code> argument before the function body is applied.
+Within the function body, we tell <code class="docutils literal notranslate"><span class="pre">vmap</span></code> to only map over values within Variables tagged as “dropout” using <code class="docutils literal notranslate"><span class="pre">nnx.prefix</span></code> to specify the <code class="docutils literal notranslate"><span class="pre">in_axes</span></code>.</p>
+</section>
+<section id="transforming-implicit-state">
+<h2>Transforming implicit state<a class="headerlink" href="#transforming-implicit-state" title="Permalink to this heading">#</a></h2>
+<p>In the previous section, we showed how to use <code class="docutils literal notranslate"><span class="pre">nnx.vmap</span></code> with a module that contained implicit random state. But we can use other <code class="docutils literal notranslate"><span class="pre">nnx</span></code> transformations too! Remember: implicit random state isn’t different from any other type of Model state, and this applies to Flax NNX transforms too. This means you can use the Flax NNX state handling APIs of each transform to get the results you want. For a more involved example, let’s explore how to implement recurrent dropout on an <code class="docutils literal notranslate"><span class="pre">RNNCell</span></code> using <code class="docutils literal notranslate"><span class="pre">nnx.scan</span></code>.</p>
+<p>We’ll start by constructing the <code class="docutils literal notranslate"><span class="pre">RNNCell</span></code> class:</p>
+<ul class="simple">
+<li><p>First, create an <code class="docutils literal notranslate"><span class="pre">nnx.Dropout</span></code> layer that will sample PRNG keys from a custom <code class="docutils literal notranslate"><span class="pre">recurrent_dropout</span></code> stream.</p></li>
+<li><p>Apply dropout (<code class="docutils literal notranslate"><span class="pre">drop</span></code>) to the hidden state <code class="docutils literal notranslate"><span class="pre">h</span></code> of the <code class="docutils literal notranslate"><span class="pre">RNNCell</span></code>.</p></li>
+<li><p>Then, define an <code class="docutils literal notranslate"><span class="pre">initial_state</span></code> function to create the initial state of the <code class="docutils literal notranslate"><span class="pre">RNNCell</span></code>.</p></li>
+<li><p>Finally, instantiate <code class="docutils literal notranslate"><span class="pre">RNNCell</span></code>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Count</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Variable</span><span class="p">):</span> <span class="k">pass</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RNNCell</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">din</span><span class="p">,</span> <span class="n">dout</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dout</span> <span class="o">+</span> <span class="n">din</span><span class="p">,</span> <span class="n">dout</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">drop</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rng_collection</span><span class="o">=</span><span class="s1">&#39;recurrent_dropout&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dout</span> <span class="o">=</span> <span class="n">dout</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">Count</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">uint32</span><span class="p">))</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">]:</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="c1"># Recurrent dropout.</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">h</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">y</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">initial_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dout</span><span class="p">))</span>
+
+<span class="n">cell</span> <span class="o">=</span> <span class="n">RNNCell</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">recurrent_dropout</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, use <code class="docutils literal notranslate"><span class="pre">nnx.scan</span></code> over an <code class="docutils literal notranslate"><span class="pre">unroll</span></code> function to implement the <code class="docutils literal notranslate"><span class="pre">rnn_forward</span></code> operation:</p>
+<ul class="simple">
+<li><p>The key ingredient of recurrent dropout is to apply the same dropout mask across all time steps. To achieve this, you must use <code class="docutils literal notranslate"><span class="pre">nnx.with_rngs</span></code> with the <code class="docutils literal notranslate"><span class="pre">broadcast</span></code> argument. This will broadcast the <code class="docutils literal notranslate"><span class="pre">recurrent_dropout</span></code> stream within the implicit state. To specify that this state should traversed in the call to <code class="docutils literal notranslate"><span class="pre">nnx.scan</span></code>, you can use a call to <code class="docutils literal notranslate"><span class="pre">nnx.prefix</span></code> to generate the appropriate <code class="docutils literal notranslate"><span class="pre">in_axes</span></code> argument.</p></li>
+<li><p>The hidden state <code class="docutils literal notranslate"><span class="pre">h</span></code> will be the <code class="docutils literal notranslate"><span class="pre">nnx.scan</span></code>’s <code class="docutils literal notranslate"><span class="pre">Carry</span></code> variable, and the sequence <code class="docutils literal notranslate"><span class="pre">x</span></code> will be <code class="docutils literal notranslate"><span class="pre">scan</span></code>ned over its axis <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@nnx</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rnn_forward</span><span class="p">(</span><span class="n">cell</span><span class="p">:</span> <span class="n">RNNCell</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">initial_state</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># Broadcast the &#39;recurrent_dropout&#39; PRNG state to have the same mask on every step.</span>
+    <span class="n">broadcast_cell</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">with_rngs</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">broadcast</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">in_axes</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">prefix</span><span class="p">(</span><span class="n">broadcast_cell</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;recurrent_dropout&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nd">@nnx</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="n">in_axes</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Carry</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">out_axes</span><span class="o">=</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Carry</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unroll</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">]:</span>
+        <span class="n">h</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">h</span><span class="p">,</span> <span class="n">y</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">unroll</span><span class="p">(</span><span class="n">broadcast_cell</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">rnn_forward</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cell</span><span class="o">.</span><span class="n">count</span><span class="p">[</span><span class="o">...</span><span class="p">]</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>y.shape = (4, 20, 16)
+cell.count[...] = Array(20, dtype=uint32)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="filters_guide.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Filters</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="checkpointing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Save and load checkpoints</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Randomness</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rngs-rngstream-and-rngstate"><code class="docutils literal notranslate"><span class="pre">Rngs</span></code>, <code class="docutils literal notranslate"><span class="pre">RngStream</span></code>, and <code class="docutils literal notranslate"><span class="pre">RngState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-random-state-with-flax-modules">Using random state with flax Modules.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#default-prng-key-stream">Default PRNG key stream</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jax-random-shorthand-methods">jax.random shorthand methods</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#split-random-state">Split random state</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-random-state">Implicit Random State</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering-random-state">Filtering random state</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reseeding">Reseeding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#splitting-implicit-random-state">Splitting implicit random state</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transforming-implicit-state">Transforming implicit state</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

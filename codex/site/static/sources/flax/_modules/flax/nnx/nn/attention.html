@@ -1,0 +1,1372 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>flax.nnx.nn.attention</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/flax/nnx/nn/attention';</script>
+    <link rel="icon" href="../../../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_modules/flax/nnx/nn/attention.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for flax.nnx.nn.attention</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2024 The Flax Authors.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;Attention core modules for Flax.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">MappingProxyType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">lax</span><span class="p">,</span> <span class="n">random</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx</span><span class="w"> </span><span class="kn">import</span> <span class="n">rnglib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.module</span><span class="w"> </span><span class="kn">import</span> <span class="n">Module</span><span class="p">,</span> <span class="n">first_from</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">initializers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">dtypes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.nn.linear</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+  <span class="n">LinearGeneral</span><span class="p">,</span>
+  <span class="n">default_kernel_init</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.nn.normalization</span><span class="w"> </span><span class="kn">import</span> <span class="n">LayerNorm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+  <span class="n">Dtype</span><span class="p">,</span>
+  <span class="n">PromoteDtypeFn</span><span class="p">,</span>
+  <span class="n">Shape</span><span class="p">,</span>
+  <span class="n">Initializer</span><span class="p">,</span>
+  <span class="n">PrecisionLike</span><span class="p">,</span>
+  <span class="n">DotGeneralT</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">Array</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dot_product_attention_weights</span><span class="p">(</span>
+  <span class="n">query</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+  <span class="n">key</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+  <span class="n">bias</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">mask</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">broadcast_dropout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="n">dropout_rng</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">dropout_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+  <span class="n">deterministic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+  <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">precision</span><span class="p">:</span> <span class="n">PrecisionLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">module</span><span class="p">:</span> <span class="n">Module</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">promote_dtype</span><span class="p">:</span> <span class="n">PromoteDtypeFn</span> <span class="o">=</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+  <span class="n">is_causal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Computes dot-product attention weights given query and key.</span>
+
+<span class="sd">  Used by :func:`dot_product_attention`, which is what you&#39;ll most likely use.</span>
+<span class="sd">  But if you want access to the attention weights for introspection, then</span>
+<span class="sd">  you can directly call this function and call einsum yourself.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    query: queries for calculating attention with shape of `[batch..., q_length,</span>
+<span class="sd">      num_heads, qk_depth_per_head]`.</span>
+<span class="sd">    key: keys for calculating attention with shape of `[batch..., kv_length,</span>
+<span class="sd">      num_heads, qk_depth_per_head]`.</span>
+<span class="sd">    bias: bias for the attention weights. This should be broadcastable to the</span>
+<span class="sd">      shape `[batch..., num_heads, q_length, kv_length]`. This can be used for</span>
+<span class="sd">      incorporating causal masks, padding masks, proximity bias, etc.</span>
+<span class="sd">    mask: mask for the attention weights. This should be broadcastable to the</span>
+<span class="sd">      shape `[batch..., num_heads, q_length, kv_length]`. This can be used for</span>
+<span class="sd">      incorporating causal masks. Attention weights are masked out if their</span>
+<span class="sd">      corresponding mask value is `False`.</span>
+<span class="sd">    broadcast_dropout: bool: use a broadcasted dropout along batch dims.</span>
+<span class="sd">    dropout_rng: JAX PRNGKey: to be used for dropout</span>
+<span class="sd">    dropout_rate: dropout rate</span>
+<span class="sd">    deterministic: bool, deterministic or not (to apply dropout)</span>
+<span class="sd">    dtype: the dtype of the computation (default: infer from inputs and params)</span>
+<span class="sd">    precision: numerical precision of the computation see `jax.lax.Precision`</span>
+<span class="sd">      for details.</span>
+<span class="sd">    module: the Module that will sow the attention weights into the</span>
+<span class="sd">      ``nnx.Intermediate`` collection. If ``module`` is None, the attention</span>
+<span class="sd">      weights will not be sowed.</span>
+<span class="sd">    promote_dtype: function to promote the dtype of the arrays to the desired</span>
+<span class="sd">      dtype. The function should accept a tuple of ``(query, key)`` and a ``dtype``</span>
+<span class="sd">      keyword argument, and return a tuple of arrays with the promoted dtype.</span>
+<span class="sd">    is_causal: If true, causal attention will be applied. Note, some</span>
+<span class="sd">      implementations like xla will generate a mask tensor and apply it to</span>
+<span class="sd">      the logits to mask out the non-causal parts of the attention matrix,</span>
+<span class="sd">      but other implementations like cudnn will avoid computing the</span>
+<span class="sd">      non-causal regions, providing speedups.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    Output of shape `[batch..., num_heads, q_length, kv_length]`.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">query</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="n">promote_dtype</span><span class="p">((</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>  <span class="c1"># type: ignore[bad-unpacking]</span>
+  <span class="n">dtype</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">dtype</span>
+
+  <span class="k">assert</span> <span class="n">query</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="n">key</span><span class="o">.</span><span class="n">ndim</span><span class="p">,</span> <span class="s1">&#39;q, k must have same rank.&#39;</span>
+  <span class="k">assert</span> <span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;q, k batch dims must match.&#39;</span>
+  <span class="k">assert</span> <span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;q, k depths must match.&#39;</span>
+
+  <span class="c1"># check if we need to broadcast Key heads to match Query heads</span>
+  <span class="n">is_gqa</span> <span class="o">=</span> <span class="kc">False</span>
+  <span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="n">key</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]:</span>
+    <span class="n">q_heads</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">k_heads</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">q_heads</span> <span class="o">%</span> <span class="n">k_heads</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Query heads (</span><span class="si">{</span><span class="n">q_heads</span><span class="si">}</span><span class="s2">) must be multiple of &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Key heads (</span><span class="si">{</span><span class="n">k_heads</span><span class="si">}</span><span class="s2">) for Grouped Query Attention.&quot;</span>
+      <span class="p">)</span>
+
+    <span class="n">n_rep</span> <span class="o">=</span> <span class="n">q_heads</span> <span class="o">//</span> <span class="n">k_heads</span>
+    <span class="n">is_gqa</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="c1"># Reshape Query: [..., Q, H_k * n_rep, D] -&gt; [..., Q, H_k, n_rep, D]</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">k_heads</span><span class="p">,</span> <span class="n">n_rep</span><span class="p">,</span> <span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="c1"># Expand Key: [..., K, H_k, D] -&gt; [..., K, H_k, 1, D]</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Contract: q(h)gd, k(h)1d -&gt; hgqk (h=H_k, g=n_rep)</span>
+    <span class="n">einsum_str</span> <span class="o">=</span> <span class="s1">&#39;...qhgd,...kh1d-&gt;...hgqk&#39;</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">q_heads</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">einsum_str</span> <span class="o">=</span> <span class="s1">&#39;...qhd,...khd-&gt;...hqk&#39;</span>
+    <span class="k">assert</span> <span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;q, k num_heads must match.&#39;</span>
+
+  <span class="c1"># calculate attention matrix</span>
+  <span class="n">depth</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="n">query</span> <span class="o">=</span> <span class="n">query</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">depth</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+
+  <span class="c1"># attn weight shape is (batch..., num_heads, q_length, kv_length)</span>
+  <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="n">einsum_str</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">is_gqa</span><span class="p">:</span>
+      <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">q_heads</span><span class="p">,</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+  <span class="c1"># apply attention bias: masking, dropout, proximity bias, etc.</span>
+  <span class="k">if</span> <span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">attn_weights</span> <span class="o">+</span> <span class="n">bias</span>
+  <span class="c1"># apply attention mask</span>
+  <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">is_causal</span><span class="p">:</span>
+    <span class="n">big_neg</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">min</span>
+    <span class="n">masks</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">is_causal</span><span class="p">:</span>
+      <span class="n">T</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+      <span class="n">causal_mask</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="n">S</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+      <span class="n">target_shape</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span> <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span>
+      <span class="n">masks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">causal_mask</span><span class="p">,</span> <span class="n">target_shape</span><span class="p">))</span>
+    <span class="n">combined_mask</span> <span class="o">=</span> <span class="n">combine_masks</span><span class="p">(</span><span class="o">*</span><span class="n">masks</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">combined_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">combined_mask</span><span class="p">,</span> <span class="n">attn_weights</span><span class="p">,</span> <span class="n">big_neg</span><span class="p">)</span>
+
+  <span class="c1"># normalize the attention weights</span>
+  <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">attn_weights</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">module</span><span class="p">:</span>
+    <span class="n">module</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="s1">&#39;attention_weights&#39;</span><span class="p">,</span> <span class="n">attn_weights</span><span class="p">)</span>
+
+  <span class="c1"># apply attention dropout</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">deterministic</span> <span class="ow">and</span> <span class="n">dropout_rate</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+    <span class="n">keep_prob</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">dropout_rate</span>
+    <span class="c1"># use original key.ndim because we might have expanded key dim</span>
+    <span class="n">ndim_base</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">is_gqa</span> <span class="k">else</span> <span class="n">key</span><span class="o">.</span><span class="n">ndim</span>
+
+    <span class="k">if</span> <span class="n">broadcast_dropout</span><span class="p">:</span>
+      <span class="c1"># dropout is broadcast across the batch + head dimensions</span>
+      <span class="n">dropout_shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">ndim_base</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+      <span class="n">keep</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bernoulli</span><span class="p">(</span><span class="n">dropout_rng</span><span class="p">,</span> <span class="n">keep_prob</span><span class="p">,</span> <span class="n">dropout_shape</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">keep</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bernoulli</span><span class="p">(</span><span class="n">dropout_rng</span><span class="p">,</span> <span class="n">keep_prob</span><span class="p">,</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">multiplier</span> <span class="o">=</span> <span class="n">keep</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">keep_prob</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">attn_weights</span> <span class="o">*</span> <span class="n">multiplier</span>
+
+  <span class="k">return</span> <span class="n">attn_weights</span>
+
+
+<div class="viewcode-block" id="dot_product_attention"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/attention.html#flax.nnx.dot_product_attention">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">dot_product_attention</span><span class="p">(</span>
+  <span class="n">query</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+  <span class="n">key</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+  <span class="n">value</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+  <span class="n">bias</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">mask</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">broadcast_dropout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="n">dropout_rng</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">dropout_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+  <span class="n">deterministic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+  <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">precision</span><span class="p">:</span> <span class="n">PrecisionLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">module</span><span class="p">:</span> <span class="n">Module</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="n">promote_dtype</span><span class="p">:</span> <span class="n">PromoteDtypeFn</span> <span class="o">=</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+  <span class="n">is_causal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Computes dot-product attention given query, key, and value.</span>
+
+<span class="sd">  This is the core function for applying attention based on</span>
+<span class="sd">  https://arxiv.org/abs/1706.03762. It calculates the attention weights given</span>
+<span class="sd">  query and key and combines the values using the attention weights.</span>
+
+<span class="sd">  Will use the more optimized `jax.nn.dot_product_attention` if dropout is</span>
+<span class="sd">  not activated and `module=None`.</span>
+
+<span class="sd">  .. note::</span>
+<span class="sd">    ``query``, ``key``, ``value`` needn&#39;t have any batch dimensions.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    query: queries for calculating attention with shape of ``[batch..., q_length,</span>
+<span class="sd">      num_heads, qk_depth_per_head]``.</span>
+<span class="sd">    key: keys for calculating attention with shape of ``[batch..., kv_length,</span>
+<span class="sd">      num_heads, qk_depth_per_head]``.</span>
+<span class="sd">    value: values to be used in attention with shape of ``[batch..., kv_length,</span>
+<span class="sd">      num_heads, v_depth_per_head]``.</span>
+<span class="sd">    bias: bias for the attention weights. This should be broadcastable to the</span>
+<span class="sd">      shape `[batch..., num_heads, q_length, kv_length]`. This can be used for</span>
+<span class="sd">      incorporating causal masks, padding masks, proximity bias, etc.</span>
+<span class="sd">    mask: mask for the attention weights. This should be broadcastable to the</span>
+<span class="sd">      shape `[batch..., num_heads, q_length, kv_length]`. This can be used for</span>
+<span class="sd">      incorporating causal masks. Attention weights are masked out if their</span>
+<span class="sd">      corresponding mask value is `False`.</span>
+<span class="sd">    broadcast_dropout: bool: use a broadcasted dropout along batch dims.</span>
+<span class="sd">    dropout_rng: JAX PRNGKey: to be used for dropout</span>
+<span class="sd">    dropout_rate: dropout rate</span>
+<span class="sd">    deterministic: bool, deterministic or not (to apply dropout)</span>
+<span class="sd">    dtype: the dtype of the computation (default: infer from inputs)</span>
+<span class="sd">    precision: numerical precision of the computation see `jax.lax.Precision`</span>
+<span class="sd">      for details.</span>
+<span class="sd">    module: the Module that will sow the attention weights into the</span>
+<span class="sd">      ``nnx.Intermediate`` collection. If ``module`` is None, the attention</span>
+<span class="sd">      weights will not be sowed.</span>
+<span class="sd">    promote_dtype: function to promote the dtype of the arrays to the desired</span>
+<span class="sd">      dtype. The function should accept a tuple of ``(query, key, value)`` and a</span>
+<span class="sd">      ``dtype`` keyword argument, and return a tuple of arrays with the promoted</span>
+<span class="sd">      dtype.</span>
+<span class="sd">    is_causal: If true, causal attention will be applied. Note, some</span>
+<span class="sd">      implementations like xla will generate a mask tensor and apply it to</span>
+<span class="sd">      the logits to mask out the non-causal parts of the attention matrix,</span>
+<span class="sd">      but other implementations like cudnn will avoid computing the</span>
+<span class="sd">      non-causal regions, providing speedups.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    Output of shape `[batch..., q_length, num_heads, v_depth_per_head]`.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">promote_dtype</span><span class="p">((</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>  <span class="c1"># type: ignore[bad-unpacking]</span>
+  <span class="n">dtype</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">dtype</span>
+
+  <span class="k">assert</span> <span class="n">key</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="n">query</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="n">value</span><span class="o">.</span><span class="n">ndim</span><span class="p">,</span> <span class="s1">&#39;q, k, v must have same rank.&#39;</span>
+  <span class="k">assert</span> <span class="p">(</span>
+    <span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+  <span class="p">),</span> <span class="s1">&#39;q, k, v batch dims must match.&#39;</span>
+  <span class="k">assert</span> <span class="n">key</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;k, v lengths must match.&#39;</span>
+
+  <span class="c1"># Criteria that invoke the more optimized dot product attention</span>
+  <span class="k">if</span> <span class="n">dropout_rate</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># make sure qkv batch are compressed to one dim</span>
+    <span class="n">query_shape</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+      <span class="k">def</span><span class="w"> </span><span class="nf">reshape_4d</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]),</span> <span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]))</span>
+      <span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="n">reshape_4d</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">mask</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">dot_product_attention</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">is_causal</span><span class="o">=</span><span class="n">is_causal</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+      <span class="n">out</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">query_shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+  <span class="c1"># compute attention weights</span>
+  <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">dot_product_attention_weights</span><span class="p">(</span>
+    <span class="n">query</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">,</span>
+    <span class="n">bias</span><span class="p">,</span>
+    <span class="n">mask</span><span class="p">,</span>
+    <span class="n">broadcast_dropout</span><span class="p">,</span>
+    <span class="n">dropout_rng</span><span class="p">,</span>
+    <span class="n">dropout_rate</span><span class="p">,</span>
+    <span class="n">deterministic</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">,</span>
+    <span class="n">precision</span><span class="p">,</span>
+    <span class="n">module</span><span class="p">,</span>
+    <span class="n">promote_dtype</span><span class="p">,</span>
+    <span class="n">is_causal</span><span class="p">,</span>
+  <span class="p">)</span>
+
+  <span class="c1"># return weighted sum over values for each query position</span>
+  <span class="c1"># check if need to broadcast Value heads to match Query heads (GQA)</span>
+  <span class="k">if</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">!=</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]:</span>
+      <span class="n">q_heads</span> <span class="o">=</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+      <span class="n">v_heads</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+      <span class="k">if</span> <span class="n">q_heads</span> <span class="o">%</span> <span class="n">v_heads</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Query heads (</span><span class="si">{</span><span class="n">q_heads</span><span class="si">}</span><span class="s2">) must be multiple of Value heads (</span><span class="si">{</span><span class="n">v_heads</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+      <span class="n">n_rep</span> <span class="o">=</span> <span class="n">q_heads</span> <span class="o">//</span> <span class="n">v_heads</span>
+      <span class="c1"># Reshape weights: [..., H_v, n_rep, Q, K]</span>
+      <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">v_heads</span><span class="p">,</span> <span class="n">n_rep</span><span class="p">)</span> <span class="o">+</span> <span class="n">attn_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span>
+      <span class="c1"># Expand Value: [..., K, H_v, 1, D]</span>
+      <span class="n">value</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
+      <span class="c1"># Contract: hgqk, kh1d -&gt; qhgd (h=H_v, g=n_rep)</span>
+      <span class="n">out</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;...hgqk,...kh1d-&gt;...qhgd&#39;</span><span class="p">,</span> <span class="n">attn_weights</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">)</span>
+      <span class="c1"># Flatten: [..., Q, H_q, D]</span>
+      <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">q_heads</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+  <span class="k">else</span><span class="p">:</span>
+      <span class="n">out</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+        <span class="s1">&#39;...hqk,...khd-&gt;...qhd&#39;</span><span class="p">,</span> <span class="n">attn_weights</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="n">precision</span>
+      <span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="MultiHeadAttention"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/attention.html#flax.nnx.MultiHeadAttention">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">MultiHeadAttention</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Multi-head attention.</span>
+
+<span class="sd">  Example usage::</span>
+
+<span class="sd">    &gt;&gt;&gt; from flax import nnx</span>
+<span class="sd">    &gt;&gt;&gt; import jax</span>
+
+<span class="sd">    &gt;&gt;&gt; layer = nnx.MultiHeadAttention(num_heads=8, in_features=5, qkv_features=16,</span>
+<span class="sd">    ...                                decode=False, rngs=nnx.Rngs(0))</span>
+<span class="sd">    &gt;&gt;&gt; key1, key2, key3 = jax.random.split(jax.random.key(0), 3)</span>
+<span class="sd">    &gt;&gt;&gt; shape = (4, 3, 2, 5)</span>
+<span class="sd">    &gt;&gt;&gt; q, k, v = (</span>
+<span class="sd">    ...   jax.random.uniform(key1, shape),</span>
+<span class="sd">    ...   jax.random.uniform(key2, shape),</span>
+<span class="sd">    ...   jax.random.uniform(key3, shape),</span>
+<span class="sd">    ... )</span>
+
+<span class="sd">    &gt;&gt;&gt; # different inputs for inputs_q, inputs_k and inputs_v</span>
+<span class="sd">    &gt;&gt;&gt; out = layer(q, k, v)</span>
+<span class="sd">    &gt;&gt;&gt; # equivalent output when inferring v</span>
+<span class="sd">    &gt;&gt;&gt; assert (layer(q, k) == layer(q, k, k)).all()</span>
+<span class="sd">    &gt;&gt;&gt; # equivalent output when inferring k and v</span>
+<span class="sd">    &gt;&gt;&gt; assert (layer(q) == layer(q, q)).all()</span>
+<span class="sd">    &gt;&gt;&gt; assert (layer(q) == layer(q, q, q)).all()</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    num_heads: number of attention heads. Features (i.e. inputs_q.shape[-1])</span>
+<span class="sd">      should be divisible by the number of heads.</span>
+<span class="sd">    in_features: int or tuple with number of input features.</span>
+<span class="sd">    qkv_features: dimension of the key, query, and value.</span>
+<span class="sd">    out_features: dimension of the last projection.</span>
+<span class="sd">    in_kv_features: number of input features for computing key and value.</span>
+<span class="sd">    num_kv_heads: number of key and value heads. If None, it defaults to</span>
+<span class="sd">      ``num_heads``. If set to a value smaller than ``num_heads``, Grouped Query</span>
+<span class="sd">      Attention (GQA) is used. ``num_heads`` must be divisible by</span>
+<span class="sd">      ``num_kv_heads``.</span>
+<span class="sd">    dtype: the dtype of the computation (default: infer from inputs and params)</span>
+<span class="sd">    param_dtype: the dtype passed to parameter initializers (default: float32)</span>
+<span class="sd">    broadcast_dropout: bool: use a broadcasted dropout along batch dims.</span>
+<span class="sd">    dropout_rate: dropout rate</span>
+<span class="sd">    deterministic: if false, the attention weight is masked randomly using</span>
+<span class="sd">      dropout, whereas if true, the attention weights are deterministic.</span>
+<span class="sd">    precision: numerical precision of the computation see `jax.lax.Precision`</span>
+<span class="sd">      for details.</span>
+<span class="sd">    kernel_init: initializer for the kernel of the Dense layers.</span>
+<span class="sd">    out_kernel_init: optional initializer for the kernel of the output Dense layer,</span>
+<span class="sd">      if None, the kernel_init is used.</span>
+<span class="sd">    bias_init: initializer for the bias of the Dense layers.</span>
+<span class="sd">    out_bias_init: optional initializer for the bias of the output Dense layer,</span>
+<span class="sd">      if None, the bias_init is used.</span>
+<span class="sd">    use_bias: bool: whether pointwise QKVO dense transforms use bias.</span>
+<span class="sd">    attention_fn: dot_product_attention or compatible function. Accepts query,</span>
+<span class="sd">      key, value, and returns output of shape `[bs, dim1, dim2, ..., dimN,,</span>
+<span class="sd">      num_heads, value_channels]``</span>
+<span class="sd">    decode: whether to prepare and use an autoregressive cache.</span>
+<span class="sd">    normalize_qk: should QK normalization be applied (arxiv.org/abs/2302.05442).</span>
+<span class="sd">    qkv_promote_dtype: function to promote the dtype of all input array arguments</span>
+<span class="sd">      (including Variables accessed through ``self``) to the desired dtype for the</span>
+<span class="sd">      query, key, and value LinearGeneral submodules.</span>
+<span class="sd">    out_promote_dtype: function to promote the dtype of all input array arguments</span>
+<span class="sd">      (including Variables accessed through ``self``) to the desired dtype for the</span>
+<span class="sd">      output LinearGeneral submodule.</span>
+<span class="sd">    ln_promote_dtype: function to promote the dtype of all input array arguments</span>
+<span class="sd">      (including Variables accessed through ``self``) to the desired dtype for the</span>
+<span class="sd">      LayerNorm submodules (query_ln and key_ln) when normalize_qk=True.</span>
+<span class="sd">    rngs: rng key.</span>
+<span class="sd">    keep_rngs: whether to store the input rngs as attribute (i.e. `self.rngs = rngs`)</span>
+<span class="sd">      (default: True). If rngs is stored, we should split the module as</span>
+<span class="sd">      `graphdef, params, nondiff = nnx.split(module, nnx.Param, ...)` where `nondiff`</span>
+<span class="sd">      contains RNG object associated with stored `self.rngs`.</span>
+<span class="sd">    kernel_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">      the Dense layers.</span>
+<span class="sd">    out_kernel_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">      the output Dense layers. If None, the kernel_metadata is used.</span>
+<span class="sd">    bias_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">      the bias of the Dense layers.</span>
+<span class="sd">    out_bias_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">      the bias of the output Dense layers. If None, the bias_metadata is used.</span>
+<span class="sd">    query_ln_scale_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">      the scale of the query layer norm layer.</span>
+<span class="sd">    key_ln_scale_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">      the scale of the key layer norm layer.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">num_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">in_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">qkv_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">out_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">num_kv_heads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">in_kv_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">param_dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">broadcast_dropout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">dropout_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">deterministic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">precision</span><span class="p">:</span> <span class="n">PrecisionLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">kernel_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">default_kernel_init</span><span class="p">,</span>
+    <span class="n">out_kernel_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">bias_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">(),</span>
+    <span class="n">out_bias_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">use_bias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">attention_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Array</span><span class="p">]</span> <span class="o">=</span> <span class="n">dot_product_attention</span><span class="p">,</span>
+    <span class="n">decode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">normalize_qk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">qkv_promote_dtype</span><span class="p">:</span> <span class="n">PromoteDtypeFn</span> <span class="o">=</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+    <span class="n">out_promote_dtype</span><span class="p">:</span> <span class="n">PromoteDtypeFn</span> <span class="o">=</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+    <span class="n">ln_promote_dtype</span><span class="p">:</span> <span class="n">PromoteDtypeFn</span> <span class="o">=</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+    <span class="c1"># Deprecated, will be removed.</span>
+    <span class="n">qkv_dot_general</span><span class="p">:</span> <span class="n">DotGeneralT</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">out_dot_general</span><span class="p">:</span> <span class="n">DotGeneralT</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">qkv_dot_general_cls</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">out_dot_general_cls</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">,</span>
+    <span class="n">keep_rngs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">kernel_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">out_kernel_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">bias_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">out_bias_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">query_ln_scale_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">key_ln_scale_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+  <span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span> <span class="o">=</span> <span class="n">num_heads</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">in_features</span> <span class="o">=</span> <span class="n">in_features</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">qkv_features</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="n">qkv_features</span> <span class="k">if</span> <span class="n">qkv_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">in_features</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">out_features</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="n">out_features</span> <span class="k">if</span> <span class="n">out_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">in_features</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">in_kv_features</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="n">in_kv_features</span> <span class="k">if</span> <span class="n">in_kv_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">in_features</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">num_kv_heads</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">num_kv_heads</span> <span class="k">if</span> <span class="n">num_kv_heads</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">num_heads</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_kv_heads</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;num_heads (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="si">}</span><span class="s2">) must be divisible by &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;num_kv_heads (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_kv_heads</span><span class="si">}</span><span class="s2">).&quot;</span>
+        <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span> <span class="o">=</span> <span class="n">param_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">broadcast_dropout</span> <span class="o">=</span> <span class="n">broadcast_dropout</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dropout_rate</span> <span class="o">=</span> <span class="n">dropout_rate</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="n">deterministic</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="n">precision</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">use_bias</span> <span class="o">=</span> <span class="n">use_bias</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">attention_fn</span> <span class="o">=</span> <span class="n">attention_fn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">decode</span> <span class="o">=</span> <span class="n">decode</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">normalize_qk</span> <span class="o">=</span> <span class="n">normalize_qk</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">qkv_promote_dtype</span> <span class="o">=</span> <span class="n">qkv_promote_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">out_promote_dtype</span> <span class="o">=</span> <span class="n">out_promote_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ln_promote_dtype</span> <span class="o">=</span> <span class="n">ln_promote_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">qkv_dot_general</span> <span class="o">=</span> <span class="n">qkv_dot_general</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">out_dot_general</span> <span class="o">=</span> <span class="n">out_dot_general</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">qkv_dot_general_cls</span> <span class="o">=</span> <span class="n">qkv_dot_general_cls</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">out_dot_general_cls</span> <span class="o">=</span> <span class="n">out_dot_general_cls</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qkv_features</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;Memory dimension (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">qkv_features</span><span class="si">}</span><span class="s1">) must be divisible by &#39;</span>
+        <span class="sa">f</span><span class="s2">&quot;&#39;num_heads&#39; heads (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="si">}</span><span class="s2">).&quot;</span>
+      <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qkv_features</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span>
+
+    <span class="n">linear_general</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+      <span class="n">LinearGeneral</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+      <span class="n">kernel_init</span><span class="o">=</span><span class="n">kernel_init</span><span class="p">,</span>
+      <span class="n">bias_init</span><span class="o">=</span><span class="n">bias_init</span><span class="p">,</span>
+      <span class="n">use_bias</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_bias</span><span class="p">,</span>
+      <span class="n">precision</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">,</span>
+      <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qkv_promote_dtype</span><span class="p">,</span>
+      <span class="n">dot_general</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qkv_dot_general</span><span class="p">,</span>
+      <span class="n">dot_general_cls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">qkv_dot_general_cls</span><span class="p">,</span>
+      <span class="n">kernel_metadata</span><span class="o">=</span><span class="n">kernel_metadata</span><span class="p">,</span>
+      <span class="n">bias_metadata</span><span class="o">=</span><span class="n">bias_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># project inputs_q to multi-headed q/k/v</span>
+    <span class="c1"># dimensions are then [batch..., length, n_heads, n_features_per_head]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">linear_general</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span>
+        <span class="n">out_features</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">),</span>
+        <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">linear_general</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_kv_features</span><span class="p">,</span>
+        <span class="n">out_features</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_kv_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">),</span>
+        <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">linear_general</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_kv_features</span><span class="p">,</span>
+        <span class="n">out_features</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_kv_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">),</span>
+        <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">query_ln</span><span class="p">:</span> <span class="n">LayerNorm</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">key_ln</span><span class="p">:</span> <span class="n">LayerNorm</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_qk</span><span class="p">:</span>
+      <span class="c1"># Normalizing query and key projections stabilizes training with higher</span>
+      <span class="c1"># LR. See ViT-22B paper http://arxiv.org/abs/2302.05442 for analysis.</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">query_ln</span> <span class="o">=</span> <span class="n">LayerNorm</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+        <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ln_promote_dtype</span><span class="p">,</span>
+        <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+        <span class="n">scale_metadata</span><span class="o">=</span><span class="n">query_ln_scale_metadata</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">key_ln</span> <span class="o">=</span> <span class="n">LayerNorm</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+        <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ln_promote_dtype</span><span class="p">,</span>
+        <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+        <span class="n">scale_metadata</span><span class="o">=</span><span class="n">key_ln_scale_metadata</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">query_ln</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">key_ln</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">LinearGeneral</span><span class="p">(</span>
+      <span class="n">in_features</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">),</span>
+      <span class="n">out_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_features</span><span class="p">,</span>
+      <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+      <span class="n">kernel_init</span><span class="o">=</span><span class="n">out_kernel_init</span> <span class="ow">or</span> <span class="n">kernel_init</span><span class="p">,</span>
+      <span class="n">bias_init</span><span class="o">=</span><span class="n">out_bias_init</span> <span class="ow">or</span> <span class="n">bias_init</span><span class="p">,</span>
+      <span class="n">use_bias</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_bias</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+      <span class="n">precision</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">,</span>
+      <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_promote_dtype</span><span class="p">,</span>
+      <span class="n">dot_general</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_dot_general</span><span class="p">,</span>
+      <span class="n">dot_general_cls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_dot_general_cls</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">kernel_metadata</span><span class="o">=</span><span class="n">out_kernel_metadata</span> <span class="ow">or</span> <span class="n">kernel_metadata</span><span class="p">,</span>
+      <span class="n">bias_metadata</span><span class="o">=</span><span class="n">out_bias_metadata</span> <span class="ow">or</span> <span class="n">bias_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">dropout</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span> <span class="k">if</span> <span class="n">keep_rngs</span> <span class="ow">and</span> <span class="n">dropout_rate</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">cached_key</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Cache</span><span class="p">[</span><span class="n">Array</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cached_value</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Cache</span><span class="p">[</span><span class="n">Array</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cache_index</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Cache</span><span class="p">[</span><span class="n">Array</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MultiHeadAttention.__call__"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/attention.html#flax.nnx.MultiHeadAttention.__call__">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">inputs_q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="n">inputs_k</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">inputs_v</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">mask</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">deterministic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">sow_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">decode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">is_causal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">out_sharding</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">qkv_sharding</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies multi-head dot product attention on the input data.</span>
+
+<span class="sd">    Projects the inputs into multi-headed query, key, and value vectors,</span>
+<span class="sd">    applies dot-product attention and project the results to an output vector.</span>
+
+<span class="sd">    If both inputs_k and inputs_v are None, they will both copy the value of</span>
+<span class="sd">    inputs_q (self attention).</span>
+<span class="sd">    If only inputs_v is None, it will copy the value of inputs_k.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      inputs_q: input queries of shape `[batch_sizes..., length, features]`.</span>
+<span class="sd">      inputs_k: key of shape `[batch_sizes..., length, features]`. If None,</span>
+<span class="sd">        inputs_k will copy the value of inputs_q.</span>
+<span class="sd">      inputs_v: values of shape `[batch_sizes..., length, features]`. If None,</span>
+<span class="sd">        inputs_v will copy the value of inputs_k.</span>
+<span class="sd">      mask: attention mask of shape `[batch_sizes..., num_heads, query_length,</span>
+<span class="sd">        key/value_length]`. Attention weights are masked out if their</span>
+<span class="sd">        corresponding mask value is `False`.</span>
+<span class="sd">      deterministic: if false, the attention weight is masked randomly using</span>
+<span class="sd">        dropout, whereas if true, the attention weights are deterministic. The</span>
+<span class="sd">        ``deterministic`` flag passed into the call method will take precedence</span>
+<span class="sd">        over the ``deterministic`` flag passed into the constructor.</span>
+<span class="sd">      rngs: rng key. The rng key passed into the call method will take</span>
+<span class="sd">        precedence over the rng key passed into the constructor.</span>
+<span class="sd">      sow_weights: if ``True``, the attention weights are sowed into the</span>
+<span class="sd">        &#39;intermediates&#39; collection.</span>
+<span class="sd">      decode: whether to prepare and use an autoregressive cache. The ``decode``</span>
+<span class="sd">        flag passed into the call method will take precedence over the ``decode``</span>
+<span class="sd">        flag passed into the constructor.</span>
+<span class="sd">      is_causal: whether to overlay a causal attention mask. Passed as an argument to the</span>
+<span class="sd">        underlying attention funcion.</span>
+<span class="sd">      out_sharding: Optional sharding specification to pass to</span>
+<span class="sd">        the output linear layer for the output arrays.</span>
+<span class="sd">      qkv_sharding: Optional sharding specification to pass to</span>
+<span class="sd">        the QKV linear layers for the output arrays.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      output of shape `[batch_sizes..., length, features]`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">dropout</span>
+
+    <span class="k">if</span> <span class="n">inputs_k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">inputs_v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+          <span class="s1">&#39;`inputs_k` cannot be None if `inputs_v` is not None. &#39;</span>
+          <span class="s1">&#39;To have both `inputs_k` and `inputs_v` be the same value, pass in the &#39;</span>
+          <span class="s1">&#39;value to `inputs_k` and leave `inputs_v` as None.&#39;</span>
+        <span class="p">)</span>
+      <span class="n">inputs_k</span> <span class="o">=</span> <span class="n">inputs_q</span>
+    <span class="k">if</span> <span class="n">inputs_v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">inputs_v</span> <span class="o">=</span> <span class="n">inputs_k</span>
+
+    <span class="k">if</span> <span class="n">inputs_q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_features</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;Incompatible input dimension, got </span><span class="si">{</span><span class="n">inputs_q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1"> &#39;</span>
+        <span class="sa">f</span><span class="s1">&#39;but module expects </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">in_features</span><span class="si">}</span><span class="s1">.&#39;</span>
+      <span class="p">)</span>
+
+    <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">inputs_q</span><span class="p">,</span> <span class="n">out_sharding</span><span class="o">=</span><span class="n">qkv_sharding</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="n">inputs_k</span><span class="p">,</span> <span class="n">out_sharding</span><span class="o">=</span><span class="n">qkv_sharding</span><span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">inputs_v</span><span class="p">,</span> <span class="n">out_sharding</span><span class="o">=</span><span class="n">qkv_sharding</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_qk</span><span class="p">:</span>
+      <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_ln</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_ln</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+      <span class="c1"># Normalizing query and key projections stabilizes training with higher</span>
+      <span class="c1"># LR. See ViT-22B paper http://arxiv.org/abs/2302.05442 for analysis.</span>
+      <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_ln</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+      <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_ln</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="c1"># During fast autoregressive decoding, we feed one position at a time,</span>
+    <span class="c1"># and cache the keys and values step by step.</span>
+    <span class="n">decode</span> <span class="o">=</span> <span class="n">first_from</span><span class="p">(</span>
+      <span class="n">decode</span><span class="p">,</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">,</span>
+      <span class="n">error_msg</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;No `decode` argument was provided to MultiHeadAttention</span>
+<span class="s2">        as either a __call__ argument, class attribute, or nnx.flag.&quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">decode</span><span class="p">:</span>
+      <span class="k">if</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cached_key</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_value</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_index</span> <span class="ow">is</span> <span class="kc">None</span>
+      <span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+          <span class="s1">&#39;Autoregressive cache not initialized, call ``init_cache`` first.&#39;</span>
+        <span class="p">)</span>
+      <span class="p">(</span>
+        <span class="o">*</span><span class="n">batch_dims</span><span class="p">,</span>
+        <span class="n">max_length</span><span class="p">,</span>
+        <span class="n">num_kv_heads</span><span class="p">,</span>
+        <span class="n">depth_per_head</span><span class="p">,</span>
+      <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_key</span><span class="o">.</span><span class="n">shape</span>
+      <span class="c1"># shape check of cached keys against key input</span>
+      <span class="n">expected_shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">batch_dims</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_kv_heads</span><span class="p">,</span> <span class="n">depth_per_head</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">expected_shape</span> <span class="o">!=</span> <span class="n">key</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+          <span class="s1">&#39;Autoregressive cache shape error, &#39;</span>
+          <span class="sa">f</span><span class="s1">&#39;expected key shape </span><span class="si">{</span><span class="n">expected_shape</span><span class="si">}</span><span class="s1"> instead got </span><span class="si">{</span><span class="n">key</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">.&#39;</span>
+        <span class="p">)</span>
+      <span class="c1"># update key, value caches with our new 1d spatial slices</span>
+      <span class="n">cur_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_index</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+      <span class="n">zero</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">lax</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">cur_index</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
+      <span class="n">indices</span> <span class="o">=</span> <span class="p">(</span><span class="n">zero</span><span class="p">,)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_dims</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">cur_index</span><span class="p">,</span> <span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">)</span>
+      <span class="n">key</span> <span class="o">=</span> <span class="n">lax</span><span class="o">.</span><span class="n">dynamic_update_slice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cached_key</span><span class="p">[</span><span class="o">...</span><span class="p">],</span> <span class="n">key</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+      <span class="n">value</span> <span class="o">=</span> <span class="n">lax</span><span class="o">.</span><span class="n">dynamic_update_slice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cached_value</span><span class="p">[</span><span class="o">...</span><span class="p">],</span> <span class="n">value</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">cached_key</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">cached_value</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">cache_index</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="c1"># causal mask for cached decoder self-attention:</span>
+      <span class="c1"># our single query position should only attend to those key</span>
+      <span class="c1"># positions that have already been generated and cached,</span>
+      <span class="c1"># not the remaining zero elements.</span>
+      <span class="n">mask</span> <span class="o">=</span> <span class="n">combine_masks</span><span class="p">(</span>
+        <span class="n">mask</span><span class="p">,</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+          <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">max_length</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">cur_index</span><span class="p">,</span>
+          <span class="nb">tuple</span><span class="p">(</span><span class="n">batch_dims</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span><span class="p">),</span>
+        <span class="p">),</span>
+      <span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">dropout_rate</span> <span class="o">&gt;</span> <span class="mf">0.0</span>
+    <span class="p">):</span>  <span class="c1"># Require `deterministic` only if using dropout.</span>
+      <span class="n">deterministic</span> <span class="o">=</span> <span class="n">first_from</span><span class="p">(</span>
+        <span class="n">deterministic</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deterministic</span><span class="p">,</span>
+        <span class="n">error_msg</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;No `deterministic` argument was provided to MultiHeadAttention</span>
+<span class="s2">          as either a __call__ argument, class attribute, or nnx.flag.&quot;&quot;&quot;</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">deterministic</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;&#39;rngs&#39; must be provided to __call__ method if &quot;</span>
+            <span class="s2">&quot;MultiHeadAttention instance is defined with keep_rngs=False.&quot;</span>
+          <span class="p">)</span>
+        <span class="n">dropout_rng</span> <span class="o">=</span> <span class="n">rngs</span><span class="p">()</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">dropout_rng</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="n">dropout_rng</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># apply attention</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attention_fn</span><span class="p">(</span>
+      <span class="n">query</span><span class="p">,</span>
+      <span class="n">key</span><span class="p">,</span>
+      <span class="n">value</span><span class="p">,</span>
+      <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span>
+      <span class="n">dropout_rng</span><span class="o">=</span><span class="n">dropout_rng</span><span class="p">,</span>
+      <span class="n">dropout_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout_rate</span><span class="p">,</span>
+      <span class="n">broadcast_dropout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">broadcast_dropout</span><span class="p">,</span>
+      <span class="n">deterministic</span><span class="o">=</span><span class="n">deterministic</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">precision</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">,</span>
+      <span class="n">module</span><span class="o">=</span><span class="bp">self</span> <span class="k">if</span> <span class="n">sow_weights</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">is_causal</span><span class="o">=</span><span class="n">is_causal</span>
+    <span class="p">)</span>
+    <span class="c1"># back to the original inputs dimensions</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out_sharding</span><span class="o">=</span><span class="n">out_sharding</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="MultiHeadAttention.init_cache"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/attention.html#flax.nnx.MultiHeadAttention.init_cache">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="nf">init_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">:</span> <span class="n">Shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initializes cache for fast autoregressive decoding. When</span>
+<span class="sd">    ``decode=True``, this method must be called first before performing</span>
+<span class="sd">    forward inference. When in decode mode, only one token must be passed</span>
+<span class="sd">    at a time.</span>
+
+<span class="sd">    Example usage::</span>
+
+<span class="sd">      &gt;&gt;&gt; from flax import nnx</span>
+<span class="sd">      &gt;&gt;&gt; import jax.numpy as jnp</span>
+<span class="sd">      ...</span>
+<span class="sd">      &gt;&gt;&gt; batch_size = 5</span>
+<span class="sd">      &gt;&gt;&gt; embed_dim = 3</span>
+<span class="sd">      &gt;&gt;&gt; x = jnp.ones((batch_size, 1, embed_dim)) # single token</span>
+<span class="sd">      ...</span>
+<span class="sd">      &gt;&gt;&gt; model_nnx = nnx.MultiHeadAttention(</span>
+<span class="sd">      ...   num_heads=2,</span>
+<span class="sd">      ...   in_features=3,</span>
+<span class="sd">      ...   qkv_features=6,</span>
+<span class="sd">      ...   out_features=6,</span>
+<span class="sd">      ...   decode=True,</span>
+<span class="sd">      ...   rngs=nnx.Rngs(42),</span>
+<span class="sd">      ... )</span>
+<span class="sd">      ...</span>
+<span class="sd">      &gt;&gt;&gt; # out_nnx = model_nnx(x)  &lt;-- throws an error because cache isn&#39;t initialized</span>
+<span class="sd">      ...</span>
+<span class="sd">      &gt;&gt;&gt; model_nnx.init_cache(x.shape)</span>
+<span class="sd">      &gt;&gt;&gt; out_nnx = model_nnx(x)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cache_shape</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">input_shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_kv_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cached_key</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Cache</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">cache_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cached_value</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Cache</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">cache_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cache_index</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Cache</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="MultiHeadAttention.set_view"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/attention.html#flax.nnx.MultiHeadAttention.set_view">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="nf">set_view</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">deterministic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">decode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">Shape</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class method used by ``nnx.view``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      train: if True, the module is set to training mode.</span>
+<span class="sd">      deterministic: if True, the module is set to deterministic mode.</span>
+<span class="sd">      decode: if True, the module is set to decode mode.</span>
+<span class="sd">      batch_size: the batch size to use for the cache.</span>
+<span class="sd">      max_length: the max length to use for the cache.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">deterministic</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="n">deterministic</span>
+
+    <span class="k">if</span> <span class="n">decode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">decode</span> <span class="o">=</span> <span class="n">decode</span>
+      <span class="k">if</span> <span class="p">(</span>
+          <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;cached_key&#39;</span><span class="p">)</span>
+          <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;cached_value&#39;</span><span class="p">)</span>
+          <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;cache_index&#39;</span><span class="p">)</span>
+      <span class="p">):</span>
+        <span class="k">if</span> <span class="n">batch_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+              <span class="s2">&quot;&#39;batch_size&#39; must be provided when initializing cache.&quot;</span>
+          <span class="p">)</span>
+        <span class="k">if</span> <span class="n">max_length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+              <span class="s2">&quot;&#39;max_length&#39; must be provided when initializing cache.&quot;</span>
+          <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+          <span class="n">batch_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,)</span>
+
+        <span class="c1"># initialize cache</span>
+        <span class="n">cache_shape</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">max_length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_kv_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cached_key</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Cache</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">cache_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cached_value</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Cache</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">cache_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache_index</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Cache</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span></div></div>
+
+
+<span class="c1"># mask-making utility functions</span>
+
+
+<div class="viewcode-block" id="make_attention_mask"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/attention.html#flax.nnx.make_attention_mask">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">make_attention_mask</span><span class="p">(</span>
+  <span class="n">query_input</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+  <span class="n">key_input</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+  <span class="n">pairwise_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">multiply</span><span class="p">,</span>
+  <span class="n">extra_batch_dims</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Mask-making helper for attention weights.</span>
+
+<span class="sd">  In case of 1d inputs (i.e., `[batch..., len_q]`, `[batch..., len_kv]`, the</span>
+<span class="sd">  attention weights will be `[batch..., heads, len_q, len_kv]` and this</span>
+<span class="sd">  function will produce `[batch..., 1, len_q, len_kv]`.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    query_input: a batched, flat input of query_length size</span>
+<span class="sd">    key_input: a batched, flat input of key_length size</span>
+<span class="sd">    pairwise_fn: broadcasting elementwise comparison function</span>
+<span class="sd">    extra_batch_dims: number of extra batch dims to add singleton axes for, none</span>
+<span class="sd">      by default</span>
+<span class="sd">    dtype: mask return dtype</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    A `[batch..., 1, len_q, len_kv]` shaped mask for 1d attention.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">mask</span> <span class="o">=</span> <span class="n">pairwise_fn</span><span class="p">(</span>
+    <span class="n">jnp</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">query_input</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">key_input</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="n">mask</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">3</span><span class="p">)</span>
+  <span class="n">mask</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">extra_batch_dims</span><span class="p">)))</span>
+  <span class="k">return</span> <span class="n">mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="make_causal_mask"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/attention.html#flax.nnx.make_causal_mask">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">make_causal_mask</span><span class="p">(</span>
+  <span class="n">x</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">extra_batch_dims</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Make a causal mask for self-attention.</span>
+
+<span class="sd">  In case of 1d inputs (i.e., `[batch..., len]`, the self-attention weights</span>
+<span class="sd">  will be `[batch..., heads, len, len]` and this function will produce a</span>
+<span class="sd">  causal mask of shape `[batch..., 1, len, len]`.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    x: input array of shape `[batch..., len]`</span>
+<span class="sd">    extra_batch_dims: number of batch dims to add singleton axes for, none by</span>
+<span class="sd">      default</span>
+<span class="sd">    dtype: mask return dtype</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    A `[batch..., 1, len, len]` shaped causal mask for 1d attention.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">idxs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">make_attention_mask</span><span class="p">(</span>
+    <span class="n">idxs</span><span class="p">,</span>
+    <span class="n">idxs</span><span class="p">,</span>
+    <span class="n">jnp</span><span class="o">.</span><span class="n">greater_equal</span><span class="p">,</span>
+    <span class="n">extra_batch_dims</span><span class="o">=</span><span class="n">extra_batch_dims</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+  <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="combine_masks"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/attention.html#flax.nnx.combine_masks">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">combine_masks</span><span class="p">(</span>
+  <span class="o">*</span><span class="n">masks</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Combine attention masks.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    *masks: set of attention mask arguments to combine, some can be None.</span>
+<span class="sd">    dtype: dtype for the returned mask.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    Combined mask, reduced by logical and, returns None if no masks given.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">masks_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">masks</span> <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">masks_list</span><span class="p">:</span>
+    <span class="k">return</span> <span class="kc">None</span>
+  <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+    <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="n">masks_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ndim</span><span class="p">,</span> <span class="n">masks_list</span><span class="p">)</span>
+  <span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;masks must have same rank: </span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span><span class="w"> </span><span class="n">x</span><span class="p">:</span><span class="w"> </span><span class="n">x</span><span class="o">.</span><span class="n">ndim</span><span class="p">,</span><span class="w"> </span><span class="n">masks_list</span><span class="p">))</span><span class="si">}</span><span class="s1">&#39;</span>
+  <span class="n">mask</span><span class="p">,</span> <span class="o">*</span><span class="n">other_masks</span> <span class="o">=</span> <span class="n">masks_list</span>
+  <span class="k">for</span> <span class="n">other_mask</span> <span class="ow">in</span> <span class="n">other_masks</span><span class="p">:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">other_mask</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

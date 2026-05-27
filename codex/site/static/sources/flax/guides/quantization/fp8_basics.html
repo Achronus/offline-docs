@@ -1,0 +1,950 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>User Guide on Using FP8</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/quantization/fp8_basics';</script>
+    <link rel="icon" href="../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="🔪 Flax - The Sharp Bits 🔪" href="../flax_sharp_bits.html" />
+    <link rel="prev" title="Quantization" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax-linen" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/quantization/fp8_basics.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax.readthedocs.io/en/latest/index.html"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the old Flax Linen API. <span style="color: lightgray;">[Explore the new <b>Flax NNX</b> API ✨]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flax_fundamentals/flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../flax_fundamentals/index.html">Flax fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/index.html">JAX 101</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/state_params.html">Managing Parameters and State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/setup_or_nncompact.html"><code class="docutils literal notranslate"><span class="pre">setup</span></code> vs <code class="docutils literal notranslate"><span class="pre">compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/arguments.html">Dealing with Flax Module arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/rng_guide.html">Randomness and PRNGs in Flax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../data_preprocessing/index.html">Data preprocessing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/full_eval.html">Processing the entire Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/loading_datasets.html">Loading datasets</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../training_techniques/index.html">Training techniques</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/batch_norm.html">Batch normalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/dropout.html">Dropout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/lr_schedule.html">Learning rate scheduling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/transfer_learning.html">Transfer learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/use_checkpointing.html">Save and load checkpoints</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../parallel_training/index.html">Parallel training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/ensembling.html">Ensembling on multiple devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/flax_on_pjit.html">Scale up Flax Modules on multiple devices</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../model_inspection/index.html">Model inspection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/model_surgery.html">Model surgery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/extracting_intermediates.html">Extracting intermediate values</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../converting_and_upgrading/index.html">Converting and upgrading</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/haiku_migration_guide.html">Migrating from Haiku to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/convert_pytorch_to_flax.html">Convert PyTorch models to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/orbax_upgrade_guide.html">Migrate checkpointing to Orbax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/optax_update_guide.html">Upgrading my codebase to Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/linen_upgrade_guide.html">Upgrading my codebase to Linen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/rnncell_upgrade_guide.html">RNNCellBase Upgrade Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/regular_dict_upgrade_guide.html">Migrate to regular dicts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">Quantization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">User Guide on Using FP8</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../flax_sharp_bits.html">The Sharp Bits</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/core_examples.html">Core examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/google_research_examples.html">Google Research examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/repositories_that_use_flax.html">Repositories that use Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/community_examples.html">Community examples</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../developer_notes/index.html">Developer notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/module_lifecycle.html">The Flax Module lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/lift.html">Lifted transformations</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/google/flax/tree/main/docs/flip">FLIPs</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.cursor.html">flax.cursor package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.errors.html">flax.errors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.jax_utils.html">flax.jax_utils package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_reference/flax.linen/index.html">flax.linen</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/module.html">Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/init_apply.html">Init/Apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/activation_functions.html">Activation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/initializers.html">Initializers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/transformations.html">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/inspection.html">Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/variable.html">Variable dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/spmd.html">SPMD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/decorators.html">Decorators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/profiling.html">Profiling</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.serialization.html">flax.serialization package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.traceback_util.html">flax.traceback_util package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/index.html">Flax NNX</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs/guides/quantization/fp8_basics.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/guides/quantization/fp8_basics.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>User Guide on Using FP8</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-our-environment">Setting up our environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax-low-level-api">FLAX Low Level API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#current-scaling">Current Scaling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#delayed-scaling">Delayed Scaling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax-high-level-api">FLAX High Level API</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manipulate-fp8-params">Manipulate FP8 params</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#update-gradient-of-fp8-params">Update gradient of FP8 params</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accumulate-gradient-of-fp8-params">Accumulate gradient of FP8 params</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-apis">Deprecated APIs</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="user-guide-on-using-fp8">
+<h1>User Guide on Using FP8<a class="headerlink" href="#user-guide-on-using-fp8" title="Permalink to this heading">#</a></h1>
+<p>JAX supports various FP8 formats, including E4M3 (jnp.float8_e4m3fn) and E5M2
+(jnp.float8_e5m2). Due to the limited range of FP8 data types, higher-precision
+data must be scaled to fit within the FP8 representable range, a process known
+as quantization (Q). Conversely, de-quantization (DQ) rescales the FP8 data back
+to its original type.</p>
+<p>While jnp.dot supports FP8 inputs directly, proper quantization and
+dequantization is needed for optimal performance. Flax provides
+nn.fp8_ops.Fp8DotGeneral and nn.fp8_ops.Fp8Einsum modules that handle
+this automatically and can be used with existing layers like nn.Dense.</p>
+<p>This tutorial will walk you through the basics of how to use it.</p>
+<section id="setting-up-our-environment">
+<h2>Setting up our environment<a class="headerlink" href="#setting-up-our-environment" title="Permalink to this heading">#</a></h2>
+<p>Here, we provide the code necessary to set up the environment for our notebook.
+Additionally, we define a function to check if the XLA-optimized HLO will indeed
+call an FP8 dot operation under the hood.</p>
+<p><em>Note: This tutorial relies on the XLA-FP8 feature, which is only supported on
+NVIDIA Hopper GPUs or later.</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import flax
+import jax
+import re
+import pprint
+from jax import random
+from jax import numpy as jnp
+from jax._src import test_util as jtu
+from flax import linen as nn
+from flax.linen import fp8_ops
+
+e4m3 = jnp.float8_e4m3fn
+f32 = jnp.float32
+E4M3_MAX = jnp.finfo(e4m3).max.astype(f32)
+
+assert jtu.is_cuda_compute_capability_at_least(&quot;9.0&quot;)
+
+def check_fp8_call(lowered):
+  hlo = lowered.compile()
+  if re.search(r&quot;custom-call\(f8e4m3fn.*, f8e4m3fn.*&quot;, hlo.as_text()):
+    print(&quot;Fp8 call detected!&quot;)
+  else:
+    print(&quot;No Fp8 call!&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="flax-low-level-api">
+<h2>FLAX Low Level API<a class="headerlink" href="#flax-low-level-api" title="Permalink to this heading">#</a></h2>
+<p>The JAX dot operations (e.g. <code class="docutils literal notranslate"><span class="pre">jnp.dot</span></code>) support the FP8 dtype inputs. So it is
+legal to do the following call:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>k0, k1 = random.split(random.key(0), 2)
+a = random.uniform(k0, (16, 32))
+b = random.uniform(k1, (32, 64))
+@jax.jit
+def dot_fp8(a, b):
+  return jnp.dot(a.astype(e4m3), b.astype(e4m3), preferred_element_type=f32)
+check_fp8_call(dot_fp8.lower(a, b))
+</pre></div>
+</div>
+</div>
+</div>
+<p>However, this approach has two key limitations:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">jnp.dot</span></code> does not support custom scaling factors for operands, defaulting to
+a scale of 1.0</p></li>
+<li><p>The autodiff does not automatically use E5M2 for gradients and E4M3 for
+activations/weights during training, which is the recommended practice</p></li>
+</ol>
+<p>To overcome these limitations and implement proper FP8 matrix multiplication, we
+recommend using the Flax FP8 APIs. Let’s start with a basic scaling approach.</p>
+<section id="current-scaling">
+<h3>Current Scaling<a class="headerlink" href="#current-scaling" title="Permalink to this heading">#</a></h3>
+<p>Scaling factors are usually defined as <code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">=</span> <span class="pre">amax(x)</span> <span class="pre">/</span> <span class="pre">MAX</span></code>, where <code class="docutils literal notranslate"><span class="pre">amax</span></code> is
+an operation to find the absolute maximum value of the tensor, and <code class="docutils literal notranslate"><span class="pre">MAX</span></code> is the
+maximum value of the representable range of the target dtype. This scaling
+approach allows us to derive the scaling factors directly from the current
+operand tensors of the dot product.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@jax.jit
+def dot_fp8(a, b):
+  a_scale = jnp.max(jnp.abs(A)) / E4M3_MAX
+  b_scale = jnp.max(jnp.abs(B)) / E4M3_MAX
+  a = fp8_ops.quantize(a, e4m3, a_scale, f32)
+  b = fp8_ops.quantize(b, e4m3, b_scale, f32)
+
+  c = jnp.dot(a, b, preferred_element_type=f32)
+  c = fp8_ops.dequantize(c, f32, a_scale * b_scale)
+  return c
+
+c = dot_fp8(a, b)
+check_fp8_call(dot_fp8.lower(a, b))
+</pre></div>
+</div>
+</div>
+</div>
+<p>As shown in the code, we perform quantization (<code class="docutils literal notranslate"><span class="pre">fp8_ops.quantize</span></code>) on the
+tensors to get the lower precision operands. The <code class="docutils literal notranslate"><span class="pre">jnp.dot</span></code> processes them and
+accumulates the output in high precision (i.e., the <code class="docutils literal notranslate"><span class="pre">preferred_element_type</span></code>).
+After that, we multiply the result by the scaling factors to dequantize back to
+the original range (<code class="docutils literal notranslate"><span class="pre">fp8_ops.dequantize</span></code>). Note that while this example uses
+E4M3 for both inputs, it is possible to use different FP8 dtypes like E4M3 and
+E5M2 for the inputs. The quantization method and the scaling factors can also be
+customized based on application needs.</p>
+<p>One major issue with the current scaling method is the performance overhead
+introduced by computing <code class="docutils literal notranslate"><span class="pre">a_scale</span></code> and <code class="docutils literal notranslate"><span class="pre">b_scale</span></code>, which requires additional
+loading of the operand tensors. To overcome this issue, we recommend the delayed
+scaling.</p>
+</section>
+<section id="delayed-scaling">
+<h3>Delayed Scaling<a class="headerlink" href="#delayed-scaling" title="Permalink to this heading">#</a></h3>
+<p>In delayed scaling, we use a scaling factor associated with an amax history. The
+scaling factor remains a scalar, but the amax history is a list that stores amax
+values from recent steps (e.g., 1024 steps). Both tensors are computed from
+previous steps and maintained in the model parameters.</p>
+<p>The quantization and dequantization operations for delayed scaling are provided
+by <code class="docutils literal notranslate"><span class="pre">fp8_ops.in_q</span></code> and <code class="docutils literal notranslate"><span class="pre">fp8_ops.out_dq</span></code> respectively. <code class="docutils literal notranslate"><span class="pre">fp8_ops.in_q</span></code> handles
+input quantization and update the amax history and scaling factor, while
+<code class="docutils literal notranslate"><span class="pre">fp8_ops.out_dq</span></code> performs output dequantization.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>a_scale = jnp.array(1.0)
+b_scale = jnp.array(1.0)
+a_amax_hist = jnp.zeros((1024,))
+b_amax_hist = jnp.zeros((1024,))
+
+@jax.jit
+def dot_fp8(a, a_scale, a_amax_hist, b, b_scale, b_amax_hist):
+  a, a_scale = fp8_ops.in_q(f32, e4m3, a, a_scale, a_amax_hist)
+  b, b_scale = fp8_ops.in_q(f32, e4m3, b, b_scale, b_amax_hist)
+  
+  c = jnp.dot(a, b, preferred_element_type=f32)
+  c = fp8_ops.out_dq(f32, a_scale, b_scale, c)
+  return c
+
+c = dot_fp8(a, a_scale, a_amax_hist, b, b_scale, b_amax_hist)
+check_fp8_call(dot_fp8.lower(a, a_scale, a_amax_hist, b, b_scale, b_amax_hist))
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this example, we first prepare three pairs of scaling factors and amax
+histories, treating them as results computed from previous steps. Then, we apply
+<code class="docutils literal notranslate"><span class="pre">fp8_ops.in_q</span></code> to the input operands of <code class="docutils literal notranslate"><span class="pre">jnp.dot</span></code>, followed by <code class="docutils literal notranslate"><span class="pre">fp8_ops.out_dq</span></code>
+to the output of <code class="docutils literal notranslate"><span class="pre">jnp.dot</span></code>.</p>
+</section>
+</section>
+<section id="flax-high-level-api">
+<h2>FLAX High Level API<a class="headerlink" href="#flax-high-level-api" title="Permalink to this heading">#</a></h2>
+<p>Flax provides high-level operations to seamlessly integrate FP8 quantization
+into existing layers. Instead of manually handling quantization of the delayed
+scaling (e.g., the maintanence of the amax history and scaling factors), users
+can simply use these drop-in replacements:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fp8_ops.Fp8DotGeneral</span></code> for <code class="docutils literal notranslate"><span class="pre">lax.dot_general</span></code> operations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fp8_ops.Fp8Einsum</span></code> for <code class="docutils literal notranslate"><span class="pre">jnp.einsum</span></code> operations</p></li>
+</ul>
+<p>These operations automatically handle all FP8-related functionality, including
+quantization/dequantization, scale factor updates, and FP8 dtype selection for
+both forward and backward passes.</p>
+<p>Consider the following example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>model = nn.Dense(features=64, dot_general_cls=fp8_ops.Fp8DotGeneral)
+params = model.init(k0, A)
+
+@jax.jit
+def train_step(var, a): 
+  c = model.apply(var, a)
+  return jnp.sum(c)
+
+check_fp8_call(train_step.lower(params, A))
+</pre></div>
+</div>
+</div>
+</div>
+<p>By setting <code class="docutils literal notranslate"><span class="pre">dot_general_cls=fp8_ops.Fp8DotGeneral</span></code>, we replace the
+default <code class="docutils literal notranslate"><span class="pre">lax.dot_general</span></code> operation in <code class="docutils literal notranslate"><span class="pre">nn.Dense</span></code> with an FP8-enabled version.
+The model usage remains similar, but now includes additional parameters for FP8
+quantization: scaling factors and amax history values. The next section explains
+how to update these FP8-specific parameters.</p>
+<p>For models that use <code class="docutils literal notranslate"><span class="pre">jnp.einsum</span></code> operations, such as Mixture of Experts (MoE)
+layers, users can replace them with <code class="docutils literal notranslate"><span class="pre">fp8_ops.Fp8Einsum</span></code> to enable FP8
+quantization. Here’s an example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from typing import Any
+class FooModule(nn.Module):
+  einsum: Any = None
+  @nn.compact
+  def __call__(self, a, b):
+    if self.einsum is not None:
+      einsum_fn = self.einsum()
+    elif self.einsum is None:
+      einsum_fn = jnp.einsum
+    c = einsum_fn(&quot;mk,kn-&gt;mn&quot;, a, b)
+    return c
+
+model = FooModule(einsum=fp8_ops.Fp8Einsum)
+params = model.init(k0, a, b)
+
+@jax.jit
+def train_step(var, a, b):
+  c = model.apply(var, a, b)
+  return jnp.sum(c)
+
+check_fp8_call(train_step.lower(params, a, b))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="manipulate-fp8-params">
+<h2>Manipulate FP8 params<a class="headerlink" href="#manipulate-fp8-params" title="Permalink to this heading">#</a></h2>
+<p>The following sections explain the internal FP8 parameters managed by
+<code class="docutils literal notranslate"><span class="pre">fp8_ops.Fp8DotGeneral</span></code> and <code class="docutils literal notranslate"><span class="pre">fp8_ops.Fp8Einsum</span></code>. These parameters
+include scaling factors and amax history values that control the FP8
+quantization process. While most users don’t need to interact with these
+directly, understanding them can be valuable for advanced optimization and
+debugging.</p>
+<p>Let’s first examine the data structure of <code class="docutils literal notranslate"><span class="pre">params</span></code>. In the code below, we redact
+the parameter values and then display the PyTree structure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>params_structure = flax.core.unfreeze(params).copy()
+params_structure = flax.traverse_util.flatten_dict(params_structure, sep=&#39;/&#39;)
+for key, value in params_structure.items():
+    params_structure[key] = &#39;*&#39;
+params_structure = flax.traverse_util.unflatten_dict(params_structure, sep=&#39;/&#39;)
+pprint.pprint(params_structure)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The output is as follows:</p>
+<div class="highlight-plaintext notranslate"><div class="highlight"><pre><span></span>{&#39;_overwrite_with_gradient&#39;: {&#39;Fp8Einsum_0&#39;: {&#39;input_amax_history&#39;: &#39;*&#39;,
+                                              &#39;input_scale&#39;: &#39;*&#39;,
+                                              &#39;kernel_amax_history&#39;: &#39;*&#39;,
+                                              &#39;kernel_scale&#39;: &#39;*&#39;,
+                                              &#39;output_grad_amax_history&#39;: &#39;*&#39;,
+                                              &#39;output_grad_scale&#39;: &#39;*&#39;}}}
+</pre></div>
+</div>
+<p>In addition to the expected <code class="docutils literal notranslate"><span class="pre">params</span></code>, there is an additional category called
+<code class="docutils literal notranslate"><span class="pre">_overwrite_with_gradient</span></code>. This category includes three pairs of <code class="docutils literal notranslate"><span class="pre">amax_history</span></code>
+and <code class="docutils literal notranslate"><span class="pre">scale</span></code> for the activation, kernel, and dot gradient, respectively.</p>
+<section id="update-gradient-of-fp8-params">
+<h3>Update gradient of FP8 params<a class="headerlink" href="#update-gradient-of-fp8-params" title="Permalink to this heading">#</a></h3>
+<p>Now, we perform one training step to obtain the gradients and see how to use
+them to update the parameters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>step_fn = jax.jit(jax.grad(train_step, (0, 1)))
+
+grads = step_fn(params, A)
+
+params = flax.core.unfreeze(params)
+params = flax.traverse_util.flatten_dict(params, sep=&#39;/&#39;)
+grads = flax.traverse_util.flatten_dict(grads[0], sep=&#39;/&#39;)
+
+for key, value in params.items():
+  if key.startswith(&#39;params&#39;):
+    params[key] = value + 0.01 * grads[key]
+  if key.startswith(&#39;_overwrite_with_gradient&#39;):
+    params[key] = grads[key]
+
+params = flax.traverse_util.unflatten_dict(params, sep=&#39;/&#39;)
+params = flax.core.freeze(params)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The above code demonstrates how to update both <code class="docutils literal notranslate"><span class="pre">params</span></code> and
+<code class="docutils literal notranslate"><span class="pre">_overwrite_with_gradient</span></code>. For <code class="docutils literal notranslate"><span class="pre">params</span></code>, we use the formula <code class="docutils literal notranslate"><span class="pre">new_param</span> <span class="pre">=</span> <span class="pre">old_param</span> <span class="pre">+</span> <span class="pre">0.01</span> <span class="pre">*</span> <span class="pre">grads</span></code>, where <code class="docutils literal notranslate"><span class="pre">0.01</span></code> is the learning rate (or users can use
+whatever optimizers from <code class="docutils literal notranslate"><span class="pre">optax</span></code>). For <code class="docutils literal notranslate"><span class="pre">_overwrite_with_gradient</span></code>, we simply use
+the gradient to overwrite the old values.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">flax.training.train_state.TrainState</span></code> conveniently supports the
+category of <code class="docutils literal notranslate"><span class="pre">_overwrite_with_gradient</span></code>, so users do not need to modify their
+scripts if they don’t use custom <code class="docutils literal notranslate"><span class="pre">TrainState</span></code>.</p>
+</section>
+</section>
+<section id="accumulate-gradient-of-fp8-params">
+<h2>Accumulate gradient of FP8 params<a class="headerlink" href="#accumulate-gradient-of-fp8-params" title="Permalink to this heading">#</a></h2>
+<p>When the same parameter is used in a branched manner, the autograd mechanism
+will add their gradients from these branches. This is common in scenarios like
+pipeline parallelism, where each microbatch shares the same set of parameters
+for the minibatch. However, for the <code class="docutils literal notranslate"><span class="pre">_overwrite_with_gradient</span></code> parameters, this
+accumulation by addition is not meaningful. Instead, we prefer custom
+accumulation by taking the maximum value.</p>
+<p>To address this, we introduce a custom dtype <code class="docutils literal notranslate"><span class="pre">fp8_ops.fp32_max_grad</span></code>. The basic
+usage is demonstrated below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fmax32 = fp8_ops.fp32_max_grad
+
+def reuse_fp8_param(x, y, scale, amax_history):
+  scale = scale.astype(fmax32)
+  amax_history = amax_history.astype(fmax32)
+
+  x = fp8_ops.in_qdq(f32, e4m3, x, scale, amax_history)
+  y = fp8_ops.in_qdq(f32, e4m3, y, scale, amax_history)
+  return x + y
+
+reuse_fp8_param_fn = jax.grad(reuse_fp8_param, (0, 1, 2, 3))
+reuse_fp8_param_fn = jax.jit(reuse_fp8_param_fn)
+
+_, _, new_ah, new_sf = reuse_fp8_param_fn(2.0, 3.0, a_scale, a_amax_hist)
+print(new_ah, new_sf)
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this example, we first cast the <code class="docutils literal notranslate"><span class="pre">scale</span></code> and <code class="docutils literal notranslate"><span class="pre">amax_history</span></code> to
+<code class="docutils literal notranslate"><span class="pre">fp8_ops.fp32_max_grad</span></code> and then call <code class="docutils literal notranslate"><span class="pre">fp8_ops.in_qdq</span></code> twice using the same pair
+of <code class="docutils literal notranslate"><span class="pre">scale</span></code> and <code class="docutils literal notranslate"><span class="pre">amax_history</span></code>. During autograd, their gradients from each branch
+will be taken as the maximum, giving us the correct results of:</p>
+<div class="highlight-plaintext notranslate"><div class="highlight"><pre><span></span>1.0 [3. 0. 0. ... 0. 0. 0.]
+</pre></div>
+</div>
+<p>If we do not perform the type casting, we get the following result, meaning the
+gradients of the two branches are added:</p>
+<div class="highlight-plaintext notranslate"><div class="highlight"><pre><span></span>2.0 [5. 0. 0. ... 0. 0. 0.]
+</pre></div>
+</div>
+<p>This casting is already included if users choose to use the high-level APIs.</p>
+</section>
+<section id="deprecated-apis">
+<h2>Deprecated APIs<a class="headerlink" href="#deprecated-apis" title="Permalink to this heading">#</a></h2>
+<p>Previously, we provided APIs like <code class="docutils literal notranslate"><span class="pre">fp8_ops.quantize_dequantize</span></code> for current
+scaling and <code class="docutils literal notranslate"><span class="pre">fp8_ops.[in|out]_qdq</span></code> for delayed scaling. These were used with
+high precision dot operations, leveraging an XLA-FP8 feature that
+pattern-matched QDQ-&gt;dot sequences to Q-&gt;fp8_cublas_gemm. The corresponding
+high-level API was called <code class="docutils literal notranslate"><span class="pre">fp8_ops.Fp8DotGeneralOp</span></code>. However, this pattern
+matching-based solution proved brittle, as the patterns could be easily broken
+by other XLA optimizations. We recommend users migrate from these deprecated
+APIs to the newer ones described above.</p>
+<p>For migration, users should replace:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fp8_ops.quantize_dequantize</span> <span class="pre">-&gt;</span> <span class="pre">jnp.dot</span></code> with <code class="docutils literal notranslate"><span class="pre">fp8_ops.quantize</span> <span class="pre">-&gt;</span> <span class="pre">jnp.dot</span> <span class="pre">-&gt;</span> <span class="pre">fp8_ops.dequantize</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fp8_ops.in_qdq</span> <span class="pre">-&gt;</span> <span class="pre">jnp.dot</span> <span class="pre">-&gt;</span> <span class="pre">fp8_ops.out_qdq</span></code> with <code class="docutils literal notranslate"><span class="pre">fp8_ops.in_q</span> <span class="pre">-&gt;</span> <span class="pre">jnp.dot</span> <span class="pre">-&gt;</span> <span class="pre">fp8_ops.out_dq</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fp8_ops.Fp8DotGeneralOp</span></code> with <code class="docutils literal notranslate"><span class="pre">fp8_ops.Fp8DotGeneral</span></code></p></li>
+</ul>
+<p>Additionally, we provide an einsum variant through <code class="docutils literal notranslate"><span class="pre">fp8_ops.Fp8Einsum</span></code>.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Quantization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../flax_sharp_bits.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">🔪 Flax - The Sharp Bits 🔪</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-our-environment">Setting up our environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax-low-level-api">FLAX Low Level API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#current-scaling">Current Scaling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#delayed-scaling">Delayed Scaling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax-high-level-api">FLAX High Level API</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#manipulate-fp8-params">Manipulate FP8 params</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#update-gradient-of-fp8-params">Update gradient of FP8 params</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accumulate-gradient-of-fp8-params">Accumulate gradient of FP8 params</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-apis">Deprecated APIs</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

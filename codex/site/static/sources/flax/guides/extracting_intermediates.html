@@ -1,0 +1,944 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Extracting intermediate values</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/extracting_intermediates';</script>
+    <link rel="icon" href="../_static/flax.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="A Flax Optimization Cookbook" href="optimization_cookbook.html" />
+    <link rel="prev" title="Model surgery" href="surgery.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/extracting_intermediates.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../guides_advanced.html">Advanced Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surgery.html">Model surgery</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs_nnx/guides/extracting_intermediates.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/guides/extracting_intermediates.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Extracting intermediate values</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-nnx-capture-works">How <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> Works</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#capturing-all-intermediate-values">Capturing all intermediate values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-gradients-of-intermediate-values">Extracting gradients of intermediate values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nnx-transforms-and-capturing">NNX Transforms and Capturing</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="extracting-intermediate-values">
+<h1>Extracting intermediate values<a class="headerlink" href="#extracting-intermediate-values" title="Permalink to this heading">#</a></h1>
+<p>This guide will show you how to extract intermediate values from a module.
+Consider a toy neural network with two pieces: a “feature” component that embeds
+inputs in some feature space, and a “loss” component that operates on those features.
+We’ll want to log these feature components during training to identify any issues with
+the feature extraction. To do this, we can use the <code class="docutils literal notranslate"><span class="pre">Module.sow</span></code> method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense1</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense2</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+      <span class="n">feature</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dense1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">feature</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_features</span><span class="p">,</span> <span class="n">y_features</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">x_features</span> <span class="o">-</span> <span class="n">y_features</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+<span class="c1"># Instantiate the model.</span>
+<span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+<span class="c1"># Dummy input for testing</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>W0317 18:04:12.704562 2028538 cpp_gen_intrinsics.cc:74] Empty bitcode string provided for eigen. Optimizations relying on this IR will be disabled.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">self.sow</span></code> will store intermediate values under the key <code class="docutils literal notranslate"><span class="pre">'features'</span></code> in a collection associated with the
+<code class="docutils literal notranslate"><span class="pre">nnx.Intermediate</span></code> type. If you want to log values to multiple different collections, you can use different subclasses of <code class="docutils literal notranslate"><span class="pre">nnx.Intermediate</span></code>
+for each collection.</p>
+<p>Now, we can wrap the module with the <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> decorator, which wraps any <code class="docutils literal notranslate"><span class="pre">Callable</span></code> accepting a module as its argument (which includes <code class="docutils literal notranslate"><span class="pre">nnx.Module</span></code>s, their methods, or ordinary functions) to return both the resulting loss as well as any intermediate values stored to the <code class="docutils literal notranslate"><span class="pre">nnx.Intermediate</span></code> collection:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">capturing_model</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">intms</span> <span class="o">=</span> <span class="n">capturing_model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">intms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State({
+  &#39;features&#39;: Intermediate(
+    value=((32,), (32,))
+  )
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that, by default, sow appends values every time it is called. We can see
+this in the <em>features</em> intermediate values logged above. It contains a tuple with one element for the call on <code class="docutils literal notranslate"><span class="pre">x</span></code> and one for the call on <code class="docutils literal notranslate"><span class="pre">y</span></code>. To override the default append behavior, specify <code class="docutils literal notranslate"><span class="pre">init_fn</span></code> and <code class="docutils literal notranslate"><span class="pre">reduce_fn</span></code> - see <code class="docutils literal notranslate"><span class="pre">Module.sow()</span></code>.</p>
+<section id="how-nnx-capture-works">
+<h2>How <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> Works<a class="headerlink" href="#how-nnx-capture-works" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> works by temporarily installing a set of mutable capture buffers on every module in the graph before calling the wrapped function, then harvesting those buffers afterward. Before calling the wrapped function, <code class="docutils literal notranslate"><span class="pre">capture</span></code> walks the entire module graph with <code class="docutils literal notranslate"><span class="pre">iter_modules</span></code>. For each module it sets a <code class="docutils literal notranslate"><span class="pre">__captures__</span></code> attribute: a tuple of Variable instances, one per requested <code class="docutils literal notranslate"><span class="pre">var_type</span></code>. Each Variable holds a plain <code class="docutils literal notranslate"><span class="pre">dict</span></code> that maps sow-key → accumulated value.</p>
+<p>We can see this <code class="docutils literal notranslate"><span class="pre">__captures__</span></code> tuple by printing out the module contents during a <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> call:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">print_captures</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Captures:&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">__captures__</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">intms</span> <span class="o">=</span> <span class="n">print_captures</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Captures: (Intermediate(
+  value={}
+),)
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Module.sow</span></code> looks for the Variable in the <code class="docutils literal notranslate"><span class="pre">__captures__</span></code> tuple whose type matches <code class="docutils literal notranslate"><span class="pre">variable_type</span></code>, then writes its value into that dict using <code class="docutils literal notranslate"><span class="pre">reduce_fn</span></code>.</p>
+<p>If no matching type is found, <code class="docutils literal notranslate"><span class="pre">sow</span></code> silently returns <code class="docutils literal notranslate"><span class="pre">False</span></code> without logging the value. This can be used to capture only a subset of the sown values. For example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Metric1</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Metric2</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">Metric1</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_captures</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">Metric1</span><span class="p">,</span> <span class="s1">&#39;gets_sown&#39;</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">Metric2</span><span class="p">,</span> <span class="s1">&#39;gets_ignored&#39;</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">intms</span> <span class="o">=</span> <span class="n">get_captures</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">())</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">intms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State({
+  &#39;gets_sown&#39;: Metric1(
+    value=((2,),)
+  )
+})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="capturing-all-intermediate-values">
+<h2>Capturing all intermediate values<a class="headerlink" href="#capturing-all-intermediate-values" title="Permalink to this heading">#</a></h2>
+<p>To observe the output of each method without manually adding calls to <code class="docutils literal notranslate"><span class="pre">sow</span></code>, we can call <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> with the <code class="docutils literal notranslate"><span class="pre">method_outputs</span></code> argument. This will automatically <code class="docutils literal notranslate"><span class="pre">sow</span></code> the output of each method using the given variable type, including methods of sub-modules.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense1</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense2</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+      <span class="n">feature</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dense1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+      <span class="k">return</span> <span class="n">feature</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_features</span><span class="p">,</span> <span class="n">y_features</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">x_features</span> <span class="o">-</span> <span class="n">y_features</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">capturing_model</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="n">method_outputs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">intms</span> <span class="o">=</span> <span class="n">capturing_model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">intms</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State({
+  &#39;__call__&#39;: Intermediate(
+    value=((),)
+  ),
+  &#39;dense1&#39;: {
+    &#39;__call__&#39;: Intermediate(
+      value=((32,), (32,))
+    )
+  },
+  &#39;features&#39;: Intermediate(
+    value=((32,), (32,))
+  ),
+  &#39;loss&#39;: Intermediate(
+    value=((),)
+  )
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p>This pattern should be considered the “sledge hammer” approach to capturing intermediates. As a debugging and inspection tool it is very useful, but using the other patterns described in this guide will give you more fine-grained control over what intermediates you want to extract. We can also combine the <code class="docutils literal notranslate"><span class="pre">method_output_type</span></code> argument with manual calls to sow to capture both layer outputs and computations mid-layer.</p>
+</section>
+<section id="extracting-gradients-of-intermediate-values">
+<h2>Extracting gradients of intermediate values<a class="headerlink" href="#extracting-gradients-of-intermediate-values" title="Permalink to this heading">#</a></h2>
+<p>For debugging purposes, it can be useful to extract the gradients of intermediate values. This is a little tricky: jax doesn’t have a stable mechanism for sowing information from the backward pass into to objects from the forward pass. Instead, we record the gradients of intermediate values using the <code class="docutils literal notranslate"><span class="pre">Module.perturb</span></code> method as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb</span><span class="p">(</span><span class="s1">&#39;grad_of_x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="s1">&#39;activations&#39;</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">x2</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">perturbations</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Perturbation</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">perturbations</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">perturbations</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">perturb_grads</span><span class="p">),</span> <span class="n">sowed</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">has_aux</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">model</span><span class="p">,</span> <span class="n">perturbations</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">merge_state</span><span class="p">(</span><span class="n">perturb_grads</span><span class="p">,</span> <span class="n">sowed</span><span class="p">)</span>
+
+<span class="n">train_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State({
+  &#39;grad_of_x&#39;: Perturbation( # 1 (4 B)
+    value=Array(3., dtype=float32, weak_type=True)
+  ),
+  &#39;activations&#39;: Intermediate( # 1 (4 B)
+    value=(Array(1., dtype=float32, weak_type=True),)
+  )
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p>There are four steps:</p>
+<p><strong>Step One: Initialize <em>perturbations</em> of the model</strong>.</p>
+<p>We do this with a call to <code class="docutils literal notranslate"><span class="pre">nnx.capture(model,</span> <span class="pre">nnx.Perturbation)</span></code>. Before the call, <code class="docutils literal notranslate"><span class="pre">capture</span></code> installs <code class="docutils literal notranslate"><span class="pre">__captures__</span></code> on the module — a tuple containing one empty <code class="docutils literal notranslate"><span class="pre">Perturbation</span></code> buffer (as described in “How <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> Works” above). When <code class="docutils literal notranslate"><span class="pre">self.perturb</span></code> runs, it checks <code class="docutils literal notranslate"><span class="pre">__captures__</span></code> for a matching <code class="docutils literal notranslate"><span class="pre">Perturbation</span></code> Variable, initialises the slot to <code class="docutils literal notranslate"><span class="pre">zeros_like(value)</span></code>, and returns <code class="docutils literal notranslate"><span class="pre">zeros</span> <span class="pre">+</span> <span class="pre">x</span></code>. After the call, <code class="docutils literal notranslate"><span class="pre">__captures__</span></code> is removed and the filled buffer is returned as <code class="docutils literal notranslate"><span class="pre">perturbations</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;before perturb:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__captures__</span><span class="p">)</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb</span><span class="p">(</span><span class="s1">&#39;grad_of_x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;after  perturb:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__captures__</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="s1">&#39;activations&#39;</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+    <span class="c1"># sow is a no-op: Intermediate is not in __captures__, so it returns False silently</span>
+    <span class="k">return</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">x2</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">perturbations</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Perturbation</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">perturbations</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>before perturb: (Perturbation(
+  value={}
+),)
+after  perturb: (Perturbation( # 1 (4 B)
+  value={&#39;grad_of_x&#39;: Array(0., dtype=float32, weak_type=True)}
+),)
+State({
+  &#39;grad_of_x&#39;: Perturbation( # 1 (4 B)
+    value=Array(0., dtype=float32, weak_type=True)
+  )
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p>There are only two differences between <code class="docutils literal notranslate"><span class="pre">sow</span></code> and <code class="docutils literal notranslate"><span class="pre">perturb</span></code>:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">nnx.Variable</span></code> tag used for values written with <code class="docutils literal notranslate"><span class="pre">self.perturb</span></code> is <code class="docutils literal notranslate"><span class="pre">nnx.Perturbation</span></code> rather than <code class="docutils literal notranslate"><span class="pre">nnx.Intermediate</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">perturb</span></code> returns the logged value. You must use this returned value rather than the original value for the gradient capturing machinery to work.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">var_types</span></code> argument to <code class="docutils literal notranslate"><span class="pre">capture</span></code> restricts which of the logged values we want to return. Because we only want the intermediates logged with <code class="docutils literal notranslate"><span class="pre">self.perturb</span></code> statements, we only capture <code class="docutils literal notranslate"><span class="pre">nnx.Perturbation</span></code> types.</p>
+<p><strong>Step Two: Run the model again, but add in these perturbations</strong>.</p>
+<p>Call <code class="docutils literal notranslate"><span class="pre">capture</span></code> again with <code class="docutils literal notranslate"><span class="pre">init=perturbations</span></code>. <code class="docutils literal notranslate"><span class="pre">capture</span></code> first builds a mapping from module path to the Variables in <code class="docutils literal notranslate"><span class="pre">init</span></code>, then uses it to pre-populate <code class="docutils literal notranslate"><span class="pre">__captures__</span></code>. Now <code class="docutils literal notranslate"><span class="pre">__captures__</span></code> has <em>two</em> buffers: an empty <code class="docutils literal notranslate"><span class="pre">Intermediate</span></code> buffer (from <code class="docutils literal notranslate"><span class="pre">var_types</span></code>) and a <code class="docutils literal notranslate"><span class="pre">Perturbation</span></code> buffer pre-populated from <code class="docutils literal notranslate"><span class="pre">init</span></code>. <code class="docutils literal notranslate"><span class="pre">self.perturb</span></code> finds the pre-populated buffer and returns <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">+</span> <span class="pre">perturbation</span></code>; <code class="docutils literal notranslate"><span class="pre">self.sow</span></code> writes into the <code class="docutils literal notranslate"><span class="pre">Intermediate</span></code> buffer as normal.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;before perturb:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__captures__</span><span class="p">)</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb</span><span class="p">(</span><span class="s1">&#39;grad_of_x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="s1">&#39;activations&#39;</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;after  sow:    &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__captures__</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">x2</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">interms</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">perturbations</span><span class="p">)(</span><span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>before perturb: (Intermediate(
+  value={}
+), Perturbation( # 1 (4 B)
+  value={&#39;grad_of_x&#39;: Array(0., dtype=float32, weak_type=True)}
+))
+after  sow:     (Intermediate( # 1 (4 B)
+  value={&#39;activations&#39;: (Array(1., dtype=float32, weak_type=True),)}
+), Perturbation( # 1 (4 B)
+  value={&#39;grad_of_x&#39;: Array(0., dtype=float32, weak_type=True)}
+))
+</pre></div>
+</div>
+</div>
+</div>
+<p>This changes the behavior of <code class="docutils literal notranslate"><span class="pre">x2</span> <span class="pre">=</span> <span class="pre">self.perturb('name',</span> <span class="pre">x)</span></code> to essentially be <code class="docutils literal notranslate"><span class="pre">x2</span> <span class="pre">=</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">perturbations['name']</span></code>. The gradient of our output with respect to <code class="docutils literal notranslate"><span class="pre">x</span></code> will be the same as the gradient with respect to the perturbation, because JAX can differentiate through the addition with respect to the perturbation value stored in the capture dict.</p>
+<p><strong>Step Three: Take gradients</strong>.</p>
+<p>Specifically, take the gradient of this second <code class="docutils literal notranslate"><span class="pre">capture</span></code> call with respect to the perturbation arguments. JAX traces through exactly the same <code class="docutils literal notranslate"><span class="pre">__captures__</span></code> setup as Step Two, but with abstract (traced) array values instead of concrete ones. This will give us the same values as the gradients with respect to the intermediate variables. If we want to track intermediate variables in the forward pass at the same time, we’ll need to return the intermediate values output of the <code class="docutils literal notranslate"><span class="pre">capture</span></code> call as well, so we’ll need to pass <code class="docutils literal notranslate"><span class="pre">has_aux=True</span></code> to <code class="docutils literal notranslate"><span class="pre">nnx.grad</span></code>.</p>
+<p><strong>Step Four: Combine intermediate states</strong></p>
+<p>Merge the <code class="docutils literal notranslate"><span class="pre">State</span></code> object we get from the perturbation gradients with the <code class="docutils literal notranslate"><span class="pre">State</span></code> object for forward intermediates with <code class="docutils literal notranslate"><span class="pre">nnx.merge_state(perturb_grads,</span> <span class="pre">sowed)</span></code>. At this point <code class="docutils literal notranslate"><span class="pre">__captures__</span></code> no longer exists on any module — it was cleaned up at the end of the <code class="docutils literal notranslate"><span class="pre">capture</span></code> call in Step Three.</p>
+</section>
+<section id="nnx-transforms-and-capturing">
+<h2>NNX Transforms and Capturing<a class="headerlink" href="#nnx-transforms-and-capturing" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> composes with NNX transforms such as <code class="docutils literal notranslate"><span class="pre">nnx.vmap</span></code>. The main thing to keep in mind is that perturbations must be initialized with a run that has the same batch structure as the training step that will consume them.</p>
+<p>Consider a model that calls both <code class="docutils literal notranslate"><span class="pre">sow</span></code> and <code class="docutils literal notranslate"><span class="pre">perturb</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">dim</span><span class="p">))</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb</span><span class="p">(</span><span class="s1">&#39;grad_of_x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The training step vmaps <code class="docutils literal notranslate"><span class="pre">loss_grad</span></code> over a batch of inputs and perturbations, while the model weights are shared across the batch (<code class="docutils literal notranslate"><span class="pre">in_axes=None</span></code>):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@nnx</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+  <span class="n">_</span><span class="p">,</span> <span class="n">perturbations</span> <span class="o">=</span> <span class="n">init_perturbations</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">loss_grad</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">perturbations</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">perturbations</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+      <span class="n">loss</span><span class="p">,</span> <span class="n">interms</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">perturbations</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">interms</span>
+    <span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">perturb_grads</span><span class="p">),</span> <span class="n">sowed</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">has_aux</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">model</span><span class="p">,</span> <span class="n">perturbations</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">grads</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">merge_state</span><span class="p">(</span><span class="n">perturb_grads</span><span class="p">,</span> <span class="n">sowed</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">loss_grad</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">model</span><span class="p">,</span> <span class="n">perturbations</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>After every training step, we can sum the gradients and pass them to an <code class="docutils literal notranslate"><span class="pre">Optimizer</span></code> to adjust the model, as usual. But we can also look at the full batch of sown values and perturbations.</p>
+<p>Because <code class="docutils literal notranslate"><span class="pre">train_step</span></code> expects <code class="docutils literal notranslate"><span class="pre">perturbations</span></code> to have a leading batch axis (axis 0), the perturbation initialization run must also produce a batched <code class="docutils literal notranslate"><span class="pre">perturbations</span></code> state. We do this inside an <code class="docutils literal notranslate"><span class="pre">init_perturbations</span></code> method that splits the model and vmaps the run with <code class="docutils literal notranslate"><span class="pre">in_axes=(0,</span> <span class="pre">None,</span> <span class="pre">0)</span></code> for <code class="docutils literal notranslate"><span class="pre">(intermediates,</span> <span class="pre">params,</span> <span class="pre">x)</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Perturbation</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">init_perturbations</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">graphdef</span><span class="p">,</span> <span class="n">intms</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">intms</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+      <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">graphdef</span><span class="p">,</span> <span class="n">intms</span><span class="p">,</span> <span class="n">params</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">forward</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">intms</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Putting it together:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">intermediates</span> <span class="o">=</span> <span class="n">train_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">intermediates</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State({
+  &#39;grad_of_x&#39;: Perturbation(
+    value=(3, 4)
+  ),
+  &#39;y&#39;: Intermediate(
+    value=((3,),)
+  )
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p>The pattern generalises: whenever a transform introduces a new batch axis over which <code class="docutils literal notranslate"><span class="pre">capture</span></code> runs, initialize perturbations with a matching vmapped pre-run so that the <code class="docutils literal notranslate"><span class="pre">init=perturbations</span></code> argument inside the transform has the correct shape.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="surgery.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Model surgery</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="optimization_cookbook.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">A Flax Optimization Cookbook</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-nnx-capture-works">How <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> Works</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#capturing-all-intermediate-values">Capturing all intermediate values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-gradients-of-intermediate-values">Extracting gradients of intermediate values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nnx-transforms-and-capturing">NNX Transforms and Capturing</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1732 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>transforms</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/flax.nnx/transforms';</script>
+    <link rel="icon" href="../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="variables" href="variables.html" />
+    <link rel="prev" title="EMA" href="training/ema.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/api_reference/flax.nnx/transforms.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../guides/checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">flax.nnx</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/api_reference/flax.nnx/transforms.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>transforms</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.grad"><code class="docutils literal notranslate"><span class="pre">grad()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.jit"><code class="docutils literal notranslate"><span class="pre">jit()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.shard_map"><code class="docutils literal notranslate"><span class="pre">shard_map()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.remat"><code class="docutils literal notranslate"><span class="pre">remat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.scan"><code class="docutils literal notranslate"><span class="pre">scan()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.Carry"><code class="docutils literal notranslate"><span class="pre">Carry</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.value_and_grad"><code class="docutils literal notranslate"><span class="pre">value_and_grad()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.vmap"><code class="docutils literal notranslate"><span class="pre">vmap()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.eval_shape"><code class="docutils literal notranslate"><span class="pre">eval_shape()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.custom_vjp"><code class="docutils literal notranslate"><span class="pre">custom_vjp()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.vjp"><code class="docutils literal notranslate"><span class="pre">vjp()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.jvp"><code class="docutils literal notranslate"><span class="pre">jvp()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.cond"><code class="docutils literal notranslate"><span class="pre">cond()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.switch"><code class="docutils literal notranslate"><span class="pre">switch()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.while_loop"><code class="docutils literal notranslate"><span class="pre">while_loop()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.fori_loop"><code class="docutils literal notranslate"><span class="pre">fori_loop()</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-flax.nnx">
+<span id="transforms"></span><h1>transforms<a class="headerlink" href="#module-flax.nnx" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.grad">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f=&lt;flax.typing.Missing</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argnums=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_aux=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">holomorphic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_int=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduce_axes=()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/autodiff.html#grad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.grad" title="Permalink to this definition">#</a></dt>
+<dd><p>Object-aware version of <code class="docutils literal notranslate"><span class="pre">jax.grad</span></code> that can handle Modules / graph nodes as
+arguments.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grad_fn</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grads</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">grad_fn</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>
+<span class="go">State({</span>
+<span class="go">  &#39;bias&#39;: Param(</span>
+<span class="go">    value=(3,)</span>
+<span class="go">  ),</span>
+<span class="go">  &#39;kernel&#39;: Param(</span>
+<span class="go">    value=(2, 3)</span>
+<span class="go">  )</span>
+<span class="go">})</span>
+</pre></div>
+</div>
+<p>By default, NNX objects are differentiated with respect to all their <code class="docutils literal notranslate"><span class="pre">nnx.Param</span></code>
+Variables. When these gradients are given to an <code class="docutils literal notranslate"><span class="pre">nnx.Optimizer</span></code>, however, the optimizer
+will only use a subset of them based on its <cite>wrt</cite> field. As the gradient calculations not
+used by the <code class="docutils literal notranslate"><span class="pre">nnx.Optimizer</span></code> go unused, this unnecessary computation gets removed
+when the training step is compiled. For example, if you want to optimize only the
+<code class="docutils literal notranslate"><span class="pre">kernel</span></code> attribute of the <code class="docutils literal notranslate"><span class="pre">Linear</span></code> class, you can use the <code class="docutils literal notranslate"><span class="pre">PathContains</span></code> filter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kernel_attribute</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">PathContains</span><span class="p">(</span><span class="s1">&#39;kernel&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grad_fn</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grads</span> <span class="o">=</span> <span class="n">grad_fn</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opt</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Optimizer</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">),</span> <span class="n">wrt</span><span class="o">=</span><span class="n">kernel_attribute</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more information on how to create custom filters, see
+<a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/filters_guide.html">Using Filters</a>
+guide.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fun</strong> – Function to be differentiated. Its arguments at positions specified by
+<code class="docutils literal notranslate"><span class="pre">argnums</span></code> should be arrays, scalars, graph nodes or standard Python
+containers. Argument arrays in the positions specified by <code class="docutils literal notranslate"><span class="pre">argnums</span></code> must
+be of inexact (i.e., floating-point or complex) type. It should return a
+scalar (which includes arrays with shape <code class="docutils literal notranslate"><span class="pre">()</span></code> but not arrays with shape
+<code class="docutils literal notranslate"><span class="pre">(1,)</span></code> etc.)</p></li>
+<li><p><strong>argnums</strong> – Optional, integer or sequence of integers. Specifies which
+positional argument(s) to differentiate with respect to (default 0).</p></li>
+<li><p><strong>has_aux</strong> – Optional, bool. Indicates whether <code class="docutils literal notranslate"><span class="pre">fun</span></code> returns a pair where the
+first element is considered the output of the mathematical function to be
+differentiated and the second element is auxiliary data. Default False.</p></li>
+<li><p><strong>holomorphic</strong> – Optional, bool. Indicates whether <code class="docutils literal notranslate"><span class="pre">fun</span></code> is promised to be
+holomorphic. If True, inputs and outputs must be complex. Default False.</p></li>
+<li><p><strong>allow_int</strong> – Optional, bool. Whether to allow differentiating with
+respect to integer valued inputs. The gradient of an integer input will
+have a trivial vector-space dtype (float0). Default False.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol. Tree-mode does
+not support <code class="docutils literal notranslate"><span class="pre">DiffState</span></code> or shared <code class="docutils literal notranslate"><span class="pre">Variable</span></code> references.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>. When <code class="docutils literal notranslate"><span class="pre">False</span></code>, using <code class="docutils literal notranslate"><span class="pre">DiffState</span></code>
+is not supported.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.jit">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">jit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun=&lt;flax.typing.Missing</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_shardings=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_shardings=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_argnums=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_argnames=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">donate_argnums=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">donate_argnames=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_unused=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inline=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/compilation.html#jit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.jit" title="Permalink to this definition">#</a></dt>
+<dd><p>Lifted version of <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code> that can handle Modules / graph nodes as
+arguments.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If jitted function has a model and an optimizer as inputs, we can
+reduce accelerator’s memory usage if we specify them in
+<code class="docutils literal notranslate"><span class="pre">donate_argnums</span></code> or <code class="docutils literal notranslate"><span class="pre">donate_argnames</span></code>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@nnx</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">donate_argnames</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;optimizer&quot;</span><span class="p">))</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Optimizer</span><span class="p">,</span> <span class="n">other_args</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">pass</span>
+</pre></div>
+</div>
+<p>For details please see <a class="reference external" href="https://github.com/google/flax/issues/5026">this discussion</a>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fun</strong> – <p>Function to be jitted. <code class="docutils literal notranslate"><span class="pre">fun</span></code> should be a pure function, as
+side-effects may only be executed once.</p>
+<p>The arguments and return value of <code class="docutils literal notranslate"><span class="pre">fun</span></code> should be arrays,
+scalars, or (nested) standard Python containers (tuple/list/dict) thereof.
+Positional arguments indicated by <code class="docutils literal notranslate"><span class="pre">static_argnums</span></code> can be anything at
+all, provided they are hashable and have an equality operation defined.
+Static arguments are included as part of a compilation cache key, which is
+why hash and equality operators must be defined.</p>
+<p>JAX keeps a weak reference to <code class="docutils literal notranslate"><span class="pre">fun</span></code> for use as a compilation cache key,
+so the object <code class="docutils literal notranslate"><span class="pre">fun</span></code> must be weakly-referenceable. Most <code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code>
+objects will already satisfy this requirement.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bound methods (e.g., <code class="docutils literal notranslate"><span class="pre">module.method</span></code>) are not supported. Use the
+decorator form <code class="docutils literal notranslate"><span class="pre">&#64;nnx.jit</span></code> on the method definition or call
+<code class="docutils literal notranslate"><span class="pre">nnx.jit(MyClass.method)(instance,</span> <span class="pre">...)</span></code> with the unbound method.</p>
+</div>
+</p></li>
+<li><p><strong>in_shardings</strong> – <p>Pytree of structure matching that of arguments to <code class="docutils literal notranslate"><span class="pre">fun</span></code>,
+with all actual arguments replaced by resource assignment specifications.
+It is also valid to specify a pytree prefix (e.g. one value in place of a
+whole subtree), in which case the leaves get broadcast to all values in
+that subtree.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">in_shardings</span></code> argument is optional. JAX will infer the shardings
+from the input <code class="xref py py-class docutils literal notranslate"><span class="pre">jax.Array</span></code>’s and defaults to replicating the input
+if the sharding cannot be inferred.</p>
+<dl class="simple">
+<dt>The valid resource assignment specifications are:</dt><dd><ul>
+<li><dl class="simple">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">Sharding</span></code>, which will decide how the value</dt><dd><p>will be partitioned. With this, using a mesh context manager is not
+required.</p>
+</dd>
+</dl>
+</li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, will give JAX the freedom to choose whatever sharding
+it wants.
+For in_shardings, JAX will mark is as replicated but this behavior
+can change in the future.
+For out_shardings, we will rely on the XLA GSPMD partitioner to
+determine the output shardings.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The size of every dimension has to be a multiple of the total number of
+resources assigned to it. This is similar to pjit’s in_shardings.</p>
+</p></li>
+<li><p><strong>out_shardings</strong> – <p>Like <code class="docutils literal notranslate"><span class="pre">in_shardings</span></code>, but specifies resource
+assignment for function outputs. This is similar to pjit’s
+out_shardings.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">out_shardings</span></code> argument is optional. If not specified, <code class="xref py py-func docutils literal notranslate"><span class="pre">jax.jit()</span></code>
+will use GSPMD’s sharding propagation to figure out what the sharding of the
+output(s) should be.</p>
+</p></li>
+<li><p><strong>static_argnums</strong> – <p>An optional int or collection of ints that specify which
+positional arguments to treat as static (compile-time constant).
+Operations that only depend on static arguments will be constant-folded in
+Python (during tracing), and so the corresponding argument values can be
+any Python object.</p>
+<p>Static arguments should be hashable, meaning both <code class="docutils literal notranslate"><span class="pre">__hash__</span></code> and
+<code class="docutils literal notranslate"><span class="pre">__eq__</span></code> are implemented, and immutable. Calling the jitted function
+with different values for these constants will trigger recompilation.
+Arguments that are not arrays or containers thereof must be marked as
+static.</p>
+<p>If neither <code class="docutils literal notranslate"><span class="pre">static_argnums</span></code> nor <code class="docutils literal notranslate"><span class="pre">static_argnames</span></code> is provided, no
+arguments are treated as static. If <code class="docutils literal notranslate"><span class="pre">static_argnums</span></code> is not provided but
+<code class="docutils literal notranslate"><span class="pre">static_argnames</span></code> is, or vice versa, JAX uses
+<code class="code docutils literal notranslate"><span class="pre">inspect.signature(fun)</span></code> to find any positional arguments that
+correspond to <code class="docutils literal notranslate"><span class="pre">static_argnames</span></code>
+(or vice versa). If both <code class="docutils literal notranslate"><span class="pre">static_argnums</span></code> and <code class="docutils literal notranslate"><span class="pre">static_argnames</span></code> are
+provided, <code class="docutils literal notranslate"><span class="pre">inspect.signature</span></code> is not used, and only actual
+parameters listed in either <code class="docutils literal notranslate"><span class="pre">static_argnums</span></code> or <code class="docutils literal notranslate"><span class="pre">static_argnames</span></code> will
+be treated as static.</p>
+</p></li>
+<li><p><strong>static_argnames</strong> – An optional string or collection of strings specifying
+which named arguments to treat as static (compile-time constant). See the
+comment on <code class="docutils literal notranslate"><span class="pre">static_argnums</span></code> for details. If not
+provided but <code class="docutils literal notranslate"><span class="pre">static_argnums</span></code> is set, the default is based on calling
+<code class="docutils literal notranslate"><span class="pre">inspect.signature(fun)</span></code> to find corresponding named arguments.</p></li>
+<li><p><strong>donate_argnums</strong> – <p>Specify which positional argument buffers are “donated” to
+the computation. It is safe to donate argument buffers if you no longer
+need them once the computation has finished. In some cases XLA can make
+use of donated buffers to reduce the amount of memory needed to perform a
+computation, for example recycling one of your input buffers to store a
+result. You should not reuse buffers that you donate to a computation, JAX
+will raise an error if you try to. By default, no argument buffers are
+donated.</p>
+<p>If neither <code class="docutils literal notranslate"><span class="pre">donate_argnums</span></code> nor <code class="docutils literal notranslate"><span class="pre">donate_argnames</span></code> is provided, no
+arguments are donated. If <code class="docutils literal notranslate"><span class="pre">donate_argnums</span></code> is not provided but
+<code class="docutils literal notranslate"><span class="pre">donate_argnames</span></code> is, or vice versa, JAX uses
+<code class="code docutils literal notranslate"><span class="pre">inspect.signature(fun)</span></code> to find any positional arguments that
+correspond to <code class="docutils literal notranslate"><span class="pre">donate_argnames</span></code>
+(or vice versa). If both <code class="docutils literal notranslate"><span class="pre">donate_argnums</span></code> and <code class="docutils literal notranslate"><span class="pre">donate_argnames</span></code> are
+provided, <code class="docutils literal notranslate"><span class="pre">inspect.signature</span></code> is not used, and only actual
+parameters listed in either <code class="docutils literal notranslate"><span class="pre">donate_argnums</span></code> or <code class="docutils literal notranslate"><span class="pre">donate_argnames</span></code> will
+be donated.</p>
+<p>For more details on buffer donation see the
+<a class="reference external" href="https://jax.readthedocs.io/en/latest/faq.html#buffer-donation">FAQ</a>.</p>
+</p></li>
+<li><p><strong>donate_argnames</strong> – An optional string or collection of strings specifying
+which named arguments are donated to the computation. See the
+comment on <code class="docutils literal notranslate"><span class="pre">donate_argnums</span></code> for details. If not
+provided but <code class="docutils literal notranslate"><span class="pre">donate_argnums</span></code> is set, the default is based on calling
+<code class="docutils literal notranslate"><span class="pre">inspect.signature(fun)</span></code> to find corresponding named arguments.</p></li>
+<li><p><strong>keep_unused</strong> – If <cite>False</cite> (the default), arguments that JAX determines to be
+unused by <cite>fun</cite> <em>may</em> be dropped from resulting compiled XLA executables.
+Such arguments will not be transferred to the device nor provided to the
+underlying executable. If <cite>True</cite>, unused arguments will not be pruned.</p></li>
+<li><p><strong>device</strong> – This is an experimental feature and the API is likely to change.
+Optional, the Device the jitted function will run on. (Available devices
+can be retrieved via <code class="xref py py-func docutils literal notranslate"><span class="pre">jax.devices()</span></code>.) The default is inherited
+from XLA’s DeviceAssignment logic and is usually to use
+<code class="docutils literal notranslate"><span class="pre">jax.devices()[0]</span></code>.</p></li>
+<li><p><strong>backend</strong> – This is an experimental feature and the API is likely to change.
+Optional, a string representing the XLA backend: <code class="docutils literal notranslate"><span class="pre">'cpu'</span></code>, <code class="docutils literal notranslate"><span class="pre">'gpu'</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">'tpu'</span></code>.</p></li>
+<li><p><strong>inline</strong> – Specify whether this function should be inlined into enclosing
+jaxprs (rather than being represented as an application of the xla_call
+primitive with its own subjaxpr). Default False.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references, reference semantics, and
+structural changes to Modules inside the jitted function. If <code class="docutils literal notranslate"><span class="pre">False</span></code>,
+uses tree-mode which treats Modules as regular JAX pytrees, avoiding
+the overhead of the graph protocol. Tree-mode is faster but does not
+support shared <code class="docutils literal notranslate"><span class="pre">Variable</span></code> references or returning mutable array
+references from the jitted function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A wrapped version of <code class="docutils literal notranslate"><span class="pre">fun</span></code>, set up for just-in-time compilation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.shard_map">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">shard_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f=&lt;class</span> <span class="pre">'flax.typing.Missing'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_specs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_specs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_names=frozenset({})</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_vma=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/compilation.html#shard_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.shard_map" title="Permalink to this definition">#</a></dt>
+<dd><p>Lifted version of
+<a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.shard_map.html">jax.shard_map</a>
+that can handle Modules / graph nodes as arguments.</p>
+<p>Simple data parallel example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax.sharding</span><span class="w"> </span><span class="kn">import</span> <span class="n">PartitionSpec</span> <span class="k">as</span> <span class="n">P</span>
+
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">local_devices</span><span class="p">(),</span> <span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,))</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">shard_map</span><span class="p">(</span>
+  <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">in_specs</span><span class="o">=</span><span class="p">(</span><span class="n">P</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="n">P</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)),</span> <span class="n">out_specs</span><span class="o">=</span><span class="n">P</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">jax</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">visualize_array_sharding</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Notice that here we simply used some <code class="docutils literal notranslate"><span class="pre">PartitionSpec</span></code> to define the spec
+the whole model and data. This works for simple cases but if we need
+to assign different <code class="docutils literal notranslate"><span class="pre">PartitionSpec</span></code> to different parts of the model we
+need to use <code class="docutils literal notranslate"><span class="pre">StateSharding</span></code> and create some filters that allow us to target
+specific parts of the model. Here’s an example of how to do tensor parallelism
+for a simple MLP block using <code class="docutils literal notranslate"><span class="pre">StateSharding</span></code> and filters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">local_devices</span><span class="p">(),</span> <span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,))</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MLP</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">din</span><span class="p">,</span> <span class="n">dhidden</span><span class="p">,</span> <span class="n">dout</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear1</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">din</span><span class="p">,</span> <span class="n">dhidden</span><span class="p">,</span> <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear2</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dhidden</span><span class="p">,</span> <span class="n">dout</span><span class="p">,</span> <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear2</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear1</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">path_ends_with</span><span class="p">(</span><span class="o">*</span><span class="n">path_suffix</span><span class="p">):</span> <span class="c1"># custom filter</span>
+  <span class="k">return</span> <span class="k">lambda</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">path_suffix</span><span class="p">):]</span> <span class="o">==</span> <span class="n">path_suffix</span>
+
+<span class="n">model_spec</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">StateSharding</span><span class="p">({</span>
+  <span class="n">path_ends_with</span><span class="p">(</span><span class="s1">&#39;linear1&#39;</span><span class="p">,</span> <span class="s1">&#39;kernel&#39;</span><span class="p">):</span> <span class="n">P</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">),</span>
+  <span class="n">path_ends_with</span><span class="p">(</span><span class="s1">&#39;linear2&#39;</span><span class="p">,</span> <span class="s1">&#39;kernel&#39;</span><span class="p">):</span> <span class="n">P</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="p">})</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">shard_map</span><span class="p">(</span><span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">in_specs</span><span class="o">=</span><span class="p">(</span><span class="n">model_spec</span><span class="p">,</span> <span class="n">P</span><span class="p">(</span><span class="kc">None</span><span class="p">)),</span> <span class="n">out_specs</span><span class="o">=</span><span class="n">P</span><span class="p">(</span><span class="kc">None</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">psum</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">jax</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">visualize_array_sharding</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">linear1</span><span class="o">.</span><span class="n">kernel</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">visualize_array_sharding</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">linear2</span><span class="o">.</span><span class="n">kernel</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Alternatively, a <code class="docutils literal notranslate"><span class="pre">State</span></code> object with the exact PartitionSpec for each
+state then you can be passed to <code class="docutils literal notranslate"><span class="pre">StateSharding</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">local_devices</span><span class="p">(),</span> <span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,))</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MLP</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">din</span><span class="p">,</span> <span class="n">dhidden</span><span class="p">,</span> <span class="n">dout</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear1</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">din</span><span class="p">,</span> <span class="n">dhidden</span><span class="p">,</span> <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear2</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dhidden</span><span class="p">,</span> <span class="n">dout</span><span class="p">,</span> <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear2</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear1</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="n">model_spec</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">State</span><span class="p">(</span>
+  <span class="p">{</span>
+    <span class="s1">&#39;linear1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="n">P</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">)},</span>
+    <span class="s1">&#39;linear2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="n">P</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)},</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">shard_map</span><span class="p">(</span>
+  <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span>
+  <span class="n">in_specs</span><span class="o">=</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">StateSharding</span><span class="p">(</span><span class="n">model_spec</span><span class="p">),</span> <span class="n">P</span><span class="p">(</span><span class="kc">None</span><span class="p">)),</span>
+  <span class="n">out_specs</span><span class="o">=</span><span class="n">P</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">psum</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">jax</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">visualize_array_sharding</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">linear1</span><span class="o">.</span><span class="n">kernel</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">visualize_array_sharding</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">linear2</span><span class="o">.</span><span class="n">kernel</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">model_spec</span></code> was created manually but you can also automate
+this process by using <code class="docutils literal notranslate"><span class="pre">nnx.get_partition_spec</span></code> to automatically
+create it for you (see
+<a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/flax_gspmd.html">Scale up on multiple devices</a>
+).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – callable to be mapped. Each application of <code class="docutils literal notranslate"><span class="pre">f</span></code>, or “instance” of <code class="docutils literal notranslate"><span class="pre">f</span></code>,
+takes as input a shard of the mapped-over arguments and produces a shard
+of the output.</p></li>
+<li><p><strong>mesh</strong> – a <code class="docutils literal notranslate"><span class="pre">jax.sharding.Mesh</span></code> representing the array of devices over which
+to shard the data and on which to execute instances of <code class="docutils literal notranslate"><span class="pre">f</span></code>. The names of
+the <code class="docutils literal notranslate"><span class="pre">Mesh</span></code> can be used in collective communication operations in <code class="docutils literal notranslate"><span class="pre">f</span></code>.
+This is typically created by a utility function like
+<code class="xref py py-func docutils literal notranslate"><span class="pre">jax.experimental.mesh_utils.create_device_mesh()</span></code>.</p></li>
+<li><p><strong>in_specs</strong> – a pytree with <code class="docutils literal notranslate"><span class="pre">jax.sharding.PartitionSpec``or</span> <span class="pre">``nnx.StateSharding</span></code>
+(mapping substates to <code class="docutils literal notranslate"><span class="pre">PartitionSpec``s)</span> <span class="pre">instances</span> <span class="pre">as</span> <span class="pre">leaves,</span>
+<span class="pre">with</span> <span class="pre">a</span> <span class="pre">tree</span> <span class="pre">structure</span> <span class="pre">that</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">tree</span> <span class="pre">prefix</span> <span class="pre">of</span> <span class="pre">the</span>
+<span class="pre">args</span> <span class="pre">tuple</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">mapped</span> <span class="pre">over.</span> <span class="pre">Similar</span> <span class="pre">to</span> <span class="pre">``jax.sharding.NamedSharding</span></code>,
+each <code class="docutils literal notranslate"><span class="pre">PartitionSpec</span></code> represents how the corresponding argument (or subtree
+of arguments) should be sharded along the named axes of <code class="docutils literal notranslate"><span class="pre">mesh</span></code>. In each
+<code class="docutils literal notranslate"><span class="pre">PartitionSpec</span></code>, mentioning a <code class="docutils literal notranslate"><span class="pre">mesh</span></code> axis name at a position expresses sharding
+the corresponding argument array axis along that positional axis; not
+mentioning an axis name expresses replication. If an argument, or argument
+subtree, has a corresponding spec of None, that argument is not sharded.</p></li>
+<li><p><strong>out_specs</strong> – a pytree with <code class="docutils literal notranslate"><span class="pre">jax.sharding.PartitionSpec</span></code> or <code class="docutils literal notranslate"><span class="pre">nnx.StateSharding</span></code>
+(mapping substates to <code class="docutils literal notranslate"><span class="pre">PartitionSpec``s)</span> <span class="pre">instances</span> <span class="pre">as</span> <span class="pre">leaves,</span> <span class="pre">with</span> <span class="pre">a</span> <span class="pre">tree</span> <span class="pre">structure</span>
+<span class="pre">that</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">tree</span> <span class="pre">prefix</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">output</span> <span class="pre">of</span> <span class="pre">``f</span></code>.
+Each <code class="docutils literal notranslate"><span class="pre">PartitionSpec</span></code> represents how the corresponding output shards should be
+concatenated. In each <code class="docutils literal notranslate"><span class="pre">PartitionSpec</span></code>, metioning a <code class="docutils literal notranslate"><span class="pre">mesh</span></code> axis name at
+a position expresses concatenation of that mesh axis’s shards along the
+corresponding positional axis. Not mentioning a <code class="docutils literal notranslate"><span class="pre">mesh</span></code> axis name
+expresses a promise that the output values are equal along that mesh axis,
+and that rather than concatenating only a single value should be produced.</p></li>
+<li><p><strong>axis_names</strong> – optional set of axis names from <code class="docutils literal notranslate"><span class="pre">mesh</span></code> over which the function <code class="docutils literal notranslate"><span class="pre">f</span></code>
+is manual. If empty, <code class="docutils literal notranslate"><span class="pre">f</span></code>, is manual over all mesh axes.</p></li>
+<li><p><strong>check_vma</strong> – optional boolean representing whether to enable additional validity
+checks and automatic differentiation optimizations. The validity checks concern
+whether any mesh axis names not mentioned in <code class="docutils literal notranslate"><span class="pre">out_specs</span></code> are consistent with
+how the outputs of <code class="docutils literal notranslate"><span class="pre">f</span></code> are replicated.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol. Tree-mode does
+not support <code class="docutils literal notranslate"><span class="pre">StateSharding</span></code> or shared <code class="docutils literal notranslate"><span class="pre">Variable</span></code> references.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>. When <code class="docutils literal notranslate"><span class="pre">False</span></code>, using
+<code class="docutils literal notranslate"><span class="pre">StateSharding</span></code> is not supported.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A callable that applies the input function <code class="docutils literal notranslate"><span class="pre">f</span></code> across data sharded according to
+the <code class="docutils literal notranslate"><span class="pre">mesh</span></code> and <code class="docutils literal notranslate"><span class="pre">in_specs</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.remat">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">remat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f=&lt;flax.typing.Missing</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prevent_cse=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_argnums=()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/autodiff.html#remat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.remat" title="Permalink to this definition">#</a></dt>
+<dd><p>A ‘lifted’ version of the
+<a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.checkpoint.html">jax.checkpoint</a>
+(a.k.a. <code class="docutils literal notranslate"><span class="pre">jax.remat</span></code>).</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">flax.nnx.remat</span></code>, similar to <code class="docutils literal notranslate"><span class="pre">jax.checkpoint</span></code> can provide control over, for</dt><dd><p>example, how <code class="docutils literal notranslate"><span class="pre">flax.nnx.grad</span></code> values are computed and saved during the forward pass versus
+how they are recomputed during the backward pass, trading off memory and FLOPs.</p>
+</dd>
+</dl>
+<p>Learn more in <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/jax_and_nnx_transforms.html">Flax NNX vs JAX Transformations</a>.</p>
+<dl class="simple">
+<dt>To learn about <code class="docutils literal notranslate"><span class="pre">jax.remat</span></code>, go to JAX’s</dt><dd><p><a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/autodiff_remat.html#fundamentals-of-jax-checkpoint">fundamentals of jax.checkpoint</a>
+and <a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/autodiff_remat.html#practical-notes">practical notes</a>.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – Function to be rematerialized.</p></li>
+<li><p><strong>prevent_cse</strong> – Optional, bool. If True, prevents common subexpression
+elimination. Default True.</p></li>
+<li><p><strong>static_argnums</strong> – Optional, int or tuple of ints. Specifies which
+positional arguments to treat as static.</p></li>
+<li><p><strong>policy</strong> – Optional, callable. A policy for which intermediates to save
+during the forward pass.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol. Tree-mode does
+not support shared <code class="docutils literal notranslate"><span class="pre">Variable</span></code> references.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.scan">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f=&lt;class</span> <span class="pre">'flax.typing.Missing'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unroll=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_split_transpose=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_axes=(&lt;class</span> <span class="pre">'flax.nnx.transforms.iteration.Carry'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_axes=(&lt;class</span> <span class="pre">'flax.nnx.transforms.iteration.Carry'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_metadata=FrozenDict({})</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/iteration.html#scan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.scan" title="Permalink to this definition">#</a></dt>
+<dd><p>A Flax NNX transformation of <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.scan.html&gt;">jax.lax.scan</a>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Block</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dim</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="c1"># In this model implementation we create</span>
+    <span class="c1"># multiple blocks using vmap</span>
+
+    <span class="c1"># As Block contains dropout op, we prefer</span>
+    <span class="c1"># to split RNG into num_layers of RNGs</span>
+    <span class="c1"># using @nnx.split_rngs decorator.</span>
+    <span class="c1"># Next, nnx.vmap creates a vectorized version of Block.</span>
+    <span class="c1"># in_axes and out_axes define vectorization axis</span>
+    <span class="c1"># of the input splitted rngs and the output Block instance.</span>
+    <span class="c1"># Both axes should be 0.</span>
+    <span class="nd">@nnx</span><span class="o">.</span><span class="n">split_rngs</span><span class="p">(</span><span class="n">splits</span><span class="o">=</span><span class="n">num_layers</span><span class="p">)</span>
+    <span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,),</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_block</span><span class="p">(</span><span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+      <span class="k">return</span> <span class="n">Block</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span> <span class="o">=</span> <span class="n">create_block</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="n">num_layers</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="c1"># Forward pass method implementation</span>
+
+    <span class="c1"># We use nnx.scan to apply sequentially the blocks</span>
+    <span class="c1"># on the input, for example with num_layers=3</span>
+    <span class="c1"># output = block[0](x)</span>
+    <span class="c1"># output = block[1](output)</span>
+    <span class="c1"># output = block[2](output)</span>
+    <span class="c1">#</span>
+    <span class="c1"># In `forward` function defined below:</span>
+    <span class="c1"># - x represents the loop carry value</span>
+    <span class="c1"># - model is the data to scan along the leading axis</span>
+    <span class="c1"># nnx.scan args:</span>
+    <span class="c1"># - in_axes marks the inputs: x is marked as carry</span>
+    <span class="c1"># and the model is to scan along the axis 0</span>
+    <span class="c1"># - out_axes marks the output as carry</span>
+    <span class="nd">@nnx</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Carry</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">out_axes</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Carry</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">x</span>
+
+    <span class="k">return</span> <span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="p">)</span>
+
+  <span class="c1"># Alternatively, we can also decorate `self.__call__` method</span>
+  <span class="c1"># @nnx.scan(in_axes=(0, nnx.Carry), out_axes=nnx.Carry)</span>
+  <span class="c1"># def __call__(self, x):</span>
+  <span class="c1">#   return self.blocks(x)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># kernel of shape: (2, 4, 4)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># shape: (5, 4)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – a Python function to be scanned</p></li>
+<li><p><strong>length</strong> – optional integer specifying the number of loop iterations</p></li>
+<li><p><strong>reverse</strong> – optional boolean specifying whether to run the scan iteration
+forward (the default) or in reverse</p></li>
+<li><p><strong>unroll</strong> – optional positive int or bool specifying, in the underlying
+operation of the scan primitive, how many scan iterations to unroll
+within a single iteration of a loop.</p></li>
+<li><p><strong>in_axes</strong> – integer, None, <a class="reference internal" href="#flax.nnx.Carry" title="flax.nnx.Carry"><code class="xref py py-class docutils literal notranslate"><span class="pre">flax.nnx.Carry</span></code></a> or sequence of values specifying
+the kind of input args. Integer value would specify the axis of corresponding
+input data to scan along. <a class="reference internal" href="#flax.nnx.Carry" title="flax.nnx.Carry"><code class="xref py py-class docutils literal notranslate"><span class="pre">flax.nnx.Carry</span></code></a> marks the input data as
+loop carry value. None marks the input data as auxiliary input.</p></li>
+<li><p><strong>out_axes</strong> – integer, None, <a class="reference internal" href="#flax.nnx.Carry" title="flax.nnx.Carry"><code class="xref py py-class docutils literal notranslate"><span class="pre">flax.nnx.Carry</span></code></a> or sequence of values specifying
+the kind of output args. See <code class="docutils literal notranslate"><span class="pre">in_axes</span></code> for details. Note that If <code class="docutils literal notranslate"><span class="pre">in_axes</span></code>
+contains <a class="reference internal" href="#flax.nnx.Carry" title="flax.nnx.Carry"><code class="xref py py-class docutils literal notranslate"><span class="pre">flax.nnx.Carry</span></code></a> then <code class="docutils literal notranslate"><span class="pre">out_axes</span></code> must also contain <a class="reference internal" href="#flax.nnx.Carry" title="flax.nnx.Carry"><code class="xref py py-class docutils literal notranslate"><span class="pre">flax.nnx.Carry</span></code></a>.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>. When <code class="docutils literal notranslate"><span class="pre">False</span></code>, using <code class="docutils literal notranslate"><span class="pre">StateAxes</span></code>
+is not supported.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="flax.nnx.Carry">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">Carry</span></span><a class="reference internal" href="../../_modules/flax/nnx/transforms/iteration.html#Carry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.Carry" title="Permalink to this definition">#</a></dt>
+<dd><p>Helper class for <a class="reference internal" href="#flax.nnx.scan" title="flax.nnx.scan"><code class="xref py py-func docutils literal notranslate"><span class="pre">flax.nnx.scan()</span></code></a> function to mark input and output axis as carry.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.value_and_grad">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">value_and_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f=&lt;class</span> <span class="pre">'flax.typing.Missing'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argnums=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_aux=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">holomorphic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_int=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduce_axes=()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/autodiff.html#value_and_grad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.value_and_grad" title="Permalink to this definition">#</a></dt>
+<dd><p>Object-aware version of <code class="docutils literal notranslate"><span class="pre">jax.value_and_grad</span></code>.</p>
+<p>Like <a class="reference internal" href="#flax.nnx.grad" title="flax.nnx.grad"><code class="xref py py-func docutils literal notranslate"><span class="pre">grad()</span></code></a>, but returns both the value and the gradient of <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – Function to be differentiated. Its arguments at positions specified by
+<code class="docutils literal notranslate"><span class="pre">argnums</span></code> should be arrays, scalars, graph nodes or standard Python
+containers. Argument arrays in the positions specified by <code class="docutils literal notranslate"><span class="pre">argnums</span></code> must
+be of inexact (i.e., floating-point or complex) type. It should return a
+scalar (which includes arrays with shape <code class="docutils literal notranslate"><span class="pre">()</span></code> but not arrays with shape
+<code class="docutils literal notranslate"><span class="pre">(1,)</span></code> etc.)</p></li>
+<li><p><strong>argnums</strong> – Optional, integer or sequence of integers. Specifies which
+positional argument(s) to differentiate with respect to (default 0).</p></li>
+<li><p><strong>has_aux</strong> – Optional, bool. Indicates whether <code class="docutils literal notranslate"><span class="pre">f</span></code> returns a pair where the
+first element is considered the output of the mathematical function to be
+differentiated and the second element is auxiliary data. Default False.</p></li>
+<li><p><strong>holomorphic</strong> – Optional, bool. Indicates whether <code class="docutils literal notranslate"><span class="pre">f</span></code> is promised to be
+holomorphic. If True, inputs and outputs must be complex. Default False.</p></li>
+<li><p><strong>allow_int</strong> – Optional, bool. Whether to allow differentiating with
+respect to integer valued inputs. The gradient of an integer input will
+have a trivial vector-space dtype (float0). Default False.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol. Tree-mode does
+not support <code class="docutils literal notranslate"><span class="pre">DiffState</span></code> or shared <code class="docutils literal notranslate"><span class="pre">Variable</span></code> references.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>. When <code class="docutils literal notranslate"><span class="pre">False</span></code>, using <code class="docutils literal notranslate"><span class="pre">DiffState</span></code>
+is not supported.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function with the same arguments as <code class="docutils literal notranslate"><span class="pre">f</span></code> that evaluates both <code class="docutils literal notranslate"><span class="pre">f</span></code>
+and the gradient of <code class="docutils literal notranslate"><span class="pre">f</span></code> and returns them as a pair (a two-element
+tuple). If <code class="docutils literal notranslate"><span class="pre">argnums</span></code> is an integer then the gradient has the same shape
+and type as the positional argument indicated by that integer. If argnums is
+a sequence of integers, the gradient is a tuple of values with the same
+shapes and types as the corresponding arguments. If <code class="docutils literal notranslate"><span class="pre">has_aux</span></code> is True
+then a tuple of ((value, auxiliary_data), gradient) is returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.vmap">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">vmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f=&lt;class</span> <span class="pre">'flax.typing.Missing'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_axes=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_axes=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_name=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_size=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spmd_axis_name=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_metadata=FrozenDict({})</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/iteration.html#vmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.vmap" title="Permalink to this definition">#</a></dt>
+<dd><p>Reference-aware version of <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html">jax.vmap</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – Function to be mapped over additional axes.</p></li>
+<li><p><strong>in_axes</strong> – An integer, None, or sequence of values specifying which input
+array axes to map over (see <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html">jax.vmap</a>). In
+addition to integers and None, <code class="xref py py-class docutils literal notranslate"><span class="pre">StateAxes</span></code>  can be used to control
+how graph nodes like Modules are vectorized by specifying the axes to be
+applied to substates of the graph node given a <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/filters_guide.html">Filter</a>.</p></li>
+<li><p><strong>out_axes</strong> – An integer, None, or pytree indicating where the mapped axis
+should appear in the output (see <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html">jax.vmap</a>).</p></li>
+<li><p><strong>axis_name</strong> – Optional, a hashable Python object used to identify the mapped
+axis so that parallel collectives can be applied.</p></li>
+<li><p><strong>axis_size</strong> – Optional, an integer indicating the size of the axis to be
+mapped. If not provided, the mapped axis size is inferred from arguments.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol. Tree-mode does
+not support <code class="docutils literal notranslate"><span class="pre">StateAxes</span></code> or shared <code class="docutils literal notranslate"><span class="pre">Variable</span></code> references.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>. When <code class="docutils literal notranslate"><span class="pre">False</span></code>, using <code class="docutils literal notranslate"><span class="pre">StateAxes</span></code>
+is not supported.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Batched/vectorized version of <code class="docutils literal notranslate"><span class="pre">f</span></code> with arguments that correspond to
+those of <code class="docutils literal notranslate"><span class="pre">f</span></code>, but with extra array axes at positions indicated by
+<code class="docutils literal notranslate"><span class="pre">in_axes</span></code>, and a return value that corresponds to that of <code class="docutils literal notranslate"><span class="pre">f</span></code>, but
+with extra array axes at positions indicated by <code class="docutils literal notranslate"><span class="pre">out_axes</span></code>.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span><span class="p">,</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(5, 3)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">LinearEnsemble</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">rngs</span><span class="p">(),</span> <span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">LinearEnsemble</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">x</span> <span class="o">@</span> <span class="n">model</span><span class="o">.</span><span class="n">w</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(5, 3)</span>
+</pre></div>
+</div>
+<p>To control control how graph node substates are vectorized, outputs of <code class="docutils literal notranslate"><span class="pre">nnx.prefix</span></code>
+can be passed to <code class="docutils literal notranslate"><span class="pre">in_axes</span></code> and <code class="docutils literal notranslate"><span class="pre">out_axes</span></code> specifying the axes to be
+applied to each substate given a filter. The following example shows how to
+share the parameters between the ensemble members which keeping different
+batch statistics and dropout random state:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">BatchStat</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state_axes</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">prefix</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="p">{</span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="n">state_axes</span><span class="p">,),</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">mul</span><span class="p">(</span><span class="n">foo</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">foo</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="n">foo</span><span class="o">.</span><span class="n">b</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">mul</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>
+<span class="go">Array([[0, 0, 0, 0],</span>
+<span class="go">       [0, 1, 2, 3],</span>
+<span class="go">       [0, 2, 4, 6],</span>
+<span class="go">       [0, 3, 6, 9]], dtype=int32)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.eval_shape">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">eval_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/transforms.html#eval_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.eval_shape" title="Permalink to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>A “lifted” version of <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.eval_shape.html#jax.eval_shape">jax.eval_shape</a></dt><dd><p>that can handle <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/module.html#flax.nnx.Module">flax.nnx.Module</a>
+/ graph nodes as arguments.</p>
+</dd>
+<dt>Similar to <code class="docutils literal notranslate"><span class="pre">jax.eval_shape</span></code>, it computes the shape/dtype of a function <cite>f</cite> without</dt><dd><p>performing any floating point operations (FLOPs) which can be expensive. This can be
+useful for performing shape inference, for example. Unlike <cite>jax.eval_shape</cite>,
+<cite>nnx.eval_shape</cite> will automatically compute the expected sharding based on Flax sharding metadata
+for all Variables not using explicit sharding.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – the function to evaluate.</p></li>
+<li><p><strong>*args</strong> – positional arguments to <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – keyword arguments to <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.custom_vjp">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">custom_vjp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun=&lt;flax.typing.Missing</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nondiff_argnums=()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/autodiff.html#custom_vjp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.custom_vjp" title="Permalink to this definition">#</a></dt>
+<dd><p>Reference aware version of
+<a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.custom_vjp.html">jax.custom_vjp</a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">nnx.custom_vjp</span></code> accepts Modules and other Flax NNX objects as arguments. The main difference
+with the JAX version is that, because Modules follow reference semantics, they propagate the State
+updates for the inputs as auxiliary outputs. This means that the incoming gradients in the <code class="docutils literal notranslate"><span class="pre">bwd</span></code> function
+will have the form <code class="docutils literal notranslate"><span class="pre">(input_updates_g,</span> <span class="pre">out_g)</span></code> where <code class="docutils literal notranslate"><span class="pre">input_updates_g</span></code> is the gradient updated state of
+the inputs w.r.t. to the inputs. All Module terms on the inputs will an associated <code class="docutils literal notranslate"><span class="pre">State</span></code> term in
+<code class="docutils literal notranslate"><span class="pre">input_updates_g</span></code>, while all non-Module terms will appear as None. The shape of the tangent will be
+expected to have the same shape as the input, with <code class="docutils literal notranslate"><span class="pre">State</span></code> terms in place of the corresponding Module terms.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@nnx</span><span class="o">.</span><span class="n">custom_vjp</span><span class="p">(</span><span class="n">graph_updates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f_fwd</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">m</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f_bwd</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="n">input_updates_g</span><span class="p">,</span> <span class="n">out_g</span> <span class="o">=</span> <span class="n">g</span>
+<span class="gp">... </span>  <span class="n">cos_x</span><span class="p">,</span> <span class="n">sin_x</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">res</span>
+<span class="gp">... </span>  <span class="p">(</span><span class="n">m_updates_g</span><span class="p">,)</span> <span class="o">=</span> <span class="n">input_updates_g</span>
+<span class="gp">... </span>  <span class="n">m_g</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">m_updates_g</span><span class="p">)</span> <span class="c1"># create copy</span>
+<span class="gp">...</span>
+<span class="gp">... </span>  <span class="n">m_g</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos_x</span> <span class="o">*</span> <span class="n">out_g</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+<span class="gp">... </span>  <span class="n">m_g</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin_x</span> <span class="o">*</span> <span class="n">out_g</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="p">(</span><span class="n">m_g</span><span class="p">,)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">defvjp</span><span class="p">(</span><span class="n">f_fwd</span><span class="p">,</span> <span class="n">f_bwd</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">2.</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grads</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">f</span><span class="p">)(</span><span class="n">m</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>
+<span class="go">State({</span>
+<span class="go">  &#39;x&#39;: Param(</span>
+<span class="go">    value=()</span>
+<span class="go">  ),</span>
+<span class="go">  &#39;y&#39;: Param(</span>
+<span class="go">    value=()</span>
+<span class="go">  )</span>
+<span class="go">})</span>
+</pre></div>
+</div>
+<p>Note that the State objects that represent Module terms on <code class="docutils literal notranslate"><span class="pre">input_updates_g</span></code> have the
+same shape as the State objects expected in the output tanget. This means that you can
+usually just copy them from <code class="docutils literal notranslate"><span class="pre">input_updates_g</span></code> and update them with their corresponding
+gradient values.</p>
+<p>You can select which substates are differentiable (have a tangent) for Modules and other
+graph nodes by passing a <code class="docutils literal notranslate"><span class="pre">DiffState</span></code> to <code class="docutils literal notranslate"><span class="pre">nondiff_argnums</span></code>. For example, if you want to
+differentiate only the <code class="docutils literal notranslate"><span class="pre">x</span></code> attribute of the <code class="docutils literal notranslate"><span class="pre">Foo</span></code> class, you can do the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x_attribute</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">PathContains</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff_state</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">DiffState</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_attribute</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@nnx</span><span class="o">.</span><span class="n">custom_vjp</span><span class="p">(</span><span class="n">nondiff_argnums</span><span class="o">=</span><span class="p">(</span><span class="n">diff_state</span><span class="p">,),</span> <span class="n">graph_updates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>  <span class="c1"># type: ignore</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f_fwd</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">... </span>  <span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">m</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">res</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f_bwd</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="n">input_updates_g</span><span class="p">,</span> <span class="n">out_g</span> <span class="o">=</span> <span class="n">g</span>
+<span class="gp">... </span>  <span class="n">cos_x</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">res</span>
+<span class="gp">... </span>  <span class="p">(</span><span class="n">m_updates_g</span><span class="p">,)</span> <span class="o">=</span> <span class="n">input_updates_g</span>
+<span class="gp">... </span>  <span class="n">m_g</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">m_updates_g</span><span class="p">)</span> <span class="c1"># create copy</span>
+<span class="gp">...</span>
+<span class="gp">... </span>  <span class="n">m_g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos_x</span> <span class="o">*</span> <span class="n">out_g</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+<span class="gp">... </span>  <span class="k">del</span> <span class="n">m_g</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="c1"># y is not differentiable</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="p">(</span><span class="n">m_g</span><span class="p">,)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">defvjp</span><span class="p">(</span><span class="n">f_fwd</span><span class="p">,</span> <span class="n">f_bwd</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">2.</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grad</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">DiffState</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_attribute</span><span class="p">),</span> <span class="n">graph_updates</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">grad</span><span class="p">)</span>
+<span class="go">State({</span>
+<span class="go">  &#39;x&#39;: Param(</span>
+<span class="go">    value=()</span>
+<span class="go">  )</span>
+<span class="go">})</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">grad</span></code> cannot calculate gradients for states that don’t have a tangent
+defined by <code class="docutils literal notranslate"><span class="pre">custom_vjp</span></code>, in the example above we reuse the same <code class="docutils literal notranslate"><span class="pre">x_attribute</span></code>
+filter to keep <code class="docutils literal notranslate"><span class="pre">custom_vjp</span></code> and <code class="docutils literal notranslate"><span class="pre">grad</span></code> in sync.</p>
+<p><strong>graph_updates=False</strong></p>
+<p>When <code class="docutils literal notranslate"><span class="pre">graph_updates=False</span></code> or <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>, the behavior is closer to
+<code class="docutils literal notranslate"><span class="pre">jax.custom_vjp</span></code>: the <code class="docutils literal notranslate"><span class="pre">bwd</span></code> function receives <code class="docutils literal notranslate"><span class="pre">out_g</span></code> directly, and
+tangent types are the same as the input types, this means the tangent for a
+Module is a Module instance with gradient values set on its attributes.
+This mode does not support <code class="docutils literal notranslate"><span class="pre">DiffState</span></code> in <code class="docutils literal notranslate"><span class="pre">nondiff_argnums</span></code>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@nnx</span><span class="o">.</span><span class="n">custom_vjp</span><span class="p">(</span><span class="n">graph_updates</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f_fwd</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">m</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f_bwd</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="n">cos_x</span><span class="p">,</span> <span class="n">sin_x</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">res</span>
+<span class="gp">... </span>  <span class="n">m_g</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">... </span>  <span class="n">m_g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos_x</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+<span class="gp">... </span>  <span class="n">m_g</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin_x</span> <span class="o">*</span> <span class="n">g</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="p">(</span><span class="n">m_g</span><span class="p">,)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">defvjp</span><span class="p">(</span><span class="n">f_fwd</span><span class="p">,</span> <span class="n">f_bwd</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>updates_g</strong></p>
+<p>When Variables are mutated inside <code class="docutils literal notranslate"><span class="pre">f</span></code> or <code class="docutils literal notranslate"><span class="pre">f_fwd</span></code>, NNX tracks these
+updates and propagates their gradients. The <code class="docutils literal notranslate"><span class="pre">bwd</span></code> function can optionally
+receive these gradients by declaring an <code class="docutils literal notranslate"><span class="pre">updates_g</span></code> keyword argument.
+<code class="docutils literal notranslate"><span class="pre">updates_g</span></code> is a pytree with the same structure as the input <code class="docutils literal notranslate"><span class="pre">args</span></code>,
+where mutated Variables have their gradient values and all other leaves are
+<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Bar</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">BatchStat</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@nnx</span><span class="o">.</span><span class="n">custom_vjp</span><span class="p">(</span><span class="n">graph_updates</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Bar</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="n">m</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">2.0</span>  <span class="c1"># mutation tracked as an update</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f_fwd</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Bar</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">m</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f_bwd</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">updates_g</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="n">cos_x</span><span class="p">,</span> <span class="n">sin_x</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">res</span>
+<span class="gp">... </span>  <span class="c1"># updates_g is a tuple matching args: (m_updates_g,)</span>
+<span class="gp">... </span>  <span class="c1"># m_updates_g.z contains the gradient for the z mutation</span>
+<span class="gp">... </span>  <span class="n">m_g</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">... </span>  <span class="n">m_g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos_x</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+<span class="gp">... </span>  <span class="n">m_g</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin_x</span> <span class="o">*</span> <span class="n">g</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="p">(</span><span class="n">m_g</span><span class="p">,)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">defvjp</span><span class="p">(</span><span class="n">f_fwd</span><span class="p">,</span> <span class="n">f_bwd</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">bwd</span></code> does not declare <code class="docutils literal notranslate"><span class="pre">updates_g</span></code>, the update gradients are
+silently discarded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fun</strong> – Callable base function.</p></li>
+<li><p><strong>nondiff_argnums</strong> – Tuple of integers or DiffState objects specifying the
+argument indices that are not differentiated. By default all arguments are
+differentiated. Integers cannot be used to mark graph nodes such as Modules
+as non-differentiable, in this case use a DiffState object. DiffState objects
+define the set of differentiable substates, contrary to what the name of this
+argument suggests, this is done for compatibility with <code class="docutils literal notranslate"><span class="pre">grad</span></code>.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol. Tree-mode does
+not support <code class="docutils literal notranslate"><span class="pre">DiffState</span></code> in <code class="docutils literal notranslate"><span class="pre">nondiff_argnums</span></code>.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>. When <code class="docutils literal notranslate"><span class="pre">False</span></code>, using <code class="docutils literal notranslate"><span class="pre">DiffState</span></code>
+is not supported.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.vjp">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">vjp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f=&lt;flax.typing.Missing</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*primals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_aux=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduce_axes=()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/autodiff.html#vjp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.vjp" title="Permalink to this definition">#</a></dt>
+<dd><p>Stateful version of <code class="docutils literal notranslate"><span class="pre">jax.vjp</span></code> that propagates NNX Variable updates.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">primals_out</span><span class="p">,</span> <span class="n">vjp_fn</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">vjp</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m_grad</span><span class="p">,</span> <span class="n">x_grad</span> <span class="o">=</span> <span class="n">vjp_fn</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">primals_out</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Can also be used as a decorator:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@nnx</span><span class="o">.</span><span class="n">vjp</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">primals_out</span><span class="p">,</span> <span class="n">vjp_fn</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – Function to be differentiated. Its arguments can be arrays, scalars,
+or pytrees containing arrays and NNX Variables.</p></li>
+<li><p><strong>*primals</strong> – A sequence of primal values at which the Jacobian of <code class="docutils literal notranslate"><span class="pre">f</span></code>
+should be evaluated.</p></li>
+<li><p><strong>has_aux</strong> – Optional, bool. Indicates whether <code class="docutils literal notranslate"><span class="pre">f</span></code> returns a pair where the
+first element is considered the output of the mathematical function to be
+differentiated and the second element is auxiliary data. Default False.</p></li>
+<li><p><strong>reduce_axes</strong> – Deprecated, do not use.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">has_aux</span></code> is False, returns a <code class="docutils literal notranslate"><span class="pre">(primals_out,</span> <span class="pre">vjp_fn)</span></code> pair.
+<code class="docutils literal notranslate"><span class="pre">vjp_fn</span></code> takes a cotangent with the same structure as <code class="docutils literal notranslate"><span class="pre">primals_out</span></code>
+and returns gradients for each primal argument.
+If <code class="docutils literal notranslate"><span class="pre">has_aux</span></code> is True, returns <code class="docutils literal notranslate"><span class="pre">(primals_out,</span> <span class="pre">vjp_fn,</span> <span class="pre">aux)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.jvp">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">jvp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f=&lt;flax.typing.Missing</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primals=&lt;flax.typing.Missing</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangents=&lt;flax.typing.Missing</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_aux=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/autodiff.html#jvp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.jvp" title="Permalink to this definition">#</a></dt>
+<dd><p>Stateful version of <code class="docutils literal notranslate"><span class="pre">jax.jvp</span></code> that propagates NNX Variable updates.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m_tangent</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x_tangent</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">primals_out</span><span class="p">,</span> <span class="n">tangent_out</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">jvp</span><span class="p">(</span>
+<span class="gp">... </span>  <span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="p">(</span><span class="n">m_tangent</span><span class="p">,</span> <span class="n">x_tangent</span><span class="p">),</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Can also be used as a decorator:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@nnx</span><span class="o">.</span><span class="n">jvp</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">primals_out</span><span class="p">,</span> <span class="n">tangent_out</span> <span class="o">=</span> <span class="n">f</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="p">(</span><span class="n">m_tangent</span><span class="p">,</span> <span class="n">x_tangent</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – Function to be differentiated. Its arguments can be arrays, scalars,
+or pytrees containing arrays and NNX Variables.</p></li>
+<li><p><strong>primals</strong> – A tuple of primal values at which the Jacobian of <code class="docutils literal notranslate"><span class="pre">f</span></code>
+should be evaluated.</p></li>
+<li><p><strong>tangents</strong> – A tuple of tangent vectors, with the same structure as
+<code class="docutils literal notranslate"><span class="pre">primals</span></code>.</p></li>
+<li><p><strong>has_aux</strong> – Optional, bool. Indicates whether <code class="docutils literal notranslate"><span class="pre">f</span></code> returns a pair where the
+first element is considered the output of the mathematical function to be
+differentiated and the second element is auxiliary data. Default False.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">has_aux</span></code> is False, returns <code class="docutils literal notranslate"><span class="pre">(primals_out,</span> <span class="pre">tangent_out)</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">has_aux</span></code> is True, returns <code class="docutils literal notranslate"><span class="pre">(primals_out,</span> <span class="pre">tangent_out,</span> <span class="pre">aux)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.cond">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">cond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">false_fun</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">operands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/transforms.html#cond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.cond" title="Permalink to this definition">#</a></dt>
+<dd><p>Conditionally apply <code class="docutils literal notranslate"><span class="pre">true_fun</span></code> or <code class="docutils literal notranslate"><span class="pre">false_fun</span></code>.</p>
+<p>Wraps <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.cond.html">jax.lax.cond</a>
+to support Flax NNX modules and variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> – boolean scalar. If True, <code class="docutils literal notranslate"><span class="pre">true_fun</span></code> is applied, otherwise
+<code class="docutils literal notranslate"><span class="pre">false_fun</span></code>.</p></li>
+<li><p><strong>true_fun</strong> – function to apply if <code class="docutils literal notranslate"><span class="pre">pred</span></code> is True.</p></li>
+<li><p><strong>false_fun</strong> – function to apply if <code class="docutils literal notranslate"><span class="pre">pred</span></code> is False.</p></li>
+<li><p><strong>*operands</strong> – operands passed to whichever branch is selected.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.switch">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">switch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branches</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">operands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/transforms.html#switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.switch" title="Permalink to this definition">#</a></dt>
+<dd><p>Select and apply one of <code class="docutils literal notranslate"><span class="pre">branches</span></code> based on <code class="docutils literal notranslate"><span class="pre">index</span></code>.</p>
+<p>Wraps <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.switch.html">jax.lax.switch</a>
+to support Flax NNX modules and variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> – integer scalar indicating which branch to apply.</p></li>
+<li><p><strong>branches</strong> – sequence of functions to select from.</p></li>
+<li><p><strong>*operands</strong> – operands passed to the selected branch.</p></li>
+<li><p><strong>graph</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), uses graph-mode which supports the full
+NNX feature set including shared references and reference semantics.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, uses tree-mode which treats Modules as regular JAX
+pytrees, avoiding the overhead of the graph protocol.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.while_loop">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">while_loop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cond_fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_val</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/iteration.html#while_loop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.while_loop" title="Permalink to this definition">#</a></dt>
+<dd><p>A Flax NNX transformation of <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.while_loop.html">jax.lax.while_loop</a>.</p>
+<p>Caution: for the NNX internal reference tracing mechanism to work, you cannot
+change the variable reference structure of <code class="docutils literal notranslate"><span class="pre">init_val</span></code> inside <code class="docutils literal notranslate"><span class="pre">body_fun</span></code>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">fwd_fn</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="n">module</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="nb">input</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">module</span><span class="p">,</span> <span class="n">module</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">count</span> <span class="o">-</span> <span class="mf">1.0</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># `module` will be called three times</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">while_loop</span><span class="p">(</span>
+<span class="gp">... </span>  <span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">input</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fwd_fn</span><span class="p">,</span> <span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cond_fun</strong> – A function for the continue condition of the while loop, taking a
+single input of type <code class="docutils literal notranslate"><span class="pre">T</span></code> and outputting a boolean.</p></li>
+<li><p><strong>body_fun</strong> – A function that takes an input of type <code class="docutils literal notranslate"><span class="pre">T</span></code> and outputs an <code class="docutils literal notranslate"><span class="pre">T</span></code>.
+Note that both data and modules of <code class="docutils literal notranslate"><span class="pre">T</span></code> must have the same reference
+structure between inputs and outputs.</p></li>
+<li><p><strong>init_val</strong> – The initial input for <code class="docutils literal notranslate"><span class="pre">cond_fun</span></code> and <code class="docutils literal notranslate"><span class="pre">body_fun</span></code>. Must be of type <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
+<li><p><strong>graph</strong> – if True, use graph-mode (default). If False, use tree-mode.
+If None, uses the value of <code class="docutils literal notranslate"><span class="pre">nnx_graph_mode</span></code> config.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.fori_loop">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">fori_loop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_val</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unroll</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_updates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flax/nnx/transforms/iteration.html#fori_loop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.fori_loop" title="Permalink to this definition">#</a></dt>
+<dd><p>A Flax NNX transformation of <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.lax.fori_loop.html">jax.lax.fori_loop</a>.</p>
+<p>Caution: for the NNX internal reference tracing mechanism to work, you cannot
+change the variable reference structure of <cite>init_val</cite> inside <cite>body_fun</cite>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">fwd_fn</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="n">m</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="nb">input</span>
+<span class="gp">... </span>  <span class="n">m</span><span class="o">.</span><span class="n">kernel</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="n">i</span>
+<span class="gp">... </span>  <span class="k">return</span> <span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">fori_loop</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">fwd_fn</span><span class="p">,</span> <span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_equal</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lower</strong> – An integer representing the loop index lower bound (inclusive).</p></li>
+<li><p><strong>upper</strong> – An integer representing the loop index upper bound (exclusive).</p></li>
+<li><p><strong>body_fun</strong> – a function that takes an input of type <code class="docutils literal notranslate"><span class="pre">T</span></code> and outputs an <code class="docutils literal notranslate"><span class="pre">T</span></code>.
+Note that both data and modules of <code class="docutils literal notranslate"><span class="pre">T</span></code> must have the same reference
+structure between inputs and outputs.</p></li>
+<li><p><strong>init_val</strong> – the initial input for body_fun. Must be of type <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
+<li><p><strong>unroll</strong> – An optional integer or boolean that determines how much to unroll
+the loop. If an integer is provided, it determines how many unrolled
+loop iterations to run within a single rolled iteration of the loop. If a
+boolean is provided, it will determine if the loop is competely unrolled
+(i.e. <code class="docutils literal notranslate"><span class="pre">unroll=True</span></code>) or left completely unrolled (i.e. <code class="docutils literal notranslate"><span class="pre">unroll=False</span></code>).
+This argument is only applicable if the loop bounds are statically known.</p></li>
+<li><p><strong>graph</strong> – if True, use graph-mode (default). If False, use tree-mode.
+If None, uses the value of <code class="docutils literal notranslate"><span class="pre">nnx_graph_mode</span></code> config.</p></li>
+<li><p><strong>graph_updates</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, propagates updates on graph structure
+that happen inside the transform to the input graphs, has no
+effect when <code class="docutils literal notranslate"><span class="pre">graph=False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A loop value from the final iteration, of type <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="training/ema.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">EMA</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="variables.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">variables</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.grad"><code class="docutils literal notranslate"><span class="pre">grad()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.jit"><code class="docutils literal notranslate"><span class="pre">jit()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.shard_map"><code class="docutils literal notranslate"><span class="pre">shard_map()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.remat"><code class="docutils literal notranslate"><span class="pre">remat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.scan"><code class="docutils literal notranslate"><span class="pre">scan()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.Carry"><code class="docutils literal notranslate"><span class="pre">Carry</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.value_and_grad"><code class="docutils literal notranslate"><span class="pre">value_and_grad()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.vmap"><code class="docutils literal notranslate"><span class="pre">vmap()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.eval_shape"><code class="docutils literal notranslate"><span class="pre">eval_shape()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.custom_vjp"><code class="docutils literal notranslate"><span class="pre">custom_vjp()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.vjp"><code class="docutils literal notranslate"><span class="pre">vjp()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.jvp"><code class="docutils literal notranslate"><span class="pre">jvp()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.cond"><code class="docutils literal notranslate"><span class="pre">cond()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.switch"><code class="docutils literal notranslate"><span class="pre">switch()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.while_loop"><code class="docutils literal notranslate"><span class="pre">while_loop()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.fori_loop"><code class="docutils literal notranslate"><span class="pre">fori_loop()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

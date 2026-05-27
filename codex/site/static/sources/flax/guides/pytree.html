@@ -1,0 +1,1405 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Module &amp; Pytree</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/pytree';</script>
+    <link rel="icon" href="../_static/flax.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Transformations" href="transforms.html" />
+    <link rel="prev" title="Basic Guides" href="../guides_basic.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/pytree.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../guides_basic.html">Basic Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs_nnx/guides/pytree.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/guides/pytree.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Module & Pytree</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pytrees-101">Pytrees 101</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-pytrees">Custom Pytrees</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nnx-pytree">nnx.Pytree</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-use-explicit-annotations">When to use explicit annotations?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataclasses">Dataclasses</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attribute-updates">Attribute Updates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attribute-checks">Attribute checks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trace-level-awareness">Trace-level awareness</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-sharing">Reference Sharing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#turning-off-pytree-registration">Turning off pytree registration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module">Module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sow">sow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perturb">perturb</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#object">Object</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="module-pytree">
+<h1>Module &amp; Pytree<a class="headerlink" href="#module-pytree" title="Permalink to this heading">#</a></h1>
+<p>Flax NNX’s Modules are by default registered as JAX Pytrees, this allows using them throughout most of JAX APIs but in particular JAX transforms and the <code class="docutils literal notranslate"><span class="pre">jax.tree.*</span></code> functions. Thanks to the pytree protocol a simple NNX program might look like this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Linear</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">din</span><span class="p">,</span> <span class="n">dout</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">din</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dout</span> <span class="o">=</span> <span class="n">din</span><span class="p">,</span> <span class="n">dout</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">rngs</span><span class="o">.</span><span class="n">normal</span><span class="p">((</span><span class="n">din</span><span class="p">,</span> <span class="n">dout</span><span class="p">)))</span>
+
+<span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">x</span> <span class="o">@</span> <span class="n">weights</span><span class="o">.</span><span class="n">kernel</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">rngs</span><span class="o">.</span><span class="n">uniform</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>y.shape = (5, 3)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">weights</span></code>, of type <code class="docutils literal notranslate"><span class="pre">Linear</span></code>, was able to be passed directly to the <code class="docutils literal notranslate"><span class="pre">jit</span></code>-ed function <code class="docutils literal notranslate"><span class="pre">forward</span></code>. Throughout the rest of this guide we will try to answer the questions:</p>
+<ol class="arabic simple">
+<li><p>What are pytrees?</p></li>
+<li><p>How does NNX implement pytrees?</p></li>
+</ol>
+<section id="pytrees-101">
+<h2>Pytrees 101<a class="headerlink" href="#pytrees-101" title="Permalink to this heading">#</a></h2>
+<p>Most modern ML models have too many Arrays for users to pass around individually, to deal with this JAX developed a way to track Array data in nested structures that still allowed caching for compilation: Pytrees. JAX pytrees are tree structures made of python objects that can be recursively traversed in order to collect an ordered list of leaves and a definition of the tree structure, this is done via the <code class="docutils literal notranslate"><span class="pre">jax.tree.flatten</span></code> function. Most common pytrees are native python containers like <code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code>, and <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, but interestingly it also include <code class="docutils literal notranslate"><span class="pre">None</span></code>. The example bellow shows how to collect all the integer leaves from a nested structure using <code class="docutils literal notranslate"><span class="pre">flatten</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pytree</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">leaves</span><span class="p">,</span> <span class="n">treedef</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">pytree</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;leaves = </span><span class="si">{</span><span class="n">leaves</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;treedef = </span><span class="si">{</span><span class="n">treedef</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>leaves = [1, 2, 3, 4]
+treedef = PyTreeDef([{&#39;a&#39;: *}, {&#39;b&#39;: *, &#39;c&#39;: (*, *), &#39;d&#39;: None}])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">None</span></code> is not a leaf because its defined as a pytree with no children. The main purpose of being able to flatten, apart from collecting the leaves, is being able reconstruct the pytree structure from the tree definition from any sequence of leaves of the same length via the <code class="docutils literal notranslate"><span class="pre">jax.tree.unflatten</span></code> function:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_leaves</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">10</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">leaves</span><span class="p">]</span>
+<span class="n">new_pytree</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">treedef</span><span class="p">,</span> <span class="n">new_leaves</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;old pytree = </span><span class="si">{</span><span class="n">pytree</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;new pytree = </span><span class="si">{</span><span class="n">new_pytree</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>old pytree = [{&#39;a&#39;: 1}, {&#39;b&#39;: 2, &#39;c&#39;: (3, 4), &#39;d&#39;: None}]
+new pytree = [{&#39;a&#39;: 10}, {&#39;b&#39;: 20, &#39;c&#39;: (30, 40), &#39;d&#39;: None}]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="custom-pytrees">
+<h3>Custom Pytrees<a class="headerlink" href="#custom-pytrees" title="Permalink to this heading">#</a></h3>
+<p>JAX allows us to register custom pytree node type by using the <code class="docutils literal notranslate"><span class="pre">jax.tree_util.register_pytree_node</span></code> utility. For any type we are able to define a flatten that decomposes the object into a a sequence of nodes / children and a static (hashable) structure, and a unflatten function which takes the sequence of nodes and the static structure and creates a new instance. In the following example we create a simple type <code class="docutils literal notranslate"><span class="pre">Foo</span></code> with the attributes <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, and <code class="docutils literal notranslate"><span class="pre">c</span></code>, and define <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> as nodes and <code class="docutils literal notranslate"><span class="pre">c</span></code> as static.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">:</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="s2">&quot;hi&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">flatten_foo</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+  <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">foo</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">foo</span><span class="o">.</span><span class="n">b</span><span class="p">]</span>  <span class="c1"># sequence of nodes</span>
+  <span class="n">static</span> <span class="o">=</span> <span class="p">(</span><span class="n">foo</span><span class="o">.</span><span class="n">c</span><span class="p">,)</span> <span class="c1"># hashable &amp; equatable structure</span>
+  <span class="k">return</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">static</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">unflatten_foo</span><span class="p">(</span><span class="n">static</span><span class="p">,</span> <span class="n">nodes</span><span class="p">):</span>
+  <span class="n">foo</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">Foo</span><span class="p">)</span>  <span class="c1"># create uninitialized instance</span>
+  <span class="n">foo</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">foo</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="n">foo</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">static</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="k">return</span> <span class="n">foo</span>
+
+<span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">register_pytree_node</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="n">flatten_foo</span><span class="p">,</span> <span class="n">unflatten_foo</span><span class="p">)</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+<span class="n">leaves</span><span class="p">,</span> <span class="n">treedef</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;leaves = </span><span class="si">{</span><span class="n">leaves</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;treedef = </span><span class="si">{</span><span class="n">treedef</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>leaves = [1, 2]
+treedef = PyTreeDef(CustomNode(Foo[(&#39;hi&#39;,)], [*, *]))
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that <code class="docutils literal notranslate"><span class="pre">'hi'</span></code> does not appear in the leaves because <code class="docutils literal notranslate"><span class="pre">c</span></code> is defined as static, but you can see it as part of the <code class="docutils literal notranslate"><span class="pre">PyTreeDef</span></code> structure.</p>
+</section>
+</section>
+<section id="nnx-pytree">
+<h2>nnx.Pytree<a class="headerlink" href="#nnx-pytree" title="Permalink to this heading">#</a></h2>
+<p>In general it would be cumbersome for users to manually register the pytree definition for every type they create. To automate this process NNX provides the <code class="docutils literal notranslate"><span class="pre">nnx.Pytree</span></code> base type that offers a simple API: users annotate attributes using either <code class="docutils literal notranslate"><span class="pre">nnx.static</span></code> or <code class="docutils literal notranslate"><span class="pre">nnx.data</span></code>, and Pytree will register some flatten and unflatten functions that will take the annotations into account. The <code class="docutils literal notranslate"><span class="pre">nnx.data</span></code> and <code class="docutils literal notranslate"><span class="pre">nnx.static</span></code> annotations must only be assigned to <code class="docutils literal notranslate"><span class="pre">Pytree</span></code> attributes directly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Linear</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">din</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dout</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">din</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">din</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dout</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">dout</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">din</span><span class="p">,</span> <span class="n">dout</span><span class="p">)))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dout</span><span class="p">,)))</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MLP</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">num_layers</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">([</span>
+      <span class="n">Linear</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span><span class="p">)</span>
+    <span class="p">])</span>
+
+<span class="n">pytree</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">num_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pytree_structure</span><span class="p">(</span><span class="n">pytree</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;pytree structure&#39;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+  <span class="n">path_leaves</span><span class="p">,</span> <span class="n">treedef</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">flatten_with_path</span><span class="p">(</span><span class="n">pytree</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">path_leaves</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; - pytree</span><span class="si">{</span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">keystr</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">pytree_structure</span><span class="p">(</span><span class="n">pytree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pytree structure:
+ - pytree.layers[0].b = Array([0.], dtype=float32)
+ - pytree.layers[0].w = Array([[1.]], dtype=float32)
+ - pytree.layers[1].b = Array([0.], dtype=float32)
+ - pytree.layers[1].w = Array([[1.]], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see above, only the <code class="docutils literal notranslate"><span class="pre">data</span></code> paths appear in the leaves. However, its very verbose to have to define <code class="docutils literal notranslate"><span class="pre">static</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> for each attribute, so <code class="docutils literal notranslate"><span class="pre">Pytree</span></code> has sensible defaults. You can remove most of them and it will just work:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Linear</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">din</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dout</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">din</span> <span class="o">=</span> <span class="n">din</span> <span class="c1"># static</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dout</span> <span class="o">=</span> <span class="n">dout</span> <span class="c1"># static</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">din</span><span class="p">,</span> <span class="n">dout</span><span class="p">))</span> <span class="c1"># data</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dout</span><span class="p">,))</span> <span class="c1"># data</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MLP</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="n">num_layers</span> <span class="c1"># static</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">List</span><span class="p">([</span> <span class="c1"># data</span>
+      <span class="n">Linear</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span><span class="p">)</span>
+    <span class="p">])</span>
+
+<span class="n">pytree</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">num_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pytree_structure</span><span class="p">(</span><span class="n">pytree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pytree structure:
+ - pytree.layers[0].b = Array([0.], dtype=float32)
+ - pytree.layers[0].w = Array([[1.]], dtype=float32)
+ - pytree.layers[1].b = Array([0.], dtype=float32)
+ - pytree.layers[1].w = Array([[1.]], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The only change we had to do here is use <code class="docutils literal notranslate"><span class="pre">nnx.List</span></code> to signal that <code class="docutils literal notranslate"><span class="pre">layers</span></code> contains <code class="docutils literal notranslate"><span class="pre">data</span></code>, the status of the rest of the attributes can be correctly inferred. The rules that determine if a value is data or not are the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Array</span></code>s, <code class="docutils literal notranslate"><span class="pre">Variable</span></code>s, <code class="docutils literal notranslate"><span class="pre">ArrayRef</span></code>s, and <code class="docutils literal notranslate"><span class="pre">nnx.Pytree</span></code>s are data.</p></li>
+<li><p>Types registered using <code class="docutils literal notranslate"><span class="pre">nnx.register_data_type</span></code> are data.</p></li>
+<li><p>All other types are static.</p></li>
+</ul>
+<p>To check if a value is data use the <code class="docutils literal notranslate"><span class="pre">nnx.is_data</span></code> function which will return its status:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"># ------ DATA ------------</span>
+<span class="si">{</span><span class="n">nnx</span><span class="o">.</span><span class="n">is_data</span><span class="p">(</span><span class="w"> </span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">                   # Arrays are data</span>
+<span class="si">{</span><span class="n">nnx</span><span class="o">.</span><span class="n">is_data</span><span class="p">(</span><span class="w"> </span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">                   # Variables are data</span>
+<span class="si">{</span><span class="n">nnx</span><span class="o">.</span><span class="n">is_data</span><span class="p">(</span><span class="w"> </span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">                    # nnx.Pytrees are data</span>
+
+<span class="s2"># ------ STATIC ------------</span>
+<span class="si">{</span><span class="n">nnx</span><span class="o">.</span><span class="n">is_data</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;hello&#39;</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">                       # strings, arbitrary objects</span>
+<span class="si">{</span><span class="n">nnx</span><span class="o">.</span><span class="n">is_data</span><span class="p">(</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">                            # int, float, bool, complex, etc.</span>
+<span class="si">{</span><span class="n">nnx</span><span class="o">.</span><span class="n">is_data</span><span class="p">(</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">    # list, dict, tuple, regular pytrees</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span># ------ DATA ------------
+nnx.is_data( jnp.array(0) ) = True                   # Arrays are data
+nnx.is_data( nnx.Param(1) ) = True                   # Variables are data
+nnx.is_data( nnx.Rngs(2) ) = True                    # nnx.Pytrees are data
+
+# ------ STATIC ------------
+nnx.is_data( &#39;hello&#39; ) = False                       # strings, arbitrary objects
+nnx.is_data( 42 ) = False                            # int, float, bool, complex, etc.
+nnx.is_data( [1, 2.0, 3j, jnp.array(1)] ) = False    # list, dict, tuple, regular pytrees
+</pre></div>
+</div>
+</div>
+</div>
+<section id="when-to-use-explicit-annotations">
+<h3>When to use explicit annotations?<a class="headerlink" href="#when-to-use-explicit-annotations" title="Permalink to this heading">#</a></h3>
+<p>There are cases were you do want to explicitely annotate the attributes to avoid ambiguity or protect yourself against possible edge cases. These include constraining input arguments which might have unexpected types, forcing attributes as data when their type is not treated as data by default, or using <code class="docutils literal notranslate"><span class="pre">nnx.static</span></code> as a way to assert the attribute should not contain data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Bar</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">use_bias</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># constrain inputs (e.g. user could pass Array or float)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># force types that are not data by default</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ls</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">List</span><span class="p">([</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span> <span class="c1"># use nnx.List for lists of data</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># optional values that can be data</span>
+    <span class="k">if</span> <span class="n">use_bias</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+
+<span class="n">pytree</span> <span class="o">=</span> <span class="n">Bar</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">pytree_structure</span><span class="p">(</span><span class="n">pytree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pytree structure:
+ - pytree.bias.value = Array(0., dtype=float32, weak_type=True)
+ - pytree.ls[0] = Array(0, dtype=int32, weak_type=True)
+ - pytree.ls[1] = Array(1, dtype=int32, weak_type=True)
+ - pytree.ls[2] = Array(2, dtype=int32, weak_type=True)
+ - pytree.x = 1.0
+ - pytree.y = 42
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="dataclasses">
+<h3>Dataclasses<a class="headerlink" href="#dataclasses" title="Permalink to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">nnx.Pytree</span></code> dataclasses can be created by using the <code class="docutils literal notranslate"><span class="pre">nnx.dataclass</span></code> decorator. To control the status of each field, <code class="docutils literal notranslate"><span class="pre">nnx.static</span></code> and <code class="docutils literal notranslate"><span class="pre">nnx.data</span></code> can be used as <code class="docutils literal notranslate"><span class="pre">field</span></code> specifiers.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">()</span>
+  <span class="n">x</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span>
+  <span class="n">a</span><span class="p">:</span> <span class="nb">int</span>
+  <span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;hi&#39;</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Bar</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="n">ls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Foo</span><span class="p">]</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">()</span>
+  <span class="n">shapes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+
+<span class="n">pytree</span> <span class="o">=</span> <span class="n">Bar</span><span class="p">(</span>
+  <span class="n">ls</span><span class="o">=</span><span class="p">[</span><span class="n">Foo</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">42</span> <span class="o">*</span> <span class="n">i</span><span class="p">),</span> <span class="nb">hash</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)],</span>
+  <span class="n">shapes</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">pytree_structure</span><span class="p">(</span><span class="n">pytree</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pytree structure:
+ - pytree.ls[0].i = 0
+ - pytree.ls[0].x = Array(0, dtype=int32, weak_type=True)
+ - pytree.ls[1].i = 1
+ - pytree.ls[1].x = Array(42, dtype=int32, weak_type=True)
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dataclasses.dataclass</span></code> can also be used directly, however type checkers will not handle <code class="docutils literal notranslate"><span class="pre">nnx.static</span></code> and <code class="docutils literal notranslate"><span class="pre">nnx.data</span></code> correctly. To solve this <code class="docutils literal notranslate"><span class="pre">dataclasses.field</span></code> can be used by setting <code class="docutils literal notranslate"><span class="pre">metadata</span></code> with the appropriate entry for <code class="docutils literal notranslate"><span class="pre">static</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Bar</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="n">a</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;static&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span> <span class="c1"># data</span>
+  <span class="n">b</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>  <span class="c1"># static</span>
+
+<span class="n">pytree</span> <span class="o">=</span> <span class="n">Bar</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="n">pytree_structure</span><span class="p">(</span><span class="n">pytree</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;dataclass pytree structure&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dataclass pytree structure:
+ - pytree.a = 10
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="attribute-updates">
+<h3>Attribute Updates<a class="headerlink" href="#attribute-updates" title="Permalink to this heading">#</a></h3>
+<p>The status of an attribute is defined during its first assignment and will not change upon reassignment. However, it is possible to override the status by explicitly using <code class="docutils literal notranslate"><span class="pre">nnx.data</span></code> or <code class="docutils literal notranslate"><span class="pre">nnx.static</span></code> on reassignment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>  <span class="c1"># data</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;Hello, world!&quot;</span>               <span class="c1"># static</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="mf">3.14</span><span class="p">)</span>         <span class="c1"># data</span>
+
+<span class="n">pytree</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+<span class="n">pytree_structure</span><span class="p">(</span><span class="n">pytree</span><span class="p">,</span> <span class="s2">&quot;original&quot;</span><span class="p">)</span>
+
+<span class="n">pytree</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;🤔&quot;</span>  <span class="c1"># data status doesn&#39;t change</span>
+<span class="n">pytree</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>     <span class="c1"># explicit annotation overrides status to data</span>
+<span class="n">pytree</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># explicit annotation overrides status to static</span>
+<span class="n">pytree_structure</span><span class="p">(</span><span class="n">pytree</span><span class="p">,</span> <span class="s2">&quot;updated&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>original:
+ - pytree.a = Array(1., dtype=float32, weak_type=True)
+ - pytree.c = 3.14
+updated:
+ - pytree.a = &#39;🤔&#39;
+ - pytree.b = 42
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="attribute-checks">
+<h3>Attribute checks<a class="headerlink" href="#attribute-checks" title="Permalink to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Pytree</span></code> has a variety of checks to prevent a common class of errors in JAX. This includes checking for Arrays being assigned to new <code class="docutils literal notranslate"><span class="pre">static</span></code> attributes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ValueError:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ValueError: Found Arrays in value of type &#39;&lt;class &#39;jaxlib._jax.ArrayImpl&#39;&gt;&#39; annotated with nnx.static(...) when setting attribute &#39;name&#39; of Pytree type &#39;&lt;class &#39;__main__.Foo&#39;&gt;&#39;.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Checking for Arrays being assigned to known <code class="docutils literal notranslate"><span class="pre">static</span></code> attributes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+  <span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;mattjj&quot;</span><span class="p">)</span>
+  <span class="n">foo</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ValueError:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ValueError: Cannot assign data value of type &#39;&lt;class &#39;jaxlib._jax.ArrayImpl&#39;&gt;&#39; to static attribute &#39;name&#39; of Pytree type &#39;&lt;class &#39;__main__.Foo&#39;&gt;&#39;. To override the status explicitly wrap the value with nnx.data on assignment:
+
+  _.name = nnx.data(...)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Checking for Arrays after <code class="docutils literal notranslate"><span class="pre">__init__</span></code> on <code class="docutils literal notranslate"><span class="pre">static</span></code> attributes that could’ve been inserted via mutation. This check can be manually trigger via <code class="docutils literal notranslate"><span class="pre">nnx.check_pytree</span></code> at any time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ls</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># treated as static</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>  <span class="c1"># append arrays into static attribute</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>  <span class="c1"># error: Array found in static attribute after `__init__`</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ValueError:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ValueError: Found unexpected Arrays on value of type &lt;class &#39;list&#39;&gt; in static attribute &#39;ls&#39; of Pytree type &#39;&lt;class &#39;__main__.Foo&#39;&gt;&#39;. This is an error starting from Flax version 0.12.0.
+Consider one of the following options:
+
+1. If the attribute is meant to be static, either remove the Array value or wrap it in a static container.
+2. Wrap the value with nnx.data on assignment:
+
+  _.ls = nnx.data(...)
+
+3. Annotate the class attribute with nnx.Data:
+
+  class Foo(Pytree):
+    ls: nnx.Data[list]
+
+4. If the container is a list or dict, try using nnx.List(...) or nnx.Dict(...) instead.
+5. Disable pytree for this class:
+
+  class Foo(Pytree, pytree=False):
+</pre></div>
+</div>
+</div>
+</div>
+<p>Checking for <code class="docutils literal notranslate"><span class="pre">nnx.data</span></code> or <code class="docutils literal notranslate"><span class="pre">nnx.static</span></code> annotations stored inside nested structures that are not <code class="docutils literal notranslate"><span class="pre">nnx.Pytree</span></code> instances:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">nnx</span><span class="o">.</span><span class="n">static</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>  <span class="c1"># annotations in sub-pytree</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ValueError:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ValueError: Found unexpected tags {&#39;static&#39;, &#39;data&#39;} on attribute &#39;Foo.a&#39;. Values from nnx.data(...) and
+nnx.static(...) should be assigned to nnx.Pytree attributes directly, they should not be inside other structures. Got value of type &#39;&lt;class &#39;list&#39;&gt;&#39; on Pytree of type &#39;&lt;class &#39;__main__.Foo&#39;&gt;&#39;.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="trace-level-awareness">
+<h3>Trace-level awareness<a class="headerlink" href="#trace-level-awareness" title="Permalink to this heading">#</a></h3>
+<p>To prevent tracer leakage NNX will raise an error when trying to update the attribute of a <code class="docutils literal notranslate"><span class="pre">Pytree</span></code> or the value of a <code class="docutils literal notranslate"><span class="pre">Variable</span></code> on instances that are passed as captures to functions called by JAX transforms:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+
+<span class="nd">@jax</span><span class="o">.</span><span class="n">vmap</span>  <span class="c1"># or jit, grad, shard_map, pmap, scan, etc.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">increment</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+  <span class="c1"># foo passed as capture</span>
+  <span class="n">foo</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># error!</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">increment</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Error: Cannot mutate &#39;Foo&#39; from different trace level (https://flax.readthedocs.io/en/latest/api_reference/flax.errors.html#flax.errors.TraceContextError)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="reference-sharing">
+<h3>Reference Sharing<a class="headerlink" href="#reference-sharing" title="Permalink to this heading">#</a></h3>
+<p>As the name implies Pytrees should be trees. To check if a structure is a well-defined tree you can use the <code class="docutils literal notranslate"><span class="pre">nnx.find_duplicates</span></code> functions which will return a list of duplicates, where each duplicate is a list of path tuples. In the example below we see that <code class="docutils literal notranslate"><span class="pre">left</span></code> and <code class="docutils literal notranslate"><span class="pre">right</span></code> are shared references therefore <code class="docutils literal notranslate"><span class="pre">find_duplicates</span></code> returns a non-empty list with the paths:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Shared</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Parent</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">Shared</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span>  <span class="c1"># reference sharing</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">Parent</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nnx</span><span class="o">.</span><span class="n">find_duplicates</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">  # not a tree&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nnx.find_duplicates(m) = [[(&#39;left&#39;,), (&#39;right&#39;,)]]  # not a tree
+</pre></div>
+</div>
+</div>
+</div>
+<p>The main issue is that sharing is not preserved across pytree operations including JAX transforms, and this results in unintended state duplication:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Parent</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">left</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">m</span><span class="o">.</span><span class="n">right</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inside: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">left</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">m</span><span class="o">.</span><span class="n">right</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">m</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After:  </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">left</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">m</span><span class="o">.</span><span class="n">right</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Before: m.left is m.right = True
+Inside: m.left is m.right = False
+After:  m.left is m.right = False
+</pre></div>
+</div>
+</div>
+</div>
+<p>Reference sharing is rare in most Machine Learning applications, however if it is required you can either use the <code class="docutils literal notranslate"><span class="pre">nnx.{split,</span> <span class="pre">merge,</span> <span class="pre">state,</span> <span class="pre">update}</span></code> APIs to move the deduplicated state and graph definiton across the JAX transforms:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Parent</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">left</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">m</span><span class="o">.</span><span class="n">right</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">graphdef</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">graphdef</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+  <span class="n">m</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">graphdef</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inside: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">left</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">m</span><span class="o">.</span><span class="n">right</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">graphdef</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+<span class="n">nnx</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After:  </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">left</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">m</span><span class="o">.</span><span class="n">right</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">state</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1"># deduplicated state</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Before: m.left is m.right = True
+Inside: m.left is m.right = True
+After:  m.left is m.right = True
+state = State({
+  &#39;left&#39;: {
+    &#39;x&#39;: Array(1., dtype=float32, weak_type=True)
+  }
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p>Or alternatively you can use the NNX transforms which preserve shared references:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Parent</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">left</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">m</span><span class="o">.</span><span class="n">right</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inside: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">left</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">m</span><span class="o">.</span><span class="n">right</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">m</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After:  </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">left</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">m</span><span class="o">.</span><span class="n">right</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Before: m.left is m.right = True
+Inside: m.left is m.right = True
+After:  m.left is m.right = True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="turning-off-pytree-registration">
+<h3>Turning off pytree registration<a class="headerlink" href="#turning-off-pytree-registration" title="Permalink to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">nnx.Pytree</span></code> allows you to turn off the pytree registration along with the attribute checks for subtypes by setting <code class="docutils literal notranslate"><span class="pre">pytree</span></code> type attribute option to <code class="docutils literal notranslate"><span class="pre">False</span></code>. This can be useful when upgrading to previous NNX code to newer Flax verions as you will still be able to use the NNX APIs or when creating types that should not be treated as pytree because e.g. they shared references.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Pytree</span><span class="p">,</span> <span class="n">pytree</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>  <span class="c1"># no checks</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;hello&quot;</span> 
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># no checks</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">jit</span> <span class="c1"># can use in NNX transformations</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">double</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+  <span class="n">foo</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">foo</span><span class="o">.</span><span class="n">a</span><span class="p">]</span>
+  <span class="n">foo</span><span class="o">.</span><span class="n">b</span> <span class="o">*=</span> <span class="mi">2</span>
+
+<span class="n">double</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="w"> </span><span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># can be used with NNX APIs</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="w"> </span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">all_leaves</span><span class="p">([</span><span class="n">foo</span><span class="p">])</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># not a pytree</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> nnx.state(foo) = State({
+  &#39;a&#39;: {
+    0: Array(2, dtype=int32, weak_type=True),
+    1: Array(4, dtype=int32, weak_type=True)
+  },
+  &#39;b&#39;: Array(6, dtype=int32, weak_type=True)
+})
+ jax.tree_util.all_leaves([foo]) = True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="module">
+<h2>Module<a class="headerlink" href="#module" title="Permalink to this heading">#</a></h2>
+<p>NNX Modules are <code class="docutils literal notranslate"><span class="pre">Pytree</span></code>s that have two additional methods for traking intermediate values: <code class="docutils literal notranslate"><span class="pre">sow</span></code> and <code class="docutils literal notranslate"><span class="pre">perturb</span></code>.</p>
+<section id="sow">
+<h3>sow<a class="headerlink" href="#sow" title="Permalink to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">sow</span></code> receives a <code class="docutils literal notranslate"><span class="pre">Variable</span></code> type, a <code class="docutils literal notranslate"><span class="pre">name</span></code>, and a <code class="docutils literal notranslate"><span class="pre">value</span></code>, and stores it in the <code class="docutils literal notranslate"><span class="pre">Module</span></code> so it can be retrieved at a later time. As the following example shows, the <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> function allows you to retrieve the sowed state. See the <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/extracting_intermediates.html"><em>Extracting Intermediate Values</em></a> guide for more details.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Block</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">din</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">din</span><span class="p">,</span> <span class="n">dout</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">(</span><span class="n">dout</span><span class="p">,</span> <span class="n">use_running_average</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="s2">&quot;y_mean&quot;</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">y</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MLP</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">rngs</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">List</span><span class="p">([</span><span class="n">Block</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">rngs</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span><span class="p">)])</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="p">:</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">num_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">intermediates</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">intermediates</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State({
+  &#39;blocks&#39;: {
+    0: {
+      &#39;y_mean&#39;: Intermediate( # 1 (4 B)
+        value=(Array(4.659754e-06, dtype=float32),)
+      )
+    },
+    1: {
+      &#39;y_mean&#39;: Intermediate( # 1 (4 B)
+        value=(Array(0.00025933, dtype=float32),)
+      )
+    },
+    2: {
+      &#39;y_mean&#39;: Intermediate( # 1 (4 B)
+        value=(Array(0.05561922, dtype=float32),)
+      )
+    }
+  }
+})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="perturb">
+<h3>perturb<a class="headerlink" href="#perturb" title="Permalink to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">perturb</span></code> is similar to <code class="docutils literal notranslate"><span class="pre">sow</span></code> but it aims to capture the gradient of a value. This is a two step process:</p>
+<ol class="arabic simple">
+<li><p>Initialize the pertubation state by running the model once.</p></li>
+<li><p>Pass the perturbation state as a differentiable target to <code class="docutils literal notranslate"><span class="pre">grad</span></code>.</p></li>
+</ol>
+<p>As an example lets create a simple model and use <code class="docutils literal notranslate"><span class="pre">perturb</span></code> to get the intermediate gradient <code class="docutils literal notranslate"><span class="pre">xgrad</span></code> for the variable <code class="docutils literal notranslate"><span class="pre">x</span></code>, and initialize the perturbations:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rngs</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear1</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">linear2</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">gelu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb</span><span class="p">(</span><span class="s1">&#39;xgrad&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">uniform</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">rngs</span><span class="o">.</span><span class="n">uniform</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">perturbations</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Perturbation</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># initialize perturbations</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">perturbations</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>State({
+  &#39;xgrad&#39;: Perturbation( # 3 (12 B)
+    value=Array([[0., 0., 0.]], dtype=float32)
+  )
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next we’ll differentiate a loss w.r.t. both the parameters of the model and the perturbations: the latter will be the gradients for the intermediate values.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@nnx</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_grad</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">perturbations</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">perturbations</span><span class="p">)(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">loss</span><span class="p">,</span> <span class="p">(</span><span class="n">weight_grads</span><span class="p">,</span> <span class="n">interm_grads</span><span class="p">)</span> <span class="o">=</span> <span class="n">loss_grad</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">perturbations</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">interm_grads</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="object">
+<h2>Object<a class="headerlink" href="#object" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Object</span></code> are NNX types that are <strong>not</strong> registered as JAX pytrees. Formally, any <code class="docutils literal notranslate"><span class="pre">Object</span></code> subclass is a <code class="docutils literal notranslate"><span class="pre">nnx.Pytree</span></code> with <code class="docutils literal notranslate"><span class="pre">pytree=False</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Object</span><span class="p">):</span> <span class="c1"># instead of Foo(nnx.Pytree, pytree=False)</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>  <span class="c1"># no checks</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;hello&quot;</span> 
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># no checks</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">jit</span> <span class="c1"># can use in NNX transformations</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">double</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+  <span class="n">foo</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">foo</span><span class="o">.</span><span class="n">a</span><span class="p">]</span>
+  <span class="n">foo</span><span class="o">.</span><span class="n">b</span> <span class="o">*=</span> <span class="mi">2</span>
+
+<span class="n">double</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="w"> </span><span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># can be used with NNX APIs</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="w"> </span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">all_leaves</span><span class="p">([</span><span class="n">foo</span><span class="p">])</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># not a pytree</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> nnx.state(foo) = State({
+  &#39;a&#39;: {
+    0: Array(2, dtype=int32, weak_type=True),
+    1: Array(4, dtype=int32, weak_type=True)
+  },
+  &#39;b&#39;: Array(6, dtype=int32, weak_type=True)
+})
+ jax.tree_util.all_leaves([foo]) = True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../guides_basic.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Basic Guides</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="transforms.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Transformations</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pytrees-101">Pytrees 101</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-pytrees">Custom Pytrees</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nnx-pytree">nnx.Pytree</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-use-explicit-annotations">When to use explicit annotations?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataclasses">Dataclasses</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attribute-updates">Attribute Updates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attribute-checks">Attribute checks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trace-level-awareness">Trace-level awareness</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-sharing">Reference Sharing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#turning-off-pytree-registration">Turning off pytree registration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module">Module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sow">sow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perturb">perturb</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#object">Object</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

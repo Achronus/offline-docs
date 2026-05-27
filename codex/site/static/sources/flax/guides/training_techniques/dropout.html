@@ -1,0 +1,884 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Dropout</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/training_techniques/dropout';</script>
+    <link rel="icon" href="../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Learning rate scheduling" href="lr_schedule.html" />
+    <link rel="prev" title="Batch normalization" href="batch_norm.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax-linen" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/training_techniques/dropout.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax.readthedocs.io/en/latest/index.html"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the old Flax Linen API. <span style="color: lightgray;">[Explore the new <b>Flax NNX</b> API ✨]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flax_fundamentals/flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../flax_fundamentals/index.html">Flax fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/index.html">JAX 101</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/state_params.html">Managing Parameters and State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/setup_or_nncompact.html"><code class="docutils literal notranslate"><span class="pre">setup</span></code> vs <code class="docutils literal notranslate"><span class="pre">compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/arguments.html">Dealing with Flax Module arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/rng_guide.html">Randomness and PRNGs in Flax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../data_preprocessing/index.html">Data preprocessing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/full_eval.html">Processing the entire Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/loading_datasets.html">Loading datasets</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">Training techniques</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="batch_norm.html">Batch normalization</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Dropout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lr_schedule.html">Learning rate scheduling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer_learning.html">Transfer learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="use_checkpointing.html">Save and load checkpoints</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../parallel_training/index.html">Parallel training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/ensembling.html">Ensembling on multiple devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/flax_on_pjit.html">Scale up Flax Modules on multiple devices</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../model_inspection/index.html">Model inspection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/model_surgery.html">Model surgery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/extracting_intermediates.html">Extracting intermediate values</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../converting_and_upgrading/index.html">Converting and upgrading</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/haiku_migration_guide.html">Migrating from Haiku to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/convert_pytorch_to_flax.html">Convert PyTorch models to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/orbax_upgrade_guide.html">Migrate checkpointing to Orbax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/optax_update_guide.html">Upgrading my codebase to Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/linen_upgrade_guide.html">Upgrading my codebase to Linen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/rnncell_upgrade_guide.html">RNNCellBase Upgrade Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/regular_dict_upgrade_guide.html">Migrate to regular dicts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../quantization/index.html">Quantization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quantization/fp8_basics.html">User Guide on Using FP8</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../flax_sharp_bits.html">The Sharp Bits</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/core_examples.html">Core examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/google_research_examples.html">Google Research examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/repositories_that_use_flax.html">Repositories that use Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/community_examples.html">Community examples</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../developer_notes/index.html">Developer notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/module_lifecycle.html">The Flax Module lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/lift.html">Lifted transformations</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/google/flax/tree/main/docs/flip">FLIPs</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.cursor.html">flax.cursor package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.errors.html">flax.errors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.jax_utils.html">flax.jax_utils package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_reference/flax.linen/index.html">flax.linen</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/module.html">Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/init_apply.html">Init/Apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/activation_functions.html">Activation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/initializers.html">Initializers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/transformations.html">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/inspection.html">Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/variable.html">Variable dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/spmd.html">SPMD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/decorators.html">Decorators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/profiling.html">Profiling</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.serialization.html">flax.serialization package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.traceback_util.html">flax.traceback_util package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/index.html">Flax NNX</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/guides/training_techniques/dropout.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Dropout</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#split-the-prng-key">Split the PRNG key</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-your-model-with-dropout">Define your model with <code class="docutils literal notranslate"><span class="pre">Dropout</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-the-model">Initialize the model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-the-forward-pass-during-training">Perform the forward pass during training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trainstate-and-the-training-step"><code class="docutils literal notranslate"><span class="pre">TrainState</span></code> and the training step</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax-examples-with-dropout">Flax examples with dropout</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-flax-examples-that-use-module-make-rng">More Flax examples that use Module <code class="docutils literal notranslate"><span class="pre">make_rng()</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="dropout">
+<h1>Dropout<a class="headerlink" href="#dropout" title="Permalink to this heading">#</a></h1>
+<p>This guide provides an overview of how to apply
+<a class="reference external" href="https://jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf">dropout</a>
+using <a class="reference internal" href="../../api_reference/flax.linen/layers.html#flax.linen.Dropout" title="flax.linen.Dropout"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Dropout()</span></code></a>.</p>
+<p>Dropout is a stochastic regularization technique that randomly removes hidden
+and visible units in a network.</p>
+<p>Throughout the guide, you will be able to compare code examples with and without
+Flax <code class="docutils literal notranslate"><span class="pre">Dropout</span></code>.</p>
+<section id="split-the-prng-key">
+<h2>Split the PRNG key<a class="headerlink" href="#split-the-prng-key" title="Permalink to this heading">#</a></h2>
+<p>Since dropout is a random operation, it requires a pseudorandom number generator
+(PRNG) state. Flax uses JAX’s (splittable) PRNG keys, which have a number of
+desirable properties for neural networks. To learn more, refer to the
+<a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/05-random-numbers.html">Pseudorandom numbers in JAX tutorial</a>.</p>
+<p><strong>Note:</strong> Recall that JAX has an explicit way of giving you PRNG keys:
+you can fork the main PRNG state (such as <code class="docutils literal notranslate"><span class="pre">key</span> <span class="pre">=</span> <span class="pre">jax.random.key(seed=0)</span></code>)
+into multiple new PRNG keys with <code class="docutils literal notranslate"><span class="pre">key,</span> <span class="pre">subkey</span> <span class="pre">=</span> <span class="pre">jax.random.split(key)</span></code>. You
+can refresh your memory in
+<a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html#jax-prng">🔪 JAX - The Sharp Bits 🔪 Randomness and PRNG keys</a>.</p>
+<p>Begin by splitting the PRNG key using
+<a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.random.split.html">jax.random.split()</a>
+into three keys, including one for Flax Linen <code class="docutils literal notranslate"><span class="pre">Dropout</span></code>.</p>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="No Dropout" for="sd-tab-item-0">
+No Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">root_key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">main_key</span><span class="p">,</span> <span class="n">params_key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">root_key</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="With Dropout" for="sd-tab-item-1">
+With Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">root_key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="hll"><span class="n">main_key</span><span class="p">,</span> <span class="n">params_key</span><span class="p">,</span> <span class="n">dropout_key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">root_key</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</div>
+</div>
+</p>
+<p><strong>Note:</strong> In Flax, you provide <em>PRNG streams</em> with <em>names</em>, so that you can use them later
+in your <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.Module" title="flax.linen.Module"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Module()</span></code></a>. For example, you pass the stream <code class="docutils literal notranslate"><span class="pre">'params'</span></code>
+for initializing parameters, and <code class="docutils literal notranslate"><span class="pre">'dropout'</span></code> for applying
+<a class="reference internal" href="../../api_reference/flax.linen/layers.html#flax.linen.Dropout" title="flax.linen.Dropout"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Dropout()</span></code></a>.</p>
+</section>
+<section id="define-your-model-with-dropout">
+<h2>Define your model with <code class="docutils literal notranslate"><span class="pre">Dropout</span></code><a class="headerlink" href="#define-your-model-with-dropout" title="Permalink to this heading">#</a></h2>
+<p>To create a model with dropout:</p>
+<ul class="simple">
+<li><p>Subclass <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.Module" title="flax.linen.Module"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Module()</span></code></a>, and then use
+<a class="reference internal" href="../../api_reference/flax.linen/layers.html#flax.linen.Dropout" title="flax.linen.Dropout"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Dropout()</span></code></a> to add a dropout layer. Recall that
+<a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.Module" title="flax.linen.Module"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Module()</span></code></a> is the
+<a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html">base class for all neural network Modules</a>,
+and all layers and models are subclassed from it.</p></li>
+<li><p>In <a class="reference internal" href="../../api_reference/flax.linen/layers.html#flax.linen.Dropout" title="flax.linen.Dropout"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Dropout()</span></code></a>, the <code class="docutils literal notranslate"><span class="pre">deterministic</span></code> argument is required to
+be passed as a keyword argument, either:</p>
+<ul>
+<li><p>When constructing the <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.Module" title="flax.linen.Module"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Module()</span></code></a>; or</p></li>
+<li><p>When calling <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.init" title="flax.linen.init"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.init()</span></code></a> or <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.apply" title="flax.linen.apply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.apply()</span></code></a> on a constructed <code class="docutils literal notranslate"><span class="pre">Module</span></code>. (Refer to <code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.module.merge_param()</span></code> for more details.)</p></li>
+</ul>
+</li>
+<li><p>Because <code class="docutils literal notranslate"><span class="pre">deterministic</span></code> is a boolean:</p>
+<ul>
+<li><p>If it’s set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the inputs are masked (that is, set to zero) with
+a probability set by <code class="docutils literal notranslate"><span class="pre">rate</span></code>. And the remaining inputs are scaled by
+<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">/</span> <span class="pre">(1</span> <span class="pre">-</span> <span class="pre">rate)</span></code>, which ensures that the means of the inputs are
+preserved.</p></li>
+<li><p>If it’s set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, no mask is applied (the dropout is turned off),
+and the inputs are returned as-is.</p></li>
+</ul>
+</li>
+</ul>
+<p>A common pattern is to accept a <code class="docutils literal notranslate"><span class="pre">training</span></code> (or <code class="docutils literal notranslate"><span class="pre">train</span></code>) argument (a boolean)
+in the parent Flax <code class="docutils literal notranslate"><span class="pre">Module</span></code>, and use it to enable or disable dropout (as
+demonstrated in later sections of this guide). In other machine learning
+frameworks, like PyTorch or TensorFlow (Keras), this is specified via a
+mutable state or a call flag (for example, in
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.eval">torch.nn.Module.eval</a>
+or <code class="docutils literal notranslate"><span class="pre">tf.keras.Model</span></code> by setting the
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/keras/Model#call">training</a> flag).</p>
+<p><strong>Note:</strong> Flax provides an implicit way of handling PRNG key streams via Flax
+<a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.Module" title="flax.linen.Module"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Module()</span></code></a>’s <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.Module.make_rng" title="flax.linen.Module.make_rng"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Module.make_rng()</span></code></a> method.
+This allows you to split off a fresh PRNG key inside Flax Modules (or their
+sub-Modules) from the PRNG stream. The <code class="docutils literal notranslate"><span class="pre">make_rng</span></code> method guarantees to provide a
+unique key each time you call it. Internally, <a class="reference internal" href="../../api_reference/flax.linen/layers.html#flax.linen.Dropout" title="flax.linen.Dropout"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Dropout()</span></code></a> makes
+use of <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.Module.make_rng" title="flax.linen.Module.make_rng"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Module.make_rng()</span></code></a> to create a key for dropout. You can
+check out the
+<a class="reference external" href="https://github.com/google/flax/blob/5714e57a0dc8146eb58a7a06ed768ed3a17672f9/flax/linen/stochastic.py#L72">source code</a>.
+In short, <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.Module.make_rng" title="flax.linen.Module.make_rng"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Module.make_rng()</span></code></a> <em>guarantees full reproducibility</em>.</p>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-2" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="No Dropout" for="sd-tab-item-2">
+No Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">num_neurons</span><span class="p">:</span> <span class="nb">int</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_neurons</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-3" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="With Dropout" for="sd-tab-item-3">
+With Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">num_neurons</span><span class="p">:</span> <span class="nb">int</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+<span class="hll">  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_neurons</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="hll">    <span class="c1"># Set the dropout layer with a `rate` of 50%.</span>
+</span><span class="hll">    <span class="c1"># When the `deterministic` flag is `True`, dropout is turned off.</span>
+</span><span class="hll">    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="ow">not</span> <span class="n">training</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span>    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+</section>
+<section id="initialize-the-model">
+<h2>Initialize the model<a class="headerlink" href="#initialize-the-model" title="Permalink to this heading">#</a></h2>
+<p>After creating your model:</p>
+<ul class="simple">
+<li><p>Instantiate the model.</p></li>
+<li><p>Then, in the <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.init" title="flax.linen.init"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.init()</span></code></a> call, set <code class="docutils literal notranslate"><span class="pre">training=False</span></code>.</p></li>
+<li><p>Finally, extract the <code class="docutils literal notranslate"><span class="pre">params</span></code> from the
+<a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/variable.html">variable dictionary</a>.</p></li>
+</ul>
+<p>Here, the main difference between the code without Flax <code class="docutils literal notranslate"><span class="pre">Dropout</span></code>
+and with <code class="docutils literal notranslate"><span class="pre">Dropout</span></code> is that the <code class="docutils literal notranslate"><span class="pre">training</span></code> (or <code class="docutils literal notranslate"><span class="pre">train</span></code>) argument must be
+provided if you need dropout enabled.</p>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-4" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="No Dropout" for="sd-tab-item-4">
+No Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_model</span> <span class="o">=</span> <span class="n">MyModel</span><span class="p">(</span><span class="n">num_neurons</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">variables</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params_key</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-5" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="With Dropout" for="sd-tab-item-5">
+With Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_model</span> <span class="o">=</span> <span class="n">MyModel</span><span class="p">(</span><span class="n">num_neurons</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="hll"><span class="c1"># Dropout is disabled with `training=False` (that is, `deterministic=True`).</span>
+</span><span class="hll"><span class="n">variables</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params_key</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span class="n">params</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+</section>
+<section id="perform-the-forward-pass-during-training">
+<h2>Perform the forward pass during training<a class="headerlink" href="#perform-the-forward-pass-during-training" title="Permalink to this heading">#</a></h2>
+<p>When using <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.apply" title="flax.linen.apply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.apply()</span></code></a> to run your model:</p>
+<ul class="simple">
+<li><p>Pass <code class="docutils literal notranslate"><span class="pre">training=True</span></code> to <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.apply" title="flax.linen.apply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.apply()</span></code></a>.</p></li>
+<li><p>Then, to draw PRNG keys during the forward pass (with dropout), provide a PRNG key
+to seed the <code class="docutils literal notranslate"><span class="pre">'dropout'</span></code> stream when you call <a class="reference internal" href="../../api_reference/flax.linen/module.html#flax.linen.apply" title="flax.linen.apply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.apply()</span></code></a>.</p></li>
+</ul>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-6" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="No Dropout" for="sd-tab-item-6">
+No Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># No need to pass the `training` and `rngs` flags.</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">apply</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">},</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-7" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="With Dropout" for="sd-tab-item-7">
+With Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="c1"># Dropout is enabled with `training=True` (that is, `deterministic=False`).</span>
+</span><span class="hll"><span class="n">y</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">apply</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">},</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dropout&#39;</span><span class="p">:</span> <span class="n">dropout_key</span><span class="p">})</span>
+</span></pre></div>
+</div>
+</div>
+</div>
+</p>
+<p>Here, the main difference between the code without Flax <code class="docutils literal notranslate"><span class="pre">Dropout</span></code>
+and with <code class="docutils literal notranslate"><span class="pre">Dropout</span></code> is that the <code class="docutils literal notranslate"><span class="pre">training</span></code> (or <code class="docutils literal notranslate"><span class="pre">train</span></code>) and <code class="docutils literal notranslate"><span class="pre">rngs</span></code>
+arguments must be provided if you need dropout enabled.</p>
+<p>During evaluation, use the above code with no dropout enabled (this means you do
+not have to pass a RNG either).</p>
+</section>
+<section id="trainstate-and-the-training-step">
+<h2><code class="docutils literal notranslate"><span class="pre">TrainState</span></code> and the training step<a class="headerlink" href="#trainstate-and-the-training-step" title="Permalink to this heading">#</a></h2>
+<p>This section explains how to amend your code inside the training step function if
+you have dropout enabled.</p>
+<p><strong>Note:</strong> Recall that Flax has a common pattern where you create a dataclass
+that represents the whole training state, including parameters and the optimizer
+state. Then, you can pass a single parameter, <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">TrainState</span></code>, to
+the training step function. Refer to the
+<a class="reference internal" href="../../api_reference/flax.training.html#flax.training.train_state.TrainState" title="flax.training.train_state.TrainState"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.training.train_state.TrainState()</span></code></a> API docs to learn more.</p>
+<ul class="simple">
+<li><p>First, add a <code class="docutils literal notranslate"><span class="pre">key</span></code> field to a custom <a class="reference internal" href="../../api_reference/flax.training.html#flax.training.train_state.TrainState" title="flax.training.train_state.TrainState"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.training.train_state.TrainState()</span></code></a> class.</p></li>
+<li><p>Then, pass the <code class="docutils literal notranslate"><span class="pre">key</span></code> value—in this case, the <code class="docutils literal notranslate"><span class="pre">dropout_key</span></code>—to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">train_state.TrainState.create()</span></code> method.</p></li>
+</ul>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-8" name="sd-tab-set-4" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="No Dropout" for="sd-tab-item-8">
+No Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_state</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">train_state</span><span class="o">.</span><span class="n">TrainState</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+  <span class="n">apply_fn</span><span class="o">=</span><span class="n">my_model</span><span class="o">.</span><span class="n">apply</span><span class="p">,</span>
+  <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+
+  <span class="n">tx</span><span class="o">=</span><span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-9" name="sd-tab-set-4" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="With Dropout" for="sd-tab-item-9">
+With Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_state</span>
+
+<span class="hll"><span class="k">class</span><span class="w"> </span><span class="nc">TrainState</span><span class="p">(</span><span class="n">train_state</span><span class="o">.</span><span class="n">TrainState</span><span class="p">):</span>
+</span><span class="hll">  <span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span>
+</span>
+<span class="hll"><span class="n">state</span> <span class="o">=</span> <span class="n">TrainState</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+</span>  <span class="n">apply_fn</span><span class="o">=</span><span class="n">my_model</span><span class="o">.</span><span class="n">apply</span><span class="p">,</span>
+  <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+<span class="hll">  <span class="n">key</span><span class="o">=</span><span class="n">dropout_key</span><span class="p">,</span>
+</span>  <span class="n">tx</span><span class="o">=</span><span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<ul>
+<li><p>Next, in the Flax training step function, <code class="docutils literal notranslate"><span class="pre">train_step</span></code>, generate a new PRNG
+key from the <code class="docutils literal notranslate"><span class="pre">dropout_key</span></code> to apply dropout at each step. This can be done with one of the following:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.random.split.html">jax.random.split()</a>; or</p></li>
+<li><p><a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.random.fold_in.html">jax.random.fold_in()</a></p></li>
+</ul>
+<p>Using <code class="docutils literal notranslate"><span class="pre">jax.random.fold_in()</span></code> is generally faster. When you use
+<code class="docutils literal notranslate"><span class="pre">jax.random.split()</span></code> you split off a PRNG key that can be reused
+afterwards. However, using <code class="docutils literal notranslate"><span class="pre">jax.random.fold_in()</span></code> makes sure to 1) fold in
+unique data; and 2) can result in longer sequences of PRNG streams.</p>
+</li>
+<li><p>Finally, when performing the forward pass, pass the new PRNG key to <code class="docutils literal notranslate"><span class="pre">state.apply_fn()</span></code>
+as an extra parameter.</p></li>
+</ul>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-10" name="sd-tab-set-5" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="No Dropout" for="sd-tab-item-10">
+No Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">train_state</span><span class="o">.</span><span class="n">TrainState</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">apply_fn</span><span class="p">(</span>
+      <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">},</span>
+      <span class="n">x</span><span class="o">=</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span>
+
+
+      <span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">softmax_cross_entropy_with_integer_labels</span><span class="p">(</span>
+      <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">logits</span>
+  <span class="n">grad_fn</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">has_aux</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">logits</span><span class="p">),</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">grad_fn</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+  <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span><span class="n">grads</span><span class="o">=</span><span class="n">grads</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-11" name="sd-tab-set-5" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="With Dropout" for="sd-tab-item-11">
+With Dropout</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">TrainState</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">dropout_key</span><span class="p">):</span>
+</span><span class="hll">  <span class="n">dropout_train_key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">fold_in</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">dropout_key</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+</span>  <span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">apply_fn</span><span class="p">(</span>
+      <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">},</span>
+      <span class="n">x</span><span class="o">=</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span>
+<span class="hll">      <span class="n">training</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span class="hll">      <span class="n">rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dropout&#39;</span><span class="p">:</span> <span class="n">dropout_train_key</span><span class="p">}</span>
+</span>      <span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">softmax_cross_entropy_with_integer_labels</span><span class="p">(</span>
+      <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">logits</span>
+  <span class="n">grad_fn</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">has_aux</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">logits</span><span class="p">),</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">grad_fn</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+  <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span><span class="n">grads</span><span class="o">=</span><span class="n">grads</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+</section>
+<section id="flax-examples-with-dropout">
+<h2>Flax examples with dropout<a class="headerlink" href="#flax-examples-with-dropout" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>A <a class="reference external" href="https://github.com/google/flax/blob/main/examples/wmt/models.py">Transformer-based model</a>
+trained on the WMT Machine Translation dataset. This example uses dropout and attention dropout.</p></li>
+<li><p>Applying word dropout to a batch of input IDs in a
+<a class="reference external" href="https://github.com/google/flax/blob/main/examples/sst2/models.py">text classification</a>
+context. This example uses a custom <a class="reference internal" href="../../api_reference/flax.linen/layers.html#flax.linen.Dropout" title="flax.linen.Dropout"><code class="xref py py-meth docutils literal notranslate"><span class="pre">flax.linen.Dropout()</span></code></a> layer.</p></li>
+</ul>
+</section>
+<section id="more-flax-examples-that-use-module-make-rng">
+<h2>More Flax examples that use Module <code class="docutils literal notranslate"><span class="pre">make_rng()</span></code><a class="headerlink" href="#more-flax-examples-that-use-module-make-rng" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Defining a prediction token in a decoder of a
+<a class="reference external" href="https://github.com/google/flax/blob/main/examples/seq2seq/models.py">sequence-to-sequence model</a>.</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="batch_norm.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Batch normalization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lr_schedule.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Learning rate scheduling</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#split-the-prng-key">Split the PRNG key</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-your-model-with-dropout">Define your model with <code class="docutils literal notranslate"><span class="pre">Dropout</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-the-model">Initialize the model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-the-forward-pass-during-training">Perform the forward pass during training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trainstate-and-the-training-step"><code class="docutils literal notranslate"><span class="pre">TrainState</span></code> and the training step</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax-examples-with-dropout">Flax examples with dropout</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-flax-examples-that-use-module-make-rng">More Flax examples that use Module <code class="docutils literal notranslate"><span class="pre">make_rng()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

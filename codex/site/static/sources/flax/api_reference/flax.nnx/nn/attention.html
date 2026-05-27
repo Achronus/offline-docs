@@ -1,0 +1,883 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Attention</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/flax.nnx/nn/attention';</script>
+    <link rel="icon" href="../../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Dtypes" href="dtypes.html" />
+    <link rel="prev" title="Activation functions" href="activations.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/api_reference/flax.nnx/nn/attention.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../../../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../index.html">flax.nnx</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../module.html">module</a></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">nn</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="activations.html">Activation functions</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/api_reference/flax.nnx/nn/attention.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Attention</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.MultiHeadAttention"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.MultiHeadAttention.__call__"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.MultiHeadAttention.init_cache"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention.init_cache()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.MultiHeadAttention.set_view"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention.set_view()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.combine_masks"><code class="docutils literal notranslate"><span class="pre">combine_masks()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.dot_product_attention"><code class="docutils literal notranslate"><span class="pre">dot_product_attention()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.make_attention_mask"><code class="docutils literal notranslate"><span class="pre">make_attention_mask()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.make_causal_mask"><code class="docutils literal notranslate"><span class="pre">make_causal_mask()</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-flax.nnx">
+<span id="attention"></span><h1>Attention<a class="headerlink" href="#module-flax.nnx" title="Permalink to this heading">#</a></h1>
+<div class="docutils container">
+<dl class="py class">
+<dt class="sig sig-object py" id="flax.nnx.MultiHeadAttention">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">MultiHeadAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qkv_features=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_features=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_kv_heads=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_kv_features=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_dtype=&lt;class</span> <span class="pre">'jax.numpy.float32'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broadcast_dropout=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout_rate=0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deterministic=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_init=&lt;function</span> <span class="pre">variance_scaling.&lt;locals&gt;.init&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_kernel_init=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias_init=&lt;function</span> <span class="pre">zeros&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_bias_init=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_bias=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_fn=&lt;function</span> <span class="pre">dot_product_attention&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decode=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_qk=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qkv_promote_dtype=&lt;function</span> <span class="pre">promote_dtype&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_promote_dtype=&lt;function</span> <span class="pre">promote_dtype&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ln_promote_dtype=&lt;function</span> <span class="pre">promote_dtype&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qkv_dot_general=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dot_general=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qkv_dot_general_cls=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dot_general_cls=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rngs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_rngs=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_metadata=mappingproxy({})</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_kernel_metadata=mappingproxy({})</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias_metadata=mappingproxy({})</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_bias_metadata=mappingproxy({})</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_ln_scale_metadata=mappingproxy({})</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_ln_scale_metadata=mappingproxy({})</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/flax/nnx/nn/attention.html#MultiHeadAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.MultiHeadAttention" title="Permalink to this definition">#</a></dt>
+<dd><p>Multi-head attention.</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">MultiHeadAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">in_features</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">qkv_features</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+<span class="gp">... </span>                               <span class="n">decode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">key1</span><span class="p">,</span> <span class="n">key2</span><span class="p">,</span> <span class="n">key3</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>  <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="n">shape</span><span class="p">),</span>
+<span class="gp">... </span>  <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">key2</span><span class="p">,</span> <span class="n">shape</span><span class="p">),</span>
+<span class="gp">... </span>  <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">key3</span><span class="p">,</span> <span class="n">shape</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># different inputs for inputs_q, inputs_k and inputs_v</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># equivalent output when inferring v</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">(</span><span class="n">layer</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="n">layer</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># equivalent output when inferring k and v</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">(</span><span class="n">layer</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">==</span> <span class="n">layer</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">(</span><span class="n">layer</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">==</span> <span class="n">layer</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_heads</strong> – number of attention heads. Features (i.e. inputs_q.shape[-1])
+should be divisible by the number of heads.</p></li>
+<li><p><strong>in_features</strong> – int or tuple with number of input features.</p></li>
+<li><p><strong>qkv_features</strong> – dimension of the key, query, and value.</p></li>
+<li><p><strong>out_features</strong> – dimension of the last projection.</p></li>
+<li><p><strong>in_kv_features</strong> – number of input features for computing key and value.</p></li>
+<li><p><strong>num_kv_heads</strong> – number of key and value heads. If None, it defaults to
+<code class="docutils literal notranslate"><span class="pre">num_heads</span></code>. If set to a value smaller than <code class="docutils literal notranslate"><span class="pre">num_heads</span></code>, Grouped Query
+Attention (GQA) is used. <code class="docutils literal notranslate"><span class="pre">num_heads</span></code> must be divisible by
+<code class="docutils literal notranslate"><span class="pre">num_kv_heads</span></code>.</p></li>
+<li><p><strong>dtype</strong> – the dtype of the computation (default: infer from inputs and params)</p></li>
+<li><p><strong>param_dtype</strong> – the dtype passed to parameter initializers (default: float32)</p></li>
+<li><p><strong>broadcast_dropout</strong> – bool: use a broadcasted dropout along batch dims.</p></li>
+<li><p><strong>dropout_rate</strong> – dropout rate</p></li>
+<li><p><strong>deterministic</strong> – if false, the attention weight is masked randomly using
+dropout, whereas if true, the attention weights are deterministic.</p></li>
+<li><p><strong>precision</strong> – numerical precision of the computation see <cite>jax.lax.Precision</cite>
+for details.</p></li>
+<li><p><strong>kernel_init</strong> – initializer for the kernel of the Dense layers.</p></li>
+<li><p><strong>out_kernel_init</strong> – optional initializer for the kernel of the output Dense layer,
+if None, the kernel_init is used.</p></li>
+<li><p><strong>bias_init</strong> – initializer for the bias of the Dense layers.</p></li>
+<li><p><strong>out_bias_init</strong> – optional initializer for the bias of the output Dense layer,
+if None, the bias_init is used.</p></li>
+<li><p><strong>use_bias</strong> – bool: whether pointwise QKVO dense transforms use bias.</p></li>
+<li><p><strong>attention_fn</strong> – dot_product_attention or compatible function. Accepts query,
+key, value, and returns output of shape <cite>[bs, dim1, dim2, …, dimN,,
+num_heads, value_channels]`</cite></p></li>
+<li><p><strong>decode</strong> – whether to prepare and use an autoregressive cache.</p></li>
+<li><p><strong>normalize_qk</strong> – should QK normalization be applied (arxiv.org/abs/2302.05442).</p></li>
+<li><p><strong>qkv_promote_dtype</strong> – function to promote the dtype of all input array arguments
+(including Variables accessed through <code class="docutils literal notranslate"><span class="pre">self</span></code>) to the desired dtype for the
+query, key, and value LinearGeneral submodules.</p></li>
+<li><p><strong>out_promote_dtype</strong> – function to promote the dtype of all input array arguments
+(including Variables accessed through <code class="docutils literal notranslate"><span class="pre">self</span></code>) to the desired dtype for the
+output LinearGeneral submodule.</p></li>
+<li><p><strong>ln_promote_dtype</strong> – function to promote the dtype of all input array arguments
+(including Variables accessed through <code class="docutils literal notranslate"><span class="pre">self</span></code>) to the desired dtype for the
+LayerNorm submodules (query_ln and key_ln) when normalize_qk=True.</p></li>
+<li><p><strong>rngs</strong> – rng key.</p></li>
+<li><p><strong>keep_rngs</strong> – whether to store the input rngs as attribute (i.e. <cite>self.rngs = rngs</cite>)
+(default: True). If rngs is stored, we should split the module as
+<cite>graphdef, params, nondiff = nnx.split(module, nnx.Param, …)</cite> where <cite>nondiff</cite>
+contains RNG object associated with stored <cite>self.rngs</cite>.</p></li>
+<li><p><strong>kernel_metadata</strong> – Optional metadata dictionary to set when initializing
+the Dense layers.</p></li>
+<li><p><strong>out_kernel_metadata</strong> – Optional metadata dictionary to set when initializing
+the output Dense layers. If None, the kernel_metadata is used.</p></li>
+<li><p><strong>bias_metadata</strong> – Optional metadata dictionary to set when initializing
+the bias of the Dense layers.</p></li>
+<li><p><strong>out_bias_metadata</strong> – Optional metadata dictionary to set when initializing
+the bias of the output Dense layers. If None, the bias_metadata is used.</p></li>
+<li><p><strong>query_ln_scale_metadata</strong> – Optional metadata dictionary to set when initializing
+the scale of the query layer norm layer.</p></li>
+<li><p><strong>key_ln_scale_metadata</strong> – Optional metadata dictionary to set when initializing
+the scale of the key layer norm layer.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="flax.nnx.MultiHeadAttention.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs_q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs_k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs_v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deterministic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rngs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sow_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_causal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_sharding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qkv_sharding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/flax/nnx/nn/attention.html#MultiHeadAttention.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.MultiHeadAttention.__call__" title="Permalink to this definition">#</a></dt>
+<dd><p>Applies multi-head dot product attention on the input data.</p>
+<p>Projects the inputs into multi-headed query, key, and value vectors,
+applies dot-product attention and project the results to an output vector.</p>
+<p>If both inputs_k and inputs_v are None, they will both copy the value of
+inputs_q (self attention).
+If only inputs_v is None, it will copy the value of inputs_k.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs_q</strong> – input queries of shape <cite>[batch_sizes…, length, features]</cite>.</p></li>
+<li><p><strong>inputs_k</strong> – key of shape <cite>[batch_sizes…, length, features]</cite>. If None,
+inputs_k will copy the value of inputs_q.</p></li>
+<li><p><strong>inputs_v</strong> – values of shape <cite>[batch_sizes…, length, features]</cite>. If None,
+inputs_v will copy the value of inputs_k.</p></li>
+<li><p><strong>mask</strong> – attention mask of shape <cite>[batch_sizes…, num_heads, query_length,
+key/value_length]</cite>. Attention weights are masked out if their
+corresponding mask value is <cite>False</cite>.</p></li>
+<li><p><strong>deterministic</strong> – if false, the attention weight is masked randomly using
+dropout, whereas if true, the attention weights are deterministic. The
+<code class="docutils literal notranslate"><span class="pre">deterministic</span></code> flag passed into the call method will take precedence
+over the <code class="docutils literal notranslate"><span class="pre">deterministic</span></code> flag passed into the constructor.</p></li>
+<li><p><strong>rngs</strong> – rng key. The rng key passed into the call method will take
+precedence over the rng key passed into the constructor.</p></li>
+<li><p><strong>sow_weights</strong> – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the attention weights are sowed into the
+‘intermediates’ collection.</p></li>
+<li><p><strong>decode</strong> – whether to prepare and use an autoregressive cache. The <code class="docutils literal notranslate"><span class="pre">decode</span></code>
+flag passed into the call method will take precedence over the <code class="docutils literal notranslate"><span class="pre">decode</span></code>
+flag passed into the constructor.</p></li>
+<li><p><strong>is_causal</strong> – whether to overlay a causal attention mask. Passed as an argument to the
+underlying attention funcion.</p></li>
+<li><p><strong>out_sharding</strong> – Optional sharding specification to pass to
+the output linear layer for the output arrays.</p></li>
+<li><p><strong>qkv_sharding</strong> – Optional sharding specification to pass to
+the QKV linear layers for the output arrays.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>output of shape <cite>[batch_sizes…, length, features]</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flax.nnx.MultiHeadAttention.init_cache">
+<span class="sig-name descname"><span class="pre">init_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'jax.numpy.float32'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/flax/nnx/nn/attention.html#MultiHeadAttention.init_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.MultiHeadAttention.init_cache" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes cache for fast autoregressive decoding. When
+<code class="docutils literal notranslate"><span class="pre">decode=True</span></code>, this method must be called first before performing
+forward inference. When in decode mode, only one token must be passed
+at a time.</p>
+<p>Example usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embed_dim</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">))</span> <span class="c1"># single token</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_nnx</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">MultiHeadAttention</span><span class="p">(</span>
+<span class="gp">... </span>  <span class="n">num_heads</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="n">in_features</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="n">qkv_features</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="n">out_features</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="n">decode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="n">rngs</span><span class="o">=</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">42</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># out_nnx = model_nnx(x)  &lt;-- throws an error because cache isn&#39;t initialized</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_nnx</span><span class="o">.</span><span class="n">init_cache</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out_nnx</span> <span class="o">=</span> <span class="n">model_nnx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flax.nnx.MultiHeadAttention.set_view">
+<span class="sig-name descname"><span class="pre">set_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deterministic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/flax/nnx/nn/attention.html#MultiHeadAttention.set_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.MultiHeadAttention.set_view" title="Permalink to this definition">#</a></dt>
+<dd><p>Class method used by <code class="docutils literal notranslate"><span class="pre">nnx.view</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train</strong> – if True, the module is set to training mode.</p></li>
+<li><p><strong>deterministic</strong> – if True, the module is set to deterministic mode.</p></li>
+<li><p><strong>decode</strong> – if True, the module is set to decode mode.</p></li>
+<li><p><strong>batch_size</strong> – the batch size to use for the cache.</p></li>
+<li><p><strong>max_length</strong> – the max length to use for the cache.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#flax.nnx.MultiHeadAttention.init_cache" title="flax.nnx.MultiHeadAttention.init_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_cache</span></code></a>(input_shape[, dtype])</p></td>
+<td><p>Initializes cache for fast autoregressive decoding.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#flax.nnx.MultiHeadAttention.set_view" title="flax.nnx.MultiHeadAttention.set_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_view</span></code></a>([deterministic, decode, ...])</p></td>
+<td><p>Class method used by <code class="docutils literal notranslate"><span class="pre">nnx.view</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</dd></dl>
+
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.combine_masks">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">combine_masks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*masks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'jax.numpy.float32'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/flax/nnx/nn/attention.html#combine_masks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.combine_masks" title="Permalink to this definition">#</a></dt>
+<dd><p>Combine attention masks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*masks</strong> – set of attention mask arguments to combine, some can be None.</p></li>
+<li><p><strong>dtype</strong> – dtype for the returned mask.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Combined mask, reduced by logical and, returns None if no masks given.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.dot_product_attention">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">dot_product_attention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broadcast_dropout=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout_rng=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout_rate=0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deterministic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">promote_dtype=&lt;function</span> <span class="pre">promote_dtype&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_causal=False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/flax/nnx/nn/attention.html#dot_product_attention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.dot_product_attention" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes dot-product attention given query, key, and value.</p>
+<p>This is the core function for applying attention based on
+<a class="reference external" href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a>. It calculates the attention weights given
+query and key and combines the values using the attention weights.</p>
+<p>Will use the more optimized <cite>jax.nn.dot_product_attention</cite> if dropout is
+not activated and <cite>module=None</cite>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">query</span></code>, <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">value</span></code> needn’t have any batch dimensions.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> – queries for calculating attention with shape of <code class="docutils literal notranslate"><span class="pre">[batch...,</span> <span class="pre">q_length,</span>
+<span class="pre">num_heads,</span> <span class="pre">qk_depth_per_head]</span></code>.</p></li>
+<li><p><strong>key</strong> – keys for calculating attention with shape of <code class="docutils literal notranslate"><span class="pre">[batch...,</span> <span class="pre">kv_length,</span>
+<span class="pre">num_heads,</span> <span class="pre">qk_depth_per_head]</span></code>.</p></li>
+<li><p><strong>value</strong> – values to be used in attention with shape of <code class="docutils literal notranslate"><span class="pre">[batch...,</span> <span class="pre">kv_length,</span>
+<span class="pre">num_heads,</span> <span class="pre">v_depth_per_head]</span></code>.</p></li>
+<li><p><strong>bias</strong> – bias for the attention weights. This should be broadcastable to the
+shape <cite>[batch…, num_heads, q_length, kv_length]</cite>. This can be used for
+incorporating causal masks, padding masks, proximity bias, etc.</p></li>
+<li><p><strong>mask</strong> – mask for the attention weights. This should be broadcastable to the
+shape <cite>[batch…, num_heads, q_length, kv_length]</cite>. This can be used for
+incorporating causal masks. Attention weights are masked out if their
+corresponding mask value is <cite>False</cite>.</p></li>
+<li><p><strong>broadcast_dropout</strong> – bool: use a broadcasted dropout along batch dims.</p></li>
+<li><p><strong>dropout_rng</strong> – JAX PRNGKey: to be used for dropout</p></li>
+<li><p><strong>dropout_rate</strong> – dropout rate</p></li>
+<li><p><strong>deterministic</strong> – bool, deterministic or not (to apply dropout)</p></li>
+<li><p><strong>dtype</strong> – the dtype of the computation (default: infer from inputs)</p></li>
+<li><p><strong>precision</strong> – numerical precision of the computation see <cite>jax.lax.Precision</cite>
+for details.</p></li>
+<li><p><strong>module</strong> – the Module that will sow the attention weights into the
+<code class="docutils literal notranslate"><span class="pre">nnx.Intermediate</span></code> collection. If <code class="docutils literal notranslate"><span class="pre">module</span></code> is None, the attention
+weights will not be sowed.</p></li>
+<li><p><strong>promote_dtype</strong> – function to promote the dtype of the arrays to the desired
+dtype. The function should accept a tuple of <code class="docutils literal notranslate"><span class="pre">(query,</span> <span class="pre">key,</span> <span class="pre">value)</span></code> and a
+<code class="docutils literal notranslate"><span class="pre">dtype</span></code> keyword argument, and return a tuple of arrays with the promoted
+dtype.</p></li>
+<li><p><strong>is_causal</strong> – If true, causal attention will be applied. Note, some
+implementations like xla will generate a mask tensor and apply it to
+the logits to mask out the non-causal parts of the attention matrix,
+but other implementations like cudnn will avoid computing the
+non-causal regions, providing speedups.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Output of shape <cite>[batch…, q_length, num_heads, v_depth_per_head]</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.make_attention_mask">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">make_attention_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairwise_fn=&lt;jnp.ufunc</span> <span class="pre">'multiply'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_batch_dims=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'jax.numpy.float32'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/flax/nnx/nn/attention.html#make_attention_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.make_attention_mask" title="Permalink to this definition">#</a></dt>
+<dd><p>Mask-making helper for attention weights.</p>
+<p>In case of 1d inputs (i.e., <cite>[batch…, len_q]</cite>, <cite>[batch…, len_kv]</cite>, the
+attention weights will be <cite>[batch…, heads, len_q, len_kv]</cite> and this
+function will produce <cite>[batch…, 1, len_q, len_kv]</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_input</strong> – a batched, flat input of query_length size</p></li>
+<li><p><strong>key_input</strong> – a batched, flat input of key_length size</p></li>
+<li><p><strong>pairwise_fn</strong> – broadcasting elementwise comparison function</p></li>
+<li><p><strong>extra_batch_dims</strong> – number of extra batch dims to add singleton axes for, none
+by default</p></li>
+<li><p><strong>dtype</strong> – mask return dtype</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <cite>[batch…, 1, len_q, len_kv]</cite> shaped mask for 1d attention.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flax.nnx.make_causal_mask">
+<span class="sig-prename descclassname"><span class="pre">flax.nnx.</span></span><span class="sig-name descname"><span class="pre">make_causal_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_batch_dims=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'jax.numpy.float32'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/flax/nnx/nn/attention.html#make_causal_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flax.nnx.make_causal_mask" title="Permalink to this definition">#</a></dt>
+<dd><p>Make a causal mask for self-attention.</p>
+<p>In case of 1d inputs (i.e., <cite>[batch…, len]</cite>, the self-attention weights
+will be <cite>[batch…, heads, len, len]</cite> and this function will produce a
+causal mask of shape <cite>[batch…, 1, len, len]</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input array of shape <cite>[batch…, len]</cite></p></li>
+<li><p><strong>extra_batch_dims</strong> – number of batch dims to add singleton axes for, none by
+default</p></li>
+<li><p><strong>dtype</strong> – mask return dtype</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <cite>[batch…, 1, len, len]</cite> shaped causal mask for 1d attention.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="activations.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Activation functions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="dtypes.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Dtypes</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.MultiHeadAttention"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.MultiHeadAttention.__call__"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.MultiHeadAttention.init_cache"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention.init_cache()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.MultiHeadAttention.set_view"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention.set_view()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.combine_masks"><code class="docutils literal notranslate"><span class="pre">combine_masks()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.dot_product_attention"><code class="docutils literal notranslate"><span class="pre">dot_product_attention()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.make_attention_mask"><code class="docutils literal notranslate"><span class="pre">make_attention_mask()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flax.nnx.make_causal_mask"><code class="docutils literal notranslate"><span class="pre">make_causal_mask()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

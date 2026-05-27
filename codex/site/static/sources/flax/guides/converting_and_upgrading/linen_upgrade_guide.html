@@ -1,0 +1,1063 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Upgrading my codebase to Linen</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/converting_and_upgrading/linen_upgrade_guide';</script>
+    <link rel="icon" href="../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="RNNCellBase Upgrade Guide" href="rnncell_upgrade_guide.html" />
+    <link rel="prev" title="Upgrading my codebase to Optax" href="optax_update_guide.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax-linen" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/converting_and_upgrading/linen_upgrade_guide.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax.readthedocs.io/en/latest/index.html"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the old Flax Linen API. <span style="color: lightgray;">[Explore the new <b>Flax NNX</b> API ✨]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flax_fundamentals/flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../flax_fundamentals/index.html">Flax fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/index.html">JAX 101</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/state_params.html">Managing Parameters and State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/setup_or_nncompact.html"><code class="docutils literal notranslate"><span class="pre">setup</span></code> vs <code class="docutils literal notranslate"><span class="pre">compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/arguments.html">Dealing with Flax Module arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/rng_guide.html">Randomness and PRNGs in Flax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../data_preprocessing/index.html">Data preprocessing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/full_eval.html">Processing the entire Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/loading_datasets.html">Loading datasets</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../training_techniques/index.html">Training techniques</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/batch_norm.html">Batch normalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/dropout.html">Dropout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/lr_schedule.html">Learning rate scheduling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/transfer_learning.html">Transfer learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/use_checkpointing.html">Save and load checkpoints</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../parallel_training/index.html">Parallel training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/ensembling.html">Ensembling on multiple devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/flax_on_pjit.html">Scale up Flax Modules on multiple devices</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../model_inspection/index.html">Model inspection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/model_surgery.html">Model surgery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/extracting_intermediates.html">Extracting intermediate values</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">Converting and upgrading</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="haiku_migration_guide.html">Migrating from Haiku to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="convert_pytorch_to_flax.html">Convert PyTorch models to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="orbax_upgrade_guide.html">Migrate checkpointing to Orbax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="optax_update_guide.html">Upgrading my codebase to Optax</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Upgrading my codebase to Linen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rnncell_upgrade_guide.html">RNNCellBase Upgrade Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="regular_dict_upgrade_guide.html">Migrate to regular dicts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../quantization/index.html">Quantization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quantization/fp8_basics.html">User Guide on Using FP8</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../flax_sharp_bits.html">The Sharp Bits</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/core_examples.html">Core examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/google_research_examples.html">Google Research examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/repositories_that_use_flax.html">Repositories that use Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/community_examples.html">Community examples</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../developer_notes/index.html">Developer notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/module_lifecycle.html">The Flax Module lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/lift.html">Lifted transformations</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/google/flax/tree/main/docs/flip">FLIPs</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.cursor.html">flax.cursor package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.errors.html">flax.errors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.jax_utils.html">flax.jax_utils package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_reference/flax.linen/index.html">flax.linen</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/module.html">Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/init_apply.html">Init/Apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/activation_functions.html">Activation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/initializers.html">Initializers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/transformations.html">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/inspection.html">Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/variable.html">Variable dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/spmd.html">SPMD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/decorators.html">Decorators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/profiling.html">Profiling</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.serialization.html">flax.serialization package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.traceback_util.html">flax.traceback_util package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/index.html">Flax NNX</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/guides/converting_and_upgrading/linen_upgrade_guide.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Upgrading my codebase to Linen</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-simple-flax-modules">Defining simple Flax Modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-flax-modules-inside-other-modules">Using Flax Modules inside other Modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sharing-submodules-and-defining-multiple-methods">Sharing submodules and defining multiple methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-partial-inside-other-modules"><code class="docutils literal notranslate"><span class="pre">Module.partial</span></code> inside other modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#top-level-training-code-patterns">Top-level training code patterns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#non-trainable-variables-state-use-within-modules">Non-trainable variables (“state”): Use within Modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#non-trainable-variables-state-top-level-training-code-patterns">Non-trainable variables (“state”): Top-level training code patterns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-pre-linen-checkpoints">Loading pre-Linen checkpoints</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#randomness">Randomness</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lifted-transformations">Lifted transformations</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="upgrading-my-codebase-to-linen">
+<h1>Upgrading my codebase to Linen<a class="headerlink" href="#upgrading-my-codebase-to-linen" title="Permalink to this heading">#</a></h1>
+<p>As of Flax v0.4.0, <code class="docutils literal notranslate"><span class="pre">flax.nn</span></code> no longer exists, and is replaced with the new
+Linen API at <code class="docutils literal notranslate"><span class="pre">flax.linen</span></code>. If your codebase is still using the old API, you
+can use this upgrade guide to upgrade it to Linen.</p>
+<section id="defining-simple-flax-modules">
+<h2>Defining simple Flax Modules<a class="headerlink" href="#defining-simple-flax-modules" title="Permalink to this heading">#</a></h2>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Old Flax" for="sd-tab-item-0">
+Old Flax</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Dense</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">inputs</span><span class="p">,</span>
+            <span class="n">features</span><span class="p">,</span>
+            <span class="n">use_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">kernel_init</span><span class="o">=</span><span class="n">default_kernel_init</span><span class="p">,</span>
+            <span class="n">bias_init</span><span class="o">=</span><span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">()):</span>
+
+    <span class="n">kernel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;kernel&#39;</span><span class="p">,</span>
+      <span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">features</span><span class="p">),</span> <span class="n">kernel_init</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">use_bias</span><span class="p">:</span>
+      <span class="n">bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span>
+        <span class="s1">&#39;bias&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">features</span><span class="p">,),</span> <span class="n">bias_init</span><span class="p">)</span>
+      <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">bias</span>
+    <span class="k">return</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-1">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">linen</span> <span class="k">as</span> <span class="n">nn</span>  <span class="c1"># [1]</span>
+</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Dense</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="hll">  <span class="n">features</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># [2]</span>
+</span>  <span class="n">use_bias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+  <span class="n">kernel_init</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">PRNGKey</span><span class="p">,</span> <span class="n">Shape</span><span class="p">,</span> <span class="n">Dtype</span><span class="p">],</span> <span class="n">Array</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_kernel_init</span>
+  <span class="n">bias_init</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">PRNGKey</span><span class="p">,</span> <span class="n">Shape</span><span class="p">,</span> <span class="n">Dtype</span><span class="p">],</span> <span class="n">Array</span><span class="p">]</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">()</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+<span class="hll">  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>  <span class="c1"># [3]</span>
+</span>    <span class="n">kernel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;kernel&#39;</span><span class="p">,</span>
+<span class="hll">      <span class="bp">self</span><span class="o">.</span><span class="n">kernel_init</span><span class="p">,</span> <span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">))</span>  <span class="c1"># [4]</span>
+</span>    <span class="n">y</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_bias</span><span class="p">:</span>
+      <span class="n">bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span>
+<span class="hll">        <span class="s1">&#39;bias&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_init</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">,))</span>  <span class="c1"># [5]</span>
+</span>      <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">bias</span>
+    <span class="k">return</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<ol class="arabic simple">
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">flax</span> <span class="pre">import</span> <span class="pre">nn</span></code> with <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">flax</span> <span class="pre">import</span> <span class="pre">linen</span> <span class="pre">as</span> <span class="pre">nn</span></code>.</p></li>
+<li><p>Move arguments to <code class="docutils literal notranslate"><span class="pre">apply</span></code> into dataclass attributes. Add type annotations
+(or use type <code class="docutils literal notranslate"><span class="pre">Any</span></code> to bypass).</p></li>
+<li><p>Rename method <code class="docutils literal notranslate"><span class="pre">apply</span></code> to <code class="docutils literal notranslate"><span class="pre">__call__</span></code> and (optionally) wrap with
+<a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/decorators.html#flax.linen.compact"><code class="docutils literal notranslate"><span class="pre">&#64;compact</span></code></a>. Methods wrapped in <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/decorators.html#flax.linen.compact"><code class="docutils literal notranslate"><span class="pre">&#64;compact</span></code></a> can define submodules directly
+within the method (like in old Flax). You can only wrap a single method with
+<a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/decorators.html#flax.linen.compact"><code class="docutils literal notranslate"><span class="pre">&#64;compact</span></code></a>. Alternatively, you can define a <code class="docutils literal notranslate"><span class="pre">setup</span></code> method. For more
+details, please see our other HOWTO <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/flax_fundamentals/setup_or_nncompact.html">Should I use setup or nn.compact?</a>.</p></li>
+<li><p>Access dataclass attributes values by <code class="docutils literal notranslate"><span class="pre">self.&lt;attr&gt;</span></code> inside methods, e.g.
+<code class="docutils literal notranslate"><span class="pre">self.features</span></code>.</p></li>
+<li><p>Move shape to the end of the arguments to <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.param"><code class="docutils literal notranslate"><span class="pre">self.param</span></code></a> (initializer functions
+can take arbitrary argument lists).</p></li>
+</ol>
+</section>
+<section id="using-flax-modules-inside-other-modules">
+<h2>Using Flax Modules inside other Modules<a class="headerlink" href="#using-flax-modules-inside-other-modules" title="Permalink to this heading">#</a></h2>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-2" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Old Flax" for="sd-tab-item-2">
+Old Flax</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Encoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;latents&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">z</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-3" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-3">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Encoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="hll">    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">500</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># [1]</span>
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="hll">    <span class="n">z</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;latents&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># [2]</span>
+</span>    <span class="k">return</span> <span class="n">z</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<ol class="arabic simple">
+<li><p>Module constructors no longer return the outputs. Instead, they work like
+normal constructors and return module instances. These instances can be
+shared like in normal Python (instead of using <code class="docutils literal notranslate"><span class="pre">.shared()</span></code> in old Flax).
+Since most modules implement <code class="docutils literal notranslate"><span class="pre">__call__</span></code>, you can retain the conciseness of
+old Flax.</p></li>
+<li><p>Names can be optionally passed to all module constructors.</p></li>
+</ol>
+</section>
+<section id="sharing-submodules-and-defining-multiple-methods">
+<h2>Sharing submodules and defining multiple methods<a class="headerlink" href="#sharing-submodules-and-defining-multiple-methods" title="Permalink to this heading">#</a></h2>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-4" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Old Flax" for="sd-tab-item-4">
+Old Flax</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AutoEncoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">_create_submodules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Decoder</span><span class="o">.</span><span class="n">shared</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;encoder&quot;</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">z_rng</span><span class="p">,</span> <span class="n">latents</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">decoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_decoder</span><span class="p">()</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">latents</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;encoder&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">module_method</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="o">**</span><span class="n">unused_kwargs</span><span class="p">):</span>
+    <span class="n">decoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_decoder</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-5" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-5">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AutoEncoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">latents</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="hll">  <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># [1]</span>
+</span><span class="hll">    <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latents</span><span class="p">)</span>  <span class="c1"># [2]</span>
+</span>    <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">()</span>
+
+<span class="hll">  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>  <span class="c1"># [3]</span>
+</span>    <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+<span class="hll">  <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>  <span class="c1"># [4]</span>
+</span>    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<ol class="arabic simple">
+<li><p>Use <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.setup"><code class="docutils literal notranslate"><span class="pre">setup</span></code></a> instead of <code class="docutils literal notranslate"><span class="pre">__init__</span></code>, which is already defined in
+the dataclasses library. Flax calls setup right after modules are ready to be
+used. (You can do this for all modules if you like instead of using
+<code class="docutils literal notranslate"><span class="pre">&#64;compact</span></code>, but we like how <code class="docutils literal notranslate"><span class="pre">&#64;compact</span></code> co-locates where modules are defined
+and used, especially if you have loops or conditionals).</p></li>
+<li><p>Like regular Python, share submodules by assigning to self during
+initialization. Similar to PyTorch, <code class="docutils literal notranslate"><span class="pre">self.encoder</span></code> automatically has the
+name <code class="docutils literal notranslate"><span class="pre">&quot;encoder&quot;</span></code>.</p></li>
+<li><p>We don’t use <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/decorators.html#flax.linen.compact"><code class="docutils literal notranslate"><span class="pre">&#64;compact</span></code></a> here because we’re not defining any inline
+submodules (all submodules are defined in setup).</p></li>
+<li><p>Define additional methods just like in regular Python.</p></li>
+</ol>
+</section>
+<section id="module-partial-inside-other-modules">
+<h2><code class="docutils literal notranslate"><span class="pre">Module.partial</span></code> inside other modules<a class="headerlink" href="#module-partial-inside-other-modules" title="Permalink to this heading">#</a></h2>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-6" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Old Flax" for="sd-tab-item-6">
+Old Flax</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="c1"># no import</span>
+</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ResNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;ResNetV1.&quot;&quot;&quot;</span>
+
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span>
+            <span class="n">stage_sizes</span><span class="p">,</span>
+            <span class="n">num_filters</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+            <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span>
+        <span class="n">use_running_average</span><span class="o">=</span><span class="ow">not</span> <span class="n">train</span><span class="p">,</span>
+        <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">num_filters</span><span class="p">,</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="n">padding</span><span class="o">=</span><span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;conv_init&#39;</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bn_init&#39;</span><span class="p">)</span>
+
+    <span class="c1"># [...]</span>
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-7" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-7">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ResNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;ResNetV1.&quot;&quot;&quot;</span>
+  <span class="n">stage_sizes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+  <span class="n">num_filters</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span>
+  <span class="n">train</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="hll">    <span class="n">conv</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv</span><span class="p">,</span> <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">norm</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm</span><span class="p">,</span>
+</span><span class="hll">                  <span class="n">use_running_average</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">,</span>
+</span><span class="hll">                  <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_filters</span><span class="p">,</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="n">padding</span><span class="o">=</span><span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;conv_init&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;bn_init&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="c1"># [...]</span>
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<p>Use normal <code class="docutils literal notranslate"><span class="pre">functools.partial</span></code> instead of <code class="docutils literal notranslate"><span class="pre">Module.partial</span></code>. The rest stays
+the same.</p>
+</section>
+<section id="top-level-training-code-patterns">
+<h2>Top-level training code patterns<a class="headerlink" href="#top-level-training-code-patterns" title="Permalink to this heading">#</a></h2>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-8" name="sd-tab-set-4" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Old Flax" for="sd-tab-item-8">
+Old Flax</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_model</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+  <span class="n">_</span><span class="p">,</span> <span class="n">initial_params</span> <span class="o">=</span> <span class="n">CNN</span><span class="o">.</span><span class="n">init_by_shape</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">,</span> <span class="p">[((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
+  <span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">CNN</span><span class="p">,</span> <span class="n">initial_params</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">model</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_optimizer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+  <span class="n">optimizer_def</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Momentum</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+  <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer_def</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">optimizer</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">cross_entropy_loss</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">logits</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+  <span class="n">one_hot_labels</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">one_hot</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+  <span class="k">return</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">one_hot_labels</span> <span class="o">*</span> <span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">])</span>
+  <span class="n">one_hot</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">one_hot</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+  <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">one_hot_labels</span> <span class="o">*</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span>
+                           <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">logits</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-9" name="sd-tab-set-4" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-9">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">create_train_state</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>  <span class="c1"># [1]</span>
+</span><span class="hll">  <span class="n">variables</span> <span class="o">=</span> <span class="n">CNN</span><span class="p">()</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>  <span class="c1"># [2]</span>
+</span><span class="hll">  <span class="n">params</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>  <span class="c1"># [3]</span>
+</span><span class="hll">  <span class="n">tx</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">sgd</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">momentum</span><span class="p">)</span>  <span class="c1"># [4]</span>
+</span>  <span class="k">return</span> <span class="n">train_state</span><span class="o">.</span><span class="n">TrainState</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+      <span class="n">apply_fn</span><span class="o">=</span><span class="n">CNN</span><span class="o">.</span><span class="n">apply</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">tx</span><span class="o">=</span><span class="n">tx</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+<span class="hll">  <span class="n">logits</span> <span class="o">=</span> <span class="n">CNN</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">},</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">])</span>  <span class="c1"># [5]</span>
+</span>  <span class="n">one_hot</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">one_hot</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+  <span class="n">loss</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">optax</span><span class="o">.</span><span class="n">softmax_cross_entropy</span><span class="p">(</span><span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">,</span>
+                                              <span class="n">labels</span><span class="o">=</span><span class="n">one_hot</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">logits</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<ol class="arabic simple">
+<li><p>We no longer use the <code class="docutils literal notranslate"><span class="pre">Model</span></code> abstraction – instead we pass parameters
+around directly, usually encapsulated in a <a class="reference external" href="https://flax.readthedocs.io/en/latest/flax.training.html#train-state">TrainState</a> object, which can
+directly be passed to JAX transformations.</p></li>
+<li><p>To compute initial parameters, construct a module instance and call <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.init"><code class="docutils literal notranslate"><span class="pre">init</span></code></a>
+or <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.init_with_output"><code class="docutils literal notranslate"><span class="pre">init_with_output</span></code></a>. We haven’t ported over <code class="docutils literal notranslate"><span class="pre">init_by_shape</span></code> because this
+function did some magic we did not like (it evaluated the function by shape.
+but returned real values anyway). Therefore, you should now pass concrete
+values to the initializer functions, and you can optimize the initialization
+by wrapping it with <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.jit.html#jax.jit"><code class="docutils literal notranslate"><span class="pre">jax.jit</span></code></a>, which is highly recommended to avoid running
+a full forward pass.</p></li>
+<li><p>Linen generalizes parameters into variables. Parameters are one
+“collection” of variables. Variables are nested dicts, where the top-level
+keys reflect the different variable collections, of which “param” is one of.
+See the <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/variable.html">Variables documentation</a> for more details.</p></li>
+<li><p>We recommend using Optax optimizers. See our separate HOWTO called
+<a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/converting_and_upgrading/optax_update_guide.html">Upgrading my codebase to Optax</a> for more details.</p></li>
+<li><p>To make predictions with your model, make an instance at the top level (this
+is free – just a wrapper around constructor attributes) and call the
+<code class="docutils literal notranslate"><span class="pre">apply</span></code> method (which will call <code class="docutils literal notranslate"><span class="pre">__call__</span></code> internally).</p></li>
+</ol>
+</section>
+<section id="non-trainable-variables-state-use-within-modules">
+<h2>Non-trainable variables (“state”): Use within Modules<a class="headerlink" href="#non-trainable-variables-state-use-within-modules" title="Permalink to this heading">#</a></h2>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-10" name="sd-tab-set-5" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Old Flax" for="sd-tab-item-10">
+Old Flax</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BatchNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="c1"># [...]</span>
+    <span class="n">ra_mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">(</span>
+      <span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">),</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">())</span>
+    <span class="n">ra_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">(</span>
+      <span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">),</span> <span class="n">initializers</span><span class="o">.</span><span class="n">ones_init</span><span class="p">())</span>
+    <span class="c1"># [...]</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-11" name="sd-tab-set-5" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-11">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BatchNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="c1"># [...]</span>
+<span class="hll">    <span class="n">ra_mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span>
+</span>      <span class="s1">&#39;batch_stats&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">(),</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">))</span>
+    <span class="n">ra_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span>
+      <span class="s1">&#39;batch_stats&#39;</span><span class="p">,</span> <span class="s1">&#39;var&#39;</span><span class="p">,</span> <span class="n">initializers</span><span class="o">.</span><span class="n">ones_init</span><span class="p">(),</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">))</span>
+    <span class="c1"># [...]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<p>The first argument is the name of the variable collection (“param” is the only
+variable collection that’s always available). Some colllections may be treated
+as mutable, and others as immutable at top-level training code (see next section
+for details). Flax also lets you treat each variable collection differently when
+using JAX transformations inside modules.</p>
+</section>
+<section id="non-trainable-variables-state-top-level-training-code-patterns">
+<h2>Non-trainable variables (“state”): Top-level training code patterns<a class="headerlink" href="#non-trainable-variables-state-top-level-training-code-patterns" title="Permalink to this heading">#</a></h2>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-12" name="sd-tab-set-6" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Old Flax" for="sd-tab-item-12">
+Old Flax</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># initial params and state</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">initial_model</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">init_batch</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">nn</span><span class="o">.</span><span class="n">stateful</span><span class="p">()</span> <span class="k">as</span> <span class="n">initial_state</span><span class="p">:</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">initial_params</span> <span class="o">=</span> <span class="n">ResNet</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">init_batch</span><span class="p">)</span>
+  <span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">ResNet</span><span class="p">,</span> <span class="n">initial_params</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">init_state</span>
+
+
+<span class="c1"># updates batch statistics during training</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_state</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">nn</span><span class="o">.</span><span class="n">stateful</span><span class="p">(</span><span class="n">model_state</span><span class="p">)</span> <span class="k">as</span> <span class="n">new_model_state</span><span class="p">:</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">])</span>
+  <span class="c1"># [...]</span>
+
+
+
+<span class="c1"># reads immutable batch statistics during evaluation</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">eval_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_state</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">nn</span><span class="o">.</span><span class="n">stateful</span><span class="p">(</span><span class="n">model_state</span><span class="p">,</span> <span class="n">mutable</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-13" name="sd-tab-set-6" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-13">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># initial variables ({&quot;param&quot;: ..., &quot;batch_stats&quot;: ...})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">initial_variables</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">init_batch</span><span class="p">):</span>
+<span class="hll">  <span class="k">return</span> <span class="n">ResNet</span><span class="p">()</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">init_batch</span><span class="p">)</span>  <span class="c1"># [1]</span>
+</span>
+
+
+<span class="c1"># updates batch statistics during training</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">batch_stats</span><span class="p">):</span>
+<span class="hll">  <span class="n">variables</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="s1">&#39;batch_stats&#39;</span><span class="p">:</span> <span class="n">batch_stats</span><span class="p">}</span>  <span class="c1"># [2]</span>
+</span>  <span class="n">logits</span><span class="p">,</span> <span class="n">new_variables</span> <span class="o">=</span> <span class="n">ResNet</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">true</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+<span class="hll">    <span class="n">variables</span><span class="p">,</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span> <span class="n">mutable</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;batch_stats&#39;</span><span class="p">])</span>  <span class="c1"># [3]</span>
+</span>  <span class="n">new_batch_stats</span> <span class="o">=</span> <span class="n">new_variables</span><span class="p">[</span><span class="s1">&#39;batch_stats&#39;</span><span class="p">]</span>
+  <span class="c1"># [...]</span>
+
+
+<span class="c1"># reads immutable batch statistics during evaluation</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">eval_step</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">batch_stats</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+  <span class="n">variables</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="s1">&#39;batch_stats&#39;</span><span class="p">:</span> <span class="n">batch_stats</span><span class="p">}</span>
+  <span class="n">logits</span> <span class="o">=</span> <span class="n">ResNet</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+<span class="hll">    <span class="n">variables</span><span class="p">,</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span> <span class="n">mutable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># [4]</span>
+</span>  <span class="k">return</span> <span class="n">compute_metrics</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.init"><code class="docutils literal notranslate"><span class="pre">init</span></code></a> returns a variable dict, e.g. <code class="docutils literal notranslate"><span class="pre">{&quot;param&quot;:</span> <span class="pre">...,</span> <span class="pre">&quot;batch_stats&quot;:</span> <span class="pre">...}</span></code>
+(see <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/variable.html">Variables documentation</a>).</p></li>
+<li><p>Combine the different variable collections into a variable dict.</p></li>
+<li><p>During training, the <code class="docutils literal notranslate"><span class="pre">batch_stats</span></code> variable collection changes. Since we
+specify that in the mutable argument, the return value from <code class="docutils literal notranslate"><span class="pre">module.apply</span></code>
+becomes an ordered pair of <code class="docutils literal notranslate"><span class="pre">output,</span> <span class="pre">new_variables</span></code>.</p></li>
+<li><p>During evaluation, we want to raise an error if we’re accidentally applying
+Batch Norm in training mode. By passing <code class="docutils literal notranslate"><span class="pre">mutable=False</span></code> into
+<code class="docutils literal notranslate"><span class="pre">module.apply</span></code> we enforce that. Since no variables are mutated, the return
+value is once again just the output.</p></li>
+</ol>
+</section>
+<section id="loading-pre-linen-checkpoints">
+<h2>Loading pre-Linen checkpoints<a class="headerlink" href="#loading-pre-linen-checkpoints" title="Permalink to this heading">#</a></h2>
+<p>While most Linen modules should be able to use pre-Linen weights without any
+modification, there is one catch: In pre-Linen API submodules were numbered
+incrementally, independent of the submodule class. With Linen this behavior has
+changed to keep separate submodule counts per module class.</p>
+<p>In pre-Linen, params have the following structure:</p>
+<p><code class="docutils literal notranslate"><span class="pre">{'Conv_0':</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">},</span> <span class="pre">'Dense_1':</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span> <span class="pre">}</span></code></p>
+<p>In Linen this is instead:</p>
+<p><code class="docutils literal notranslate"><span class="pre">{'Conv_0':</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">},</span> <span class="pre">'Dense_0':</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span> <span class="pre">}</span></code></p>
+<p>TODO: Add an example here how to load a new <code class="docutils literal notranslate"><span class="pre">TrainState</span></code> object.</p>
+</section>
+<section id="randomness">
+<h2>Randomness<a class="headerlink" href="#randomness" title="Permalink to this heading">#</a></h2>
+<p><div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-14" name="sd-tab-set-7" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Old Flax" for="sd-tab-item-14">
+Old Flax</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">dropout</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+  <span class="n">keep_prob</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">rate</span>
+  <span class="k">if</span> <span class="n">deterministic</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">inputs</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bernoulli</span><span class="p">(</span>
+    <span class="n">make_rng</span><span class="p">(),</span> <span class="n">p</span><span class="o">=</span><span class="n">keep_prob</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lax</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+      <span class="n">mask</span><span class="p">,</span> <span class="n">inputs</span> <span class="o">/</span> <span class="n">keep_prob</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">inputs</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dropout_rng</span><span class="p">):</span>
+  <span class="k">with</span> <span class="n">nn</span><span class="o">.</span><span class="n">stochastic</span><span class="p">(</span><span class="n">dropout_rng</span><span class="p">):</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-15" name="sd-tab-set-7" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="Linen" for="sd-tab-item-15">
+Linen</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Dropout</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">rate</span><span class="p">:</span> <span class="nb">float</span>
+
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">keep_prob</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span>
+    <span class="k">if</span> <span class="n">deterministic</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">inputs</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">mask</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bernoulli</span><span class="p">(</span>
+<span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;dropout&#39;</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">keep_prob</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># [1]</span>
+</span>      <span class="k">return</span> <span class="n">lax</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+        <span class="n">mask</span><span class="p">,</span> <span class="n">inputs</span> <span class="o">/</span> <span class="n">keep_prob</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">inputs</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">dropout_rng</span><span class="p">):</span>
+  <span class="n">logits</span> <span class="o">=</span> <span class="n">Transformer</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+<span class="hll">    <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">},</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dropout&#39;</span><span class="p">:</span> <span class="n">dropout_rng</span><span class="p">})</span>  <span class="c1"># [2]</span>
+</span></pre></div>
+</div>
+</div>
+</div>
+</p>
+<ol class="arabic simple">
+<li><p>RNGs in Linen have “kinds” – in this case <code class="docutils literal notranslate"><span class="pre">'dropout'</span></code>. Different kinds can
+be treated different in JAX transformations (for example, do you want the
+same dropout mask for each timestep in a sequence model or a different one?)</p></li>
+<li><p>Instead of using the <code class="docutils literal notranslate"><span class="pre">nn.stochastic</span></code> context manager, you pass in RNGs
+explicitly to <code class="docutils literal notranslate"><span class="pre">module.apply</span></code>. During evaluation you wouldn’t pass any RNGs
+– then if you accidentally use dropout in non-deterministic mode,
+<code class="docutils literal notranslate"><span class="pre">self.make_rng('dropout')</span></code> would raise an error.</p></li>
+</ol>
+</section>
+<section id="lifted-transformations">
+<h2>Lifted transformations<a class="headerlink" href="#lifted-transformations" title="Permalink to this heading">#</a></h2>
+<p>In Linen, rather than using JAX transformation directly, we are using
+“lifted transforms”, which are JAX transformations applied to Flax Modules.</p>
+<p>For more information, please see the design note on <a class="reference external" href="https://flax.readthedocs.io/en/latest/developer_notes/lift.html">Lifted transformations</a>.</p>
+<p>TODO: Given an example of <code class="docutils literal notranslate"><span class="pre">jax.scan_in_dim</span></code> (pre-Linen) vs. <code class="docutils literal notranslate"><span class="pre">nn.scan</span></code>
+(Linen).</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="optax_update_guide.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Upgrading my codebase to Optax</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="rnncell_upgrade_guide.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">RNNCellBase Upgrade Guide</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-simple-flax-modules">Defining simple Flax Modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-flax-modules-inside-other-modules">Using Flax Modules inside other Modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sharing-submodules-and-defining-multiple-methods">Sharing submodules and defining multiple methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-partial-inside-other-modules"><code class="docutils literal notranslate"><span class="pre">Module.partial</span></code> inside other modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#top-level-training-code-patterns">Top-level training code patterns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#non-trainable-variables-state-use-within-modules">Non-trainable variables (“state”): Use within Modules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#non-trainable-variables-state-top-level-training-code-patterns">Non-trainable variables (“state”): Top-level training code patterns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-pre-linen-checkpoints">Loading pre-Linen checkpoints</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#randomness">Randomness</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lifted-transformations">Lifted transformations</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1868 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Randomness and PRNGs in Flax</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/flax_fundamentals/rng_guide';</script>
+    <link rel="icon" href="../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Data preprocessing" href="../data_preprocessing/index.html" />
+    <link rel="prev" title="Dealing with Flax Module arguments" href="arguments.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax-linen" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/flax_fundamentals/rng_guide.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax.readthedocs.io/en/latest/index.html"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the old Flax Linen API. <span style="color: lightgray;">[Explore the new <b>Flax NNX</b> API ✨]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">Flax fundamentals</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/index.html">JAX 101</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="state_params.html">Managing Parameters and State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup_or_nncompact.html"><code class="docutils literal notranslate"><span class="pre">setup</span></code> vs <code class="docutils literal notranslate"><span class="pre">compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="arguments.html">Dealing with Flax Module arguments</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Randomness and PRNGs in Flax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../data_preprocessing/index.html">Data preprocessing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/full_eval.html">Processing the entire Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/loading_datasets.html">Loading datasets</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../training_techniques/index.html">Training techniques</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/batch_norm.html">Batch normalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/dropout.html">Dropout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/lr_schedule.html">Learning rate scheduling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/transfer_learning.html">Transfer learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../training_techniques/use_checkpointing.html">Save and load checkpoints</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../parallel_training/index.html">Parallel training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/ensembling.html">Ensembling on multiple devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/flax_on_pjit.html">Scale up Flax Modules on multiple devices</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../model_inspection/index.html">Model inspection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/model_surgery.html">Model surgery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/extracting_intermediates.html">Extracting intermediate values</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../converting_and_upgrading/index.html">Converting and upgrading</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/haiku_migration_guide.html">Migrating from Haiku to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/convert_pytorch_to_flax.html">Convert PyTorch models to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/orbax_upgrade_guide.html">Migrate checkpointing to Orbax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/optax_update_guide.html">Upgrading my codebase to Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/linen_upgrade_guide.html">Upgrading my codebase to Linen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/rnncell_upgrade_guide.html">RNNCellBase Upgrade Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/regular_dict_upgrade_guide.html">Migrate to regular dicts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../quantization/index.html">Quantization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quantization/fp8_basics.html">User Guide on Using FP8</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../flax_sharp_bits.html">The Sharp Bits</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/core_examples.html">Core examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/google_research_examples.html">Google Research examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/repositories_that_use_flax.html">Repositories that use Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/community_examples.html">Community examples</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../developer_notes/index.html">Developer notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/module_lifecycle.html">The Flax Module lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/lift.html">Lifted transformations</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/google/flax/tree/main/docs/flip">FLIPs</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.cursor.html">flax.cursor package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.errors.html">flax.errors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.jax_utils.html">flax.jax_utils package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_reference/flax.linen/index.html">flax.linen</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/module.html">Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/init_apply.html">Init/Apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/activation_functions.html">Activation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/initializers.html">Initializers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/transformations.html">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/inspection.html">Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/variable.html">Variable dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/spmd.html">SPMD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/decorators.html">Decorators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/profiling.html">Profiling</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.serialization.html">flax.serialization package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.traceback_util.html">flax.traceback_util package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/index.html">Flax NNX</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs/guides/flax_fundamentals/rng_guide.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/guides/flax_fundamentals/rng_guide.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Randomness and PRNGs in Flax</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#receiving-manipulating-and-creating-prng-keys-with-module-make-rng">Receiving, manipulating and creating PRNG keys with <code class="docutils literal notranslate"><span class="pre">Module.make_rng</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-self-make-rng-works-under-the-hood">How <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> works under the hood</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sub-modules-and-self-make-rng">Sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code>s and <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-self-param-and-self-variable">Using <code class="docutils literal notranslate"><span class="pre">self.param</span></code> and <code class="docutils literal notranslate"><span class="pre">self.variable</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#managing-rng-streams-inside-a-training-loop">Managing RNG streams inside a training loop</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sharp-edge-unintentionally-generating-the-same-values">🔪 Sharp edge 🔪 - unintentionally generating the same values</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#managing-rng-s-on-multiple-devices">Managing RNG’s on multiple devices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-jax-jit">Using <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-shard-map">Using <code class="docutils literal notranslate"><span class="pre">shard_map</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lifted-transforms">Lifted transforms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nn-vmap"><code class="docutils literal notranslate"><span class="pre">nn.vmap</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nn-scan"><code class="docutils literal notranslate"><span class="pre">nn.scan</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="randomness-and-prngs-in-flax">
+<h1>Randomness and PRNGs in Flax<a class="headerlink" href="#randomness-and-prngs-in-flax" title="Permalink to this heading">#</a></h1>
+<p>In this guide, you will learn how Flax uses <a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html#jax-prng">JAX’s explicit pseudorandom number generator (PRNG) keys</a> to emulate randomness, and adds some additional features to make it easier for users to thread PRNG keys through different Flax <code class="docutils literal notranslate"><span class="pre">Module</span></code>s.</p>
+<p>If you are new to JAX PRNG keys or need a refresher, check out:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/05-random-numbers.html">JAX 101: PRNGs in JAX</a></p></li>
+<li><p><a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html#random-numbers">🔪 JAX - The Sharp Bits 🔪: Random Numbers</a>.</p></li>
+</ul>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
+<p>Install or upgrade Flax, and then import some necessary dependencies.</p>
+<p><strong>Note:</strong> This guide uses the <code class="docutils literal notranslate"><span class="pre">--xla_force_host_platform_device_count=8</span></code> flag to emulate multiple devices in a CPU environment in a Google Colab/Jupyter Notebook. You don’t need this if you are already using a multi-device Google Cloud TPU environment, for example, on Google Cloud or in a Kaggle VM with a TPU.</p>
+<div class="cell tag_skip-execution docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>-q<span class="w"> </span>flax
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;XLA_FLAGS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;--xla_force_host_platform_device_count=8&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">flax</span><span class="o">,</span><span class="w"> </span><span class="nn">flax.linen</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span><span class="o">,</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax.sharding</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">PartitionSpec</span><span class="p">,</span> <span class="n">NamedSharding</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax.experimental</span><span class="w"> </span><span class="kn">import</span> <span class="n">mesh_utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax.experimental.shard_map</span><span class="w"> </span><span class="kn">import</span> <span class="n">shard_map</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_772/1357846662.py:5: DeprecationWarning: jax.experimental.shard_map is deprecated in v0.8.0. Used jax.shard_map instead.
+  from jax.experimental.shard_map import shard_map
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[CpuDevice(id=0),
+ CpuDevice(id=1),
+ CpuDevice(id=2),
+ CpuDevice(id=3),
+ CpuDevice(id=4),
+ CpuDevice(id=5),
+ CpuDevice(id=6),
+ CpuDevice(id=7)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Set the JAX config variable <code class="docutils literal notranslate"><span class="pre">jax_threefry_partitionable</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>. This will be the default value in the future and makes the PRNG more efficiently auto-parallelizable under <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code>. Refer to <a class="reference external" href="https://github.com/jax-ml/jax/discussions/18480">JAX discussion</a> for more details.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;jax_threefry_partitionable&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">jax_threefry_partitionable</span> <span class="o">==</span> <span class="kc">True</span>
+<span class="k">assert</span> <span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">jax_default_prng_impl</span> <span class="o">==</span> <span class="s1">&#39;threefry2x32&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="receiving-manipulating-and-creating-prng-keys-with-module-make-rng">
+<h2>Receiving, manipulating and creating PRNG keys with <code class="docutils literal notranslate"><span class="pre">Module.make_rng</span></code><a class="headerlink" href="#receiving-manipulating-and-creating-prng-keys-with-module-make-rng" title="Permalink to this heading">#</a></h2>
+<p>The primary method Flax uses to receive, manipulate and create PRNG keys is via the <code class="docutils literal notranslate"><span class="pre">Module</span></code> method <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.make_rng"><code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code></a>. It is a method that accepts a string name that represents an “RNG stream”. Each RNG stream has an initial starting seed PRNG key, which the user passes in as a dictionary argument (i.e. into an <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.init"><code class="docutils literal notranslate"><span class="pre">.init</span></code></a> or <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.apply"><code class="docutils literal notranslate"><span class="pre">.apply</span></code></a> function), and the starting seed is used by <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> to generate more PRNG keys for that stream. If <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> is called on a string name that does not have an initial starting seed PRNG key (i.e. the user did not pass a key with the corresponding name into <code class="docutils literal notranslate"><span class="pre">.init</span></code> or <code class="docutils literal notranslate"><span class="pre">.apply</span></code>), then <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> will use the <code class="docutils literal notranslate"><span class="pre">'params'</span></code> key as the initial starting seed by default.</p>
+<p>Note that this method can only be called with bounded modules (see <a class="reference external" href="https://flax.readthedocs.io/en/latest/developer_notes/module_lifecycle.html#top-level-modules">The Flax Module lifecycle</a>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RNGModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">))</span>
+
+<span class="n">rng_module</span> <span class="o">=</span> <span class="n">RNGModule</span><span class="p">()</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">rng_module</span><span class="o">.</span><span class="n">init</span><span class="p">({</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array((), dtype=key&lt;fry&gt;) overlaying:
+[1428664606 3351135085]
+Array((), dtype=key&lt;fry&gt;) overlaying:
+[3456700291 3873160899]
+Array((), dtype=key&lt;fry&gt;) overlaying:
+[2411773124 4124888837]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now if we use a different starting seed PRNG key, we will generate different values (as intended).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variables</span> <span class="o">=</span> <span class="n">rng_module</span><span class="o">.</span><span class="n">init</span><span class="p">({</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array((), dtype=key&lt;fry&gt;) overlaying:
+[3077990774 2166202870]
+Array((), dtype=key&lt;fry&gt;) overlaying:
+[3825832496 2886313970]
+Array((), dtype=key&lt;fry&gt;) overlaying:
+[ 791337683 1373966058]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calling <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> for one stream will not affect the random values generated from another stream; i.e. the call order doesn’t matter.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RNGModuleTwoStreams</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># same value as first code snippet above</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rng_stream1: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream1&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># same value as second code snippet above</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rng_stream2: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream2&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># same value as first code snippet above</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rng_stream1: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream1&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># same value as second code snippet above</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rng_stream2: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream2&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># same value as first code snippet above</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rng_stream1: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream1&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># same value as second code snippet above</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rng_stream2: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream2&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">rng_module_two_streams</span> <span class="o">=</span> <span class="n">RNGModuleTwoStreams</span><span class="p">()</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">rng_module_two_streams</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+  <span class="p">{</span><span class="s1">&#39;rng_stream1&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;rng_stream2&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">)}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>rng_stream1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[1428664606 3351135085]
+rng_stream2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3077990774 2166202870]
+rng_stream1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3456700291 3873160899]
+rng_stream2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3825832496 2886313970]
+rng_stream1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[2411773124 4124888837]
+rng_stream2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[ 791337683 1373966058]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Providing the same seed PRNG key will result in the same values being generated (provided that the same operations are used for those keys).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variables</span> <span class="o">=</span> <span class="n">rng_module_two_streams</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+  <span class="p">{</span><span class="s1">&#39;rng_stream1&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;rng_stream2&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">)}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>rng_stream1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[1428664606 3351135085]
+rng_stream2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[1428664606 3351135085]
+rng_stream1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3456700291 3873160899]
+rng_stream2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3456700291 3873160899]
+rng_stream1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[2411773124 4124888837]
+rng_stream2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[2411773124 4124888837]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="how-self-make-rng-works-under-the-hood">
+<h3>How <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> works under the hood<a class="headerlink" href="#how-self-make-rng-works-under-the-hood" title="Permalink to this heading">#</a></h3>
+<p>This is what happens when <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> (<code class="docutils literal notranslate"><span class="pre">flax.linen.Module.make_rng</span></code>) is called:</p>
+<ul class="simple">
+<li><p>The following data is collected:</p>
+<ul>
+<li><p>The path of the <code class="docutils literal notranslate"><span class="pre">Module</span></code> as provided by <code class="docutils literal notranslate"><span class="pre">self.scope.path</span></code> (the top-level root module has an empty path <code class="docutils literal notranslate"><span class="pre">()</span></code>).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> call count. That is, the number of times <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> has been called for this specific stream (including this call).</p>
+<ul>
+<li><p><strong>Note:</strong> Each sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code> will have its own individual call count that’s separate from other <code class="docutils literal notranslate"><span class="pre">Module</span></code>s. For example, a <code class="docutils literal notranslate"><span class="pre">Module</span></code> that has called <code class="docutils literal notranslate"><span class="pre">self.make_rng('params')</span></code> twice and contains a sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code> that has called <code class="docutils literal notranslate"><span class="pre">self.make_rng('params')</span></code> once, will have a call count of 2 and 1 for each of the RNG stream <code class="docutils literal notranslate"><span class="pre">'params'</span></code>, respectively.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>The data is bundled into a tuple and fed into a hash function and produces an integer.</p></li>
+<li><p>The generated integer is folded into the RNG stream’s starting seed PRNG key to generate a new, unique PRNG key.</p></li>
+</ul>
+<p>Below is a slightly simplified version of the hash function that Flax uses for <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">produce_hash</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+  <span class="n">m</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">()</span>
+  <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">+</span> <span class="mi">7</span><span class="p">)</span> <span class="o">//</span> <span class="mi">8</span><span class="p">,</span> <span class="n">byteorder</span><span class="o">=</span><span class="s1">&#39;big&#39;</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Expected int or string, got: </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+  <span class="n">d</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+  <span class="n">hash_int</span> <span class="o">=</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">d</span><span class="p">[:</span><span class="mi">4</span><span class="p">],</span> <span class="n">byteorder</span><span class="o">=</span><span class="s1">&#39;big&#39;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">hash_int</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And now you can manually reproduce the PRNG keys generated from <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stream_seed</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">call_count</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+  <span class="n">hash_int</span> <span class="o">=</span> <span class="n">produce_hash</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="n">call_count</span><span class="p">,))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">fold_in</span><span class="p">(</span><span class="n">stream_seed</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">hash_int</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array((), dtype=key&lt;fry&gt;) overlaying:
+[1428664606 3351135085]
+Array((), dtype=key&lt;fry&gt;) overlaying:
+[3456700291 3873160899]
+Array((), dtype=key&lt;fry&gt;) overlaying:
+[2411773124 4124888837]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variables</span> <span class="o">=</span> <span class="n">rng_module</span><span class="o">.</span><span class="n">init</span><span class="p">({</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array((), dtype=key&lt;fry&gt;) overlaying:
+[1428664606 3351135085]
+Array((), dtype=key&lt;fry&gt;) overlaying:
+[3456700291 3873160899]
+Array((), dtype=key&lt;fry&gt;) overlaying:
+[2411773124 4124888837]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sub-modules-and-self-make-rng">
+<h3>Sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code>s and <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code><a class="headerlink" href="#sub-modules-and-self-make-rng" title="Permalink to this heading">#</a></h3>
+<p>This section explores how <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> (<code class="docutils literal notranslate"><span class="pre">flax.linen.Module.make_rng</span></code>) behaves with sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code>s.</p>
+<p>Consider the following example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RNGSubSubModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, count 1: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, count 2: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RNGSubModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, count 1: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, count 2: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">RNGSubSubModule</span><span class="p">()()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RNGModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RNGModule, count 1: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RNGModule, count 2: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">RNGSubModule</span><span class="p">()()</span>
+
+<span class="n">rng_module</span> <span class="o">=</span> <span class="n">RNGModule</span><span class="p">()</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">rng_module</span><span class="o">.</span><span class="n">init</span><span class="p">({</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RNGModule, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[1428664606 3351135085]
+RNGModule, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3456700291 3873160899]
+RNGSubModule_0, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3858825717 2323087578]
+RNGSubModule_0, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[ 601859108 3782857444]
+RNGSubSubModule_0, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[ 234240654 1028548813]
+RNGSubSubModule_0, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3650462303 2124609379]
+</pre></div>
+</div>
+</div>
+</div>
+<p>As previously discussed, the data that is fed into the Flax hash function consists of:</p>
+<ul class="simple">
+<li><p>The path of the <code class="docutils literal notranslate"><span class="pre">Module</span></code>, provided by <code class="docutils literal notranslate"><span class="pre">self.scope.path</span></code> (the top-level root module has an empty path <code class="docutils literal notranslate"><span class="pre">()</span></code>); and</p></li>
+<li><p>The call count for the specific RNG stream.</p></li>
+</ul>
+<p>In addition, note that each Flax <code class="docutils literal notranslate"><span class="pre">Module</span></code> and sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code> have their own individual call counts, even for the same RNG stream. The convention for sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code> names is: <code class="docutils literal notranslate"><span class="pre">f'{module_name}_{module_number}'</span></code>. For example, the first <code class="docutils literal notranslate"><span class="pre">Dense</span></code> sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code> will be called <code class="docutils literal notranslate"><span class="pre">Dense_0</span></code>, the second one will be called <code class="docutils literal notranslate"><span class="pre">Dense_1</span></code>, and so on.</p>
+<p>Therefore, the following data will be fed into the hash function:</p>
+<ul class="simple">
+<li><p>For <code class="docutils literal notranslate"><span class="pre">RNGModule</span></code>: The data is just the call count, such as <code class="docutils literal notranslate"><span class="pre">(1,)</span></code> and <code class="docutils literal notranslate"><span class="pre">(2,)</span></code>, since the root <code class="docutils literal notranslate"><span class="pre">Module</span></code> has an empty path.</p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">RNGSubModule</span></code>: The data is <code class="docutils literal notranslate"><span class="pre">('RNGSubModule_0',</span> <span class="pre">1)</span></code> and <code class="docutils literal notranslate"><span class="pre">('RNGSubModule_0',</span> <span class="pre">2)</span></code>.</p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">RNGSubSubModule</span></code>: The data is <code class="docutils literal notranslate"><span class="pre">('RNGSubModule_0',</span> <span class="pre">'RNGSubSubModule_0',</span> <span class="pre">1)</span></code> and <code class="docutils literal notranslate"><span class="pre">('RNGSubModule_0',</span> <span class="pre">'RNGSubSubModule_0',</span> <span class="pre">2)</span></code>.</p></li>
+</ul>
+<p>With this data, you can manually reproduce the PRNG keys generated from the <code class="docutils literal notranslate"><span class="pre">Module</span></code> and sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code>s using <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code>.</p>
+<p>For example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stream_seed</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">initial_data</span> <span class="ow">in</span> <span class="p">((),</span> <span class="p">(</span><span class="s1">&#39;RNGSubModule_0&#39;</span><span class="p">,),</span> <span class="p">(</span><span class="s1">&#39;RNGSubModule_0&#39;</span><span class="p">,</span> <span class="s1">&#39;RNGSubSubModule_0&#39;</span><span class="p">)):</span>
+  <span class="k">if</span> <span class="n">initial_data</span><span class="p">:</span>
+    <span class="n">module_name</span> <span class="o">=</span> <span class="n">initial_data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">module_name</span> <span class="o">=</span> <span class="s1">&#39;RNGModule&#39;</span>
+  <span class="k">for</span> <span class="n">call_count</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">hash_int</span> <span class="o">=</span> <span class="n">produce_hash</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">initial_data</span><span class="o">+</span><span class="p">(</span><span class="n">call_count</span><span class="p">,))</span>
+    <span class="n">rng_key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">fold_in</span><span class="p">(</span><span class="n">stream_seed</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">hash_int</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">, count </span><span class="si">{</span><span class="n">call_count</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rng_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RNGModule, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[1428664606 3351135085]
+RNGModule, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3456700291 3873160899]
+RNGSubModule_0, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3858825717 2323087578]
+RNGSubModule_0, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[ 601859108 3782857444]
+RNGSubSubModule_0, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[ 234240654 1028548813]
+RNGSubSubModule_0, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3650462303 2124609379]
+</pre></div>
+</div>
+</div>
+</div>
+<p>If the same sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code> class is used multiple times, you can increment the suffix of the sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code> name accordingly. For example: <code class="docutils literal notranslate"><span class="pre">RNGSubModule_0</span></code>, <code class="docutils literal notranslate"><span class="pre">RNGSubModule_1</span></code>, and so on.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RNGSubModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, count 1: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, count 2: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RNGModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RNGModule, count 1: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RNGModule, count 2: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">RNGSubModule</span><span class="p">()()</span>
+    <span class="n">RNGSubModule</span><span class="p">()()</span>
+
+<span class="n">rng_module</span> <span class="o">=</span> <span class="n">RNGModule</span><span class="p">()</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">rng_module</span><span class="o">.</span><span class="n">init</span><span class="p">({</span><span class="s1">&#39;rng_stream&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RNGModule, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[1428664606 3351135085]
+RNGModule, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3456700291 3873160899]
+RNGSubModule_0, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3858825717 2323087578]
+RNGSubModule_0, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[ 601859108 3782857444]
+RNGSubModule_1, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[ 426957352 2006350344]
+RNGSubModule_1, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[4006253729 4205356731]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stream_seed</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">initial_data</span> <span class="ow">in</span> <span class="p">((),</span> <span class="p">(</span><span class="s1">&#39;RNGSubModule_0&#39;</span><span class="p">,),</span> <span class="p">(</span><span class="s1">&#39;RNGSubModule_1&#39;</span><span class="p">,)):</span>
+  <span class="k">if</span> <span class="n">initial_data</span><span class="p">:</span>
+    <span class="n">module_name</span> <span class="o">=</span> <span class="n">initial_data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">module_name</span> <span class="o">=</span> <span class="s1">&#39;RNGModule&#39;</span>
+  <span class="k">for</span> <span class="n">call_count</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="n">hash_int</span> <span class="o">=</span> <span class="n">produce_hash</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">initial_data</span><span class="o">+</span><span class="p">(</span><span class="n">call_count</span><span class="p">,))</span>
+    <span class="n">rng_key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">fold_in</span><span class="p">(</span><span class="n">stream_seed</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">hash_int</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">, count </span><span class="si">{</span><span class="n">call_count</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rng_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RNGModule, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[1428664606 3351135085]
+RNGModule, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3456700291 3873160899]
+RNGSubModule_0, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[3858825717 2323087578]
+RNGSubModule_0, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[ 601859108 3782857444]
+RNGSubModule_1, count 1: Array((), dtype=key&lt;fry&gt;) overlaying:
+[ 426957352 2006350344]
+RNGSubModule_1, count 2: Array((), dtype=key&lt;fry&gt;) overlaying:
+[4006253729 4205356731]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-self-param-and-self-variable">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">self.param</span></code> and <code class="docutils literal notranslate"><span class="pre">self.variable</span></code><a class="headerlink" href="#using-self-param-and-self-variable" title="Permalink to this heading">#</a></h3>
+<p>Flax users have the option of creating additional parameters and variables in their modules by using the <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.param"><code class="docutils literal notranslate"><span class="pre">self.param</span></code></a> and <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/module.html#flax.linen.Module.variable"><code class="docutils literal notranslate"><span class="pre">self.variable</span></code></a> <code class="docutils literal notranslate"><span class="pre">Module</span></code> methods. An <code class="docutils literal notranslate"><span class="pre">init_fn</span></code> argument must be passed to these methods so that it can generate the initial value of the parameter/variable. <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> is commonly used implicitly or explicitly in this <code class="docutils literal notranslate"><span class="pre">init_fn</span></code>, since many initializer functions are stochastic in nature and require a PRNG key. See the full list of Flax initializers <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/initializers.html">here</a>.</p>
+<p>There are a couple of differences between the two methods that the user should take note of:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">self.param</span></code> always creates a parameter in the <code class="docutils literal notranslate"><span class="pre">'params'</span></code> <a class="reference external" href="https://flax.readthedocs.io/en/latest/glossary.html#term-Params-parameters">collection</a>, whereas <code class="docutils literal notranslate"><span class="pre">self.variable</span></code> creates a variable in any <a class="reference external" href="https://flax.readthedocs.io/en/latest/glossary.html#term-Variable-collections">collection</a> the user specifies</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">self.param</span></code> will automatically call <code class="docutils literal notranslate"><span class="pre">self.make_rng('params')</span></code> and pass in the generated PRNG key implicitly to the <code class="docutils literal notranslate"><span class="pre">init_fn</span></code> of the parameter you instantiated (it will be passed in as the first argument), whereas users will have to manually specify what RNG stream to call <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> on in the <code class="docutils literal notranslate"><span class="pre">init_fn</span></code> of <code class="docutils literal notranslate"><span class="pre">self.variable</span></code> (it could be <code class="docutils literal notranslate"><span class="pre">'params'</span></code> or something different).</p></li>
+</ul>
+<p>Below is an example using both <code class="docutils literal notranslate"><span class="pre">self.param</span></code> and <code class="docutils literal notranslate"><span class="pre">self.variable</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="c1"># kernel will use &#39;params&#39; seed, initial data will include &#39;Dense_0&#39;, call count 1</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">kernel_init</span><span class="o">=</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">,</span> <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="c1"># model_param will use &#39;params&#39; seed, call count 1</span>
+    <span class="n">model_param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;model_param&#39;</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># model_variable1 will use &#39;params&#39; seed, call count 2</span>
+    <span class="n">model_variable1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span>
+      <span class="s1">&#39;other_collection&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;model_variable1&#39;</span><span class="p">,</span>
+      <span class="k">lambda</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;params&#39;</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="c1"># model_variable2 will use &#39;other&#39; seed, call count 1</span>
+    <span class="n">model_variable2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span>
+      <span class="s1">&#39;other_collection&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;model_variable2&#39;</span><span class="p">,</span>
+      <span class="k">lambda</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;other&#39;</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="c1"># kernel will use &#39;params&#39; seed, initial data will include &#39;Dense_1&#39;, call count 1</span>
+    <span class="c1"># bias will use &#39;params&#39; seed, initial data will include &#39;Dense_1&#39;, call count 2</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">kernel_init</span><span class="o">=</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">,</span> <span class="n">bias_init</span><span class="o">=</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">)(</span>
+      <span class="n">x</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+  <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">)},</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;Dense_0&#39;</span><span class="p">][</span><span class="s1">&#39;kernel&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;model_param&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;other_collection&#39;</span><span class="p">][</span><span class="s1">&#39;model_variable1&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;other_collection&#39;</span><span class="p">][</span><span class="s1">&#39;model_variable2&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;Dense_1&#39;</span><span class="p">][</span><span class="s1">&#39;kernel&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;Dense_1&#39;</span><span class="p">][</span><span class="s1">&#39;bias&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[-1.6185919   0.700908  ]
+ [-1.3146383  -0.79342234]]
+[[ 0.0761425 -1.6157459]
+ [-1.6857724  0.7126891]]
+[[ 0.60175574  0.2553228 ]
+ [ 0.27367848 -2.1975214 ]]
+[[1.6249592  0.30813068]
+ [1.6613585  1.0404155 ]]
+[[ 0.0030665   0.29551846]
+ [ 0.16670242 -0.78252524]]
+[1.582462   0.15216611]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Remember:</p>
+<ul class="simple">
+<li><p>there is a separate count for each RNG stream; this is why the count for <code class="docutils literal notranslate"><span class="pre">self.make_rng('other')</span></code> starts at 1 even though there were earlier calls of <code class="docutils literal notranslate"><span class="pre">self.make_rng('params')</span></code></p></li>
+<li><p>each submodule has their own separate count for each rng stream; this is why each <code class="docutils literal notranslate"><span class="pre">Dense</span></code> layer has their own separate count for <code class="docutils literal notranslate"><span class="pre">self.make_rng('params')</span></code> and why <code class="docutils literal notranslate"><span class="pre">model_param</span></code> and <code class="docutils literal notranslate"><span class="pre">model_variable1</span></code> share the same count (since they are defined within the same top-level parent module)</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params_seed</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">other_seed</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">initial_data</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">shape</span> <span class="ow">in</span> <span class="p">(</span>
+  <span class="p">((</span><span class="s1">&#39;Dense_0&#39;</span><span class="p">,),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">params_seed</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+  <span class="p">((),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">params_seed</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+  <span class="p">((),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">params_seed</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+  <span class="p">((),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">other_seed</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+  <span class="p">((</span><span class="s1">&#39;Dense_1&#39;</span><span class="p">,),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">params_seed</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+  <span class="p">((</span><span class="s1">&#39;Dense_1&#39;</span><span class="p">,),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">params_seed</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">):</span>
+  <span class="n">hash_int</span> <span class="o">=</span> <span class="n">produce_hash</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="o">*</span><span class="n">initial_data</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span>
+  <span class="n">rng_key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">fold_in</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">hash_int</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">rng_key</span><span class="p">,</span> <span class="n">shape</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[-1.6185919   0.700908  ]
+ [-1.3146383  -0.79342234]]
+[[ 0.0761425 -1.6157459]
+ [-1.6857724  0.7126891]]
+[[ 0.60175574  0.2553228 ]
+ [ 0.27367848 -2.1975214 ]]
+[[1.6249592  0.30813068]
+ [1.6613585  1.0404155 ]]
+[[ 0.0030665   0.29551846]
+ [ 0.16670242 -0.78252524]]
+[[1.582462   0.15216611]]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="managing-rng-streams-inside-a-training-loop">
+<h3>Managing RNG streams inside a training loop<a class="headerlink" href="#managing-rng-streams-inside-a-training-loop" title="Permalink to this heading">#</a></h3>
+<p>Below is an example of managing RNG streams from <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code>, <code class="docutils literal notranslate"><span class="pre">self.param</span></code>, <code class="docutils literal notranslate"><span class="pre">self.variable</span></code> and <code class="docutils literal notranslate"><span class="pre">nn.Dropout</span></code> in a training loop (note: <code class="docutils literal notranslate"><span class="pre">nn.Dropout</span></code> requires a seed PRNG key to be passed in the <code class="docutils literal notranslate"><span class="pre">'dropout'</span></code> RNG stream, since it implicitly calls <code class="docutils literal notranslate"><span class="pre">self.make_rng('dropout')</span></code>):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SubModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">train</span><span class="p">):</span>
+    <span class="c1"># variables created using `self.param` will use `self.make_rng(&#39;params&#39;)`</span>
+    <span class="n">kernel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;submodule_kernel&#39;</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">kernel</span>
+    <span class="c1"># `nn.Dropout` will use self.make_rng(&#39;dropout&#39;)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="ow">not</span> <span class="n">train</span><span class="p">)</span>
+    <span class="c1"># `nn.Dense` will use self.make_rng(&#39;params&#39;)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">train</span><span class="p">):</span>
+    <span class="c1"># make kernel use `self.make_rng(&#39;other&#39;)`</span>
+    <span class="n">kernel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span>
+      <span class="s1">&#39;other_collection&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;module_kernel&#39;</span><span class="p">,</span>
+      <span class="k">lambda</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;other&#39;</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="n">x</span> <span class="o">+</span> <span class="n">kernel</span><span class="o">.</span><span class="n">value</span>
+    <span class="p">)</span>  <span class="c1"># `.value` will extract the underlying value of the variable</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">SubModule</span><span class="p">()(</span><span class="n">x</span><span class="p">,</span> <span class="n">train</span><span class="p">)</span>
+    <span class="c1"># `nn.Dropout` will use self.make_rng(&#39;dropout&#39;)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="ow">not</span> <span class="n">train</span><span class="p">)</span>
+    <span class="c1"># `nn.Dense` will use self.make_rng(&#39;params&#39;)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">2</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">params_rng</span><span class="p">,</span> <span class="n">other_rng</span><span class="p">,</span> <span class="n">train_rng</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">init_rngs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params_rng</span><span class="p">,</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="n">other_rng</span><span class="p">}</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="n">module</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">init_rngs</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+  <span class="c1"># we don&#39;t need to provide a &#39;params&#39; or &#39;other&#39; rng, as only &#39;dropout&#39; rng will be used during training</span>
+  <span class="c1"># split the rng to get a dropout_rng to be used for this training iteration,</span>
+  <span class="c1"># and to get another rng key to be used for the next training iteration</span>
+  <span class="n">dropout_rng</span><span class="p">,</span> <span class="n">next_rng</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+      <span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="s1">&#39;other_collection&#39;</span><span class="p">:</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;other_collection&#39;</span><span class="p">]},</span>
+      <span class="n">x</span><span class="p">,</span>
+      <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dropout&#39;</span><span class="p">:</span> <span class="n">dropout_rng</span><span class="p">},</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">out</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="n">grads</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss</span><span class="p">)(</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>
+  <span class="n">params</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="n">p</span> <span class="o">-</span> <span class="mf">1e-3</span> <span class="o">*</span> <span class="n">g</span><span class="p">,</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">],</span> <span class="n">grads</span><span class="p">)</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+    <span class="s1">&#39;other_collection&#39;</span><span class="p">:</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;other_collection&#39;</span><span class="p">],</span>
+  <span class="p">},</span> <span class="n">next_rng</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+  <span class="n">variables</span><span class="p">,</span> <span class="n">train_rng</span> <span class="o">=</span> <span class="n">update</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">train_rng</span><span class="p">)</span>
+  <span class="n">out</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">out</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.518454
+2.4859657
+2.4171872
+2.412684
+2.3435805
+2.2773488
+2.2592616
+2.2009292
+2.1839895
+2.1707344
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sharp-edge-unintentionally-generating-the-same-values">
+<h3>🔪 Sharp edge 🔪 - unintentionally generating the same values<a class="headerlink" href="#sharp-edge-unintentionally-generating-the-same-values" title="Permalink to this heading">#</a></h3>
+<p>There is an edge case where the same value can be unintentionally generated.
+See the <a class="reference external" href="https://github.com/google/flax/issues/2157">Flax issue</a> for more details.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Leaf</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s2">&quot;rng&quot;</span><span class="p">),</span> <span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Node</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="n">leaf_name</span><span class="p">:</span> <span class="nb">str</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Leaf</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">leaf_name</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ab&quot;</span><span class="p">,</span> <span class="n">leaf_name</span><span class="o">=</span><span class="s2">&quot;cdef&quot;</span><span class="p">)(</span><span class="n">x</span><span class="p">),</span>
+            <span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;abc&quot;</span><span class="p">,</span> <span class="n">leaf_name</span><span class="o">=</span><span class="s2">&quot;def&quot;</span><span class="p">)(</span><span class="n">x</span><span class="p">),</span>
+    <span class="p">)</span>
+
+<span class="n">out1</span><span class="p">,</span> <span class="n">out2</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">({},</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rng&quot;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">33</span><span class="p">)})</span>
+<span class="n">out1</span> <span class="o">==</span> <span class="n">out2</span> <span class="c1"># same output, despite having different submodule names</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(True, dtype=bool)
+</pre></div>
+</div>
+</div>
+</div>
+<p>This occurs because the hash function <a class="reference external" href="https://docs.python.org/3/library/hashlib.html#hashlib.hash.update">concatenates strings together</a>, so the data <code class="docutils literal notranslate"><span class="pre">('AB',</span> <span class="pre">'C')</span></code> is equivalent to data <code class="docutils literal notranslate"><span class="pre">('A',</span> <span class="pre">'BC')</span></code> when fed into the hash function, therefore producing the same hash int.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">produce_hash</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">produce_hash</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;AB&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">produce_hash</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;BC&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">produce_hash</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;ABC&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>947574064
+947574064
+947574064
+947574064
+</pre></div>
+</div>
+</div>
+</div>
+<p>To avoid this edge case, users can flip the <code class="docutils literal notranslate"><span class="pre">flax_fix_rng_separator</span></code> <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.config.html#flax.configurations.Config.flax_fix_rng_separator">configuration flag</a> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">flax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;flax_fix_rng_separator&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">out1</span><span class="p">,</span> <span class="n">out2</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">({},</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rng&quot;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">33</span><span class="p">)})</span>
+<span class="n">out1</span> <span class="o">==</span> <span class="n">out2</span> <span class="c1"># different output</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array(False, dtype=bool)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="managing-rng-s-on-multiple-devices">
+<h2>Managing RNG’s on multiple devices<a class="headerlink" href="#managing-rng-s-on-multiple-devices" title="Permalink to this heading">#</a></h2>
+<p>This section will show examples on how to use <code class="docutils literal notranslate"><span class="pre">jit</span></code> and <code class="docutils literal notranslate"><span class="pre">shard_map</span></code> to use RNG’s in multi-device settings.</p>
+<section id="using-jax-jit">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code><a class="headerlink" href="#using-jax-jit" title="Permalink to this heading">#</a></h3>
+<p>When using <a class="reference external" href="https://jax.readthedocs.io/en/latest/_autosummary/jax.jit.html"><code class="docutils literal notranslate"><span class="pre">jax.jit</span></code></a>, we can use RNG’s as we did before, but we now include <code class="docutils literal notranslate"><span class="pre">in_shardings</span></code> and <code class="docutils literal notranslate"><span class="pre">out_shardings</span></code> arguments to specify how to shard input and output data. The RNG key itself gets replicated (not sharded); <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code> makes each device use it as appropriate for its shard of the data.</p>
+<p>For more details on training on multiple devices in Flax using <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code>, see our <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/parallel_training/flax_on_pjit.html#">Scale up Flax Modules on multiple devices guide</a> and <a class="reference external" href="https://github.com/google/flax/tree/main/examples/lm1b">lm1b example</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a mesh and annotate the axis with a name.</span>
+<span class="n">device_mesh</span> <span class="o">=</span> <span class="n">mesh_utils</span><span class="o">.</span><span class="n">create_device_mesh</span><span class="p">((</span><span class="mi">8</span><span class="p">,))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">device_mesh</span><span class="p">)</span>
+
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">(</span><span class="n">devices</span><span class="o">=</span><span class="n">device_mesh</span><span class="p">,</span> <span class="n">axis_names</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+
+<span class="n">data_sharding</span> <span class="o">=</span> <span class="n">NamedSharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">PartitionSpec</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_sharding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[CpuDevice(id=0) CpuDevice(id=1) CpuDevice(id=2) CpuDevice(id=3)
+ CpuDevice(id=4) CpuDevice(id=5) CpuDevice(id=6) CpuDevice(id=7)]
+Mesh(&#39;data&#39;: 8, axis_types=(Auto,))
+NamedSharding(mesh=Mesh(&#39;data&#39;: 8, axis_types=(Auto,)), spec=P(&#39;data&#39;,), memory_kind=device)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">add_noise</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="c1"># use jnp.where for control flow; for more details see: https://jax.readthedocs.io/en/latest/errors.html#jax.errors.TracerBoolConversionError</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+      <span class="n">add_noise</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;params&#39;</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">x</span>
+    <span class="p">)</span>
+
+<span class="n">module</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+<span class="n">init_rng</span><span class="p">,</span> <span class="n">apply_rng</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">init_rng</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># create custom forward function, since jit does not support kwargs when in_shardings is specified</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">add_noise</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">module</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">add_noise</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">rng</span><span class="p">})</span>
+
+<span class="c1"># shard the inputs x across devices</span>
+<span class="c1"># replicate the variables, add_noise boolean and rng key across devices</span>
+<span class="c1"># shard the output across devices</span>
+<span class="n">jit_forward</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span>
+  <span class="n">forward</span><span class="p">,</span>
+  <span class="n">in_shardings</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_sharding</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+  <span class="n">out_shardings</span><span class="o">=</span><span class="n">data_sharding</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">jit_forward</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">apply_rng</span><span class="p">)</span>
+<span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array([[-2.2187614 ],
+       [-2.8055234 ],
+       [-2.5464184 ],
+       [ 1.027039  ],
+       [-3.5243359 ],
+       [-2.2795477 ],
+       [-0.6504516 ],
+       [ 0.17373265]], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The output is different given the same input, meaning the RNG key was used to add noise to the output.</p>
+<p>We can also confirm that the output is sharded across devices:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out</span><span class="o">.</span><span class="n">addressable_shards</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Shard(device=CpuDevice(id=0), index=(slice(0, 1, None), slice(None, None, None)), replica_id=0, data=[[-2.2187614]]),
+ Shard(device=CpuDevice(id=1), index=(slice(1, 2, None), slice(None, None, None)), replica_id=0, data=[[-2.8055234]]),
+ Shard(device=CpuDevice(id=2), index=(slice(2, 3, None), slice(None, None, None)), replica_id=0, data=[[-2.5464184]]),
+ Shard(device=CpuDevice(id=3), index=(slice(3, 4, None), slice(None, None, None)), replica_id=0, data=[[1.027039]]),
+ Shard(device=CpuDevice(id=4), index=(slice(4, 5, None), slice(None, None, None)), replica_id=0, data=[[-3.5243359]]),
+ Shard(device=CpuDevice(id=5), index=(slice(5, 6, None), slice(None, None, None)), replica_id=0, data=[[-2.2795477]]),
+ Shard(device=CpuDevice(id=6), index=(slice(6, 7, None), slice(None, None, None)), replica_id=0, data=[[-0.6504516]]),
+ Shard(device=CpuDevice(id=7), index=(slice(7, 8, None), slice(None, None, None)), replica_id=0, data=[[0.17373265]])]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Another way to visualize the output sharding:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jax</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">visualize_array_sharding</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">  CPU 0  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">  CPU 1  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">  CPU 2  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">  CPU 3  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span>
+<span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">  CPU 4  </span>
+<span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">  CPU 5  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">  CPU 6  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">  CPU 7  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+</pre>
+</div></div>
+</div>
+<p>If we choose not to add noise, then the output is the same across all batches (as expected, since the input is the same for all batches):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">jit_forward</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">apply_rng</span><span class="p">)</span>
+<span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array([[-1.2839764],
+       [-1.2839764],
+       [-1.2839764],
+       [-1.2839764],
+       [-1.2839764],
+       [-1.2839764],
+       [-1.2839764],
+       [-1.2839764]], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can confirm the un-jitted function produces the same values, albeit unsharded (note there may be small numerical differences due to compiler optimizations from jitting):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">apply_rng</span><span class="p">)</span>
+<span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array([[-2.2187614 ],
+       [-2.8055234 ],
+       [-2.5464187 ],
+       [ 1.0270392 ],
+       [-3.5243359 ],
+       [-2.2795477 ],
+       [-0.6504516 ],
+       [ 0.17373264]], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">forward</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">apply_rng</span><span class="p">)</span>
+<span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array([[-1.2839764],
+       [-1.2839764],
+       [-1.2839764],
+       [-1.2839764],
+       [-1.2839764],
+       [-1.2839764],
+       [-1.2839764],
+       [-1.2839764]], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-shard-map">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">shard_map</span></code><a class="headerlink" href="#using-shard-map" title="Permalink to this heading">#</a></h3>
+<p>When using <a class="reference external" href="https://jax.readthedocs.io/en/latest/jep/14273-shard-map.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.shard_map.shard_map</span></code></a>, the important parts to remember are to:</p>
+<ul class="simple">
+<li><p>split your PRNG key to produce a different key for each device</p></li>
+<li><p>the PRNG keys will be sharded automatically to each device (provided you use the correct partition specification), but the <a class="reference external" href="https://jax.readthedocs.io/en/latest/jep/14273-shard-map.html#rank-reducing-vs-rank-preserving-maps-over-array-axes"><strong>rank of the original batched PRNG key array will not be reduced</strong></a>; e.g.
+with a batch of 8 PRNG keys and 8 devices, each device will see a PRNG key batch of size 1 within the <code class="docutils literal notranslate"><span class="pre">shard_map</span></code>-ed function</p>
+<ul>
+<li><p>therefore to access the PRNG key itself, we need to index slice into it (see the example below)</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">add_noise</span><span class="p">,</span> <span class="n">rng_key_batch</span><span class="p">):</span>
+  <span class="c1"># rng_key_batch is a batch of size 1 containing 1 PRNG key</span>
+  <span class="c1"># index slice into the rng_key_batch to access the PRNG key</span>
+  <span class="k">return</span> <span class="n">module</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">add_noise</span><span class="p">,</span> <span class="n">rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">rng_key_batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
+  <span class="p">)</span>
+
+<span class="c1"># define partition specifications</span>
+<span class="n">data_pspec</span> <span class="o">=</span> <span class="n">PartitionSpec</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">no_pspec</span> <span class="o">=</span> <span class="n">PartitionSpec</span><span class="p">()</span>
+
+<span class="c1"># shard the inputs x and rng keys across devices</span>
+<span class="c1"># replicate the variables and add_noise boolean across devices</span>
+<span class="c1"># shard the output across devices</span>
+<span class="n">shmap_forward</span> <span class="o">=</span> <span class="n">shard_map</span><span class="p">(</span>
+  <span class="n">forward</span><span class="p">,</span>
+  <span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span>
+  <span class="n">in_specs</span><span class="o">=</span><span class="p">(</span><span class="n">no_pspec</span><span class="p">,</span> <span class="n">data_pspec</span><span class="p">,</span> <span class="n">no_pspec</span><span class="p">,</span> <span class="n">data_pspec</span><span class="p">),</span>
+  <span class="n">out_specs</span><span class="o">=</span><span class="n">data_pspec</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># get 8 different rng&#39;s that will be used by the 8 devices when doing forward inference</span>
+<span class="n">apply_rngs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">apply_rng</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">shmap_forward</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">apply_rngs</span><span class="p">)</span>
+<span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Array([[-1.2605132 ],
+       [-1.2405176 ],
+       [-0.99350417],
+       [-1.0277128 ],
+       [-1.4154483 ],
+       [-0.3905797 ],
+       [-2.417677  ],
+       [ 0.9023453 ]], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Confirm that the output is sharded across devices:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out</span><span class="o">.</span><span class="n">addressable_shards</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Shard(device=CpuDevice(id=0), index=(slice(0, 1, None), slice(None, None, None)), replica_id=0, data=[[-1.2605132]]),
+ Shard(device=CpuDevice(id=1), index=(slice(1, 2, None), slice(None, None, None)), replica_id=0, data=[[-1.2405176]]),
+ Shard(device=CpuDevice(id=2), index=(slice(2, 3, None), slice(None, None, None)), replica_id=0, data=[[-0.99350417]]),
+ Shard(device=CpuDevice(id=3), index=(slice(3, 4, None), slice(None, None, None)), replica_id=0, data=[[-1.0277128]]),
+ Shard(device=CpuDevice(id=4), index=(slice(4, 5, None), slice(None, None, None)), replica_id=0, data=[[-1.4154483]]),
+ Shard(device=CpuDevice(id=5), index=(slice(5, 6, None), slice(None, None, None)), replica_id=0, data=[[-0.3905797]]),
+ Shard(device=CpuDevice(id=6), index=(slice(6, 7, None), slice(None, None, None)), replica_id=0, data=[[-2.417677]]),
+ Shard(device=CpuDevice(id=7), index=(slice(7, 8, None), slice(None, None, None)), replica_id=0, data=[[0.9023453]])]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jax</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">visualize_array_sharding</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">  CPU 0  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #393b79">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">  CPU 1  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #d6616b">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">  CPU 2  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8ca252">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">  CPU 3  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #de9ed6">         </span>
+<span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">  CPU 4  </span>
+<span style="color: #000000; text-decoration-color: #000000; background-color: #e7cb94">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">  CPU 5  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #6b6ecf">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">  CPU 6  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #a55194">         </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">  CPU 7  </span>
+<span style="color: #ffffff; text-decoration-color: #ffffff; background-color: #8c6d31">         </span>
+</pre>
+</div></div>
+</div>
+</section>
+</section>
+<section id="lifted-transforms">
+<h2>Lifted transforms<a class="headerlink" href="#lifted-transforms" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/transformations.html">Flax lifted transforms</a> allow you to use <a class="reference external" href="https://github.com/jax-ml/jax#transformations">JAX transforms</a> with <code class="docutils literal notranslate"><span class="pre">Module</span></code> arguments. This section will show you how to control how PRNG keys are split in Flax lifted transforms.</p>
+<p>Refer to <a class="reference external" href="https://flax.readthedocs.io/en/latest/developer_notes/lift.html">Lifted transformations</a> for more detail.</p>
+<section id="nn-vmap">
+<h3><code class="docutils literal notranslate"><span class="pre">nn.vmap</span></code><a class="headerlink" href="#nn-vmap" title="Permalink to this heading">#</a></h3>
+<p>We can use <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/_autosummary/flax.linen.vmap.html"><code class="docutils literal notranslate"><span class="pre">nn.vmap</span></code></a> to create a batched <code class="docutils literal notranslate"><span class="pre">Dense</span></code> layer:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="n">BatchDense</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">,</span>
+    <span class="n">in_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">variable_axes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+    <span class="n">split_rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+<span class="n">BatchDense</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;bias&#39;: Array([0., 0.], dtype=float32),
+  &#39;kernel&#39;: Array([[-1.2488099 , -0.6127134 ],
+         [-0.07084481,  0.60130936]], dtype=float32)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>By denoting <code class="docutils literal notranslate"><span class="pre">variable_axes={'params':</span> <span class="pre">0}'</span></code>, we vectorize the <code class="docutils literal notranslate"><span class="pre">params</span></code> Arrays on the first axis. However the parameter values generated are all identical to each other:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BatchDense</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">,</span>
+    <span class="n">in_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">variable_axes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="n">split_rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+<span class="n">BatchDense</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;bias&#39;: Array([[0., 0.],
+         [0., 0.],
+         [0., 0.]], dtype=float32),
+  &#39;kernel&#39;: Array([[[-1.2488099 , -0.6127134 ],
+          [-0.07084481,  0.60130936]],
+  
+         [[-1.2488099 , -0.6127134 ],
+          [-0.07084481,  0.60130936]],
+  
+         [[-1.2488099 , -0.6127134 ],
+          [-0.07084481,  0.60130936]]], dtype=float32)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we also make <code class="docutils literal notranslate"><span class="pre">split_rngs={'params':</span> <span class="pre">True}</span></code>, then the PRNG key we provide is split across the variable axis (in this case, the batch axis 0), and we can generate different parameters for each batch input:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BatchDense</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">,</span>
+    <span class="n">in_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">variable_axes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="n">split_rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+
+<span class="n">BatchDense</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;bias&#39;: Array([[0., 0.],
+         [0., 0.],
+         [0., 0.]], dtype=float32),
+  &#39;kernel&#39;: Array([[[-0.2526208 , -0.15088455],
+          [-1.1987205 , -0.40843305]],
+  
+         [[-0.7064888 , -1.108805  ],
+          [-0.938775  ,  1.4812315 ]],
+  
+         [[-0.59468937, -0.2502723 ],
+          [-1.33515   ,  0.5067442 ]]], dtype=float32)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Adding a variable via <code class="docutils literal notranslate"><span class="pre">self.variable</span></code> is straightforward:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">2</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">kernel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variable</span><span class="p">(</span>
+      <span class="s1">&#39;other_collection&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;kernel&#39;</span><span class="p">,</span>
+      <span class="k">lambda</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_rng</span><span class="p">(</span><span class="s1">&#39;other&#39;</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">kernel</span><span class="o">.</span><span class="n">value</span>
+
+<span class="n">BatchModel</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span>
+  <span class="n">Model</span><span class="p">,</span>
+  <span class="n">in_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+  <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+  <span class="n">variable_axes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;other_collection&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+  <span class="n">split_rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<span class="p">)</span>
+
+<span class="n">BatchModel</span><span class="p">()</span><span class="o">.</span><span class="n">init</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">)},</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;Dense_0&#39;: {&#39;bias&#39;: Array([[0., 0.],
+          [0., 0.],
+          [0., 0.]], dtype=float32),
+   &#39;kernel&#39;: Array([[[-0.9079084 ,  0.76390624],
+           [-0.01285526,  0.4320353 ]],
+   
+          [[ 0.12398645,  0.7884565 ],
+           [ 1.5344163 ,  1.3186085 ]],
+   
+          [[-0.44171348,  0.43430036],
+           [-0.40732604,  0.29774475]]], dtype=float32)}},
+ &#39;other_collection&#39;: {&#39;kernel&#39;: Array([[-0.8193048 ,  0.711106  ],
+         [-0.37802765, -0.66705877],
+         [-0.44808003,  0.93031347]], dtype=float32)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can control which RNG stream to split, for example, if we only wanted to split the <code class="docutils literal notranslate"><span class="pre">'params'</span></code> RNG stream, then the variables generated from <code class="docutils literal notranslate"><span class="pre">self.variable</span></code> will be the same for each batch input:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BatchModel</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span>
+    <span class="n">Model</span><span class="p">,</span>
+    <span class="n">in_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">variable_axes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;other_collection&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="n">split_rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+<span class="n">BatchModel</span><span class="p">()</span><span class="o">.</span><span class="n">init</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">)},</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;Dense_0&#39;: {&#39;bias&#39;: Array([[0., 0.],
+          [0., 0.],
+          [0., 0.]], dtype=float32),
+   &#39;kernel&#39;: Array([[[-0.9079084 ,  0.76390624],
+           [-0.01285526,  0.4320353 ]],
+   
+          [[ 0.12398645,  0.7884565 ],
+           [ 1.5344163 ,  1.3186085 ]],
+   
+          [[-0.44171348,  0.43430036],
+           [-0.40732604,  0.29774475]]], dtype=float32)}},
+ &#39;other_collection&#39;: {&#39;kernel&#39;: Array([[ 0.44956833, -1.1854612 ],
+         [ 0.44956833, -1.1854612 ],
+         [ 0.44956833, -1.1854612 ]], dtype=float32)}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also control which parameters / variables should be generated for each batch input, for example, if we only wanted <code class="docutils literal notranslate"><span class="pre">'params'</span></code> to generate separate parameters for each batch input:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BatchModel</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span>
+    <span class="n">Model</span><span class="p">,</span>
+    <span class="n">in_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">variable_axes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;other_collection&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+    <span class="n">split_rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+
+<span class="n">BatchModel</span><span class="p">()</span><span class="o">.</span><span class="n">init</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">1</span><span class="p">)},</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;Dense_0&#39;: {&#39;bias&#39;: Array([[0., 0.],
+          [0., 0.],
+          [0., 0.]], dtype=float32),
+   &#39;kernel&#39;: Array([[[-0.9079084 ,  0.76390624],
+           [-0.01285526,  0.4320353 ]],
+   
+          [[ 0.12398645,  0.7884565 ],
+           [ 1.5344163 ,  1.3186085 ]],
+   
+          [[-0.44171348,  0.43430036],
+           [-0.40732604,  0.29774475]]], dtype=float32)}},
+ &#39;other_collection&#39;: {&#39;kernel&#39;: Array([ 0.44956833, -1.1854612 ], dtype=float32)}}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="nn-scan">
+<h3><code class="docutils literal notranslate"><span class="pre">nn.scan</span></code><a class="headerlink" href="#nn-scan" title="Permalink to this heading">#</a></h3>
+<p>We can use <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.linen/_autosummary/flax.linen.scan.html"><code class="docutils literal notranslate"><span class="pre">nn.scan</span></code></a> to create a scanned <code class="docutils literal notranslate"><span class="pre">Module</span></code> layer (this is useful for simplifying repetitively stacked submodules):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ResidualMLPBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="nd">@nn</span><span class="o">.</span><span class="n">compact</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="mi">2</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">h</span><span class="p">,</span> <span class="kc">None</span> <span class="c1"># return an empty carry</span>
+
+<span class="n">ScanMLP</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span>
+      <span class="n">ResidualMLPBlock</span><span class="p">,</span> <span class="n">variable_axes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+      <span class="n">variable_broadcast</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split_rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+      <span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">ScanMLP</span><span class="p">()</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="c1"># pass in an empty carry</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;Dense_0&#39;: {&#39;bias&#39;: Array([[0., 0.],
+          [0., 0.],
+          [0., 0.]], dtype=float32),
+   &#39;kernel&#39;: Array([[[-0.07838312, -0.7422982 ],
+           [ 0.87488323,  0.13773395]],
+   
+          [[ 0.97309333,  0.9087693 ],
+           [-0.12564984, -1.0920651 ]],
+   
+          [[-0.99055105,  1.1499453 ],
+           [-0.15721127, -0.62520015]]], dtype=float32)}}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Similar to before, we can control whether to split the RNG stream or not, for example, if we wanted all the stacked modules to be initialized to the same parameter values, we can pass in <code class="docutils literal notranslate"><span class="pre">split_rngs={'params':</span> <span class="pre">False}</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ScanMLP</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span>
+      <span class="n">ResidualMLPBlock</span><span class="p">,</span> <span class="n">variable_axes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+      <span class="n">variable_broadcast</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">split_rngs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+      <span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">ScanMLP</span><span class="p">()</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;params&#39;: {&#39;Dense_0&#39;: {&#39;bias&#39;: Array([[0., 0.],
+          [0., 0.],
+          [0., 0.]], dtype=float32),
+   &#39;kernel&#39;: Array([[[-0.66715515, -0.0484313 ],
+           [ 0.9867164 ,  0.75408363]],
+   
+          [[-0.66715515, -0.0484313 ],
+           [ 0.9867164 ,  0.75408363]],
+   
+          [[-0.66715515, -0.0484313 ],
+           [ 0.9867164 ,  0.75408363]]], dtype=float32)}}}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="arguments.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Dealing with Flax Module arguments</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../data_preprocessing/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Data preprocessing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#receiving-manipulating-and-creating-prng-keys-with-module-make-rng">Receiving, manipulating and creating PRNG keys with <code class="docutils literal notranslate"><span class="pre">Module.make_rng</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-self-make-rng-works-under-the-hood">How <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code> works under the hood</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sub-modules-and-self-make-rng">Sub-<code class="docutils literal notranslate"><span class="pre">Module</span></code>s and <code class="docutils literal notranslate"><span class="pre">self.make_rng</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-self-param-and-self-variable">Using <code class="docutils literal notranslate"><span class="pre">self.param</span></code> and <code class="docutils literal notranslate"><span class="pre">self.variable</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#managing-rng-streams-inside-a-training-loop">Managing RNG streams inside a training loop</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sharp-edge-unintentionally-generating-the-same-values">🔪 Sharp edge 🔪 - unintentionally generating the same values</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#managing-rng-s-on-multiple-devices">Managing RNG’s on multiple devices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-jax-jit">Using <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-shard-map">Using <code class="docutils literal notranslate"><span class="pre">shard_map</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lifted-transforms">Lifted transforms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nn-vmap"><code class="docutils literal notranslate"><span class="pre">nn.vmap</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nn-scan"><code class="docutils literal notranslate"><span class="pre">nn.scan</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

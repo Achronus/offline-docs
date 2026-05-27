@@ -1,0 +1,862 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Tree Mode NNX</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'flip/5310-tree-mode-nnx';</script>
+    <link rel="icon" href="../_static/flax.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/flip/5310-tree-mode-nnx.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../guides/checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/flip/5310-tree-mode-nnx.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Tree Mode NNX</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proposal">Proposal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-transforms">Simple transforms</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backward-compatibility">Backward Compatibility</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#breaking-changes">Breaking changes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prefix-filters-prefix-filters">Prefix filters {#prefix-filters}</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nnx-grad">nnx.grad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nnx-custom-vjp">nnx.custom_vjp</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transform-metadata">transform_metadata</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-sow">Module.sow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-perturb">Module.perturb</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="tree-mode-nnx">
+<h1>Tree Mode NNX<a class="headerlink" href="#tree-mode-nnx" title="Permalink to this heading">#</a></h1>
+<p>Mar 4, 2026
+Cristian Garcia, Samuel Anklesaria, Flax Team</p>
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading">#</a></h2>
+<p>Current NNX APIs allow general graph structures and graph transformations, this includes:</p>
+<ol class="arabic simple">
+<li><p>Tracking Variable state updates</p></li>
+<li><p>Handling shared references (graphs)</p></li>
+<li><p>Supporting prefix filters (StateAxes, DiffState, StateSharding)</p></li>
+<li><p>Propagating graph updates (static state and structure changes)</p></li>
+</ol>
+<p>While powerful, some of these capabilities (<strong>3</strong> and <strong>4</strong>) are beyond what JAX transform APIs offer and supporting them results in both internal complexity, harder to reason about code, and a larger set of APIs a user must learn.  We wish to tackle all these issues by simplifying NNX.</p>
+</section>
+<section id="proposal">
+<h2>Proposal<a class="headerlink" href="#proposal" title="Permalink to this heading">#</a></h2>
+<p>To do this we propose two things. First, the introduction of <strong>Tree Mode NNX</strong>: a reimplementation of the NNX APIs that only handles trees, assumes referential transparency, and has a more limited support for state updates. Concretely, this means:</p>
+<ul class="simple">
+<li><p>Automatic state updates only for Variables in NNX transforms.</p></li>
+<li><p>Tree structure assumed and enforced on all APIs (no sharing)</p></li>
+<li><p>Modules treated as stateless pytrees (no graph updates).</p></li>
+<li><p>Full JAX transform compatibility (remove <a class="reference internal" href="#prefix-filters"><span class="xref myst">prefix filters</span></a>: StateAxes, DiffState, StateSharding).</p></li>
+</ul>
+<p>Second, simplifying graph support. Graphs stand out as an important feature for some NNX users. However, we will be limiting support to <strong>1</strong> and <strong>2</strong>, meaning that prefix filters and graph updates will be dropped. This will make it such that tree and graph transforms can share the same underlying implementation and semantics while still allowing for a great deal of expressivity.</p>
+</section>
+<section id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this heading">#</a></h2>
+<p>Tree mode will be implemented on top of the current APIs by introducing a <code class="docutils literal notranslate"><span class="pre">graph</span></code> argument, when <code class="docutils literal notranslate"><span class="pre">True</span></code> graph support is enabled, when <code class="docutils literal notranslate"><span class="pre">False</span></code> only trees are supported and internals rely on <code class="docutils literal notranslate"><span class="pre">jax.tree.*</span></code> APIs. Additionally, a <code class="docutils literal notranslate"><span class="pre">graph_updates</span></code> argument will be added to NNX transforms, when <code class="docutils literal notranslate"><span class="pre">False</span></code> transforms will no longer propagate graph structure update (<strong>4</strong>) or support prefix filters (<strong>3</strong>).</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">split</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">jit</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">graph_updates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">graph</span></code> or <code class="docutils literal notranslate"><span class="pre">graph_updates</span></code> are not provided, their default values will be taken from the <code class="docutils literal notranslate"><span class="pre">nnx_graph_mode</span></code> and <code class="docutils literal notranslate"><span class="pre">nnx_graph_updates</span></code> config flags respectively. These can be easily fetched and updated via <code class="docutils literal notranslate"><span class="pre">set_graph_mode</span></code> and <code class="docutils literal notranslate"><span class="pre">set_graph_updates</span></code>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># status</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">set_graph_mode</span><span class="o">.</span><span class="n">current_value</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">set_graph_updates</span><span class="o">.</span><span class="n">current_value</span><span class="p">())</span>
+
+<span class="c1"># set value</span>
+<span class="n">nnx</span><span class="o">.</span><span class="n">set_graph_mode</span><span class="p">(</span><span class="kc">True</span><span class="o">/</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">nnx</span><span class="o">.</span><span class="n">set_graph_updates</span><span class="p">(</span><span class="kc">True</span><span class="o">/</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># via env vars </span>
+<span class="c1"># NNX_GRAPH_MODE=true/false</span>
+<span class="c1"># NNX_GRAPH_UPDATES=true/false</span>
+
+<span class="c1"># context managers</span>
+<span class="k">with</span> <span class="n">nnx</span><span class="o">.</span><span class="n">set_graph_mode</span><span class="p">(</span><span class="kc">True</span><span class="o">/</span><span class="kc">False</span><span class="p">):</span>
+  <span class="o">...</span>
+<span class="k">with</span> <span class="n">nnx</span><span class="o">.</span><span class="n">set_graph_updates</span><span class="p">(</span><span class="kc">True</span><span class="o">/</span><span class="kc">False</span><span class="p">):</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+<p>The goal will be to have the default value for <code class="docutils literal notranslate"><span class="pre">nnx_graph_mode</span></code> and <code class="docutils literal notranslate"><span class="pre">nnx_graph_updates</span></code> to be set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, thus enabling tree mode for new projects. Users that don’t want to migrate can use these flags to make sure their code continues to work with current features.</p>
+<section id="simple-transforms">
+<h3>Simple transforms<a class="headerlink" href="#simple-transforms" title="Permalink to this heading">#</a></h3>
+<p>These new transforms are highly simplified compared to current transforms, they are easier to implement and optimize, while supporting both trees and graphs. Given a user function f, most simplified transforms follow this pattern:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">transform_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">graph</span><span class="p">:</span> <span class="n">args</span> <span class="o">=</span> <span class="n">to_tree</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+  <span class="n">variables</span> <span class="o">=</span> <span class="n">check_no_aliases</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+  
+  <span class="nd">@jax_transform</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">transformed_f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">current</span><span class="p">,</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">snapshot</span><span class="p">(</span><span class="n">labeled</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">graph</span><span class="p">:</span> <span class="n">args</span> <span class="o">=</span> <span class="n">from_tree</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">graph</span><span class="p">:</span> <span class="n">out</span> <span class="o">=</span> <span class="n">to_tree</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+    <span class="n">check_no_aliases</span><span class="p">(</span><span class="o">**</span><span class="n">current</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+    <span class="n">updates</span> <span class="o">=</span> <span class="n">get_updates</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">prev</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">updates</span>
+  
+  <span class="n">out</span><span class="p">,</span> <span class="n">updates</span> <span class="o">=</span> <span class="n">transformed_f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+  <span class="n">apply_updates</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">graph</span><span class="p">:</span> <span class="n">out</span> <span class="o">=</span> <span class="n">from_tree</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+</div>
+<p>The transformed function tracks input Variable, applies <code class="docutils literal notranslate"><span class="pre">f</span></code>, and creates the Variable updates (no updates for Variables that didn’t change). It also checks that there are no Variable aliases between the inputs and outputs (no shared references), and returns the user output plus Variable updates. The wrapper function calls the transformed function, applies the Variable updates to the input Variables, and returns the user output. To support graphs, we simply convert objects to a tree representation before passing them to jax, and back to graphs before passing them to the user code.</p>
+</section>
+</section>
+<section id="backward-compatibility">
+<h2>Backward Compatibility<a class="headerlink" href="#backward-compatibility" title="Permalink to this heading">#</a></h2>
+<p>When tree mode is on by default, code that relies on graphs, graph updates, and prefix filters will stop working. There are two ways to port existing code, the first is reverting the defaults config via <code class="docutils literal notranslate"><span class="pre">set_graph_mode</span></code> and <code class="docutils literal notranslate"><span class="pre">set_graph_updates</span></code> somewhere in the after the imports:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="o">...</span>
+<span class="n">nnx</span><span class="o">.</span><span class="n">set_graph_mode</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">nnx</span><span class="o">.</span><span class="n">set_graph_updates</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The previous implementation of the transform APIs will also be accessible via the <code class="docutils literal notranslate"><span class="pre">nnx.compat</span></code> module. They are implemented as partials that set <code class="docutils literal notranslate"><span class="pre">graph=True</span></code> and <code class="docutils literal notranslate"><span class="pre">graph_updates=True</span></code>:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">nnx</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">split</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">split</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">nnx</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">jit</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">graph_updates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>The above shortcuts will make it such that porting existing code (if needed) is as simple as performing some rewrites:</p>
+<p><code class="docutils literal notranslate"><span class="pre">nnx.split</span></code> → <code class="docutils literal notranslate"><span class="pre">nnx.compat.split</span></code><br />
+<code class="docutils literal notranslate"><span class="pre">nnx.jit</span></code> → <code class="docutils literal notranslate"><span class="pre">nnx.compat.jit</span></code><br />
+…</p>
+</section>
+<section id="breaking-changes">
+<h2>Breaking changes<a class="headerlink" href="#breaking-changes" title="Permalink to this heading">#</a></h2>
+<section id="prefix-filters-prefix-filters">
+<h3>Prefix filters {#prefix-filters}<a class="headerlink" href="#prefix-filters-prefix-filters" title="Permalink to this heading">#</a></h3>
+<p>Code that relies on prefix filters such as StateAxes, StateSharding, and DiffState will require some restructuring as JAX has no equivalent mechanisms (these were added to make Linen migration easier). The solution is to use <code class="docutils literal notranslate"><span class="pre">split</span></code> and <code class="docutils literal notranslate"><span class="pre">merge</span></code> to create state groups, and pass each group through their corresponding tree prefix on the jax transform. For example:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># previous code</span>
+<span class="n">state_axes</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">StateAxes</span><span class="p">({</span><span class="n">some_filter</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axis</span><span class="o">=</span><span class="n">state_axes</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">graph_updates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+<p>This can be rewritten to <code class="docutils literal notranslate"><span class="pre">split</span></code> the model into two state groups using the previous filter, passing the groups as separate arguments, one vectorized and the other broadcasted, and using <code class="docutils literal notranslate"><span class="pre">merge</span></code> to reconstruct the model inside the transform.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># new code</span>
+<span class="n">graphdef</span><span class="p">,</span> <span class="n">vectorized</span><span class="p">,</span> <span class="n">broadcasted</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">some_filter</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">vectorized</span><span class="p">,</span> <span class="n">broadcasted</span><span class="p">):</span>
+  <span class="n">model</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">graphdef</span><span class="p">,</span> <span class="n">vectorized</span><span class="p">,</span> <span class="n">broadcasted</span><span class="p">)</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+<p>This is roughly how prefix filters were implemented under the hood.</p>
+</section>
+<section id="nnx-grad">
+<h3>nnx.grad<a class="headerlink" href="#nnx-grad" title="Permalink to this heading">#</a></h3>
+<p>Code that uses <code class="docutils literal notranslate"><span class="pre">nnx.grad</span></code> will change in two ways:</p>
+<ol class="arabic simple">
+<li><p>The first argument will no longer be differentiated w.r.t. to <code class="docutils literal notranslate"><span class="pre">Param</span></code>s only, this is because <code class="docutils literal notranslate"><span class="pre">grad</span></code> used this prefix filter by default: <code class="docutils literal notranslate"><span class="pre">DiffState(0,</span> <span class="pre">Param)</span></code>.</p></li>
+<li><p>The gradients of NNX Pytree/Module types will no longer be <code class="docutils literal notranslate"><span class="pre">State</span></code> types. Now they just follow JAX and return the same input type.</p></li>
+</ol>
+<p>Concretely it means that code like this:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># previous code</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+  <span class="o">...</span>
+
+<span class="c1"># uses argnums=nnx.DiffState(0, nnx.Param)</span>
+<span class="n">grads</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">)(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now has to explicitly use <code class="docutils literal notranslate"><span class="pre">split</span></code> and <code class="docutils literal notranslate"><span class="pre">merge</span></code> if to avoid calculating gradients for the non-differentiable state:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># new code</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">graphdef</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">nondiff</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">nondiff</span><span class="p">):</span>
+  <span class="n">model</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">graphdef</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">nondiff</span><span class="p">)</span>
+  <span class="o">...</span>
+
+<span class="c1"># uses argnums=0</span>
+<span class="n">grads</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">)(</span><span class="n">params</span><span class="p">,</span> <span class="n">nondiff</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If there is no non-differentiable the <code class="docutils literal notranslate"><span class="pre">model</span></code> can be passed in directly but the gradients will now be of the same type:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># new code</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+  <span class="o">...</span>
+
+<span class="c1"># uses argnums=0</span>
+<span class="n">grads</span><span class="p">:</span> <span class="n">Foo</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">)(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="nnx-custom-vjp">
+<h3>nnx.custom_vjp<a class="headerlink" href="#nnx-custom-vjp" title="Permalink to this heading">#</a></h3>
+<p>Previously <code class="docutils literal notranslate"><span class="pre">nnx.custom_vjp</span></code> did two particular things:</p>
+<ol class="arabic simple">
+<li><p>The backward function returned the gradients of the Variable updates (<code class="docutils literal notranslate"><span class="pre">m_updates_g</span></code>) along with the output gradient.</p></li>
+<li><p>The tangent for nnx.Pytree/Module objects were of type <code class="docutils literal notranslate"><span class="pre">nnx.State</span></code>.</p></li>
+</ol>
+<p>For a <code class="docutils literal notranslate"><span class="pre">Foo</span></code> Module with <code class="docutils literal notranslate"><span class="pre">x:</span> <span class="pre">Param</span></code> and <code class="docutils literal notranslate"><span class="pre">y:</span> <span class="pre">Param</span></code> attributes, a simple example could look like this:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># previous code</span>
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">custom_vjp</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">f_fwd</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">m</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">f_bwd</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span>
+  <span class="p">(</span><span class="n">m_updates_g</span><span class="p">,),</span> <span class="n">out_g</span> <span class="o">=</span> <span class="n">g</span>
+  <span class="n">cos_x</span><span class="p">,</span> <span class="n">sin_x</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">res</span>
+  <span class="n">m_g</span><span class="p">:</span> <span class="n">nnx</span><span class="o">.</span><span class="n">State</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">m_updates_g</span><span class="p">)</span> <span class="c1"># create copy</span>
+  <span class="n">m_g</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos_x</span> <span class="o">*</span> <span class="n">out_g</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+  <span class="n">m_g</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin_x</span> <span class="o">*</span> <span class="n">out_g</span>
+  <span class="k">return</span> <span class="p">(</span><span class="n">m_g</span><span class="p">,)</span>  <span class="c1"># State gradient</span>
+</pre></div>
+</div>
+<p>In the new implementation gradients for Variable updates are not returned, and the tangent type is the same as the input type (<code class="docutils literal notranslate"><span class="pre">Foo</span></code>), this matches the behavior of <code class="docutils literal notranslate"><span class="pre">jax.custom_vjp</span></code>:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># new code</span>
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">custom_vjp</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">f_fwd</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Foo</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">m</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">f_bwd</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span> <span class="c1"># no gradients for updates</span>
+  <span class="n">cos_x</span><span class="p">,</span> <span class="n">sin_x</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">res</span>
+  <span class="n">m_g</span><span class="p">:</span> <span class="n">Foo</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="c1"># create copy</span>
+  <span class="n">m_g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos_x</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">y</span>
+  <span class="n">m_g</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin_x</span> <span class="o">*</span> <span class="n">g</span>
+  <span class="k">return</span> <span class="p">(</span><span class="n">m_g</span><span class="p">,)</span> <span class="c1"># Foo gradient</span>
+</pre></div>
+</div>
+<p>Note that to avoid losing information, now differentiable Variables are not allowed to be updated inside <code class="docutils literal notranslate"><span class="pre">nnx.custom_vjp</span></code>.</p>
+</section>
+<section id="transform-metadata">
+<h3>transform_metadata<a class="headerlink" href="#transform-metadata" title="Permalink to this heading">#</a></h3>
+<p>Previously NNX transforms like <code class="docutils literal notranslate"><span class="pre">vmap</span></code> and <code class="docutils literal notranslate"><span class="pre">scan</span></code> had a <code class="docutils literal notranslate"><span class="pre">transform_metadata</span></code> metadata argument that allowed them to update the sharding metadata.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># old code</span>
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">split_rngs</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">transform_metadata</span><span class="o">=</span><span class="p">{</span><span class="n">nnx</span><span class="o">.</span><span class="n">PARTITION_NAME</span><span class="p">:</span> <span class="s1">&#39;din&#39;</span><span class="p">})</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">create_stack</span><span class="p">(</span><span class="n">rngs</span><span class="p">):</span>  <span class="c1"># &#39;din&#39; added to out_sharding metadata</span>
+  <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">rngs</span><span class="o">.</span><span class="n">uniform</span><span class="p">((</span><span class="mi">16</span><span class="p">,)),</span> <span class="n">out_sharding</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;dout&#39;</span><span class="p">,))</span>
+
+<span class="n">v_stack</span> <span class="o">=</span> <span class="n">create_stack</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">assert</span> <span class="n">v_stack</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">v_stack</span><span class="o">.</span><span class="n">out_shardings</span> <span class="o">==</span> <span class="p">(</span><span class="s1">&#39;din&#39;</span><span class="p">,</span> <span class="s1">&#39;dout&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The new simplified NNX transform implementations don’t support this argument. However, to keep supporting the behavior, a new <code class="docutils literal notranslate"><span class="pre">nnx.transform_metadata</span></code> transform is introduced that can be inserted to get back the same results. TODO: mention it works on <code class="docutils literal notranslate"><span class="pre">jax.vmap</span></code>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># new code</span>
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">split_rngs</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">transform_metadata</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">partition</span><span class="o">=</span><span class="s1">&#39;din&#39;</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">create_stack</span><span class="p">(</span><span class="n">rngs</span><span class="p">):</span>  <span class="c1"># &#39;din&#39; added to out_sharding metadata</span>
+  <span class="k">return</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">rngs</span><span class="o">.</span><span class="n">uniform</span><span class="p">((</span><span class="mi">16</span><span class="p">,)),</span> <span class="n">out_sharding</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;dout&#39;</span><span class="p">,))</span>
+
+<span class="n">v_stack</span> <span class="o">=</span> <span class="n">create_stack</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Rngs</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="k">assert</span> <span class="n">v_stack</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">v_stack</span><span class="o">.</span><span class="n">out_shardings</span> <span class="o">==</span> <span class="p">(</span><span class="s1">&#39;din&#39;</span><span class="p">,</span> <span class="s1">&#39;dout&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">transform_metada</span></code> accepts <code class="docutils literal notranslate"><span class="pre">in_axes</span></code> and <code class="docutils literal notranslate"><span class="pre">out_axes</span></code>, these should match the values passed to the corresponding transform.</p>
+</section>
+<section id="module-sow">
+<h3>Module.sow<a class="headerlink" href="#module-sow" title="Permalink to this heading">#</a></h3>
+<p>Previously, <code class="docutils literal notranslate"><span class="pre">Module.sow</span></code> used graph updates to capture intermediate values during computations and propagate them outside, it was used in conjunction with <code class="docutils literal notranslate"><span class="pre">nnx.pop</span></code> to log and extract intermediates:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># old code</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="s2">&quot;y_mean&quot;</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">intermediates</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">)</span> <span class="c1"># extract intermediate values</span>
+</pre></div>
+</div>
+<p>To achieve the same without graph updates we’ve added a new <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> API which allows for a similar workflow.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># New Code</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sow</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="s2">&quot;y_mean&quot;</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">intermediates</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In general, <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> takes a function or Module to be transformed, a <code class="docutils literal notranslate"><span class="pre">nnx.Variable</span></code> subclass to collect, and an optional <code class="docutils literal notranslate"><span class="pre">init</span></code> argument to initialize the collected state, which will be stored within <code class="docutils literal notranslate"><span class="pre">nnx.Variable</span></code> objects. <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> creates a <code class="docutils literal notranslate"><span class="pre">__captures__:</span> <span class="pre">tuple[Variable,</span> <span class="pre">...]</span></code> attribute on each <code class="docutils literal notranslate"><span class="pre">Module</span></code> instance, each Variable in <code class="docutils literal notranslate"><span class="pre">__captures__</span></code> contains a dictionary which <code class="docutils literal notranslate"><span class="pre">sow</span></code> and <code class="docutils literal notranslate"><span class="pre">perturb</span></code> populate.</p>
+</section>
+<section id="module-perturb">
+<h3>Module.perturb<a class="headerlink" href="#module-perturb" title="Permalink to this heading">#</a></h3>
+<p>Similarly, <code class="docutils literal notranslate"><span class="pre">Module.perturb</span></code> was previously used to extract the gradients of intermediate values. This was done in two steps: initializing a perturbation state by running a module once, and then passing the perturbation state as a differentiable target to <code class="docutils literal notranslate"><span class="pre">grad</span></code>.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb</span><span class="p">(</span><span class="s1">&#39;grad_of_x&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="n">y</span>
+
+<span class="c1"># old code</span>
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+  <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># Initialize perturbation state</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="n">diff_state</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">DiffState</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Perturbation</span><span class="p">))</span>
+  <span class="n">grads</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="n">diff_state</span><span class="p">)(</span><span class="n">model</span><span class="p">)</span>
+  <span class="n">grads</span><span class="p">,</span> <span class="n">interm_grads</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Perturbation</span><span class="p">)</span>
+  <span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>
+  <span class="n">nnx</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Perturbation</span><span class="p">)</span> <span class="c1"># clean up perturbations</span>
+  <span class="k">return</span> <span class="n">interm_grads</span>
+</pre></div>
+</div>
+<p>Similar pattern can be used with  <code class="docutils literal notranslate"><span class="pre">nnx.capture</span></code> during both perturbation initialization and when running the forward pass to insert the differentiable perturbations state. In this version explicitly pass the <code class="docutils literal notranslate"><span class="pre">perturbs</span></code> state as a separate argument and use <code class="docutils literal notranslate"><span class="pre">argnums</span></code> to specify that both arguments are differentiable:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># new code</span>
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+  <span class="n">_</span><span class="p">,</span> <span class="n">perturbs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Perturbation</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># init perturbations</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">perturbs</span><span class="p">):</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="n">perturbs</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="n">grads</span><span class="p">,</span> <span class="n">interm_grads</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">argnums</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))(</span><span class="n">model</span><span class="p">,</span> <span class="n">perturbs</span><span class="p">)</span>
+  <span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">interm_grads</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proposal">Proposal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-transforms">Simple transforms</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backward-compatibility">Backward Compatibility</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#breaking-changes">Breaking changes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prefix-filters-prefix-filters">Prefix filters {#prefix-filters}</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nnx-grad">nnx.grad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nnx-custom-vjp">nnx.custom_vjp</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transform-metadata">transform_metadata</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-sow">Module.sow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-perturb">Module.perturb</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

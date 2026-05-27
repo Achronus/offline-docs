@@ -1,0 +1,884 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Filters</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/filters_guide';</script>
+    <link rel="icon" href="../_static/flax.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Randomness" href="randomness.html" />
+    <link rel="prev" title="Model Views" href="view.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/filters_guide.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../guides_basic.html">Basic Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">Model Views</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs_nnx/guides/filters_guide.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/guides/filters_guide.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Filters</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-filter-protocol">The <code class="docutils literal notranslate"><span class="pre">Filter</span></code> Protocol</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-filter-dsl">The <code class="docutils literal notranslate"><span class="pre">Filter</span></code> DSL</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grouping-states">Grouping <code class="docutils literal notranslate"><span class="pre">State</span></code>s</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="filters">
+<h1>Filters<a class="headerlink" href="#filters" title="Permalink to this heading">#</a></h1>
+<p>Flax NNX uses <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/filterlib.html"><code class="docutils literal notranslate"><span class="pre">Filter</span></code>s</a> extensively as a way to create <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/state.html#flax.nnx.State"><code class="docutils literal notranslate"><span class="pre">nnx.State</span></code></a> groups in APIs, such as <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/graph.html#flax.nnx.split"><code class="docutils literal notranslate"><span class="pre">nnx.split</span></code></a>, <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/graph.html#flax.nnx.state"><code class="docutils literal notranslate"><span class="pre">nnx.state()</span></code></a>, and many of the <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/jax_and_nnx_transforms.html">Flax NNX transformations (transforms)</a>.</p>
+<p>In this guide you will learn how to:</p>
+<ul class="simple">
+<li><p>Use <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/filterlib.html"><code class="docutils literal notranslate"><span class="pre">Filter</span></code>s</a> to group Flax NNX variables and states into subgroups;</p></li>
+<li><p>Understand relationships between types, such as <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.Param"><code class="docutils literal notranslate"><span class="pre">nnx.Param</span></code></a> or <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.BatchStat"><code class="docutils literal notranslate"><span class="pre">nnx.BatchStat</span></code></a>, and <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/filterlib.html"><code class="docutils literal notranslate"><span class="pre">Filter</span></code>s</a>;</p></li>
+<li><p>Express your <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s flexibly with <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/filterlib.html"><code class="docutils literal notranslate"><span class="pre">nnx.filterlib.Filter</span></code></a> language.</p></li>
+</ul>
+<p>In the following example <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.Param"><code class="docutils literal notranslate"><span class="pre">nnx.Param</span></code></a> and <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.BatchStat"><code class="docutils literal notranslate"><span class="pre">nnx.BatchStat</span></code></a> are used as <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s to split the model into two groups: one with the parameters and the other with the batch statistics:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">BatchStat</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+
+<span class="n">graphdef</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">batch_stats</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">BatchStat</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">params</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">batch_stats</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>params = State({
+  &#39;a&#39;: Param(
+    value=0
+  )
+})
+batch_stats = State({
+  &#39;b&#39;: BatchStat(
+    value=True
+  )
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s dive deeper into <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s.</p>
+<section id="the-filter-protocol">
+<h2>The <code class="docutils literal notranslate"><span class="pre">Filter</span></code> Protocol<a class="headerlink" href="#the-filter-protocol" title="Permalink to this heading">#</a></h2>
+<p>In general, Flax <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s are predicate functions of the form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Key</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Key</span></code> is a hashable and comparable type;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code> is a tuple of <code class="docutils literal notranslate"><span class="pre">Key</span></code>s representing the path to the value in a nested structure; and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> is the value at the path.</p></li>
+</ul>
+<p>The function returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the value should be included in the group, and <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<p>Types are not functions of this form. They are treated as <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s because, as you will learn in the next section, types and some other literals are converted to <em>predicates</em>. For example, <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.Param"><code class="docutils literal notranslate"><span class="pre">nnx.Param</span></code></a> is roughly converted to a predicate like this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">is_param</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+  <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">is_param</span><span class="p">((),</span><span class="w"> </span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>is_param((), nnx.Param(0)) = True
+</pre></div>
+</div>
+</div>
+</div>
+<p>Such function matches any value that is an instance of <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.Param"><code class="docutils literal notranslate"><span class="pre">nnx.Param</span></code></a>. Internally Flax NNX uses <code class="docutils literal notranslate"><span class="pre">OfType</span></code> which defines a callable of this form for a given type:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">is_param</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">OfType</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">is_param</span><span class="p">((),</span><span class="w"> </span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>is_param((), nnx.Param(0)) = True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-filter-dsl">
+<h2>The <code class="docutils literal notranslate"><span class="pre">Filter</span></code> DSL<a class="headerlink" href="#the-filter-dsl" title="Permalink to this heading">#</a></h2>
+<p>Flax NNX exposes a small domain specific language (<a class="reference external" href="https://en.wikipedia.org/wiki/Domain-specific_language">DSL</a>), formalized as the <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/filterlib.html"><code class="docutils literal notranslate"><span class="pre">nnx.filterlib.Filter</span></code></a> type. This means users don’t have to create functions like in the previous section.</p>
+<p>Here is a list of all the callable <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s included in Flax NNX, and their corresponding DSL literals (when available):</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Literal</p></th>
+<th class="head"><p>Callable</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">...</span></code> or <code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Everything()</span></code></p></td>
+<td><p>Matches all values</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Nothing()</span></code></p></td>
+<td><p>Matches no values</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OfType(type)</span></code></p></td>
+<td><p>Matches values that are instances of <code class="docutils literal notranslate"><span class="pre">type</span></code> or have a <code class="docutils literal notranslate"><span class="pre">type</span></code> attribute that is an instance of <code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PathContains(key)</span></code></p></td>
+<td><p>Matches values that have an associated <code class="docutils literal notranslate"><span class="pre">path</span></code> that contains the given <code class="docutils literal notranslate"><span class="pre">key</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'{filter}'</span></code> <span style="color:gray">str</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">WithTag('{filter}')</span></code></p></td>
+<td><p>Matches values that have string <code class="docutils literal notranslate"><span class="pre">tag</span></code> attribute equal to <code class="docutils literal notranslate"><span class="pre">'{filter}'</span></code>. Used by <code class="docutils literal notranslate"><span class="pre">RngKey</span></code> and <code class="docutils literal notranslate"><span class="pre">RngCount</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">(*filters)</span></code> <span style="color:gray">tuple</span> or <code class="docutils literal notranslate"><span class="pre">[*filters]</span></code> <span style="color:gray">list</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Any(*filters)</span></code></p></td>
+<td><p>Matches values that match any of the inner <code class="docutils literal notranslate"><span class="pre">filters</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">All(*filters)</span></code></p></td>
+<td><p>Matches values that match all of the inner <code class="docutils literal notranslate"><span class="pre">filters</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Not(filter)</span></code></p></td>
+<td><p>Matches values that do not match the inner <code class="docutils literal notranslate"><span class="pre">filter</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Let’s check out the DSL in action by using <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/transforms.html#flax.nnx.vmap"><code class="docutils literal notranslate"><span class="pre">nnx.vmap</span></code></a> as an example. Consider the following:</p>
+<ol class="arabic simple">
+<li><p>You want to vectorize all parameters;</p></li>
+<li><p>Apply <code class="docutils literal notranslate"><span class="pre">'dropout'</span></code> <code class="docutils literal notranslate"><span class="pre">Rng(Keys|Counts)</span></code> on the <code class="docutils literal notranslate"><span class="pre">0</span></code>th axis; and</p></li>
+<li><p>Broadcast the rest.</p></li>
+</ol>
+<p>To do this, you can use the following <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s to define a <code class="docutils literal notranslate"><span class="pre">nnx.StateAxes</span></code> object that you can pass to <code class="docutils literal notranslate"><span class="pre">nnx.vmap</span></code>’s <code class="docutils literal notranslate"><span class="pre">in_axes</span></code> to specify how the <code class="docutils literal notranslate"><span class="pre">model</span></code>’s various sub-states should be vectorized:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">state_axes</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">StateAxes</span><span class="p">({(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">,</span> <span class="s1">&#39;dropout&#39;</span><span class="p">):</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
+
+<span class="nd">@nnx</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="n">state_axes</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">(nnx.Param,</span> <span class="pre">'dropout')</span></code> expands to <code class="docutils literal notranslate"><span class="pre">Any(OfType(nnx.Param),</span> <span class="pre">WithTag('dropout'))</span></code> and <code class="docutils literal notranslate"><span class="pre">...</span></code> expands to <code class="docutils literal notranslate"><span class="pre">Everything()</span></code>.</p>
+<p>If you wish to manually convert literal into a predicate, you can use <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/filterlib.html#flax.nnx.filterlib.to_predicate"><code class="docutils literal notranslate"><span class="pre">nnx.filterlib.to_predicate</span></code></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">is_param</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">filterlib</span><span class="o">.</span><span class="n">to_predicate</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">)</span>
+<span class="n">everything</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">filterlib</span><span class="o">.</span><span class="n">to_predicate</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">nothing</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">filterlib</span><span class="o">.</span><span class="n">to_predicate</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">params_or_dropout</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">filterlib</span><span class="o">.</span><span class="n">to_predicate</span><span class="p">((</span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">,</span> <span class="s1">&#39;dropout&#39;</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">is_param</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">everything</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">nothing</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">params_or_dropout</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>is_param = OfType(&lt;class &#39;flax.nnx.variablelib.Param&#39;&gt;)
+everything = Everything()
+nothing = Nothing()
+params_or_dropout = Any(OfType(&lt;class &#39;flax.nnx.variablelib.Param&#39;&gt;), WithTag(&#39;dropout&#39;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="grouping-states">
+<h2>Grouping <code class="docutils literal notranslate"><span class="pre">State</span></code>s<a class="headerlink" href="#grouping-states" title="Permalink to this heading">#</a></h2>
+<p>With the knowledge of <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s from previous sections at hand, let’s learn how to roughly implement <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/graph.html#flax.nnx.split"><code class="docutils literal notranslate"><span class="pre">nnx.split</span></code></a>. Here are the key ideas:</p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">nnx.graph.flatten</span></code> to get the <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/graph.html#flax.nnx.GraphDef"><code class="docutils literal notranslate"><span class="pre">GraphDef</span></code></a> and <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/state.html#flax.nnx.State"><code class="docutils literal notranslate"><span class="pre">nnx.State</span></code></a> representation of the node.</p></li>
+<li><p>Convert all the <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s to predicates.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">State.flat_state</span></code> to get the flat representation of the state.</p></li>
+<li><p>Traverse all the <code class="docutils literal notranslate"><span class="pre">(path,</span> <span class="pre">value)</span></code> pairs in the flat state and group them according to the predicates.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">State.from_flat_state</span></code> to convert the flat states to nested <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/state.html#flax.nnx.State"><code class="docutils literal notranslate"><span class="pre">nnx.State</span></code></a>s.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="n">KeyPath</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">nnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">Key</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">split</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">*</span><span class="n">filters</span><span class="p">):</span>
+  <span class="n">graphdef</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+  <span class="n">predicates</span> <span class="o">=</span> <span class="p">[</span><span class="n">nnx</span><span class="o">.</span><span class="n">filterlib</span><span class="o">.</span><span class="n">to_predicate</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">]</span>
+  <span class="n">flat_states</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="n">KeyPath</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[{}</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">predicates</span><span class="p">]</span>
+
+  <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">state</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">predicate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">predicates</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">predicate</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">flat_states</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No filter matched </span><span class="si">{</span><span class="n">path</span><span class="w"> </span><span class="si">= }</span><span class="s1"> </span><span class="si">{</span><span class="n">value</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+
+  <span class="n">states</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">nnx</span><span class="o">.</span><span class="n">GraphState</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+    <span class="n">nnx</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">from_flat_path</span><span class="p">(</span><span class="n">flat_state</span><span class="p">)</span> <span class="k">for</span> <span class="n">flat_state</span> <span class="ow">in</span> <span class="n">flat_states</span>
+  <span class="p">)</span>
+  <span class="k">return</span> <span class="n">graphdef</span><span class="p">,</span> <span class="o">*</span><span class="n">states</span>
+
+<span class="c1"># Let&#39;s test it.</span>
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+
+<span class="n">graphdef</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">batch_stats</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">BatchStat</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">params</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">batch_stats</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>params = State({
+  &#39;a&#39;: Param(
+    value=0
+  )
+})
+batch_stats = State({
+  &#39;b&#39;: BatchStat(
+    value=True
+  )
+})
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Note:</strong>* It’s very important to know that <strong>filtering is order-dependent</strong>. The first <code class="docutils literal notranslate"><span class="pre">Filter</span></code> that matches a value will keep it, and therefore you should place more specific <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s before more general <code class="docutils literal notranslate"><span class="pre">Filter</span></code>s.</p>
+<p>For example, as demonstrated below, if you:</p>
+<ol class="arabic simple">
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">SpecialParam</span></code> type that is a subclass of <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.Param"><code class="docutils literal notranslate"><span class="pre">nnx.Param</span></code></a>, and a <code class="docutils literal notranslate"><span class="pre">Bar</span></code> object (subclassing <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/module.html"><code class="docutils literal notranslate"><span class="pre">nnx.Module</span></code></a>) that contains both types of parameters; and</p></li>
+<li><p>Try to split the <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.Param"><code class="docutils literal notranslate"><span class="pre">nnx.Param</span></code></a>s before the <code class="docutils literal notranslate"><span class="pre">SpecialParam</span></code>s</p></li>
+</ol>
+<p>then all the values will be placed in the <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.Param"><code class="docutils literal notranslate"><span class="pre">nnx.Param</span></code></a> group, and the <code class="docutils literal notranslate"><span class="pre">SpecialParam</span></code> group will be empty because all <code class="docutils literal notranslate"><span class="pre">SpecialParam</span></code>s are also <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.nnx/variables.html#flax.nnx.Param"><code class="docutils literal notranslate"><span class="pre">nnx.Param</span></code></a>s:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SpecialParam</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">):</span>
+  <span class="k">pass</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Bar</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">SpecialParam</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">bar</span> <span class="o">=</span> <span class="n">Bar</span><span class="p">()</span>
+
+<span class="n">graphdef</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">special_params</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">bar</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">,</span> <span class="n">SpecialParam</span><span class="p">)</span> <span class="c1"># wrong!</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">params</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">special_params</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>params = State({
+  &#39;a&#39;: Param(
+    value=0
+  ),
+  &#39;b&#39;: SpecialParam(
+    value=0
+  )
+})
+special_params = State({})
+</pre></div>
+</div>
+</div>
+</div>
+<p>And reversing the order will ensure that the <code class="docutils literal notranslate"><span class="pre">SpecialParam</span></code> are captured first:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">graphdef</span><span class="p">,</span> <span class="n">special_params</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">bar</span><span class="p">,</span> <span class="n">SpecialParam</span><span class="p">,</span> <span class="n">nnx</span><span class="o">.</span><span class="n">Param</span><span class="p">)</span> <span class="c1"># correct!</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">params</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">special_params</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>params = State({
+  &#39;a&#39;: Param(
+    value=0
+  )
+})
+special_params = State({
+  &#39;b&#39;: SpecialParam(
+    value=0
+  )
+})
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="view.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Model Views</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="randomness.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Randomness</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-filter-protocol">The <code class="docutils literal notranslate"><span class="pre">Filter</span></code> Protocol</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-filter-dsl">The <code class="docutils literal notranslate"><span class="pre">Filter</span></code> DSL</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grouping-states">Grouping <code class="docutils literal notranslate"><span class="pre">State</span></code>s</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1477 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Save and load checkpoints</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/training_techniques/use_checkpointing';</script>
+    <link rel="icon" href="../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Parallel training" href="../parallel_training/index.html" />
+    <link rel="prev" title="Transfer learning" href="transfer_learning.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax-linen" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/guides/training_techniques/use_checkpointing.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax.readthedocs.io/en/latest/index.html"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the old Flax Linen API. <span style="color: lightgray;">[Explore the new <b>Flax NNX</b> API ✨]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flax_fundamentals/flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../flax_fundamentals/index.html">Flax fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/index.html">JAX 101</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/flax_basics.html">Flax Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/state_params.html">Managing Parameters and State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/setup_or_nncompact.html"><code class="docutils literal notranslate"><span class="pre">setup</span></code> vs <code class="docutils literal notranslate"><span class="pre">compact</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/arguments.html">Dealing with Flax Module arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../flax_fundamentals/rng_guide.html">Randomness and PRNGs in Flax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../data_preprocessing/index.html">Data preprocessing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/full_eval.html">Processing the entire Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data_preprocessing/loading_datasets.html">Loading datasets</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">Training techniques</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="batch_norm.html">Batch normalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dropout.html">Dropout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="lr_schedule.html">Learning rate scheduling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transfer_learning.html">Transfer learning</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Save and load checkpoints</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../parallel_training/index.html">Parallel training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/ensembling.html">Ensembling on multiple devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../parallel_training/flax_on_pjit.html">Scale up Flax Modules on multiple devices</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../model_inspection/index.html">Model inspection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/model_surgery.html">Model surgery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_inspection/extracting_intermediates.html">Extracting intermediate values</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../converting_and_upgrading/index.html">Converting and upgrading</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/haiku_migration_guide.html">Migrating from Haiku to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/convert_pytorch_to_flax.html">Convert PyTorch models to Flax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/orbax_upgrade_guide.html">Migrate checkpointing to Orbax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/optax_update_guide.html">Upgrading my codebase to Optax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/linen_upgrade_guide.html">Upgrading my codebase to Linen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/rnncell_upgrade_guide.html">RNNCellBase Upgrade Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../converting_and_upgrading/regular_dict_upgrade_guide.html">Migrate to regular dicts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../quantization/index.html">Quantization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quantization/fp8_basics.html">User Guide on Using FP8</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../flax_sharp_bits.html">The Sharp Bits</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/core_examples.html">Core examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/google_research_examples.html">Google Research examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/repositories_that_use_flax.html">Repositories that use Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/community_examples.html">Community examples</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../developer_notes/index.html">Developer notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/module_lifecycle.html">The Flax Module lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developer_notes/lift.html">Lifted transformations</a></li>
+<li class="toctree-l2"><a class="reference external" href="https://github.com/google/flax/tree/main/docs/flip">FLIPs</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.cursor.html">flax.cursor package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.errors.html">flax.errors package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.jax_utils.html">flax.jax_utils package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api_reference/flax.linen/index.html">flax.linen</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/module.html">Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/init_apply.html">Init/Apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/layers.html">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/activation_functions.html">Activation functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/initializers.html">Initializers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/transformations.html">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/inspection.html">Inspection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/variable.html">Variable dictionary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/spmd.html">SPMD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/decorators.html">Decorators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/flax.linen/profiling.html">Profiling</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.serialization.html">flax.serialization package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.traceback_util.html">flax.traceback_util package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://flax.readthedocs.io/en/latest/index.html">Flax NNX</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/google/flax/blob/master/docs/guides/training_techniques/use_checkpointing.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/guides/training_techniques/use_checkpointing.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Save and load checkpoints</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-checkpoints">Save checkpoints</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-orbax">With Orbax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-the-legacy-api">With the legacy API</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-checkpoints">Restore checkpoints</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">With Orbax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">With the legacy API</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-with-custom-dataclasses">Restore with custom dataclasses</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">With Orbax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">With the legacy API</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-when-checkpoint-structures-differ">Restore when checkpoint structures differ</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-1-when-a-reference-object-is-partial">Scenario 1: When a reference object is partial</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-2-when-a-checkpoint-is-partial">Scenario 2: When a checkpoint is partial</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">With Orbax</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">With the legacy API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#asynchronized-checkpointing">Asynchronized checkpointing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-host-multi-process-checkpointing">Multi-host/multi-process checkpointing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">With Orbax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-the-legacy-flax-use-save-checkpoint-multiprocess">With the legacy Flax: use <code class="docutils literal notranslate"><span class="pre">save_checkpoint_multiprocess</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax-as-backend-troubleshooting">Orbax-as-backend troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#if-your-devices-hang-when-writing-checkpoints">If your devices hang when writing checkpoints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-don-t-save-pytrees">If you don’t save pytrees</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="save-and-load-checkpoints">
+<h1>Save and load checkpoints<a class="headerlink" href="#save-and-load-checkpoints" title="Permalink to this heading">#</a></h1>
+<p>This guide demonstrates how to save and load Flax checkpoints with <a class="reference external" href="https://github.com/google/orbax">Orbax</a>.</p>
+<p>Orbax provides a variety of features for saving and loading model data, which you will learn about in this doc:</p>
+<ul class="simple">
+<li><p>Support for various array types and storage formats</p></li>
+<li><p>Asynchronous saving to reduce training wait time</p></li>
+<li><p>Versioning and automatic bookkeeping of past checkpoints</p></li>
+<li><p>Flexible <a class="reference external" href="https://orbax.readthedocs.io/en/latest/transformations.html"><code class="docutils literal notranslate"><span class="pre">transformations</span></code></a> to tweak and load old checkpoints</p></li>
+<li><p><a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html"><code class="docutils literal notranslate"><span class="pre">jax.sharding</span></code></a>-based API to save and load in multi-host scenarios</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong><em>Ongoing migration to Orbax:</em></strong></p>
+<p>After July 30 2023, Flax’s legacy <code class="docutils literal notranslate"><span class="pre">flax.training.checkpoints</span></code> API will be deprecated in favor of <a class="reference external" href="https://github.com/google/orbax">Orbax</a>.</p>
+<ul class="simple">
+<li><p><strong>If you are a new Flax user</strong>: Use the new <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint</span></code> API, as demonstrated in this guide.</p></li>
+<li><p><strong>If you have legacy <code class="docutils literal notranslate"><span class="pre">flax.training.checkpoints</span></code> code in your project</strong>: Consider the following options:</p>
+<ul>
+<li><p><strong>Migrating your code to Orbax (Recommended)</strong>: Migrate your API calls to <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint</span></code> API by following this <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/converting_and_upgrading/orbax_upgrade_guide.html">migration guide</a>.</p></li>
+<li><p><strong>Automatically use the Orbax backend</strong>: Add <code class="docutils literal notranslate"><span class="pre">flax.config.update('flax_use_orbax_checkpointing',</span> <span class="pre">True)</span></code> to your project, which will let your <code class="docutils literal notranslate"><span class="pre">flax.training.checkpoints</span></code> calls automatically use the Orbax backend to save your checkpoints.</p>
+<ul>
+<li><p><strong>Scheduled flip</strong>: This will become the default mode after <strong>May 2023</strong> (tentative date).</p></li>
+<li><p>Visit <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting">Orbax-as-backend troubleshooting section</a> if you meet any issue in the automatic migration.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr class="docutils" />
+<p>For backward-compatibility, this guide shows the Orbax-equivalent calls in the Flax legacy <code class="docutils literal notranslate"><span class="pre">flax.training.checkpoints</span></code> API.</p>
+<p>If you need to learn more about <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint</span></code>, refer to the <a class="reference external" href="https://orbax.readthedocs.io/en/latest/">Orbax docs</a>.</p>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
+<p>Install/upgrade Flax and <a class="reference external" href="https://github.com/google/orbax">Orbax</a>. For JAX installation with GPU/TPU support, visit <a class="reference external" href="https://github.com/jax-ml/jax#installation">this section on GitHub</a>.</p>
+<p>Note: Before running <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">jax</span></code>, create eight fake devices to mimic a <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/06-parallelism.html?#aside-hosts-and-devices-in-jax">multi-host environment</a> in this notebook. Note that the order of imports is important here. The <code class="docutils literal notranslate"><span class="pre">os.environ[&quot;XLA_FLAGS&quot;]</span> <span class="pre">=</span> <span class="pre">'--xla_force_host_platform_device_count=8'</span></code> command works only with the CPU backend, which means it won’t work with GPU/TPU acceleration on if you’re running this notebook in Google Colab. If you are already running the code on multiple devices (for example, in a 4x2 TPU environment), you can skip running the next cell.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;XLA_FLAGS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;--xla_force_host_platform_device_count=8&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span><span class="p">,</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">flax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">linen</span> <span class="k">as</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">checkpoints</span><span class="p">,</span> <span class="n">train_state</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">struct</span><span class="p">,</span> <span class="n">serialization</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">orbax.checkpoint</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:Tensorflow library not found, tensorflow.io.gfile operations will use native shim calls. GCS paths (i.e. &#39;gs://...&#39;) cannot be accessed.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ckpt_dir</span> <span class="o">=</span> <span class="s1">&#39;/tmp/flax_ckpt&#39;</span>
+
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ckpt_dir</span><span class="p">):</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">ckpt_dir</span><span class="p">)</span>  <span class="c1"># Remove any existing checkpoints from the last notebook run.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="save-checkpoints">
+<h2>Save checkpoints<a class="headerlink" href="#save-checkpoints" title="Permalink to this heading">#</a></h2>
+<p>In Orbax and Flax, you can save and load any given JAX <a class="reference external" href="https://jax.readthedocs.io/en/latest/pytrees.html">pytree</a>. This includes not only typical Python and NumPy containers, but also customized classes extended from <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.struct.html#flax.struct.dataclass"><code class="docutils literal notranslate"><span class="pre">flax.struct.dataclass</span></code></a>. That means you can store almost any data generated — not only your model parameters, but any arrays/dictionaries, metadata/configs, and so on.</p>
+<p>First, create a pytree with many data structures and containers, and play with it:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A simple model with one linear layer.</span>
+<span class="n">key1</span><span class="p">,</span> <span class="n">key2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">key</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,))</span>      <span class="c1"># A simple JAX array.</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">key2</span><span class="p">,</span> <span class="n">x1</span><span class="p">)</span>
+
+<span class="c1"># Flax&#39;s TrainState is a pytree dataclass and is supported in checkpointing.</span>
+<span class="c1"># Define your class with `@flax.struct.dataclass` decorator to make it compatible.</span>
+<span class="n">tx</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">sgd</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>      <span class="c1"># An Optax SGD optimizer.</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">train_state</span><span class="o">.</span><span class="n">TrainState</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">apply_fn</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">],</span>
+    <span class="n">tx</span><span class="o">=</span><span class="n">tx</span><span class="p">)</span>
+<span class="c1"># Perform a simple gradient update similar to the one during a normal training workflow.</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span><span class="n">grads</span><span class="o">=</span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">ones_like</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="p">))</span>
+
+<span class="c1"># Some arbitrary nested pytree with a dictionary and a NumPy array.</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">])}</span>
+
+<span class="c1"># Bundle everything together.</span>
+<span class="n">ckpt</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x1</span><span class="p">]}</span>
+<span class="n">ckpt</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1695322343.254588       1 tfrt_cpu_pjrt_client.cc:349] TfrtCpuClient created.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;model&#39;: TrainState(step=1, apply_fn=&lt;bound method Module.apply of Dense(
+     # attributes
+     features = 3
+     use_bias = True
+     dtype = None
+     param_dtype = float32
+     precision = None
+     kernel_init = init
+     bias_init = zeros
+     dot_general = dot_general
+     dot_general_cls = None
+ )&gt;, params={&#39;bias&#39;: Array([-0.001, -0.001, -0.001], dtype=float32), &#39;kernel&#39;: Array([[ 0.26048955, -0.61399287, -0.23458514],
+        [ 0.11050402, -0.8765793 ,  0.9800635 ],
+        [ 0.36260957,  0.18276349, -0.6856061 ],
+        [-0.8519373 , -0.6416717 , -0.4818122 ],
+        [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)}, tx=GradientTransformationExtraArgs(init=&lt;function chain.&lt;locals&gt;.init_fn at 0x13d5d83a0&gt;, update=&lt;function chain.&lt;locals&gt;.update_fn at 0x13d5d8dc0&gt;), opt_state=(EmptyState(), EmptyState())),
+ &#39;config&#39;: {&#39;dimensions&#39;: array([5, 3])},
+ &#39;data&#39;: [Array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],      dtype=float32)]}
+</pre></div>
+</div>
+</div>
+</div>
+<section id="with-orbax">
+<h3>With Orbax<a class="headerlink" href="#with-orbax" title="Permalink to this heading">#</a></h3>
+<p>Save the checkpoint with <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.PyTreeCheckpointer</span></code>, directly to the <code class="docutils literal notranslate"><span class="pre">tmp/orbax/single_save</span></code> directory.</p>
+<p>Note: An optional <code class="docutils literal notranslate"><span class="pre">save_args</span></code> is provided. This is recommended for performance speedups, as it bundles smaller arrays in your pytree to a single large file instead of multiple smaller files.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flax.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">orbax_utils</span>
+
+<span class="n">orbax_checkpointer</span> <span class="o">=</span> <span class="n">orbax</span><span class="o">.</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">PyTreeCheckpointer</span><span class="p">()</span>
+<span class="n">save_args</span> <span class="o">=</span> <span class="n">orbax_utils</span><span class="o">.</span><span class="n">save_args_from_target</span><span class="p">(</span><span class="n">ckpt</span><span class="p">)</span>
+<span class="n">orbax_checkpointer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;/tmp/flax_ckpt/orbax/single_save&#39;</span><span class="p">,</span> <span class="n">ckpt</span><span class="p">,</span> <span class="n">save_args</span><span class="o">=</span><span class="n">save_args</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, to use versioning and automatic bookkeeping features, you need to wrap <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.CheckpointManager</span></code> over <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.PyTreeCheckpointer</span></code>.</p>
+<p>In addition, provide <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.CheckpointManagerOptions</span></code> that customizes your needs, such as how often and on what criteria you prefer old checkpoints be deleted. See <a class="reference external" href="https://orbax.readthedocs.io/en/latest/guides/checkpoint/api_refactor.html">documentation</a> for a full list of options offered.</p>
+<p><code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.CheckpointManager</span></code> should be placed at the top-level outside your training steps to manage your saves.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">options</span> <span class="o">=</span> <span class="n">orbax</span><span class="o">.</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">CheckpointManagerOptions</span><span class="p">(</span><span class="n">max_to_keep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">checkpoint_manager</span> <span class="o">=</span> <span class="n">orbax</span><span class="o">.</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">CheckpointManager</span><span class="p">(</span>
+    <span class="s1">&#39;/tmp/flax_ckpt/orbax/managed&#39;</span><span class="p">,</span> <span class="n">orbax_checkpointer</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+<span class="c1"># Inside a training loop</span>
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="c1"># ... do your training</span>
+    <span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">ckpt</span><span class="p">,</span> <span class="n">save_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;save_args&#39;</span><span class="p">:</span> <span class="n">save_args</span><span class="p">})</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;/tmp/flax_ckpt/orbax/managed&#39;</span><span class="p">)</span>  <span class="c1"># Because max_to_keep=2, only step 3 and 4 are retained</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;4&#39;, &#39;3&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="with-the-legacy-api">
+<h3>With the legacy API<a class="headerlink" href="#with-the-legacy-api" title="Permalink to this heading">#</a></h3>
+<p>And here’s how to save with the legacy Flax checkpointing utilities (note that this provides less management features compared with <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.CheckpointManagerOptions</span></code>):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import Flax Checkpoints.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.training</span><span class="w"> </span><span class="kn">import</span> <span class="n">checkpoints</span>
+
+<span class="n">checkpoints</span><span class="o">.</span><span class="n">save_checkpoint</span><span class="p">(</span><span class="n">ckpt_dir</span><span class="o">=</span><span class="s1">&#39;/tmp/flax_ckpt/flax-checkpointing&#39;</span><span class="p">,</span>
+                            <span class="n">target</span><span class="o">=</span><span class="n">ckpt</span><span class="p">,</span>
+                            <span class="n">step</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">keep</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;/tmp/flax_ckpt/flax-checkpointing/checkpoint_0&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="restore-checkpoints">
+<h2>Restore checkpoints<a class="headerlink" href="#restore-checkpoints" title="Permalink to this heading">#</a></h2>
+<section id="id1">
+<h3>With Orbax<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p>In Orbax, call <code class="docutils literal notranslate"><span class="pre">.restore()</span></code> for either <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.PyTreeCheckpointer</span></code> or <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.CheckpointManager</span></code> to restore your checkpoint in the raw pytree format.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_restored</span> <span class="o">=</span> <span class="n">orbax_checkpointer</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="s1">&#39;/tmp/flax_ckpt/orbax/single_save&#39;</span><span class="p">)</span>
+<span class="n">raw_restored</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;config&#39;: {&#39;dimensions&#39;: array([5, 3])},
+ &#39;data&#39;: [array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],
+        dtype=float32)],
+ &#39;model&#39;: {&#39;opt_state&#39;: [None, None],
+  &#39;params&#39;: {&#39;bias&#39;: array([-0.001, -0.001, -0.001], dtype=float32),
+   &#39;kernel&#39;: array([[ 0.26048955, -0.61399287, -0.23458514],
+          [ 0.11050402, -0.8765793 ,  0.9800635 ],
+          [ 0.36260957,  0.18276349, -0.6856061 ],
+          [-0.8519373 , -0.6416717 , -0.4818122 ],
+          [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)},
+  &#39;step&#39;: 1}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">step</span></code> number is required for <code class="docutils literal notranslate"><span class="pre">CheckpointManger</span></code>. You can also use <code class="docutils literal notranslate"><span class="pre">.latest_step()</span></code> to find the latest step available.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">step</span> <span class="o">=</span> <span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">latest_step</span><span class="p">()</span>  <span class="c1"># step = 4</span>
+<span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;config&#39;: {&#39;dimensions&#39;: array([5, 3])},
+ &#39;data&#39;: [array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],
+        dtype=float32)],
+ &#39;model&#39;: {&#39;opt_state&#39;: [None, None],
+  &#39;params&#39;: {&#39;bias&#39;: array([-0.001, -0.001, -0.001], dtype=float32),
+   &#39;kernel&#39;: array([[ 0.26048955, -0.61399287, -0.23458514],
+          [ 0.11050402, -0.8765793 ,  0.9800635 ],
+          [ 0.36260957,  0.18276349, -0.6856061 ],
+          [-0.8519373 , -0.6416717 , -0.4818122 ],
+          [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)},
+  &#39;step&#39;: 1}}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id2">
+<h3>With the legacy API<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<p>Note that with the migration to Orbax in progress, <code class="docutils literal notranslate"><span class="pre">flax.training.checkpointing.restore_checkpoint</span></code> can automatically identify whether a checkpoint is saved in the legacy Flax format or with an Orbax backend, and restore the pytree correctly. Therefore, adding <code class="docutils literal notranslate"><span class="pre">flax.config.update('flax_use_orbax_checkpointing',</span> <span class="pre">True)</span></code> won’t hurt your ability to restore old checkpoints.</p>
+<p>Here’s how to restore checkpoints using the legacy API:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_restored</span> <span class="o">=</span> <span class="n">checkpoints</span><span class="o">.</span><span class="n">restore_checkpoint</span><span class="p">(</span><span class="n">ckpt_dir</span><span class="o">=</span><span class="s1">&#39;/tmp/flax_ckpt/flax-checkpointing&#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">raw_restored</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;config&#39;: {&#39;dimensions&#39;: array([5, 3])},
+ &#39;data&#39;: {&#39;0&#39;: array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],
+        dtype=float32)},
+ &#39;model&#39;: {&#39;opt_state&#39;: {&#39;0&#39;: None, &#39;1&#39;: None},
+  &#39;params&#39;: {&#39;bias&#39;: array([-0.001, -0.001, -0.001], dtype=float32),
+   &#39;kernel&#39;: array([[ 0.26048955, -0.61399287, -0.23458514],
+          [ 0.11050402, -0.8765793 ,  0.9800635 ],
+          [ 0.36260957,  0.18276349, -0.6856061 ],
+          [-0.8519373 , -0.6416717 , -0.4818122 ],
+          [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)},
+  &#39;step&#39;: 1}}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="restore-with-custom-dataclasses">
+<h2>Restore with custom dataclasses<a class="headerlink" href="#restore-with-custom-dataclasses" title="Permalink to this heading">#</a></h2>
+<section id="id3">
+<h3>With Orbax<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The pytrees restored in the previous examples are in the form of raw dictionaries. Original pytrees contain custom dataclasses like <a class="reference external" href="https://flax.readthedocs.io/en/latest/flip/1009-optimizer-api.html?#train-state"><code class="docutils literal notranslate"><span class="pre">TrainState</span></code></a> and <code class="docutils literal notranslate"><span class="pre">optax</span></code> states.</p></li>
+<li><p>This is because when restoring a pytree, the program does not yet know which structure it once belonged to.</p></li>
+<li><p>To resolve this, you should first provide an example pytree to let Orbax or Flax know exactly which structure to restore to.</p></li>
+</ul>
+<p>This section demonstrates how to set up any custom Flax dataclass explicitly, and have the same structure as a saved checkpoint.</p>
+<p>Note: Data that was a JAX NumPy array (<code class="docutils literal notranslate"><span class="pre">jnp.array</span></code>) format will be restored as a NumPy array (<code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>). This would not affect your work because JAX will <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax-101/01-jax-basics.html">automatically convert</a> NumPy arrays to JAX arrays once the computation starts.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">empty_state</span> <span class="o">=</span> <span class="n">train_state</span><span class="o">.</span><span class="n">TrainState</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">apply_fn</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">,</span> <span class="n">variables</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]),</span>  <span class="c1"># values of the tree leaf doesn&#39;t matter</span>
+    <span class="n">tx</span><span class="o">=</span><span class="n">tx</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">empty_config</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])}</span>
+<span class="n">target</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">empty_state</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">:</span> <span class="n">empty_config</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x1</span><span class="p">)]}</span>
+<span class="n">state_restored</span> <span class="o">=</span> <span class="n">orbax_checkpointer</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="s1">&#39;/tmp/flax_ckpt/orbax/single_save&#39;</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+<span class="n">state_restored</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;config&#39;: {&#39;dimensions&#39;: array([5, 3])},
+ &#39;data&#39;: [array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],
+        dtype=float32)],
+ &#39;model&#39;: TrainState(step=1, apply_fn=&lt;bound method Module.apply of Dense(
+     # attributes
+     features = 3
+     use_bias = True
+     dtype = None
+     param_dtype = float32
+     precision = None
+     kernel_init = init
+     bias_init = zeros
+     dot_general = dot_general
+     dot_general_cls = None
+ )&gt;, params={&#39;bias&#39;: array([-0.001, -0.001, -0.001], dtype=float32), &#39;kernel&#39;: array([[ 0.26048955, -0.61399287, -0.23458514],
+        [ 0.11050402, -0.8765793 ,  0.9800635 ],
+        [ 0.36260957,  0.18276349, -0.6856061 ],
+        [-0.8519373 , -0.6416717 , -0.4818122 ],
+        [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)}, tx=GradientTransformationExtraArgs(init=&lt;function chain.&lt;locals&gt;.init_fn at 0x13d5d83a0&gt;, update=&lt;function chain.&lt;locals&gt;.update_fn at 0x13d5d8dc0&gt;), opt_state=(EmptyState(), EmptyState()))}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id4">
+<h3>With the legacy API<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<p>Alternatively, you can restore from Orbax <code class="docutils literal notranslate"><span class="pre">CheckpointManager</span></code> and from the legacy Flax code as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;config&#39;: {&#39;dimensions&#39;: array([5, 3])},
+ &#39;data&#39;: [array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],
+        dtype=float32)],
+ &#39;model&#39;: TrainState(step=1, apply_fn=&lt;bound method Module.apply of Dense(
+     # attributes
+     features = 3
+     use_bias = True
+     dtype = None
+     param_dtype = float32
+     precision = None
+     kernel_init = init
+     bias_init = zeros
+     dot_general = dot_general
+     dot_general_cls = None
+ )&gt;, params={&#39;bias&#39;: array([-0.001, -0.001, -0.001], dtype=float32), &#39;kernel&#39;: array([[ 0.26048955, -0.61399287, -0.23458514],
+        [ 0.11050402, -0.8765793 ,  0.9800635 ],
+        [ 0.36260957,  0.18276349, -0.6856061 ],
+        [-0.8519373 , -0.6416717 , -0.4818122 ],
+        [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)}, tx=GradientTransformationExtraArgs(init=&lt;function chain.&lt;locals&gt;.init_fn at 0x13d5d83a0&gt;, update=&lt;function chain.&lt;locals&gt;.update_fn at 0x13d5d8dc0&gt;), opt_state=(EmptyState(), EmptyState()))}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">checkpoints</span><span class="o">.</span><span class="n">restore_checkpoint</span><span class="p">(</span><span class="n">ckpt_dir</span><span class="o">=</span><span class="s1">&#39;/tmp/flax_ckpt/flax-checkpointing&#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:The transformations API will eventually be replaced by an upgraded design. The current API will not be removed until this point, but it will no longer be actively worked on.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;model&#39;: TrainState(step=1, apply_fn=&lt;bound method Module.apply of Dense(
+     # attributes
+     features = 3
+     use_bias = True
+     dtype = None
+     param_dtype = float32
+     precision = None
+     kernel_init = init
+     bias_init = zeros
+     dot_general = dot_general
+     dot_general_cls = None
+ )&gt;, params={&#39;bias&#39;: array([-0.001, -0.001, -0.001], dtype=float32), &#39;kernel&#39;: array([[ 0.26048955, -0.61399287, -0.23458514],
+        [ 0.11050402, -0.8765793 ,  0.9800635 ],
+        [ 0.36260957,  0.18276349, -0.6856061 ],
+        [-0.8519373 , -0.6416717 , -0.4818122 ],
+        [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)}, tx=GradientTransformationExtraArgs(init=&lt;function chain.&lt;locals&gt;.init_fn at 0x13d5d83a0&gt;, update=&lt;function chain.&lt;locals&gt;.update_fn at 0x13d5d8dc0&gt;), opt_state=(EmptyState(), EmptyState())),
+ &#39;config&#39;: {&#39;dimensions&#39;: array([5, 3])},
+ &#39;data&#39;: [Array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],      dtype=float32)]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>It’s often recommended to refactor out the process of initializing a checkpoint’s structure (for example, a <a class="reference external" href="https://flax.readthedocs.io/en/latest/flip/1009-optimizer-api.html?#train-state"><code class="docutils literal notranslate"><span class="pre">TrainState</span></code></a>), so that saving/loading is easier and less error-prone. This is because functions and complex objects like <code class="docutils literal notranslate"><span class="pre">apply_fn</span></code> and <code class="docutils literal notranslate"><span class="pre">tx</span></code> (optimizer) cannot be serialized into the checkpoint file and must be initialized by code.</p>
+</section>
+</section>
+<section id="restore-when-checkpoint-structures-differ">
+<h2>Restore when checkpoint structures differ<a class="headerlink" href="#restore-when-checkpoint-structures-differ" title="Permalink to this heading">#</a></h2>
+<p>During your development, your checkpoint structure will change when changing the model, adding/removing fields during tweaking, and so on.</p>
+<p>This section explains how to load old data to your new code.</p>
+<p>Below is  a simple example — a <code class="docutils literal notranslate"><span class="pre">CustomTrainState</span></code> extended from <code class="docutils literal notranslate"><span class="pre">flax.training.train_state.TrainState</span></code> that contains an extra field called <code class="docutils literal notranslate"><span class="pre">batch_stats</span></code>. When working on a real-world model, you may need this when applying <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/training_techniques/batch_norm.html">batch normalization</a>.</p>
+<p>Here, you store the new <code class="docutils literal notranslate"><span class="pre">CustomTrainState</span></code> as step 5, while step 4 contains the old/previous <code class="docutils literal notranslate"><span class="pre">TrainState</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CustomTrainState</span><span class="p">(</span><span class="n">train_state</span><span class="o">.</span><span class="n">TrainState</span><span class="p">):</span>
+    <span class="n">batch_stats</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">custom_state</span> <span class="o">=</span> <span class="n">CustomTrainState</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">apply_fn</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">apply_fn</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
+    <span class="n">tx</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">tx</span><span class="p">,</span>
+    <span class="n">batch_stats</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">custom_ckpt</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">custom_state</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x1</span><span class="p">]}</span>
+<span class="c1"># Use a custom state to read the old `TrainState` checkpoint.</span>
+<span class="n">custom_target</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">custom_state</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x1</span><span class="p">)]}</span>
+
+<span class="c1"># Save it in Orbax.</span>
+<span class="n">custom_save_args</span> <span class="o">=</span> <span class="n">orbax_utils</span><span class="o">.</span><span class="n">save_args_from_target</span><span class="p">(</span><span class="n">custom_ckpt</span><span class="p">)</span>
+<span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">custom_ckpt</span><span class="p">,</span> <span class="n">save_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;save_args&#39;</span><span class="p">:</span> <span class="n">custom_save_args</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is recommended to keep your checkpoints up-to-date with your pytree dataclass definitions. However, you might be forced to restore the checkpoints with incompatible reference objects at runtime. When this happens, the checkpoint restoration will try to respect the structure of the reference when given.</p>
+<p>Below are examples of a few common scenarios.</p>
+<section id="scenario-1-when-a-reference-object-is-partial">
+<h3>Scenario 1: When a reference object is partial<a class="headerlink" href="#scenario-1-when-a-reference-object-is-partial" title="Permalink to this heading">#</a></h3>
+<p>If your reference object is a subtree of your checkpoint, the restoration will ignore the additional field(s) and restore a checkpoint with the same structure as the reference.</p>
+<p>Like in the example below, the <code class="docutils literal notranslate"><span class="pre">batch_stats</span></code> field in <code class="docutils literal notranslate"><span class="pre">CustomTrainState</span></code> was ignored, and the checkpoint was restored as a <code class="docutils literal notranslate"><span class="pre">TrainState</span></code>.</p>
+<p>This can also be useful for reading only part of your checkpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">restored</span> <span class="o">=</span> <span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+<span class="k">assert</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">restored</span><span class="p">,</span> <span class="s1">&#39;batch_stats&#39;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">restored</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="n">train_state</span><span class="o">.</span><span class="n">TrainState</span>
+<span class="n">restored</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;config&#39;: {&#39;dimensions&#39;: array([5, 3])},
+ &#39;data&#39;: [array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],
+        dtype=float32)],
+ &#39;model&#39;: TrainState(step=0, apply_fn=&lt;bound method Module.apply of Dense(
+     # attributes
+     features = 3
+     use_bias = True
+     dtype = None
+     param_dtype = float32
+     precision = None
+     kernel_init = init
+     bias_init = zeros
+     dot_general = dot_general
+     dot_general_cls = None
+ )&gt;, params={&#39;bias&#39;: array([-0.001, -0.001, -0.001], dtype=float32), &#39;kernel&#39;: array([[ 0.26048955, -0.61399287, -0.23458514],
+        [ 0.11050402, -0.8765793 ,  0.9800635 ],
+        [ 0.36260957,  0.18276349, -0.6856061 ],
+        [-0.8519373 , -0.6416717 , -0.4818122 ],
+        [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)}, tx=GradientTransformationExtraArgs(init=&lt;function chain.&lt;locals&gt;.init_fn at 0x13d5d83a0&gt;, update=&lt;function chain.&lt;locals&gt;.update_fn at 0x13d5d8dc0&gt;), opt_state=(EmptyState(), EmptyState()))}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="scenario-2-when-a-checkpoint-is-partial">
+<h3>Scenario 2: When a checkpoint is partial<a class="headerlink" href="#scenario-2-when-a-checkpoint-is-partial" title="Permalink to this heading">#</a></h3>
+<p>On the other hand, if the reference object contains a value that is not available in the checkpoint, the checkpointing code will by default warn that some data is not compatible.</p>
+<p>To bypass the error, you need to pass an Orbax <a class="reference external" href="https://orbax.readthedocs.io/en/latest/guides/checkpoint/transformations.html"><code class="docutils literal notranslate"><span class="pre">transform</span></code></a> that teaches Orbax how to conform this checkpoint into the structure of the <code class="docutils literal notranslate"><span class="pre">custom_target</span></code>.</p>
+<p>In this case, pass a default <code class="docutils literal notranslate"><span class="pre">{}</span></code> that lets Orbax use values in the <code class="docutils literal notranslate"><span class="pre">custom_target</span></code> to fill in the blank. This allows you to restore an old checkpoint into a new data structure, the <code class="docutils literal notranslate"><span class="pre">CustomTrainState</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">custom_target</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;KeyError when target state has an unmentioned field: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="c1"># Step 4 is an original `TrainState`, without the `batch_stats`</span>
+<span class="n">custom_restore_args</span> <span class="o">=</span> <span class="n">orbax_utils</span><span class="o">.</span><span class="n">restore_args_from_target</span><span class="p">(</span><span class="n">custom_target</span><span class="p">)</span>
+<span class="n">restored</span> <span class="o">=</span> <span class="n">checkpoint_manager</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">custom_target</span><span class="p">,</span>
+                                      <span class="n">restore_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;transforms&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="s1">&#39;restore_args&#39;</span><span class="p">:</span> <span class="n">custom_restore_args</span><span class="p">})</span>
+<span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">restored</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="n">CustomTrainState</span>
+<span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">restored</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">batch_stats</span><span class="p">,</span>
+                        <span class="n">custom_target</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">batch_stats</span><span class="p">)</span>
+<span class="n">restored</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:The transformations API will eventually be replaced by an upgraded design. The current API will not be removed until this point, but it will no longer be actively worked on.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>KeyError when target state has an unmentioned field: &#39;batch_stats&#39;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;config&#39;: None,
+ &#39;data&#39;: [Array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],      dtype=float32)],
+ &#39;model&#39;: CustomTrainState(step=1, apply_fn=&lt;bound method Module.apply of Dense(
+     # attributes
+     features = 3
+     use_bias = True
+     dtype = None
+     param_dtype = float32
+     precision = None
+     kernel_init = init
+     bias_init = zeros
+     dot_general = dot_general
+     dot_general_cls = None
+ )&gt;, params={&#39;bias&#39;: Array([-0.001, -0.001, -0.001], dtype=float32), &#39;kernel&#39;: Array([[ 0.26048955, -0.61399287, -0.23458514],
+        [ 0.11050402, -0.8765793 ,  0.9800635 ],
+        [ 0.36260957,  0.18276349, -0.6856061 ],
+        [-0.8519373 , -0.6416717 , -0.4818122 ],
+        [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)}, tx=GradientTransformationExtraArgs(init=&lt;function chain.&lt;locals&gt;.init_fn at 0x13d5d83a0&gt;, update=&lt;function chain.&lt;locals&gt;.update_fn at 0x13d5d8dc0&gt;), opt_state=(EmptyState(), EmptyState()), batch_stats=array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))}
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id5">
+<h4>With Orbax<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h4>
+<p>If you have already saved your checkpoints with the Orbax backend, you can use <code class="docutils literal notranslate"><span class="pre">orbax_transforms</span></code> to access this <code class="docutils literal notranslate"><span class="pre">transforms</span></code> argument in the Flax API.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save in the &quot;Flax-with-Orbax&quot; backend.</span>
+<span class="n">flax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;flax_use_orbax_checkpointing&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">checkpoints</span><span class="o">.</span><span class="n">save_checkpoint</span><span class="p">(</span><span class="n">ckpt_dir</span><span class="o">=</span><span class="s1">&#39;/tmp/flax_ckpt/flax-checkpointing&#39;</span><span class="p">,</span>
+                            <span class="n">target</span><span class="o">=</span><span class="n">ckpt</span><span class="p">,</span>
+                            <span class="n">step</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                            <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">keep</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">checkpoints</span><span class="o">.</span><span class="n">restore_checkpoint</span><span class="p">(</span><span class="s1">&#39;/tmp/flax_ckpt/flax-checkpointing&#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">custom_target</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                               <span class="n">orbax_transforms</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:The transformations API will eventually be replaced by an upgraded design. The current API will not be removed until this point, but it will no longer be actively worked on.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;model&#39;: CustomTrainState(step=1, apply_fn=&lt;bound method Module.apply of Dense(
+     # attributes
+     features = 3
+     use_bias = True
+     dtype = None
+     param_dtype = float32
+     precision = None
+     kernel_init = init
+     bias_init = zeros
+     dot_general = dot_general
+     dot_general_cls = None
+ )&gt;, params={&#39;bias&#39;: Array([-0.001, -0.001, -0.001], dtype=float32), &#39;kernel&#39;: Array([[ 0.26048955, -0.61399287, -0.23458514],
+        [ 0.11050402, -0.8765793 ,  0.9800635 ],
+        [ 0.36260957,  0.18276349, -0.6856061 ],
+        [-0.8519373 , -0.6416717 , -0.4818122 ],
+        [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)}, tx=GradientTransformationExtraArgs(init=&lt;function chain.&lt;locals&gt;.init_fn at 0x13d5d83a0&gt;, update=&lt;function chain.&lt;locals&gt;.update_fn at 0x13d5d8dc0&gt;), opt_state=(EmptyState(), EmptyState()), batch_stats=array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])),
+ &#39;config&#39;: None,
+ &#39;data&#39;: [Array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],      dtype=float32)]}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id6">
+<h4>With the legacy API<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h4>
+<p>Using the legacy <code class="docutils literal notranslate"><span class="pre">flax.training.checkpoints</span></code> API, similar things are doable too, but they are not as flexible as the <a class="reference external" href="https://orbax.readthedocs.io/en/latest/guides/checkpoint/transformations.html">Orbax Transformations</a>.</p>
+<p>You need to restore the checkpoint to a raw dict with <code class="docutils literal notranslate"><span class="pre">target=None</span></code>, modify the structure accordingly, and then deserialize it back to the original target.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save using the legacy Flax `checkpoints` API.</span>
+<span class="n">flax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;flax_use_orbax_checkpointing&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">checkpoints</span><span class="o">.</span><span class="n">save_checkpoint</span><span class="p">(</span><span class="n">ckpt_dir</span><span class="o">=</span><span class="s1">&#39;/tmp/flax_ckpt/flax-checkpointing&#39;</span><span class="p">,</span>
+                            <span class="n">target</span><span class="o">=</span><span class="n">ckpt</span><span class="p">,</span>
+                            <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                            <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">keep</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Pass no target to get a raw state dictionary first.</span>
+<span class="n">raw_state_dict</span> <span class="o">=</span> <span class="n">checkpoints</span><span class="o">.</span><span class="n">restore_checkpoint</span><span class="p">(</span><span class="s1">&#39;/tmp/flax_ckpt/flax-checkpointing&#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="c1"># Add/remove fields as needed.</span>
+<span class="n">raw_state_dict</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;batch_stats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="c1"># Restore the classes with correct target now</span>
+<span class="n">flax</span><span class="o">.</span><span class="n">serialization</span><span class="o">.</span><span class="n">from_state_dict</span><span class="p">(</span><span class="n">custom_target</span><span class="p">,</span> <span class="n">raw_state_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;model&#39;: CustomTrainState(step=1, apply_fn=&lt;bound method Module.apply of Dense(
+     # attributes
+     features = 3
+     use_bias = True
+     dtype = None
+     param_dtype = float32
+     precision = None
+     kernel_init = init
+     bias_init = zeros
+     dot_general = dot_general
+     dot_general_cls = None
+ )&gt;, params={&#39;bias&#39;: array([-0.001, -0.001, -0.001], dtype=float32), &#39;kernel&#39;: array([[ 0.26048955, -0.61399287, -0.23458514],
+        [ 0.11050402, -0.8765793 ,  0.9800635 ],
+        [ 0.36260957,  0.18276349, -0.6856061 ],
+        [-0.8519373 , -0.6416717 , -0.4818122 ],
+        [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)}, tx=GradientTransformationExtraArgs(init=&lt;function chain.&lt;locals&gt;.init_fn at 0x13d5d83a0&gt;, update=&lt;function chain.&lt;locals&gt;.update_fn at 0x13d5d8dc0&gt;), opt_state=(EmptyState(), EmptyState()), batch_stats=array([9, 8, 7, 6, 5, 4, 3, 2, 1, 0])),
+ &#39;config&#39;: {&#39;dimensions&#39;: array([5, 3])},
+ &#39;data&#39;: [array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],
+        dtype=float32)]}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="asynchronized-checkpointing">
+<h2>Asynchronized checkpointing<a class="headerlink" href="#asynchronized-checkpointing" title="Permalink to this heading">#</a></h2>
+<p>Checkpointing is I/O heavy, and if you have a large amount of data to save, it may be worthwhile to put it into a background thread, while continuing with your training.</p>
+<p>You can do this by creating an <a class="reference external" href="https://github.com/google/orbax/blob/main/checkpoint/orbax/checkpoint/async_checkpointer.py"><code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.AsyncCheckpointer</span></code></a> in place of the <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.PyTreeCheckpointer</span></code>.</p>
+<p>Note: You should use the same <code class="docutils literal notranslate"><span class="pre">async_checkpointer</span></code> to handle all your async saves across your training steps, so that it can make sure that a previous async save is done before the next one begins. This enables bookkeeping, such as <code class="docutils literal notranslate"><span class="pre">keep</span></code> (the number of checkpoints) and <code class="docutils literal notranslate"><span class="pre">overwrite</span></code> to be consistent across steps.</p>
+<p>Whenever you want to explicitly wait until an async save is done, you can call <code class="docutils literal notranslate"><span class="pre">async_checkpointer.wait_until_finished()</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># `orbax.checkpoint.AsyncCheckpointer` needs some multi-process initialization, because it was</span>
+<span class="c1"># originally designed for multi-process large model checkpointing.</span>
+<span class="c1"># For Python notebooks or other single-process settings, just set up with `num_processes=1`.</span>
+<span class="c1"># Refer to https://jax.readthedocs.io/en/latest/multi_process.html#initializing-the-cluster</span>
+<span class="c1"># for how to set it up in multi-process scenarios.</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">distributed</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="s2">&quot;localhost:8889&quot;</span><span class="p">,</span> <span class="n">num_processes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">process_id</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">async_checkpointer</span> <span class="o">=</span> <span class="n">orbax</span><span class="o">.</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">AsyncCheckpointer</span><span class="p">(</span>
+    <span class="n">orbax</span><span class="o">.</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">PyTreeCheckpointHandler</span><span class="p">(),</span> <span class="n">timeout_secs</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Save your job:</span>
+<span class="n">async_checkpointer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;/tmp/flax_ckpt/orbax/single_save_async&#39;</span><span class="p">,</span> <span class="n">ckpt</span><span class="p">,</span> <span class="n">save_args</span><span class="o">=</span><span class="n">save_args</span><span class="p">)</span>
+<span class="c1"># ... Continue with your work...</span>
+
+<span class="c1"># ... Until a time when you want to wait until the save completes:</span>
+<span class="n">async_checkpointer</span><span class="o">.</span><span class="n">wait_until_finished</span><span class="p">()</span>  <span class="c1"># Blocks until the checkpoint saving is completed.</span>
+<span class="n">async_checkpointer</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="s1">&#39;/tmp/flax_ckpt/orbax/single_save_async&#39;</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;config&#39;: {&#39;dimensions&#39;: array([5, 3])},
+ &#39;data&#39;: [array([0.59902626, 0.2172144 , 2.4202902 , 0.03266738, 1.2164948 ],
+        dtype=float32)],
+ &#39;model&#39;: TrainState(step=1, apply_fn=&lt;bound method Module.apply of Dense(
+     # attributes
+     features = 3
+     use_bias = True
+     dtype = None
+     param_dtype = float32
+     precision = None
+     kernel_init = init
+     bias_init = zeros
+     dot_general = dot_general
+     dot_general_cls = None
+ )&gt;, params={&#39;bias&#39;: array([-0.001, -0.001, -0.001], dtype=float32), &#39;kernel&#39;: array([[ 0.26048955, -0.61399287, -0.23458514],
+        [ 0.11050402, -0.8765793 ,  0.9800635 ],
+        [ 0.36260957,  0.18276349, -0.6856061 ],
+        [-0.8519373 , -0.6416717 , -0.4818122 ],
+        [-0.6886102 , -0.33987316, -0.05898903]], dtype=float32)}, tx=GradientTransformationExtraArgs(init=&lt;function chain.&lt;locals&gt;.init_fn at 0x13d5d83a0&gt;, update=&lt;function chain.&lt;locals&gt;.update_fn at 0x13d5d8dc0&gt;), opt_state=(EmptyState(), EmptyState()))}
+</pre></div>
+</div>
+</div>
+</div>
+<p>If you are using Orbax <code class="docutils literal notranslate"><span class="pre">CheckpointManager</span></code>, just pass in the async_checkpointer when initializing it. Then, in practice, call <code class="docutils literal notranslate"><span class="pre">async_checkpoint_manager.wait_until_finished()</span></code> instead.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">async_checkpoint_manager</span> <span class="o">=</span> <span class="n">orbax</span><span class="o">.</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">CheckpointManager</span><span class="p">(</span>
+    <span class="s1">&#39;/tmp/flax_ckpt/orbax/managed_async&#39;</span><span class="p">,</span> <span class="n">async_checkpointer</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+<span class="n">async_checkpoint_manager</span><span class="o">.</span><span class="n">wait_until_finished</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="multi-host-multi-process-checkpointing">
+<h2>Multi-host/multi-process checkpointing<a class="headerlink" href="#multi-host-multi-process-checkpointing" title="Permalink to this heading">#</a></h2>
+<p>JAX provides a few ways to scale up your code on multiple hosts at the same time. This usually happens when the number of devices (CPU/GPU/TPU) is so large that different devices are managed by different hosts (CPU). To get started on JAX in multi-process settings, check out <a class="reference external" href="https://jax.readthedocs.io/en/latest/multi_process.html">Using JAX in multi-host and multi-process environments</a> and the <a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html">distributed array guide</a>.</p>
+<p>In the <a class="reference external" href="https://jax.readthedocs.io/en/latest/glossary.html#term-SPMD">Single Program Multi Data (SPMD)</a> paradigm with JAX <code class="docutils literal notranslate"><span class="pre">jit</span></code>, a large multi-process array can have its data sharded across different devices. (Note that JAX <code class="docutils literal notranslate"><span class="pre">pjit</span></code> and <code class="docutils literal notranslate"><span class="pre">jit</span></code> have been merged into a single unified interface. To learn about compiling and executing JAX functions in multi-host or multi-core environments, refer to <a class="reference external" href="https://jax.readthedocs.io/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html">this guide</a> and the <a class="reference external" href="https://jax.readthedocs.io/en/latest/jax_array_migration.html">jax.Array migration guide</a>.) When a multi-process array is serialized, each host dumps its data shards to a single shared storage, such as a Google Cloud bucket.</p>
+<p>Orbax supports saving and loading pytrees with multi-process arrays in the same fashion as single-process pytrees. However, it’s recommended to use the asynchronized <a class="reference external" href="https://github.com/google/orbax/blob/main/checkpoint/orbax/checkpoint/async_checkpointer.py"><code class="docutils literal notranslate"><span class="pre">orbax.AsyncCheckpointer</span></code></a> to save large multi-process arrays on another thread, so that you can perform computation alongside the saves. With pure Orbax, saving checkpoints in a multi-process context uses the same API as in a single-process context.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jax.sharding</span><span class="w"> </span><span class="kn">import</span> <span class="n">PartitionSpec</span><span class="p">,</span> <span class="n">NamedSharding</span>
+
+<span class="c1"># Create an array sharded across multiple devices.</span>
+<span class="n">mesh_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">devices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">devices</span><span class="p">())</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">mesh_shape</span><span class="p">)</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">))</span>
+
+<span class="n">mp_array</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">device_put</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+                          <span class="n">NamedSharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">PartitionSpec</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)))</span>
+
+<span class="c1"># Make it a pytree.</span>
+<span class="n">mp_ckpt</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">mp_array</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">async_checkpoint_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mp_ckpt</span><span class="p">)</span>
+<span class="n">async_checkpoint_manager</span><span class="o">.</span><span class="n">wait_until_finished</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>When restoring a checkpoint with multi-process arrays, you need to specify what <code class="docutils literal notranslate"><span class="pre">sharding</span></code> each array should be restored back to. Otherwise, they will be restored as large <code class="docutils literal notranslate"><span class="pre">np.array</span></code>s on process 0, costing time and memory.</p>
+<p>(In this notebook, since we are on single-process, it will be restored as <code class="docutils literal notranslate"><span class="pre">np.array</span></code> even if we provide shardings.)</p>
+<section id="id7">
+<h3>With Orbax<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h3>
+<p>Orbax allows you to specify this by passing a pytree of <code class="docutils literal notranslate"><span class="pre">sharding</span></code>s in <code class="docutils literal notranslate"><span class="pre">restore_args</span></code>. If you already have a reference pytree that has all the arrays with the right sharding, you can use <code class="docutils literal notranslate"><span class="pre">orbax_utils.restore_args_from_target</span></code> to transform it into the <code class="docutils literal notranslate"><span class="pre">restore_args</span></code> that Orbax needs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The reference doesn&#39;t need to be as large as your checkpoint!</span>
+<span class="c1"># Just make sure it has the `.sharding` you want.</span>
+<span class="n">mp_smaller</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">device_put</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+                            <span class="n">NamedSharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">PartitionSpec</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)))</span>
+<span class="n">ref_ckpt</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">mp_smaller</span><span class="p">}</span>
+
+<span class="n">restore_args</span> <span class="o">=</span> <span class="n">orbax_utils</span><span class="o">.</span><span class="n">restore_args_from_target</span><span class="p">(</span><span class="n">ref_ckpt</span><span class="p">)</span>
+<span class="n">async_checkpoint_manager</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">ref_ckpt</span><span class="p">,</span> <span class="n">restore_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;restore_args&#39;</span><span class="p">:</span> <span class="n">restore_args</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;model&#39;: Array([[ 0,  1],
+        [ 2,  3],
+        [ 4,  5],
+        [ 6,  7],
+        [ 8,  9],
+        [10, 11],
+        [12, 13],
+        [14, 15]], dtype=int32)}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="with-the-legacy-flax-use-save-checkpoint-multiprocess">
+<h3>With the legacy Flax: use <code class="docutils literal notranslate"><span class="pre">save_checkpoint_multiprocess</span></code><a class="headerlink" href="#with-the-legacy-flax-use-save-checkpoint-multiprocess" title="Permalink to this heading">#</a></h3>
+<p>In legacy Flax, to save multi-process arrays, use <a class="reference external" href="https://flax.readthedocs.io/en/latest/api_reference/flax.training.html#flax.training.checkpoints.save_checkpoint_multiprocess"><code class="docutils literal notranslate"><span class="pre">flax.training.checkpoints.save_checkpoint_multiprocess()</span></code></a> in place of <code class="docutils literal notranslate"><span class="pre">save_checkpoint()</span></code> and with the same arguments.</p>
+<p>If your checkpoint is too large, you can specify <code class="docutils literal notranslate"><span class="pre">timeout_secs</span></code> in the manager and give it more time to finish writing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">async_checkpointer</span> <span class="o">=</span> <span class="n">orbax</span><span class="o">.</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">AsyncCheckpointer</span><span class="p">(</span><span class="n">orbax</span><span class="o">.</span><span class="n">checkpoint</span><span class="o">.</span><span class="n">PyTreeCheckpointHandler</span><span class="p">(),</span> <span class="n">timeout_secs</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">checkpoints</span><span class="o">.</span><span class="n">save_checkpoint_multiprocess</span><span class="p">(</span><span class="n">ckpt_dir</span><span class="p">,</span>
+                                         <span class="n">mp_ckpt</span><span class="p">,</span>
+                                         <span class="n">step</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                         <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                         <span class="n">keep</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                                         <span class="n">orbax_checkpointer</span><span class="o">=</span><span class="n">async_checkpointer</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;/tmp/flax_ckpt/checkpoint_3&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mp_restored</span> <span class="o">=</span> <span class="n">checkpoints</span><span class="o">.</span><span class="n">restore_checkpoint</span><span class="p">(</span><span class="n">ckpt_dir</span><span class="p">,</span>
+                                             <span class="n">target</span><span class="o">=</span><span class="n">ref_ckpt</span><span class="p">,</span>
+                                             <span class="n">step</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                             <span class="n">orbax_checkpointer</span><span class="o">=</span><span class="n">async_checkpointer</span><span class="p">)</span>
+<span class="n">mp_restored</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:absl:The transformations API will eventually be replaced by an upgraded design. The current API will not be removed until this point, but it will no longer be actively worked on.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;model&#39;: Array([[ 0,  1],
+        [ 2,  3],
+        [ 4,  5],
+        [ 6,  7],
+        [ 8,  9],
+        [10, 11],
+        [12, 13],
+        [14, 15]], dtype=int32)}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="orbax-as-backend-troubleshooting">
+<h2>Orbax-as-backend troubleshooting<a class="headerlink" href="#orbax-as-backend-troubleshooting" title="Permalink to this heading">#</a></h2>
+<p>As an intermediate stage of the migration (to Orbax from the legacy Flax <code class="docutils literal notranslate"><span class="pre">checkpoints</span></code> API), <code class="docutils literal notranslate"><span class="pre">flax.training.checkpoints</span></code> APIs will start to use Orbax as their backend when saving checkpoints starting from May 15, 2023.</p>
+<p>Checkpoints saved with the Orbax backend can be readable by either <code class="docutils literal notranslate"><span class="pre">flax.training.checkpoints.restore_checkpoint</span></code> or <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.PyTreeCheckpointer</span></code>.</p>
+<p>Code-wise, this is equivalent to setting the config flag <a class="reference external" href="https://github.com/google/flax/blob/main/flax/configurations.py#L103"><code class="docutils literal notranslate"><span class="pre">flax.config.flax_use_orbax_checkpointing</span></code></a> default to <code class="docutils literal notranslate"><span class="pre">True</span></code>. You can overwrite this value in your project with <code class="docutils literal notranslate"><span class="pre">flax.config.update('flax_use_orbax_checkpointing',</span> <span class="pre">&lt;BoolValue&gt;)</span></code> at any time.</p>
+<p>In general, this automatic migration will not affect most users. However, you may encounter issues if your API usage follows some specific pattern. Check out the sections below for troubleshooting.</p>
+<section id="if-your-devices-hang-when-writing-checkpoints">
+<h3>If your devices hang when writing checkpoints<a class="headerlink" href="#if-your-devices-hang-when-writing-checkpoints" title="Permalink to this heading">#</a></h3>
+<p>If you are running in a multi-host environment (usually anything larger than 8 TPU devices) and your devices hang when writing checkpoints, check if your code is in the following pattern (that is, the <code class="docutils literal notranslate"><span class="pre">save_checkpoint</span></code> only ran on host <code class="docutils literal notranslate"><span class="pre">0</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">jax</span><span class="o">.</span><span class="n">process_index</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+  <span class="n">flax</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">checkpoints</span><span class="o">.</span><span class="n">save_checkpoint</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Unfortunately this is a legacy pattern that will be deprecated and won’t be supported, because in a multi-process environment, the checkpointing code should coordinate among hosts instead of being triggered only on the host <code class="docutils literal notranslate"><span class="pre">0</span></code>. Replacing the code above with the following should resolve the hang issue:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flax</span><span class="o">.</span><span class="n">training</span><span class="o">.</span><span class="n">checkpoints</span><span class="o">.</span><span class="n">save_checkpoint_multiprocess</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="if-you-don-t-save-pytrees">
+<h3>If you don’t save pytrees<a class="headerlink" href="#if-you-don-t-save-pytrees" title="Permalink to this heading">#</a></h3>
+<p>Orbax uses <code class="docutils literal notranslate"><span class="pre">orbax.checkpoint.PyTreeCheckpointHandler</span></code> to save checkpoints, which means they only save pytrees.</p>
+<p>If you want to save singular arrays or numbers, you have two options:</p>
+<ol class="arabic simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">orbax.ArrayCheckpointHandler</span></code> to save them following <a class="reference external" href="https://flax.readthedocs.io/en/latest/guides/converting_and_upgrading/orbax_upgrade_guide.html#saving-loading-a-single-jax-or-numpy-array">this migration section</a>.</p></li>
+<li><p>Wrap it inside a pytree and save as usual.</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="transfer_learning.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Transfer learning</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../parallel_training/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Parallel training</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-checkpoints">Save checkpoints</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-orbax">With Orbax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-the-legacy-api">With the legacy API</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-checkpoints">Restore checkpoints</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">With Orbax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">With the legacy API</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-with-custom-dataclasses">Restore with custom dataclasses</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">With Orbax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">With the legacy API</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#restore-when-checkpoint-structures-differ">Restore when checkpoint structures differ</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-1-when-a-reference-object-is-partial">Scenario 1: When a reference object is partial</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scenario-2-when-a-checkpoint-is-partial">Scenario 2: When a checkpoint is partial</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">With Orbax</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">With the legacy API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#asynchronized-checkpointing">Asynchronized checkpointing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-host-multi-process-checkpointing">Multi-host/multi-process checkpointing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">With Orbax</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-the-legacy-flax-use-save-checkpoint-multiprocess">With the legacy Flax: use <code class="docutils literal notranslate"><span class="pre">save_checkpoint_multiprocess</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orbax-as-backend-troubleshooting">Orbax-as-backend troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#if-your-devices-hang-when-writing-checkpoints">If your devices hang when writing checkpoints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#if-you-don-t-save-pytrees">If you don’t save pytrees</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

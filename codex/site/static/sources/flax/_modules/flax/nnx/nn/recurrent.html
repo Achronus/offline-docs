@@ -1,0 +1,1605 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>flax.nnx.nn.recurrent</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/flax_theme.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../../../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/flax/nnx/nn/recurrent';</script>
+    <link rel="icon" href="../../../../_static/flax.png"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <script async type="text/javascript" src="/sources/flax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="flax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/_modules/flax/nnx/nn/recurrent.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content">
+<a
+  href="https://flax-linen.readthedocs.io/en/latest"
+  style="text-decoration: none; color: white;"
+>
+  This site covers the new Flax NNX API. <span style="color: lightgray;">[Click here for the old <b>Flax Linen</b> API]</span>
+</a>
+</div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/flax.png" class="logo__image only-light" alt=" - Home"/>
+    <script>document.write(`<img src="../../../../_static/flax.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../nnx_basics.html">Flax basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../mnist_tutorial.html">MNIST tutorial</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../why.html">Why Flax NNX?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../key_concepts.html">JAX/Flax Key Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../guides_basic.html">Basic Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/pytree.html">Module &amp; Pytree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/transforms.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/view.html">Model Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/filters_guide.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/randomness.html">Randomness</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/checkpointing.html">Save and load checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/data_loaders.html">Data Loaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/jax_and_nnx_transforms.html">Flax NNX vs JAX transformations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../guides_advanced.html">Advanced Guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/flax_gspmd.html">Scale up on multiple devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/performance.html">Performance considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/bridge_guide.html">Use Flax NNX and Linen together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/surgery.html">Model surgery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/extracting_intermediates.html">Extracting intermediate values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/optimization_cookbook.html">A Flax Optimization Cookbook</a></li>
+
+
+
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://tunix.readthedocs.io/en/latest/index.html">Post-training (Tunix)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../hijax/index.html">Hijax (experimental)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../hijax/hijax.html">Hijax</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../migrating/index.html">Migrating</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../migrating/pytorch_to_jax_flax.html">From PyTorch to Jax and Flax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../migrating/nnx_010_to_nnx_011.html">NNX 0.10 to NNX 0.11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../migrating/linen_to_nnx.html">Flax Linen to Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../migrating/haiku_to_flax.html">Haiku to Flax NNX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/gemma.html">Example: Using pretrained Gemma for inference with Flax NNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/digits_diffusion_model.html">Example: Train a diffusion model for image generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/minigpt.html">Train a miniGPT language model with JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nnx_glossary.html">Flax NNX glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../philosophy.html">The Flax philosophy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">How to contribute</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api_reference/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api_reference/flax.nnx/index.html">flax.nnx</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/graph.html">graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/compat.html">compat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/object.html">object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/module.html">module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/index.html">nn</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/activations.html">Activation functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/attention.html">Attention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/dtypes.html">Dtypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/initializers.html">Initializers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/linear.html">Linear</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/lora.html">LoRA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/normalization.html">Normalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/pooling.html">Pooling functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/recurrent.html">Recurrent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/nn/stochastic.html">Stochastic</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/rnglib.html">rnglib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/spmd.html">spmd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/state.html">state</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api_reference/flax.nnx/training/index.html">training</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/training/metrics.html">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/training/optimizer.html">Optimizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_reference/flax.nnx/training/ema.html">EMA</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/transforms.html">transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/variables.html">variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/helpers.html">helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/visualization.html">visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/filterlib.html">filterlib</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api_reference/flax.nnx/bridge.html">bridge</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api_reference/flax.core.frozen_dict.html">flax.core.frozen_dict package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api_reference/flax.struct.html">flax.struct package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api_reference/flax.training.html">flax.training package</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/google/flax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for flax.nnx.nn.recurrent</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2024 The Flax Authors.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;RNN modules for Flax.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">MappingProxyType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">absl</span><span class="w"> </span><span class="kn">import</span> <span class="n">logging</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax</span><span class="w"> </span><span class="kn">import</span> <span class="n">nnx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx</span><span class="w"> </span><span class="kn">import</span> <span class="n">filterlib</span><span class="p">,</span> <span class="n">rnglib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.module</span><span class="w"> </span><span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">initializers</span><span class="p">,</span> <span class="n">dtypes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.nn.linear</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.nn.activations</span><span class="w"> </span><span class="kn">import</span> <span class="n">sigmoid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.nn.activations</span><span class="w"> </span><span class="kn">import</span> <span class="n">tanh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.nnx.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">iteration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flax.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dtype</span><span class="p">,</span> <span class="n">Initializer</span><span class="p">,</span> <span class="n">PromoteDtypeFn</span><span class="p">,</span> <span class="n">Shape</span>
+
+<span class="n">default_kernel_init</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">lecun_normal</span><span class="p">()</span>
+<span class="n">default_bias_init</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">()</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+<span class="n">Array</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span>
+<span class="n">Output</span> <span class="o">=</span> <span class="n">Any</span>
+<span class="n">Carry</span> <span class="o">=</span> <span class="n">Any</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RNNCellBase</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RNN cell base class.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_carry</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">input_shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+      <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">carry_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Carry</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the RNN cell carry.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          input_shape: a tuple providing the shape of the input to the cell.</span>
+<span class="sd">          rngs: random number generator passed to the init_fn.</span>
+<span class="sd">          carry_init: optional carry initializer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          An initialized carry for the given RNN cell.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">carry</span><span class="p">:</span> <span class="n">Carry</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Carry</span><span class="p">,</span> <span class="n">Array</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the RNN cell.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          carry: the hidden state of the RNN cell.</span>
+<span class="sd">          inputs: an ndarray with the input for the current time step.</span>
+<span class="sd">            All dimensions except the final are considered batch dimensions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          A tuple with the new carry and the output.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">num_feature_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the number of feature axes of the RNN cell.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">modified_orthogonal</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">Shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Modified orthogonal initializer for compatibility with half precision.&quot;&quot;&quot;</span>
+    <span class="n">initializer</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">orthogonal</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">initializer</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LSTMCell"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.LSTMCell">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">LSTMCell</span><span class="p">(</span><span class="n">RNNCellBase</span><span class="p">):</span>
+<span class="w">  </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;LSTM cell.</span>
+
+<span class="sd">  The mathematical definition of the cell is as follows</span>
+
+<span class="sd">  .. math::</span>
+<span class="sd">      \begin{array}{ll}</span>
+<span class="sd">      i = \sigma(W_{ii} x + W_{hi} h + b_{hi}) \\</span>
+<span class="sd">      f = \sigma(W_{if} x + W_{hf} h + b_{hf}) \\</span>
+<span class="sd">      g = \tanh(W_{ig} x + W_{hg} h + b_{hg}) \\</span>
+<span class="sd">      o = \sigma(W_{io} x + W_{ho} h + b_{ho}) \\</span>
+<span class="sd">      c&#39; = f * c + i * g \\</span>
+<span class="sd">      h&#39; = o * \tanh(c&#39;) \\</span>
+<span class="sd">      \end{array}</span>
+
+<span class="sd">  where x is the input, h is the output of the previous time step, and c is</span>
+<span class="sd">  the memory.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">in_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">hidden_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">gate_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">,</span>
+    <span class="n">activation_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">tanh</span><span class="p">,</span>
+    <span class="n">kernel_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">default_kernel_init</span><span class="p">,</span>
+    <span class="n">recurrent_kernel_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">modified_orthogonal</span><span class="p">,</span>
+    <span class="n">bias_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">(),</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">param_dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">carry_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">promote_dtype</span><span class="p">:</span> <span class="n">PromoteDtypeFn</span> <span class="o">=</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+    <span class="n">keep_rngs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">,</span>
+    <span class="n">kernel_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">recurrent_kernel_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">bias_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+  <span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">in_features</span> <span class="o">=</span> <span class="n">in_features</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span> <span class="o">=</span> <span class="n">hidden_features</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span> <span class="o">=</span> <span class="n">gate_fn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">activation_fn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span> <span class="o">=</span> <span class="n">param_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span> <span class="o">=</span> <span class="n">promote_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">keep_rngs</span><span class="p">:</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+          <span class="s2">&quot;keep_rngs argument is deprecated. Please use rngs argument in __call__ instead &quot;</span>
+      <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># input and recurrent layers are summed so only one needs a bias.</span>
+    <span class="n">dense_i</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+      <span class="n">Linear</span><span class="p">,</span>
+      <span class="n">in_features</span><span class="o">=</span><span class="n">in_features</span><span class="p">,</span>
+      <span class="n">out_features</span><span class="o">=</span><span class="n">hidden_features</span><span class="p">,</span>
+      <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+      <span class="n">kernel_init</span><span class="o">=</span><span class="n">kernel_init</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+      <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">kernel_metadata</span><span class="o">=</span><span class="n">kernel_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">dense_h</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+      <span class="n">Linear</span><span class="p">,</span>
+      <span class="n">in_features</span><span class="o">=</span><span class="n">hidden_features</span><span class="p">,</span>
+      <span class="n">out_features</span><span class="o">=</span><span class="n">hidden_features</span><span class="p">,</span>
+      <span class="n">use_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+      <span class="n">kernel_init</span><span class="o">=</span><span class="n">recurrent_kernel_init</span><span class="p">,</span>
+      <span class="n">bias_init</span><span class="o">=</span><span class="n">bias_init</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+      <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">kernel_metadata</span><span class="o">=</span><span class="n">recurrent_kernel_metadata</span><span class="p">,</span>
+      <span class="n">bias_metadata</span><span class="o">=</span><span class="n">bias_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">ii</span> <span class="o">=</span> <span class="n">dense_i</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">if_</span> <span class="o">=</span> <span class="n">dense_i</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ig</span> <span class="o">=</span> <span class="n">dense_i</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">io</span> <span class="o">=</span> <span class="n">dense_i</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hi</span> <span class="o">=</span> <span class="n">dense_h</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hf</span> <span class="o">=</span> <span class="n">dense_h</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hg</span> <span class="o">=</span> <span class="n">dense_h</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ho</span> <span class="o">=</span> <span class="n">dense_h</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">carry_init</span><span class="p">:</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;carry_init is provided in __init__. &quot;</span>
+        <span class="s2">&quot;Please, use carry_init argument in `initialize_carry` method instead to initialize the carry. &quot;</span>
+        <span class="s2">&quot;Otherwise, two instances with same configuration but different carry_init &quot;</span>
+        <span class="s2">&quot;functions will have different graphdefs.&quot;</span>
+      <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span> <span class="o">=</span> <span class="n">carry_init</span>
+
+<div class="viewcode-block" id="LSTMCell.__call__"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.LSTMCell.__call__">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">carry</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Array</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">Array</span><span class="p">]:</span>  <span class="c1"># type: ignore[override]</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A long short-term memory (LSTM) cell.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      carry: the hidden state of the LSTM cell,</span>
+<span class="sd">        initialized using ``LSTMCell.initialize_carry``.</span>
+<span class="sd">      inputs: an ndarray with the input for the current time step.</span>
+<span class="sd">        All dimensions except the final are considered batch dimensions.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A tuple with the new carry and the output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">c</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">carry</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ii</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hi</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">if_</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hf</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ig</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hg</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+    <span class="n">o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">io</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ho</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+    <span class="n">new_c</span> <span class="o">=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">c</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">g</span>
+    <span class="n">new_h</span> <span class="o">=</span> <span class="n">o</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="n">new_c</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">new_c</span><span class="p">,</span> <span class="n">new_h</span><span class="p">),</span> <span class="n">new_h</span></div>
+
+<div class="viewcode-block" id="LSTMCell.initialize_carry"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.LSTMCell.initialize_carry">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="nf">initialize_carry</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">input_shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">carry_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">]:</span>  <span class="c1"># type: ignore[override]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the RNN cell carry.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      rng: random number generator passed to the init_fn.</span>
+<span class="sd">      input_shape: a tuple providing the shape of the input to the cell.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">      An initialized carry for the given RNN cell.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">batch_dims</span> <span class="o">=</span> <span class="n">input_shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;RNGs must be provided to initialize the cell carry.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">carry_init</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">carry_init</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span>
+    <span class="k">assert</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># just to please mypy</span>
+
+    <span class="n">mem_shape</span> <span class="o">=</span> <span class="n">batch_dims</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span><span class="p">,)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">carry_init</span><span class="p">(</span><span class="n">rngs</span><span class="p">(),</span> <span class="n">mem_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">carry_init</span><span class="p">(</span><span class="n">rngs</span><span class="p">(),</span> <span class="n">mem_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span></div>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">num_feature_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="OptimizedLSTMCell"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.OptimizedLSTMCell">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">OptimizedLSTMCell</span><span class="p">(</span><span class="n">RNNCellBase</span><span class="p">):</span>
+<span class="w">  </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;More efficient LSTM Cell that concatenates state components before matmul.</span>
+
+<span class="sd">    The parameters are compatible with ``LSTMCell``. Note that this cell is often</span>
+<span class="sd">    faster than ``LSTMCell`` as long as the hidden size is roughly &lt;= 2048 units.</span>
+
+<span class="sd">    The mathematical definition of the cell is the same as ``LSTMCell`` and as</span>
+<span class="sd">    follows:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \begin{array}{ll}</span>
+<span class="sd">        i = \sigma(W_{ii} x + W_{hi} h + b_{hi}) \\</span>
+<span class="sd">        f = \sigma(W_{if} x + W_{hf} h + b_{hf}) \\</span>
+<span class="sd">        g = \tanh(W_{ig} x + W_{hg} h + b_{hg}) \\</span>
+<span class="sd">        o = \sigma(W_{io} x + W_{ho} h + b_{ho}) \\</span>
+<span class="sd">        c&#39; = f * c + i * g \\</span>
+<span class="sd">        h&#39; = o * \tanh(c&#39;) \\</span>
+<span class="sd">        \end{array}</span>
+
+<span class="sd">    where x is the input, h is the output of the previous time step, and c is</span>
+<span class="sd">    the memory.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        gate_fn: activation function used for gates (default: sigmoid).</span>
+<span class="sd">        activation_fn: activation function used for output and memory update</span>
+<span class="sd">          (default: tanh).</span>
+<span class="sd">        kernel_init: initializer function for the kernels that transform</span>
+<span class="sd">          the input (default: lecun_normal).</span>
+<span class="sd">        recurrent_kernel_init: initializer function for the kernels that transform</span>
+<span class="sd">          the hidden state (default: initializers.orthogonal()).</span>
+<span class="sd">        bias_init: initializer for the bias parameters (default: initializers.zeros_init()).</span>
+<span class="sd">        dtype: the dtype of the computation (default: infer from inputs and params).</span>
+<span class="sd">        param_dtype: the dtype passed to parameter initializers (default: float32).</span>
+<span class="sd">        keep_rngs: whether to store the input rngs as attribute (i.e. `self.rngs = rngs`)</span>
+<span class="sd">          (default: True). If rngs is stored, we should split the module as</span>
+<span class="sd">          `graphdef, params, nondiff = nnx.split(module, nnx.Param, ...)` where `nondiff`</span>
+<span class="sd">          contains RNG object associated with stored `self.rngs`.</span>
+<span class="sd">        rngs: rng key.</span>
+<span class="sd">        kernel_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">          the kernels that transform the input.</span>
+<span class="sd">        recurrent_kernel_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">          the kernels that transform the hidden state.</span>
+<span class="sd">        bias_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">          the bias of layers that transform the hidden state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">in_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">hidden_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">gate_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">,</span>
+    <span class="n">activation_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">tanh</span><span class="p">,</span>
+    <span class="n">kernel_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">default_kernel_init</span><span class="p">,</span>
+    <span class="n">recurrent_kernel_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">orthogonal</span><span class="p">(),</span>
+    <span class="n">bias_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">(),</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">param_dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">carry_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">promote_dtype</span><span class="p">:</span> <span class="n">PromoteDtypeFn</span> <span class="o">=</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+    <span class="n">keep_rngs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">,</span>
+    <span class="n">kernel_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">recurrent_kernel_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">bias_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+  <span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">in_features</span> <span class="o">=</span> <span class="n">in_features</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span> <span class="o">=</span> <span class="n">hidden_features</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span> <span class="o">=</span> <span class="n">gate_fn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">activation_fn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span> <span class="o">=</span> <span class="n">param_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span> <span class="o">=</span> <span class="n">promote_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">keep_rngs</span><span class="p">:</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+          <span class="s2">&quot;keep_rngs argument is deprecated. Please use rngs argument in __call__ instead &quot;</span>
+      <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># input and recurrent layers are summed so only one needs a bias.</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense_i</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span>
+      <span class="n">in_features</span><span class="o">=</span><span class="n">in_features</span><span class="p">,</span>
+      <span class="n">out_features</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="n">hidden_features</span><span class="p">,</span>
+      <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+      <span class="n">kernel_init</span><span class="o">=</span><span class="n">kernel_init</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+      <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">kernel_metadata</span><span class="o">=</span><span class="n">kernel_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense_h</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span>
+      <span class="n">in_features</span><span class="o">=</span><span class="n">hidden_features</span><span class="p">,</span>
+      <span class="n">out_features</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="n">hidden_features</span><span class="p">,</span>
+      <span class="n">use_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+      <span class="n">kernel_init</span><span class="o">=</span><span class="n">recurrent_kernel_init</span><span class="p">,</span>
+      <span class="n">bias_init</span><span class="o">=</span><span class="n">bias_init</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+      <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">kernel_metadata</span><span class="o">=</span><span class="n">recurrent_kernel_metadata</span><span class="p">,</span>
+      <span class="n">bias_metadata</span><span class="o">=</span><span class="n">bias_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">carry_init</span><span class="p">:</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;carry_init is provided in __init__. &quot;</span>
+        <span class="s2">&quot;Please, use carry_init argument in `initialize_carry` method instead to initialize the carry. &quot;</span>
+        <span class="s2">&quot;Otherwise, two instances with same configuration but different carry_init &quot;</span>
+        <span class="s2">&quot;functions will have different graphdefs.&quot;</span>
+      <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span> <span class="o">=</span> <span class="n">carry_init</span>
+
+<div class="viewcode-block" id="OptimizedLSTMCell.__call__"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.OptimizedLSTMCell.__call__">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">carry</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Array</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">Array</span><span class="p">]:</span>  <span class="c1"># type: ignore[override]</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;An optimized long short-term memory (LSTM) cell.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      carry: the hidden state of the LSTM cell, initialized using</span>
+<span class="sd">        ``LSTMCell.initialize_carry``.</span>
+<span class="sd">      inputs: an ndarray with the input for the current time step.</span>
+<span class="sd">        All dimensions except the final are considered batch dimensions.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A tuple with the new carry and the output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">c</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">carry</span>
+
+    <span class="c1"># Compute combined transformations for inputs and hidden state</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense_i</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense_h</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+    <span class="c1"># Split the combined transformations into individual gates</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">o</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">indices_or_sections</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Apply gate activations</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+    <span class="n">o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+    <span class="c1"># Update cell state and hidden state</span>
+    <span class="n">new_c</span> <span class="o">=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">c</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">g</span>
+    <span class="n">new_h</span> <span class="o">=</span> <span class="n">o</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="n">new_c</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">new_c</span><span class="p">,</span> <span class="n">new_h</span><span class="p">),</span> <span class="n">new_h</span></div>
+
+<div class="viewcode-block" id="OptimizedLSTMCell.initialize_carry"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.OptimizedLSTMCell.initialize_carry">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="nf">initialize_carry</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">input_shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">carry_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">]:</span>  <span class="c1"># type: ignore[override]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the RNN cell carry.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      rngs: random number generator passed to the init_fn.</span>
+<span class="sd">      input_shape: a tuple providing the shape of the input to the cell.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      An initialized carry for the given RNN cell.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">batch_dims</span> <span class="o">=</span> <span class="n">input_shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;RNGs must be provided to initialize the cell carry.&#39;</span><span class="p">)</span>
+    <span class="n">mem_shape</span> <span class="o">=</span> <span class="n">batch_dims</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span><span class="p">,)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">carry_init</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">carry_init</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span>
+    <span class="k">assert</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># just to please mypy</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">carry_init</span><span class="p">(</span><span class="n">rngs</span><span class="p">(),</span> <span class="n">mem_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">carry_init</span><span class="p">(</span><span class="n">rngs</span><span class="p">(),</span> <span class="n">mem_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span></div>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">num_feature_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="SimpleCell"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.SimpleCell">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">SimpleCell</span><span class="p">(</span><span class="n">RNNCellBase</span><span class="p">):</span>
+<span class="w">  </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Simple cell.</span>
+
+<span class="sd">  The mathematical definition of the cell is as follows</span>
+
+<span class="sd">  .. math::</span>
+
+<span class="sd">      \begin{array}{ll}</span>
+<span class="sd">      h&#39; = \tanh(W_i x + b_i + W_h h)</span>
+<span class="sd">      \end{array}</span>
+
+<span class="sd">  where x is the input and h is the output of the previous time step.</span>
+
+<span class="sd">  If `residual` is `True`,</span>
+
+<span class="sd">  .. math::</span>
+
+<span class="sd">      \begin{array}{ll}</span>
+<span class="sd">      h&#39; = \tanh(W_i x + b_i + W_h h + h)</span>
+<span class="sd">      \end{array}</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">in_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">hidden_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>  <span class="c1"># not inferred from carry for now</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">param_dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">carry_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">residual</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">activation_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">tanh</span><span class="p">,</span>
+    <span class="n">kernel_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">lecun_normal</span><span class="p">(),</span>
+    <span class="n">recurrent_kernel_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">orthogonal</span><span class="p">(),</span>
+    <span class="n">bias_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">(),</span>
+    <span class="n">promote_dtype</span><span class="p">:</span> <span class="n">PromoteDtypeFn</span> <span class="o">=</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+    <span class="n">keep_rngs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">,</span>
+    <span class="n">kernel_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">recurrent_kernel_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">bias_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+  <span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">in_features</span> <span class="o">=</span> <span class="n">in_features</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span> <span class="o">=</span> <span class="n">hidden_features</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span> <span class="o">=</span> <span class="n">param_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">residual</span> <span class="o">=</span> <span class="n">residual</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">activation_fn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span> <span class="o">=</span> <span class="n">promote_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">keep_rngs</span><span class="p">:</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;keep_rngs argument is deprecated. Please use rngs argument in __call__ instead&quot;</span>
+      <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># self.hidden_features = carry.shape[-1]</span>
+    <span class="c1"># input and recurrent layers are summed so only one needs a bias.</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense_h</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span>
+      <span class="n">in_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span><span class="p">,</span>
+      <span class="n">out_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span><span class="p">,</span>
+      <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+      <span class="n">kernel_init</span><span class="o">=</span><span class="n">recurrent_kernel_init</span><span class="p">,</span>
+      <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">kernel_metadata</span><span class="o">=</span><span class="n">recurrent_kernel_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense_i</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span>
+      <span class="n">in_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_features</span><span class="p">,</span>
+      <span class="n">out_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span><span class="p">,</span>
+      <span class="n">use_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+      <span class="n">kernel_init</span><span class="o">=</span><span class="n">kernel_init</span><span class="p">,</span>
+      <span class="n">bias_init</span><span class="o">=</span><span class="n">bias_init</span><span class="p">,</span>
+      <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">kernel_metadata</span><span class="o">=</span><span class="n">kernel_metadata</span><span class="p">,</span>
+      <span class="n">bias_metadata</span><span class="o">=</span><span class="n">bias_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">carry_init</span><span class="p">:</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;carry_init is provided in __init__. &quot;</span>
+        <span class="s2">&quot;Please, use carry_init argument in `initialize_carry` method instead to initialize the carry. &quot;</span>
+        <span class="s2">&quot;Otherwise, two instances with same configuration but different carry_init &quot;</span>
+        <span class="s2">&quot;functions will have different graphdefs.&quot;</span>
+      <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span> <span class="o">=</span> <span class="n">carry_init</span>
+
+<div class="viewcode-block" id="SimpleCell.__call__"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.SimpleCell.__call__">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">carry</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">]:</span>  <span class="c1"># type: ignore[override]</span>
+    <span class="n">new_carry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense_i</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense_h</span><span class="p">(</span><span class="n">carry</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">residual</span><span class="p">:</span>
+      <span class="n">new_carry</span> <span class="o">+=</span> <span class="n">carry</span>
+    <span class="n">new_carry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="n">new_carry</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_carry</span><span class="p">,</span> <span class="n">new_carry</span></div>
+
+<div class="viewcode-block" id="SimpleCell.initialize_carry"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.SimpleCell.initialize_carry">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="nf">initialize_carry</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">input_shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">carry_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the RNN cell carry.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      rng: random number generator passed to the init_fn.</span>
+<span class="sd">      input_shape: a tuple providing the shape of the input to the cell.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      An initialized carry for the given RNN cell.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;RNGs must be provided to initialize the cell carry.&#39;</span><span class="p">)</span>
+
+    <span class="n">batch_dims</span> <span class="o">=</span> <span class="n">input_shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">mem_shape</span> <span class="o">=</span> <span class="n">batch_dims</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span><span class="p">,)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">carry_init</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">carry_init</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span>
+    <span class="k">assert</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># just to please mypy</span>
+
+    <span class="k">return</span> <span class="n">carry_init</span><span class="p">(</span><span class="n">rngs</span><span class="p">(),</span> <span class="n">mem_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">)</span></div>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">num_feature_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="GRUCell"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.GRUCell">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">GRUCell</span><span class="p">(</span><span class="n">RNNCellBase</span><span class="p">):</span>
+<span class="w">  </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;GRU cell.</span>
+
+<span class="sd">    The mathematical definition of the cell is as follows</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \begin{array}{ll}</span>
+<span class="sd">        r = \sigma(W_{ir} x + b_{ir} + W_{hr} h) \\</span>
+<span class="sd">        z = \sigma(W_{iz} x + b_{iz} + W_{hz} h) \\</span>
+<span class="sd">        n = \tanh(W_{in} x + b_{in} + r * (W_{hn} h + b_{hn})) \\</span>
+<span class="sd">        h&#39; = (1 - z) * n + z * h \\</span>
+<span class="sd">        \end{array}</span>
+
+<span class="sd">    where x is the input and h is the output of the previous time step.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        in_features: number of input features.</span>
+<span class="sd">        hidden_features: number of output features.</span>
+<span class="sd">        gate_fn: activation function used for gates (default: sigmoid).</span>
+<span class="sd">        activation_fn: activation function used for output and memory update</span>
+<span class="sd">          (default: tanh).</span>
+<span class="sd">        kernel_init: initializer function for the kernels that transform</span>
+<span class="sd">          the input (default: lecun_normal).</span>
+<span class="sd">        recurrent_kernel_init: initializer function for the kernels that transform</span>
+<span class="sd">          the hidden state (default: initializers.orthogonal()).</span>
+<span class="sd">        bias_init: initializer for the bias parameters (default: initializers.zeros_init()).</span>
+<span class="sd">        dtype: the dtype of the computation (default: None).</span>
+<span class="sd">        param_dtype: the dtype passed to parameter initializers (default: float32).</span>
+<span class="sd">        keep_rngs: whether to store the input rngs as attribute (i.e. `self.rngs = rngs`)</span>
+<span class="sd">          (default: True). If rngs is stored, we should split the module as</span>
+<span class="sd">          `graphdef, params, nondiff = nnx.split(module, nnx.Param, ...)` where `nondiff`</span>
+<span class="sd">          contains RNG object associated with stored `self.rngs`.</span>
+<span class="sd">        rngs: rng key.</span>
+<span class="sd">        kernel_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">          the kernels that transform the input.</span>
+<span class="sd">        recurrent_kernel_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">          the kernels that transform the hidden state.</span>
+<span class="sd">        bias_metadata: Optional metadata dictionary to set when initializing</span>
+<span class="sd">          the bias of layers that transform the input.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">in_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">hidden_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">gate_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">,</span>
+    <span class="n">activation_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">tanh</span><span class="p">,</span>
+    <span class="n">kernel_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">default_kernel_init</span><span class="p">,</span>
+    <span class="n">recurrent_kernel_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">orthogonal</span><span class="p">(),</span>
+    <span class="n">bias_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">(),</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">param_dtype</span><span class="p">:</span> <span class="n">Dtype</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">carry_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">promote_dtype</span><span class="p">:</span> <span class="n">PromoteDtypeFn</span> <span class="o">=</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+    <span class="n">keep_rngs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">,</span>
+    <span class="n">kernel_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">recurrent_kernel_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+    <span class="n">bias_metadata</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({}),</span>
+  <span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">in_features</span> <span class="o">=</span> <span class="n">in_features</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span> <span class="o">=</span> <span class="n">hidden_features</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span> <span class="o">=</span> <span class="n">gate_fn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">activation_fn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span> <span class="o">=</span> <span class="n">param_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span> <span class="o">=</span> <span class="n">promote_dtype</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">keep_rngs</span><span class="p">:</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;keep_rngs argument is deprecated. Please use rngs argument in __call__ instead &quot;</span>
+      <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># Combine input transformations into a single linear layer</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense_i</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span>
+      <span class="n">in_features</span><span class="o">=</span><span class="n">in_features</span><span class="p">,</span>
+      <span class="n">out_features</span><span class="o">=</span><span class="mi">3</span> <span class="o">*</span> <span class="n">hidden_features</span><span class="p">,</span>  <span class="c1"># r, z, n</span>
+      <span class="n">use_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+      <span class="n">kernel_init</span><span class="o">=</span><span class="n">kernel_init</span><span class="p">,</span>
+      <span class="n">bias_init</span><span class="o">=</span><span class="n">bias_init</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+      <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">kernel_metadata</span><span class="o">=</span><span class="n">kernel_metadata</span><span class="p">,</span>
+      <span class="n">bias_metadata</span><span class="o">=</span><span class="n">bias_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">dense_h</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span>
+      <span class="n">in_features</span><span class="o">=</span><span class="n">hidden_features</span><span class="p">,</span>
+      <span class="n">out_features</span><span class="o">=</span><span class="mi">3</span> <span class="o">*</span> <span class="n">hidden_features</span><span class="p">,</span>  <span class="c1"># r, z, n</span>
+      <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+      <span class="n">kernel_init</span><span class="o">=</span><span class="n">recurrent_kernel_init</span><span class="p">,</span>
+      <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+      <span class="n">param_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">,</span>
+      <span class="n">promote_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">promote_dtype</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">kernel_metadata</span><span class="o">=</span><span class="n">recurrent_kernel_metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">carry_init</span><span class="p">:</span>
+      <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;carry_init is provided in __init__. &quot;</span>
+        <span class="s2">&quot;Please, use carry_init argument in `initialize_carry` method instead to initialize the carry. &quot;</span>
+        <span class="s2">&quot;Otherwise, two instances with same configuration but different carry_init &quot;</span>
+        <span class="s2">&quot;functions will have different graphdefs.&quot;</span>
+      <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span> <span class="o">=</span> <span class="n">carry_init</span>
+
+<div class="viewcode-block" id="GRUCell.__call__"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.GRUCell.__call__">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">carry</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">]:</span>  <span class="c1"># type: ignore[override]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gated recurrent unit (GRU) cell.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        carry: the hidden state of the GRU cell,</span>
+<span class="sd">          initialized using ``GRUCell.initialize_carry``.</span>
+<span class="sd">        inputs: an ndarray with the input for the current time step.</span>
+<span class="sd">          All dimensions except the final are considered batch dimensions.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple with the new carry and the output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">carry</span>
+
+    <span class="c1"># Compute combined transformations for inputs and hidden state</span>
+    <span class="n">x_transformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense_i</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">h_transformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense_h</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+    <span class="c1"># Split the combined transformations into individual components</span>
+    <span class="n">xi_r</span><span class="p">,</span> <span class="n">xi_z</span><span class="p">,</span> <span class="n">xi_n</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">x_transformed</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">hh_r</span><span class="p">,</span> <span class="n">hh_z</span><span class="p">,</span> <span class="n">hh_n</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">h_transformed</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Compute gates</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span><span class="p">(</span><span class="n">xi_r</span> <span class="o">+</span> <span class="n">hh_r</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_fn</span><span class="p">(</span><span class="n">xi_z</span> <span class="o">+</span> <span class="n">hh_z</span><span class="p">)</span>
+
+    <span class="c1"># Compute n with an additional linear transformation on h</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="n">xi_n</span> <span class="o">+</span> <span class="n">r</span> <span class="o">*</span> <span class="n">hh_n</span><span class="p">)</span>
+
+    <span class="c1"># Update hidden state</span>
+    <span class="n">new_h</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">h</span>
+    <span class="k">return</span> <span class="n">new_h</span><span class="p">,</span> <span class="n">new_h</span></div>
+
+<div class="viewcode-block" id="GRUCell.initialize_carry"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.GRUCell.initialize_carry">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="nf">initialize_carry</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">input_shape</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">carry_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the RNN cell carry.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rngs: random number generator passed to the init_fn.</span>
+<span class="sd">        input_shape: a tuple providing the shape of the input to the cell.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An initialized carry for the given RNN cell.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">batch_dims</span> <span class="o">=</span> <span class="n">input_shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;RNGs must be provided to initialize the cell carry.&#39;</span><span class="p">)</span>
+
+    <span class="n">mem_shape</span> <span class="o">=</span> <span class="n">batch_dims</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_features</span><span class="p">,)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">carry_init</span> <span class="o">=</span> <span class="n">initializers</span><span class="o">.</span><span class="n">zeros_init</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">carry_init</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">carry_init</span>
+    <span class="k">assert</span> <span class="n">carry_init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># just to please mypy</span>
+
+    <span class="n">h</span> <span class="o">=</span> <span class="n">carry_init</span><span class="p">(</span><span class="n">rngs</span><span class="p">(),</span> <span class="n">mem_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_dtype</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">h</span></div>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">num_feature_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="RNN"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.RNN">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">RNN</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;The ``RNN`` module takes any :class:`RNNCellBase` instance and applies it over a sequence</span>
+
+<span class="sd">  using :func:`flax.nnx.scan`.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">state_axes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">type</span><span class="p">[</span><span class="n">iteration</span><span class="o">.</span><span class="n">Carry</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">cell</span><span class="p">:</span> <span class="n">RNNCellBase</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">time_major</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">return_carry</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">keep_order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">unroll</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">state_axes</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">type</span><span class="p">[</span><span class="n">iteration</span><span class="o">.</span><span class="n">Carry</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">broadcast_rngs</span><span class="p">:</span> <span class="n">filterlib</span><span class="o">.</span><span class="n">Filter</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">cell</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">time_major</span> <span class="o">=</span> <span class="n">time_major</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">return_carry</span> <span class="o">=</span> <span class="n">return_carry</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">reverse</span> <span class="o">=</span> <span class="n">reverse</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">keep_order</span> <span class="o">=</span> <span class="n">keep_order</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">unroll</span> <span class="o">=</span> <span class="n">unroll</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s1">&#39;carry&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="s1">&#39;Expected rngs to be a jax.Array, int, Rngs, or bool. &#39;</span>
+        <span class="sa">f</span><span class="s1">&#39;Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span>
+      <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">state_axes</span> <span class="o">=</span> <span class="n">state_axes</span> <span class="ow">or</span> <span class="n">nnx</span><span class="o">.</span><span class="n">StateAxes</span><span class="p">({</span><span class="o">...</span><span class="p">:</span> <span class="n">iteration</span><span class="o">.</span><span class="n">Carry</span><span class="p">})</span>  <span class="c1"># type: ignore</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">broadcast_rngs</span> <span class="o">=</span> <span class="n">broadcast_rngs</span>
+
+<div class="viewcode-block" id="RNN.__call__"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.RNN.__call__">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">initial_carry</span><span class="p">:</span> <span class="n">Carry</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">seq_lengths</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">return_carry</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">time_major</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">keep_order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="k">if</span> <span class="n">return_carry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">return_carry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_carry</span>
+    <span class="k">if</span> <span class="n">time_major</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">time_major</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_major</span>
+    <span class="k">if</span> <span class="n">reverse</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">reverse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse</span>
+    <span class="k">if</span> <span class="n">keep_order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">keep_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_order</span>
+
+    <span class="c1"># Infer the number of batch dimensions from the input shape.</span>
+    <span class="c1"># Cells like ConvLSTM have additional spatial dimensions.</span>
+    <span class="n">time_axis</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">time_major</span> <span class="k">else</span> <span class="n">inputs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">num_feature_axes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># make time_axis positive</span>
+    <span class="k">if</span> <span class="n">time_axis</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">time_axis</span> <span class="o">+=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">ndim</span>
+
+    <span class="k">if</span> <span class="n">time_major</span><span class="p">:</span>
+      <span class="c1"># we add +1 because we moved the time axis to the front</span>
+      <span class="n">batch_dims</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">num_feature_axes</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">batch_dims</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="n">time_axis</span><span class="p">]</span>
+
+    <span class="c1"># maybe reverse the sequence</span>
+    <span class="k">if</span> <span class="n">reverse</span><span class="p">:</span>
+      <span class="n">inputs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">flip_sequences</span><span class="p">(</span>
+          <span class="n">x</span><span class="p">,</span>
+          <span class="n">seq_lengths</span><span class="p">,</span>
+          <span class="n">num_batch_dims</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">batch_dims</span><span class="p">),</span>
+          <span class="n">time_major</span><span class="o">=</span><span class="n">time_major</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+        <span class="p">),</span>
+        <span class="n">inputs</span><span class="p">,</span>
+      <span class="p">)</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
+
+    <span class="n">carry</span><span class="p">:</span> <span class="n">Carry</span> <span class="o">=</span> <span class="p">(</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">initialize_carry</span><span class="p">(</span>
+        <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="n">time_axis</span><span class="p">]</span> <span class="o">+</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">time_axis</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:],</span> <span class="n">rngs</span>
+      <span class="p">)</span>
+      <span class="k">if</span> <span class="n">initial_carry</span> <span class="ow">is</span> <span class="kc">None</span>
+      <span class="k">else</span> <span class="n">initial_carry</span>
+    <span class="p">)</span>
+
+    <span class="n">slice_carry</span> <span class="o">=</span> <span class="n">seq_lengths</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">return_carry</span>
+    <span class="n">broadcast_rngs</span> <span class="o">=</span> <span class="n">nnx</span><span class="o">.</span><span class="n">All</span><span class="p">(</span><span class="n">nnx</span><span class="o">.</span><span class="n">RngState</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">broadcast_rngs</span><span class="p">)</span>
+    <span class="n">state_axes</span> <span class="o">=</span> <span class="n">iteration</span><span class="o">.</span><span class="n">StateAxes</span><span class="p">({</span><span class="n">broadcast_rngs</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">state_axes</span><span class="p">})</span>  <span class="c1"># type: ignore[misc]</span>
+
+    <span class="c1"># we use split_rngs with splits=1 and squeeze=True to get unique rngs</span>
+    <span class="c1"># every time RNN is called</span>
+    <span class="nd">@nnx</span><span class="o">.</span><span class="n">split_rngs</span><span class="p">(</span><span class="n">splits</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">only</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">broadcast_rngs</span><span class="p">,</span> <span class="n">squeeze</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nd">@nnx</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span>
+      <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="n">state_axes</span><span class="p">,</span> <span class="n">iteration</span><span class="o">.</span><span class="n">Carry</span><span class="p">,</span> <span class="n">time_axis</span><span class="p">),</span>
+      <span class="n">out_axes</span><span class="o">=</span><span class="p">(</span><span class="n">iteration</span><span class="o">.</span><span class="n">Carry</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">time_axis</span><span class="p">))</span>
+      <span class="k">if</span> <span class="n">slice_carry</span>
+      <span class="k">else</span> <span class="p">(</span><span class="n">iteration</span><span class="o">.</span><span class="n">Carry</span><span class="p">,</span> <span class="n">time_axis</span><span class="p">),</span>
+      <span class="n">unroll</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">unroll</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">scan_fn</span><span class="p">(</span>
+      <span class="n">cell</span><span class="p">:</span> <span class="n">RNNCellBase</span><span class="p">,</span> <span class="n">carry</span><span class="p">:</span> <span class="n">Carry</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Carry</span><span class="p">,</span> <span class="n">Array</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Carry</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Carry</span><span class="p">,</span> <span class="n">Array</span><span class="p">]]:</span>
+      <span class="n">carry</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cell</span><span class="p">(</span><span class="n">carry</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">slice_carry</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">carry</span><span class="p">,</span> <span class="p">(</span><span class="n">carry</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">carry</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="n">scan_output</span> <span class="o">=</span> <span class="n">scan_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">,</span> <span class="n">carry</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+
+    <span class="c1"># Next we select the final carry. If a segmentation mask was provided and</span>
+    <span class="c1"># return_carry is True we slice the carry history and select the last valid</span>
+    <span class="c1"># carry for each sequence. Otherwise we just use the last carry.</span>
+    <span class="k">if</span> <span class="n">slice_carry</span><span class="p">:</span>
+      <span class="k">assert</span> <span class="n">seq_lengths</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+      <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">carries</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span> <span class="o">=</span> <span class="n">scan_output</span>
+      <span class="c1"># seq_lengths[None] expands the shape of the mask to match the</span>
+      <span class="c1"># number of dimensions of the carry.</span>
+      <span class="n">carry</span> <span class="o">=</span> <span class="n">_select_last_carry</span><span class="p">(</span><span class="n">carries</span><span class="p">,</span> <span class="n">seq_lengths</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">carry</span><span class="p">,</span> <span class="n">outputs</span> <span class="o">=</span> <span class="n">scan_output</span>
+
+    <span class="k">if</span> <span class="n">reverse</span> <span class="ow">and</span> <span class="n">keep_order</span><span class="p">:</span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">flip_sequences</span><span class="p">(</span>
+                    <span class="n">x</span><span class="p">,</span>
+                    <span class="n">seq_lengths</span><span class="p">,</span>
+                    <span class="n">num_batch_dims</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">batch_dims</span><span class="p">),</span>
+                    <span class="n">time_major</span><span class="o">=</span><span class="n">time_major</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+                <span class="p">),</span>
+                <span class="n">outputs</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">return_carry</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">carry</span><span class="p">,</span> <span class="n">outputs</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">outputs</span></div></div>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_select_last_carry</span><span class="p">(</span><span class="n">sequence</span><span class="p">:</span> <span class="n">A</span><span class="p">,</span> <span class="n">seq_lengths</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">A</span><span class="p">:</span>
+    <span class="n">last_idx</span> <span class="o">=</span> <span class="n">seq_lengths</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_slice_array</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="n">last_idx</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+
+    <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="n">_slice_array</span><span class="p">,</span> <span class="n">sequence</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_expand_dims_like</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Expands the shape of `x` to match `target`&#39;s shape by adding singleton dimensions.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="flip_sequences"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.flip_sequences">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">flip_sequences</span><span class="p">(</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="n">seq_lengths</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">num_batch_dims</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">time_major</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Flips a sequence of inputs along the time axis.</span>
+
+<span class="sd">    This function can be used to prepare inputs for the reverse direction of a</span>
+<span class="sd">    bidirectional LSTM. It solves the issue that, when naively flipping multiple</span>
+<span class="sd">    padded sequences stored in a matrix, the first elements would be padding</span>
+<span class="sd">    values for those sequences that were padded. This function keeps the padding</span>
+<span class="sd">    at the end, while flipping the rest of the elements.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">      &gt;&gt;&gt; from flax.nnx.nn.recurrent import flip_sequences</span>
+<span class="sd">      &gt;&gt;&gt; from jax import numpy as jnp</span>
+<span class="sd">      &gt;&gt;&gt; inputs = jnp.array([[1, 0, 0], [2, 3, 0], [4, 5, 6]])</span>
+<span class="sd">      &gt;&gt;&gt; lengths = jnp.array([1, 2, 3])</span>
+<span class="sd">      &gt;&gt;&gt; flip_sequences(inputs, lengths, 1, False)</span>
+<span class="sd">      Array([[1, 0, 0],</span>
+<span class="sd">             [3, 2, 0],</span>
+<span class="sd">             [6, 5, 4]], dtype=int32)</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">      inputs: An array of input IDs &lt;int&gt;[batch_size, seq_length].</span>
+<span class="sd">      lengths: The length of each sequence &lt;int&gt;[batch_size].</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      An ndarray with the flipped inputs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Compute the indices to put the inputs in flipped order as per above example.</span>
+    <span class="n">time_axis</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">time_major</span> <span class="k">else</span> <span class="n">num_batch_dims</span>
+    <span class="n">max_steps</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">time_axis</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">seq_lengths</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># reverse inputs and return</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">time_axis</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inputs</span>
+
+    <span class="n">seq_lengths</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">seq_lengths</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">time_axis</span><span class="p">)</span>
+
+    <span class="c1"># create indexes</span>
+    <span class="n">idxs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">max_steps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># [max_steps]</span>
+    <span class="k">if</span> <span class="n">time_major</span><span class="p">:</span>
+        <span class="n">idxs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="p">[</span><span class="n">max_steps</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_batch_dims</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">idxs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">idxs</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_batch_dims</span> <span class="o">+</span> <span class="p">[</span><span class="n">max_steps</span><span class="p">]</span>
+        <span class="p">)</span>  <span class="c1"># [1, ..., max_steps]</span>
+    <span class="n">idxs</span> <span class="o">=</span> <span class="p">(</span><span class="n">idxs</span> <span class="o">+</span> <span class="n">seq_lengths</span><span class="p">)</span> <span class="o">%</span> <span class="n">max_steps</span>  <span class="c1"># [*batch, max_steps]</span>
+    <span class="n">idxs</span> <span class="o">=</span> <span class="n">_expand_dims_like</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>  <span class="c1"># [*batch, max_steps, *features]</span>
+    <span class="c1"># Select the inputs in flipped order.</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">take_along_axis</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">idxs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">time_axis</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">outputs</span></div>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_concatenate</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Concatenates two arrays along the last dimension.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RNNBase</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">initial_carry</span><span class="p">:</span> <span class="n">Carry</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">seq_lengths</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">return_carry</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">time_major</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">keep_order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Output</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Carry</span><span class="p">,</span> <span class="n">Output</span><span class="p">]:</span> <span class="o">...</span>
+
+
+<div class="viewcode-block" id="Bidirectional"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.Bidirectional">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Bidirectional</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Processes the input in both directions and merges the results.</span>
+
+<span class="sd">  Example usage::</span>
+
+<span class="sd">    &gt;&gt;&gt; from flax import nnx</span>
+<span class="sd">    &gt;&gt;&gt; import jax</span>
+<span class="sd">    &gt;&gt;&gt; import jax.numpy as jnp</span>
+
+<span class="sd">    &gt;&gt;&gt; # Define forward and backward RNNs</span>
+<span class="sd">    &gt;&gt;&gt; forward_rnn = RNN(GRUCell(in_features=3, hidden_features=4, rngs=nnx.Rngs(0)))</span>
+<span class="sd">    &gt;&gt;&gt; backward_rnn = RNN(GRUCell(in_features=3, hidden_features=4, rngs=nnx.Rngs(0)))</span>
+
+<span class="sd">    &gt;&gt;&gt; # Create Bidirectional layer</span>
+<span class="sd">    &gt;&gt;&gt; layer = Bidirectional(forward_rnn=forward_rnn, backward_rnn=backward_rnn)</span>
+
+<span class="sd">    &gt;&gt;&gt; # Input data</span>
+<span class="sd">    &gt;&gt;&gt; x = jnp.ones((2, 3, 3))</span>
+
+<span class="sd">    &gt;&gt;&gt; # Apply the layer</span>
+<span class="sd">    &gt;&gt;&gt; out = layer(x)</span>
+<span class="sd">    &gt;&gt;&gt; print(out.shape)</span>
+<span class="sd">    (2, 3, 8)</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">forward_rnn</span><span class="p">:</span> <span class="n">RNNBase</span>
+  <span class="n">backward_rnn</span><span class="p">:</span> <span class="n">RNNBase</span>
+  <span class="n">merge_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">Array</span><span class="p">]</span> <span class="o">=</span> <span class="n">_concatenate</span>
+  <span class="n">time_major</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+  <span class="n">return_carry</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">forward_rnn</span><span class="p">:</span> <span class="n">RNNBase</span><span class="p">,</span>
+    <span class="n">backward_rnn</span><span class="p">:</span> <span class="n">RNNBase</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">merge_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">],</span> <span class="n">Array</span><span class="p">]</span> <span class="o">=</span> <span class="n">_concatenate</span><span class="p">,</span>
+    <span class="n">time_major</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">return_carry</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">forward_rnn</span> <span class="o">=</span> <span class="n">forward_rnn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">backward_rnn</span> <span class="o">=</span> <span class="n">backward_rnn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">merge_fn</span> <span class="o">=</span> <span class="n">merge_fn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">time_major</span> <span class="o">=</span> <span class="n">time_major</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">return_carry</span> <span class="o">=</span> <span class="n">return_carry</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s1">&#39;carry&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span><span class="o">.</span><span class="n">fork</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;rngs must be a Rngs, jax.Array, int, or bool, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span><span class="si">}</span><span class="s1">.&#39;</span>
+      <span class="p">)</span>
+
+<div class="viewcode-block" id="Bidirectional.__call__"><a class="viewcode-back" href="../../../../api_reference/flax.nnx/nn/recurrent.html#flax.nnx.nn.recurrent.Bidirectional.__call__">[docs]</a>  <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">initial_carry</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Carry</span><span class="p">,</span> <span class="n">Carry</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rngs</span><span class="p">:</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span> <span class="o">|</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">RngStream</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">seq_lengths</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">return_carry</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">time_major</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># unused</span>
+    <span class="n">keep_order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># unused</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Output</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Carry</span><span class="p">,</span> <span class="n">Carry</span><span class="p">],</span> <span class="n">Output</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">time_major</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">time_major</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_major</span>
+    <span class="k">if</span> <span class="n">return_carry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">return_carry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_carry</span>
+    <span class="k">if</span> <span class="n">rngs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rngs</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rngs</span><span class="p">,</span> <span class="n">rnglib</span><span class="o">.</span><span class="n">Rngs</span><span class="p">):</span>
+      <span class="n">rngs</span> <span class="o">=</span> <span class="n">rngs</span><span class="o">.</span><span class="n">carry</span>
+
+    <span class="k">if</span> <span class="n">initial_carry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">initial_carry_forward</span><span class="p">,</span> <span class="n">initial_carry_backward</span> <span class="o">=</span> <span class="n">initial_carry</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">initial_carry_forward</span> <span class="o">=</span> <span class="kc">None</span>
+      <span class="n">initial_carry_backward</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Throw a warning in case the user accidentally re-uses the forward RNN</span>
+    <span class="c1"># for the backward pass and does not intend for them to share parameters.</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_rnn</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">backward_rnn</span><span class="p">:</span>
+      <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+        <span class="s1">&#39;forward_rnn and backward_rnn is the same object, so &#39;</span>
+        <span class="s1">&#39;they will share parameters.&#39;</span>
+      <span class="p">)</span>
+
+    <span class="c1"># Encode in the forward direction.</span>
+    <span class="n">carry_forward</span><span class="p">,</span> <span class="n">outputs_forward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_rnn</span><span class="p">(</span>
+      <span class="n">inputs</span><span class="p">,</span>
+      <span class="n">initial_carry</span><span class="o">=</span><span class="n">initial_carry_forward</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">seq_lengths</span><span class="o">=</span><span class="n">seq_lengths</span><span class="p">,</span>
+      <span class="n">return_carry</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+      <span class="n">time_major</span><span class="o">=</span><span class="n">time_major</span><span class="p">,</span>
+      <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Encode in the backward direction.</span>
+    <span class="n">carry_backward</span><span class="p">,</span> <span class="n">outputs_backward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backward_rnn</span><span class="p">(</span>
+      <span class="n">inputs</span><span class="p">,</span>
+      <span class="n">initial_carry</span><span class="o">=</span><span class="n">initial_carry_backward</span><span class="p">,</span>
+      <span class="n">rngs</span><span class="o">=</span><span class="n">rngs</span><span class="p">,</span>
+      <span class="n">seq_lengths</span><span class="o">=</span><span class="n">seq_lengths</span><span class="p">,</span>
+      <span class="n">return_carry</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+      <span class="n">time_major</span><span class="o">=</span><span class="n">time_major</span><span class="p">,</span>
+      <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+      <span class="n">keep_order</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">carry</span> <span class="o">=</span> <span class="p">(</span><span class="n">carry_forward</span><span class="p">,</span> <span class="n">carry_backward</span><span class="p">)</span> <span class="k">if</span> <span class="n">return_carry</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">merge_fn</span><span class="p">,</span> <span class="n">outputs_forward</span><span class="p">,</span> <span class="n">outputs_backward</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">return_carry</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">carry</span><span class="p">,</span> <span class="n">outputs</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">outputs</span></div></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Flax authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-Present, The Flax authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
