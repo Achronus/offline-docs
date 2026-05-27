@@ -47,4 +47,13 @@ export const manifests: Manifest[] = [
     version: '0.2.0',
     page_count: 39,
   },
+  {
+    dir: 'flax',
+    name: 'Flax',
+    tag: 'Fl',
+    color: '#534AB7',
+    version: '0.10.4',
+    page_count: 140,
+    source_url: 'https://flax.readthedocs.io/en/latest/',
+  },
 ];

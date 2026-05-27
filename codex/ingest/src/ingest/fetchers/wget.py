@@ -20,7 +20,27 @@ from collections import deque
 from pathlib import Path
 from urllib.parse import urldefrag, urljoin, urlparse
 
-import requests
+# curl_cffi impersonates a real Chrome's TLS handshake + HTTP/2 header order
+# so Cloudflare-protected docs sites (most ReadTheDocs sources) don't 403 us.
+# Falls back to plain requests if curl_cffi isn't installed.
+try:
+    from curl_cffi import requests as http_client  # type: ignore
+    _IMPERSONATE = "chrome"
+except ImportError:  # pragma: no cover
+    import requests as http_client  # type: ignore
+    _IMPERSONATE = None
+import requests as _requests_for_exc  # exception types regardless of client
+
+# Catch both libs' HTTP exception classes so we cleanly skip individual failures
+# regardless of which underlying client is in use.
+try:
+    from curl_cffi.requests.exceptions import RequestsError as _CurlRequestsError  # type: ignore
+    _HTTP_EXCEPTIONS: tuple[type[BaseException], ...] = (
+        _requests_for_exc.RequestException,
+        _CurlRequestsError,
+    )
+except ImportError:
+    _HTTP_EXCEPTIONS = (_requests_for_exc.RequestException,)
 from bs4 import BeautifulSoup
 from rich.console import Console
 
@@ -34,7 +54,10 @@ def fetch(
     exclude_pattern: str | None = None,
     max_pages: int = 5000,
     delay: float = 0.3,
-    user_agent: str = "codex-ingest/0.1 (+https://github.com/codex)",
+    user_agent: str = (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+    ),
 ) -> Path:
     """
     Crawl ``base_url`` and save each reachable HTML page to ``cache_dir``,
@@ -51,8 +74,30 @@ def fetch(
     path_prefix = parsed_base.path or "/"
     exclude_re = re.compile(exclude_pattern) if exclude_pattern else None
 
-    session = requests.Session()
-    session.headers["User-Agent"] = user_agent
+    session = (
+        http_client.Session(impersonate=_IMPERSONATE)
+        if _IMPERSONATE
+        else http_client.Session()
+    )
+    # Some sites (RTD-hosted ones behind Cloudflare especially) reject barely-
+    # shaped clients with a 403. Sending the same headers a real browser would
+    # use clears the challenge.
+    session.headers.update({
+        "User-Agent": user_agent,
+        "Accept": (
+            "text/html,application/xhtml+xml,application/xml;q=0.9,"
+            "image/avif,image/webp,*/*;q=0.8"
+        ),
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1",
+        "Upgrade-Insecure-Requests": "1",
+        "DNT": "1",
+        "Connection": "keep-alive",
+    })
 
     visited: set[str] = set()
     asset_visited: set[str] = set()
@@ -81,7 +126,7 @@ def fetch(
         try:
             resp = session.get(url, timeout=30, allow_redirects=True)
             resp.raise_for_status()
-        except requests.RequestException as e:
+        except Exception as e:
             console.log(f"[yellow]skip[/yellow] {url} ({e})")
             skipped += 1
             continue
@@ -104,6 +149,11 @@ def fetch(
             if href.startswith(("mailto:", "javascript:", "tel:", "#")):
                 continue
             absolute, _ = urldefrag(urljoin(url, href))
+            # Sphinx links its raw .rst/.ipynb sources under /_sources/ for the
+            # "View source" widget. RTD returns 403 for them and we don't need
+            # them in the offline mirror — the rendered HTML is enough.
+            if "/_sources/" in absolute or absolute.endswith((".rst", ".ipynb")):
+                continue
             if absolute not in visited:
                 queue.append(absolute)
 
@@ -125,9 +175,16 @@ def fetch(
             try:
                 asset_resp = session.get(asset_url, timeout=30)
                 asset_resp.raise_for_status()
-            except requests.RequestException:
+            except Exception:
                 continue
-            asset_rel = asset_parsed.path.lstrip("/")
+            # Mirror the same prefix-stripping we do for HTML pages so that
+            # cached asset paths match what the HTML's relative refs expect.
+            # Assets outside the docs path prefix (e.g. /img/sponsors on a
+            # site whose docs live at /) keep their full path.
+            asset_path = asset_parsed.path
+            if asset_path.startswith(path_prefix):
+                asset_path = asset_path[len(path_prefix):]
+            asset_rel = asset_path.lstrip("/")
             if not asset_rel:
                 continue
             asset_out = cache_dir / asset_rel

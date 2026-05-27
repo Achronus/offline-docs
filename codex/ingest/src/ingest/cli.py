@@ -12,6 +12,7 @@ from . import __version__
 from .config import CodexConfig, Source, cache_root, find_config, load
 from .emitter import write_manifest
 from .fetchers import local as local_fetcher
+from .fetchers import rtd as rtd_fetcher
 from .fetchers import wget as wget_fetcher
 from .stager import stage_source
 
@@ -116,7 +117,7 @@ def _do_fetch(src: Source) -> Path:
     cache_dir = cache_root() / src.name
     console.rule(f"[bold]fetch[/bold] {src.name} ({src.type})")
 
-    if src.type in ("mkdocs", "docusaurus"):
+    if src.type in ("mkdocs", "docusaurus", "sphinx-html"):
         if not src.url:
             raise click.ClickException(f"{src.name}: 'url' is required")
         return wget_fetcher.fetch(
@@ -131,10 +132,6 @@ def _do_fetch(src: Source) -> Path:
             )
         return local_fetcher.fetch(Path(src.repo_path), cache_dir)
 
-    if src.type == "sphinx-html":
-        raise click.ClickException(
-            f"{src.name}: sphinx-html fetcher not implemented yet (Phase 4)"
-        )
     if src.type == "spa":
         raise click.ClickException(
             f"{src.name}: spa fetcher not implemented yet (Phase 5)"
