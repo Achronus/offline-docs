@@ -146,6 +146,19 @@ def fetch(
             console.log(f"  fetched {fetched} pages…")
 
         soup = BeautifulSoup(resp.text, "html.parser")
+
+        # Some Sphinx projects make their landing page a meta-refresh redirect
+        # (e.g. MuJoCo's index → overview.html). Follow the target so the
+        # crawler doesn't dead-end on the first page.
+        meta_refresh = soup.find("meta", attrs={"http-equiv": re.compile("^refresh$", re.I)})
+        if meta_refresh:
+            content = meta_refresh.get("content") or ""
+            m = re.search(r"url\s*=\s*([^;\s]+)", content, re.IGNORECASE)
+            if m:
+                target, _ = urldefrag(urljoin(url, m.group(1)))
+                if target not in visited:
+                    queue.append(target)
+
         for a in soup.find_all("a", href=True):
             href = a["href"]
             if href.startswith(("mailto:", "javascript:", "tel:", "#")):

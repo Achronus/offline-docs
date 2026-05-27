@@ -1,0 +1,1339 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Custom pytree nodes &#8212; JAX  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css?v=17fd2dad" />
+    <link rel="stylesheet" href="_static/style.css" type="text/css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=30646c52"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'custom_pytrees';</script>
+    <link rel="icon" href="_static/favicon.png"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Persistent compilation cache" href="persistent_compilation_cache.html" />
+    <link rel="prev" title="Transfer guard" href="transfer_guard.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  <script async type="text/javascript" src="/sources/jax/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="jax" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/custom_pytrees.html" /><meta name="readthedocs-http-status" content="200" /></head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/jax_logo_250px.png" class="logo__image only-light" alt="JAX  documentation - Home"/>
+    <img src="_static/jax_logo_250px.png" class="logo__image only-dark pst-js-only" alt="JAX  documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/thinking_in_jax.html">Quickstart: How to think in JAX</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Common_Gotchas_in_JAX.html">🔪 JAX - The Sharp Bits 🔪</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="jax-101.html">JAX 101</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="jit-compilation.html">Just-in-time compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="automatic-vectorization.html">Automatic vectorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="automatic-differentiation.html">Automatic differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pytrees.html">Pytrees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random-numbers.html">Pseudorandom numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallel.html">Distributed arrays and automatic parallelization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control-flow.html">Control flow and logical operators with JIT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing.html">Tracing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stateful-computations.html">Stateful computations</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Resources, guides, and references</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="key-concepts.html">Key concepts</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="advanced_guides.html">Resources and Advanced Guides</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="notebooks/shard_map.html">Manual parallelism with <code class="docutils literal notranslate"><span class="pre">shard_map</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/layout.html">Device-local array layout control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/host-offloading.html">JAX Memories and Host Offloading</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="multi_process.html">Introduction to multi-controller JAX (aka multi-process/multi-host JAX)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fault_tolerance.html">Fault Tolerant Distributed JAX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed_data_loading.html">Distributed data loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/colocated-python.html">Colocated Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the-training-cookbook.html">The Training Cookbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/autodiff_cookbook.html">The Autodiff Cookbook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/autodiff_remat.html">Control autodiff’s saved values with <code class="docutils literal notranslate"><span class="pre">jax.checkpoint</span></code> (aka <code class="docutils literal notranslate"><span class="pre">jax.remat</span></code>)</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="advanced_autodiff.html">Advanced Automatic Differentiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="higher-order.html">Higher-order derivatives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jacobian-vector-products.html">Forward- and reverse-mode autodiff in JAX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="complex-differentiation.html">Complex numbers and differentiation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/Custom_derivative_rules_for_Python_code.html">Custom derivative rules for JAX-transformable Python functions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="debugging.html">Introduction to debugging</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="debugging/index.html">Debugging runtime values</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="debugging/flags.html">JAX debugging flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debugging/print_breakpoint.html">Compiled prints and breakpoints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debugging/checkify_guide.html">The <code class="docutils literal notranslate"><span class="pre">checkify</span></code> transformation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debugging/xla_metadata.html">Attaching XLA Metadata with <code class="docutils literal notranslate"><span class="pre">set_xla_metadata</span></code></a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="transfer_guard.html">Transfer guard</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Custom pytree nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistent_compilation_cache.html">Persistent compilation cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer_donation.html">Buffer donation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpu_performance_tips.html">GPU performance tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="benchmarking.html">Benchmarking JAX code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiling.html">Profiling computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="device_memory_profiling.html">Profiling device memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_refs.html"><code class="docutils literal notranslate"><span class="pre">Ref</span></code>: mutable arrays for data plumbing and memory control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="external-callbacks.html">External callbacks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ffi.html">Foreign function interface (FFI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/cute_dsl_jax.html">Writing High-Performance GPU Kernels with CuTe DSL and JAX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gradient-checkpointing.html">Gradient checkpointing with <code class="docutils literal notranslate"><span class="pre">jax.checkpoint</span></code> (<code class="docutils literal notranslate"><span class="pre">jax.remat</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aot.html">Ahead-of-time lowering and compilation</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="export/index.html">Exporting and serialization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="export/export.html">Exporting and serializing staged-out computations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="export/shape_poly.html">Shape polymorphism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="export/jax2tf.html">Interoperation with TensorFlow</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/neural_network_with_tfds_data.html">Training a simple neural network, with tensorflow/datasets data loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Neural_Network_and_Data_Loading.html">Training a simple neural network, with PyTorch data loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/vmapped_log_probs.html">Autobatching for Bayesian inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/convolutions.html">Generalized convolutions in JAX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xla_flags.html">XLA compiler flags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax-primitives.html">JAX Internals: primitives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jaxpr.html">JAX internals: The jaxpr language</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="jax.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="jax.numpy.html"><code class="docutils literal notranslate"><span class="pre">jax.numpy</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.fft.html">jax.numpy.fft.fft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.fft2.html">jax.numpy.fft.fft2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.fftfreq.html">jax.numpy.fft.fftfreq</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.fftn.html">jax.numpy.fft.fftn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.fftshift.html">jax.numpy.fft.fftshift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.hfft.html">jax.numpy.fft.hfft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.ifft.html">jax.numpy.fft.ifft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.ifft2.html">jax.numpy.fft.ifft2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.ifftn.html">jax.numpy.fft.ifftn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.ifftshift.html">jax.numpy.fft.ifftshift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.ihfft.html">jax.numpy.fft.ihfft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.irfft.html">jax.numpy.fft.irfft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.irfft2.html">jax.numpy.fft.irfft2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.irfftn.html">jax.numpy.fft.irfftn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.rfft.html">jax.numpy.fft.rfft</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.rfft2.html">jax.numpy.fft.rfft2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.rfftfreq.html">jax.numpy.fft.rfftfreq</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.numpy.fft.rfftn.html">jax.numpy.fft.rfftn</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="jax.scipy.html"><code class="docutils literal notranslate"><span class="pre">jax.scipy</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.scipy.stats.bernoulli.logpmf.html">jax.scipy.stats.bernoulli.logpmf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.scipy.stats.bernoulli.pmf.html">jax.scipy.stats.bernoulli.pmf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.scipy.stats.bernoulli.cdf.html">jax.scipy.stats.bernoulli.cdf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/jax.scipy.stats.bernoulli.ppf.html">jax.scipy.stats.bernoulli.ppf</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.lax.html"><code class="docutils literal notranslate"><span class="pre">jax.lax</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.random.html"><code class="docutils literal notranslate"><span class="pre">jax.random</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.sharding.html"><code class="docutils literal notranslate"><span class="pre">jax.sharding</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.ad_checkpoint.html"><code class="docutils literal notranslate"><span class="pre">jax.ad_checkpoint</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.debug.html"><code class="docutils literal notranslate"><span class="pre">jax.debug</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.dlpack.html"><code class="docutils literal notranslate"><span class="pre">jax.dlpack</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.distributed.html"><code class="docutils literal notranslate"><span class="pre">jax.distributed</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.dtypes.html"><code class="docutils literal notranslate"><span class="pre">jax.dtypes</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.ffi.html"><code class="docutils literal notranslate"><span class="pre">jax.ffi</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.flatten_util.html"><code class="docutils literal notranslate"><span class="pre">jax.flatten_util</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.image.html"><code class="docutils literal notranslate"><span class="pre">jax.image</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="jax.nn.html"><code class="docutils literal notranslate"><span class="pre">jax.nn</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="jax.nn.initializers.html"><code class="docutils literal notranslate"><span class="pre">jax.nn.initializers</span></code> module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.ops.html"><code class="docutils literal notranslate"><span class="pre">jax.ops</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.profiler.html"><code class="docutils literal notranslate"><span class="pre">jax.profiler</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.ref.html"><code class="docutils literal notranslate"><span class="pre">jax.ref</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.stages.html"><code class="docutils literal notranslate"><span class="pre">jax.stages</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.test_util.html"><code class="docutils literal notranslate"><span class="pre">jax.test_util</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.tree.html"><code class="docutils literal notranslate"><span class="pre">jax.tree</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.tree_util.html"><code class="docutils literal notranslate"><span class="pre">jax.tree_util</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.typing.html"><code class="docutils literal notranslate"><span class="pre">jax.typing</span></code> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jax.export.html"><code class="docutils literal notranslate"><span class="pre">jax.export</span></code> module</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="jax.extend.html"><code class="docutils literal notranslate"><span class="pre">jax.extend</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.backend.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.backend</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.core.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.core</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.linear_util.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.linear_util</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.lowering.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.lowering</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.mlir.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.mlir</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.pallas.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.pallas</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.random.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.random</span></code> module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="jax.example_libraries.html"><code class="docutils literal notranslate"><span class="pre">jax.example_libraries</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="jax.example_libraries.optimizers.html"><code class="docutils literal notranslate"><span class="pre">jax.example_libraries.optimizers</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.example_libraries.stax.html"><code class="docutils literal notranslate"><span class="pre">jax.example_libraries.stax</span></code> module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="jax.experimental.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.checkify.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.checkify</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.compilation_cache.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.compilation_cache</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.custom_partitioning.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.custom_partitioning</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.jet.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.jet</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.key_reuse.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.key_reuse</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.mesh_utils.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.mesh_utils</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.multihost_utils.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.multihost_utils</span></code> module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="jax.experimental.pallas.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.pallas</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="jax.experimental.pallas.tpu.html">Pallas TPU (TensorCore)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="jax.experimental.pallas.mosaic_gpu.html">Pallas MGPU</a></li>
+<li class="toctree-l4"><a class="reference internal" href="jax.experimental.pallas.triton.html">Triton</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.random.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.random</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.serialize_executable.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.serialize_executable</span></code> module</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="jax.experimental.sparse.html"><code class="docutils literal notranslate"><span class="pre">jax.experimental.sparse</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.BCOO.html">jax.experimental.sparse.BCOO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_broadcast_in_dim.html">jax.experimental.sparse.bcoo_broadcast_in_dim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_concatenate.html">jax.experimental.sparse.bcoo_concatenate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_dot_general.html">jax.experimental.sparse.bcoo_dot_general</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_dot_general_sampled.html">jax.experimental.sparse.bcoo_dot_general_sampled</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_dynamic_slice.html">jax.experimental.sparse.bcoo_dynamic_slice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_extract.html">jax.experimental.sparse.bcoo_extract</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_fromdense.html">jax.experimental.sparse.bcoo_fromdense</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_gather.html">jax.experimental.sparse.bcoo_gather</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_multiply_dense.html">jax.experimental.sparse.bcoo_multiply_dense</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_multiply_sparse.html">jax.experimental.sparse.bcoo_multiply_sparse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_update_layout.html">jax.experimental.sparse.bcoo_update_layout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_reduce_sum.html">jax.experimental.sparse.bcoo_reduce_sum</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_reshape.html">jax.experimental.sparse.bcoo_reshape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_slice.html">jax.experimental.sparse.bcoo_slice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_sort_indices.html">jax.experimental.sparse.bcoo_sort_indices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_squeeze.html">jax.experimental.sparse.bcoo_squeeze</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_sum_duplicates.html">jax.experimental.sparse.bcoo_sum_duplicates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_todense.html">jax.experimental.sparse.bcoo_todense</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/jax.experimental.sparse.bcoo_transpose.html">jax.experimental.sparse.bcoo_transpose</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.addressable_shards.html">jax.Array.addressable_shards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.all.html">jax.Array.all</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.any.html">jax.Array.any</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.argmax.html">jax.Array.argmax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.argmin.html">jax.Array.argmin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.argpartition.html">jax.Array.argpartition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.argsort.html">jax.Array.argsort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.astype.html">jax.Array.astype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.at.html">jax.Array.at</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.byteswap.html">jax.Array.byteswap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.choose.html">jax.Array.choose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.clip.html">jax.Array.clip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.compress.html">jax.Array.compress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.committed.html">jax.Array.committed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.conj.html">jax.Array.conj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.conjugate.html">jax.Array.conjugate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.copy.html">jax.Array.copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.copy_to_host_async.html">jax.Array.copy_to_host_async</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.cumprod.html">jax.Array.cumprod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.cumsum.html">jax.Array.cumsum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.device.html">jax.Array.device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.diagonal.html">jax.Array.diagonal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.dot.html">jax.Array.dot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.dtype.html">jax.Array.dtype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.flat.html">jax.Array.flat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.flatten.html">jax.Array.flatten</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.global_shards.html">jax.Array.global_shards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.imag.html">jax.Array.imag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.is_fully_addressable.html">jax.Array.is_fully_addressable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.is_fully_replicated.html">jax.Array.is_fully_replicated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.item.html">jax.Array.item</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.itemsize.html">jax.Array.itemsize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.max.html">jax.Array.max</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.mean.html">jax.Array.mean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.min.html">jax.Array.min</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.nbytes.html">jax.Array.nbytes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.ndim.html">jax.Array.ndim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.nonzero.html">jax.Array.nonzero</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.prod.html">jax.Array.prod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.ptp.html">jax.Array.ptp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.ravel.html">jax.Array.ravel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.real.html">jax.Array.real</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.repeat.html">jax.Array.repeat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.reshape.html">jax.Array.reshape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.round.html">jax.Array.round</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.searchsorted.html">jax.Array.searchsorted</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.shape.html">jax.Array.shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.sharding.html">jax.Array.sharding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.size.html">jax.Array.size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.sort.html">jax.Array.sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.squeeze.html">jax.Array.squeeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.std.html">jax.Array.std</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.sum.html">jax.Array.sum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.swapaxes.html">jax.Array.swapaxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.take.html">jax.Array.take</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.to_device.html">jax.Array.to_device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.trace.html">jax.Array.trace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.transpose.html">jax.Array.transpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.var.html">jax.Array.var</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.view.html">jax.Array.view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.T.html">jax.Array.T</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/jax.Array.mT.html">jax.Array.mT</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="contributor_guide.html">Developer notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to JAX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer.html">Building from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="investigating_a_regression.html">Investigating a regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autodidax.html">Autodidax: JAX core from scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autodidax2_part1.html">Autodidax2, part 1: JAX from scratch, again</a></li>
+
+<li class="toctree-l2 has-children"><a class="reference internal" href="jep/index.html">JAX Enhancement Proposals (JEPs)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="jep/263-prng.html">263: JAX PRNG Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/2026-custom-derivatives.html">2026: Custom JVP/VJP rules for JAX-transformable functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/4008-custom-vjp-update.html">4008: Custom VJP and `nondiff_argnums` update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/4410-omnistaging.html">4410: Omnistaging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/9263-typed-keys.html">9263: Typed keys &amp; pluggable RNGs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/9407-type-promotion.html">9407: Design of Type Promotion Semantics for JAX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/9419-jax-versioning.html">9419: Jax and Jaxlib versioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/10657-sequencing-effects.html">10657: Sequencing side-effects in JAX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/11830-new-remat-checkpoint.html">11830: `jax.remat` / `jax.checkpoint` new implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/12049-type-annotations.html">12049: Type Annotation Roadmap for JAX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/14273-shard-map.html">14273: `shard_map` (`shmap`) for simple per-device code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/15856-jex.html">15856: `jax.extend`, an extensions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/17111-shmap-transpose.html">17111: Efficient transposition of `shard_map` (and other maps)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/18137-numpy-scipy-scope.html">18137: Scope of JAX NumPy &amp; SciPy Wrappers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/25516-effver.html">25516: Effort-based versioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/28661-jax-array-protocol.html">28661: Supporting the `__jax_array__` protocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jep/28845-stateful-rng.html">28845: Stateful Randomness in JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="internals/index.html">JAX Internal Implementation Notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="internals/constants.html">Handling of closed-over constants</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="extensions.html">Extension guides</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Writing_custom_interpreters_in_Jax.html">Writing custom Jaxpr interpreters in JAX</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="jax.extend.html"><code class="docutils literal notranslate"><span class="pre">jax.extend</span></code> module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.backend.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.backend</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.core.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.core</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.linear_util.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.linear_util</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.lowering.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.lowering</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.mlir.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.mlir</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.pallas.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.pallas</span></code> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.extend.random.html"><code class="docutils literal notranslate"><span class="pre">jax.extend.random</span></code> module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="building_on_jax.html">Building on JAX</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="notes.html">Notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_compatibility.html">API compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deprecation.html">Python and NumPy version support policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="async_dispatch.html">Asynchronous dispatch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrency.html">Concurrency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpu_memory_allocation.html">GPU memory allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rank_promotion_warning.html">Rank promotion warning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_promotion.html">Type promotion semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="default_dtypes.html">Default dtypes and the X64 flag</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pallas/index.html">Pallas: a JAX kernel language</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="pallas/quickstart.html">Pallas Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pallas/pipelining.html">Software Pipelining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pallas/grid_blockspec.html">Grids and BlockSpecs</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pallas/tpu/index.html">Pallas TPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="pallas/tpu/details.html">Writing TPU kernels with Pallas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/tpu/pipelining.html">TPU Pipelining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/tpu/matmul.html">Matrix Multiplication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/tpu/sparse.html">Scalar Prefetch and Block-Sparse Computation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/tpu/distributed.html">Distributed Computing in Pallas for TPUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/tpu/core_map.html">Pallas Core-specific Programming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/tpu/sparsecore.html">SparseCore Kernel Writing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/tpu/prng.html">Pseudo-Random Number Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/tpu/hardware.html">TPU Hardware Reference</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pallas/gpu/index.html">Pallas:Mosaic GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="pallas/gpu/reference.html">Writing Mosaic GPU kernels with Pallas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/gpu/pipelining.html">Mosaic GPU Pipelining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/gpu/blackwell_matmul.html">Writing high-performance matrix multiplication kernels for Blackwell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/gpu/collective_matmul.html">Collective matrix multiplication</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="jax.experimental.pallas.html">Instruction Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.pallas.tpu.html">Pallas TPU (TensorCore)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.pallas.mosaic_gpu.html">Pallas MGPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jax.experimental.pallas.triton.html">Triton</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pallas/design/index.html">Pallas Design Notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="pallas/design/design.html">Pallas Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pallas/design/async_note.html">Pallas Async Operations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="pallas/CHANGELOG.html">Pallas Changelog</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About the project</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently asked questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary of terms</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="advanced_guides.html" class="nav-link">Resources and Advanced Guides</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Custom pytree nodes</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/jax-ml/jax" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/custom_pytrees.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Custom pytree nodes</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-pytrees-and-initialization-with-unexpected-values">Custom pytrees and initialization with unexpected values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#internal-pytree-handling">Internal pytree handling</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="custom-pytree-nodes">
+<span id="pytrees-custom-pytree-nodes"></span><h1>Custom pytree nodes<a class="headerlink" href="#custom-pytree-nodes" title="Link to this heading">#</a></h1>
+<p>This section explains how in JAX you can extend the set of Python types that will be considered <em>internal nodes</em> in pytrees (pytree nodes) by using <a class="reference internal" href="_autosummary/jax.tree_util.register_pytree_node.html#jax.tree_util.register_pytree_node" title="jax.tree_util.register_pytree_node"><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.tree_util.register_pytree_node()</span></code></a> with <a class="reference internal" href="_autosummary/jax.tree.map.html#jax.tree.map" title="jax.tree.map"><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.tree.map()</span></code></a>.</p>
+<p>Why would you need this? In the previous examples, pytrees were shown as lists, tuples, and dicts, with everything else as pytree leaves. This is because if you define your own container class, it will be considered to be a pytree leaf unless you <em>register</em> it with JAX. This is also the case even if your container class has trees inside it. For example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Special</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+
+<span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">leaves</span><span class="p">([</span>
+    <span class="n">Special</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">Special</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;__main__.Special at 0x70aca658f590&gt;, &lt;__main__.Special at 0x70ac7e7108f0&gt;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Accordingly, if you try to use a <a class="reference internal" href="_autosummary/jax.tree.map.html#jax.tree.map" title="jax.tree.map"><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.tree.map()</span></code></a> expecting the leaves to be elements inside the container, you will get an error:</p>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="p">[</span>
+    <span class="n">Special</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">Special</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+  <span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>   <span class="p">[</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">Special</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">Special</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="nn">File ~/checkouts/readthedocs.org/user_builds/jax/envs/latest/lib/python3.12/site-packages/jax/_src/tree.py:156,</span> in <span class="ni">map</span><span class="nt">(f, tree, is_leaf, *rest)</span>
+<span class="g g-Whitespace">    </span><span class="mi">116</span> <span class="k">def</span><span class="w"> </span><span class="nf">map</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">117</span>         <span class="n">tree</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">118</span>         <span class="o">*</span><span class="n">rest</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">119</span>         <span class="n">is_leaf</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">120</span><span class="w">   </span><span class="sd">&quot;&quot;&quot;Maps a multi-input function over pytree args to produce a new pytree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">121</span><span class="sd"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">122</span><span class="sd">   Args:</span>
+<span class="sd">   (...)    154     - :func:`jax.tree.reduce`</span>
+<span class="g g-Whitespace">    </span><span class="mi">155</span><span class="sd">   &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">156</span>   <span class="k">return</span> <span class="n">tree_util</span><span class="o">.</span><span class="n">tree_map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_leaf</span><span class="p">)</span>
+
+<span class="nn">File ~/checkouts/readthedocs.org/user_builds/jax/envs/latest/lib/python3.12/site-packages/jax/_src/tree_util.py:398,</span> in <span class="ni">tree_map</span><span class="nt">(f, tree, is_leaf, *rest)</span>
+<span class="g g-Whitespace">    </span><span class="mi">396</span>   <span class="n">err</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">_prefix_error</span><span class="p">((),</span> <span class="n">tree</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">is_leaf</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+<span class="g g-Whitespace">    </span><span class="mi">397</span>   <span class="k">raise</span> <span class="p">(</span><span class="n">err</span><span class="p">(</span><span class="s1">&#39;tree_map tree&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">e</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+<span class="nn">--&gt; 398 return treedef.unflatten(f(*xs) for xs</span> in <span class="ni">zip</span><span class="nt">(*all_leaves))</span>
+
+<span class="nn">File ~/checkouts/readthedocs.org/user_builds/jax/envs/latest/lib/python3.12/site-packages/jax/_src/tree_util.py:398,</span> in <span class="ni">&lt;genexpr&gt;</span><span class="nt">(.0)</span>
+<span class="g g-Whitespace">    </span><span class="mi">396</span>   <span class="n">err</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">_prefix_error</span><span class="p">((),</span> <span class="n">tree</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">is_leaf</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+<span class="g g-Whitespace">    </span><span class="mi">397</span>   <span class="k">raise</span> <span class="p">(</span><span class="n">err</span><span class="p">(</span><span class="s1">&#39;tree_map tree&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">e</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+<span class="nn">--&gt; 398 return treedef.unflatten(f(*xs) for xs</span> in <span class="ni">zip</span><span class="nt">(*all_leaves))</span>
+
+<span class="nn">Cell In[2], line 1,</span> in <span class="ni">&lt;lambda&gt;</span><span class="nt">(x)</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>   <span class="p">[</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">Special</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">Special</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="ne">TypeError</span>: unsupported operand type(s) for +: &#39;Special&#39; and &#39;int&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>As a solution, JAX allows to extend the set of types to be considered internal pytree nodes through a global registry of types. Additionally, the values of registered types are traversed recursively.</p>
+<p>First, register a new type using <a class="reference internal" href="_autosummary/jax.tree_util.register_pytree_node.html#jax.tree_util.register_pytree_node" title="jax.tree_util.register_pytree_node"><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.tree_util.register_pytree_node()</span></code></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jax.tree_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_pytree_node</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RegisteredSpecial</span><span class="p">(</span><span class="n">Special</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;RegisteredSpecial(x=</span><span class="si">{}</span><span class="s2">, y=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">special_flatten</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Specifies a flattening recipe.</span>
+
+<span class="sd">  Params:</span>
+<span class="sd">    v: The value of the registered type to flatten.</span>
+<span class="sd">  Returns:</span>
+<span class="sd">    A pair of an iterable with the children to be flattened recursively,</span>
+<span class="sd">    and some opaque auxiliary data to pass back to the unflattening recipe.</span>
+<span class="sd">    The auxiliary data is stored in the treedef for use during unflattening.</span>
+<span class="sd">    The auxiliary data could be used, for example, for dictionary keys.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">children</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">aux_data</span> <span class="o">=</span> <span class="kc">None</span>
+  <span class="k">return</span> <span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="n">aux_data</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">special_unflatten</span><span class="p">(</span><span class="n">aux_data</span><span class="p">,</span> <span class="n">children</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Specifies an unflattening recipe.</span>
+
+<span class="sd">  Params:</span>
+<span class="sd">    aux_data: The opaque data that was specified during flattening of the</span>
+<span class="sd">      current tree definition.</span>
+<span class="sd">    children: The unflattened children</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    A reconstructed object of the registered type, using the specified</span>
+<span class="sd">    children and auxiliary data.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">RegisteredSpecial</span><span class="p">(</span><span class="o">*</span><span class="n">children</span><span class="p">)</span>
+
+<span class="c1"># Global registration</span>
+<span class="n">register_pytree_node</span><span class="p">(</span>
+    <span class="n">RegisteredSpecial</span><span class="p">,</span>
+    <span class="n">special_flatten</span><span class="p">,</span>    <span class="c1"># Instruct JAX what are the children nodes.</span>
+    <span class="n">special_unflatten</span>   <span class="c1"># Instruct JAX how to pack back into a `RegisteredSpecial`.</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now you can traverse the special container structure:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="p">[</span>
+   <span class="n">RegisteredSpecial</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+   <span class="n">RegisteredSpecial</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+  <span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[RegisteredSpecial(x=1, y=2), RegisteredSpecial(x=3, y=5)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Alternatively, you can define appropriate <code class="docutils literal notranslate"><span class="pre">tree_flatten</span></code> and <code class="docutils literal notranslate"><span class="pre">tree_unflatten</span></code> methods
+on your class and decorate it with <a class="reference internal" href="_autosummary/jax.tree_util.register_pytree_node_class.html#jax.tree_util.register_pytree_node_class" title="jax.tree_util.register_pytree_node_class"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_pytree_node_class()</span></code></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jax.tree_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_pytree_node_class</span>
+
+<span class="nd">@register_pytree_node_class</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RegisteredSpecial2</span><span class="p">(</span><span class="n">Special</span><span class="p">):</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;RegisteredSpecial2(x=</span><span class="si">{}</span><span class="s2">, y=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">tree_flatten</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">aux_data</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="n">aux_data</span><span class="p">)</span>
+
+  <span class="nd">@classmethod</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">tree_unflatten</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">aux_data</span><span class="p">,</span> <span class="n">children</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">children</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">show_example</span><span class="p">(</span><span class="n">structured</span><span class="p">):</span>
+  <span class="n">flat</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">structured</span><span class="o">.</span><span class="n">tree_flatten</span><span class="p">()</span>
+  <span class="n">unflattened</span> <span class="o">=</span> <span class="n">RegisteredSpecial2</span><span class="o">.</span><span class="n">tree_unflatten</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">flat</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">structured</span><span class="si">=}</span><span class="se">\n</span><span class="s2">  </span><span class="si">{</span><span class="n">flat</span><span class="si">=}</span><span class="se">\n</span><span class="s2">  </span><span class="si">{</span><span class="n">tree</span><span class="si">=}</span><span class="se">\n</span><span class="s2">  </span><span class="si">{</span><span class="n">unflattened</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="n">show_example</span><span class="p">(</span><span class="n">RegisteredSpecial2</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>structured=RegisteredSpecial2(x=1.0, y=2.0)
+  flat=(1.0, 2.0)
+  tree=None
+  unflattened=RegisteredSpecial2(x=1.0, y=2.0)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Modern Python comes equipped with helpful tools to make defining containers easier. Some will work with JAX out-of-the-box, but others require more care.</p>
+<p>For instance, a Python <code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code> subclass doesn’t need to be registered to be considered a pytree node type:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyOtherContainer</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+  <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+  <span class="n">a</span><span class="p">:</span> <span class="n">Any</span>
+  <span class="n">b</span><span class="p">:</span> <span class="n">Any</span>
+  <span class="n">c</span><span class="p">:</span> <span class="n">Any</span>
+
+<span class="c1"># NamedTuple subclasses are handled as pytree nodes, so</span>
+<span class="c1"># this will work out-of-the-box.</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">leaves</span><span class="p">([</span>
+    <span class="n">MyOtherContainer</span><span class="p">(</span><span class="s1">&#39;Alice&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">MyOtherContainer</span><span class="p">(</span><span class="s1">&#39;Bob&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Alice&#39;, 1, 2, 3, &#39;Bob&#39;, 4, 5, 6]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that the <code class="docutils literal notranslate"><span class="pre">name</span></code> field now appears as a leaf, because all tuple elements are children. This is what happens when you don’t have to register the class the hard way.</p>
+<p>When defining unflattening functions, in general <code class="docutils literal notranslate"><span class="pre">children</span></code> should contain all the
+dynamic elements of the data structure (arrays, dynamic scalars, and pytrees), while
+<code class="docutils literal notranslate"><span class="pre">aux_data</span></code> should contain all the static elements that will be rolled into the <code class="docutils literal notranslate"><span class="pre">treedef</span></code>
+structure. JAX sometimes needs to compare <code class="docutils literal notranslate"><span class="pre">treedef</span></code> for equality, or compute its hash
+for use in the JIT cache, and so care must be taken to ensure that the auxiliary data
+specified in the flattening recipe supports meaningful hashing and equality comparisons.</p>
+<p>Unlike <code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code> subclasses, classes decorated with <code class="docutils literal notranslate"><span class="pre">&#64;dataclass</span></code> are not automatically pytrees. However, they can be registered as pytrees using the <a class="reference internal" href="_autosummary/jax.tree_util.register_dataclass.html#jax.tree_util.register_dataclass" title="jax.tree_util.register_dataclass"><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.tree_util.register_dataclass()</span></code></a> decorator:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+
+<span class="nd">@functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">register_dataclass</span><span class="p">,</span>
+                   <span class="n">data_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span>
+                   <span class="n">meta_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyDataclassContainer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+  <span class="n">a</span><span class="p">:</span> <span class="n">Any</span>
+  <span class="n">b</span><span class="p">:</span> <span class="n">Any</span>
+  <span class="n">c</span><span class="p">:</span> <span class="n">Any</span>
+
+<span class="c1"># MyDataclassContainer is now a pytree node.</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">leaves</span><span class="p">([</span>
+  <span class="n">MyDataclassContainer</span><span class="p">(</span><span class="s1">&#39;apple&#39;</span><span class="p">,</span> <span class="mf">5.3</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">4</span><span class="p">])),</span>
+  <span class="n">MyDataclassContainer</span><span class="p">(</span><span class="s1">&#39;banana&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[5.3, 1.2, Array([0., 0., 0., 0.], dtype=float32), array([3, 4]), -1.0, 0.0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that the <code class="docutils literal notranslate"><span class="pre">name</span></code> field does not appear as a leaf. This is because we included it in the <code class="docutils literal notranslate"><span class="pre">meta_fields</span></code> argument to <a class="reference internal" href="_autosummary/jax.tree_util.register_dataclass.html#jax.tree_util.register_dataclass" title="jax.tree_util.register_dataclass"><code class="xref py py-func docutils literal notranslate"><span class="pre">jax.tree_util.register_dataclass()</span></code></a>, indicating that it should be treated as metadata/auxiliary data, just like <code class="docutils literal notranslate"><span class="pre">aux_data</span></code> in <code class="docutils literal notranslate"><span class="pre">RegisteredSpecial</span></code> above. Now instances of <code class="docutils literal notranslate"><span class="pre">MyDataclassContainer</span></code> can be passed into JIT-ed functions, and <code class="docutils literal notranslate"><span class="pre">name</span></code> will be treated as static (see <a class="reference internal" href="jit-compilation.html#jit-marking-arguments-as-static"><span class="std std-ref">Marking arguments as static</span></a> for more information on static args):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">MyDataclassContainer</span> <span class="o">|</span> <span class="n">MyOtherContainer</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">a</span> <span class="o">+</span> <span class="n">x</span><span class="o">.</span><span class="n">b</span>
+
+<span class="c1"># Works fine! `mdc.name` is static.</span>
+<span class="n">mdc</span> <span class="o">=</span> <span class="n">MyDataclassContainer</span><span class="p">(</span><span class="s1">&#39;mdc&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">mdc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Contrast this with <code class="docutils literal notranslate"><span class="pre">MyOtherContainer</span></code>, the <code class="docutils literal notranslate"><span class="pre">NamedTuple</span></code> subclass. Since the <code class="docutils literal notranslate"><span class="pre">name</span></code> field is a pytree leaf, JIT expects it to be convertible to <a class="reference internal" href="_autosummary/jax.Array.html#jax.Array" title="jax.Array"><code class="xref py py-class docutils literal notranslate"><span class="pre">jax.Array</span></code></a>, and the following raises an error:</p>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">moc</span> <span class="o">=</span> <span class="n">MyOtherContainer</span><span class="p">(</span><span class="s1">&#39;moc&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">moc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">moc</span> <span class="o">=</span> <span class="n">MyOtherContainer</span><span class="p">(</span><span class="s1">&#39;moc&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">moc</span><span class="p">)</span>
+
+    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">hidden</span> <span class="mi">3</span> <span class="n">frame</span><span class="p">]</span>
+
+<span class="nn">File ~/checkouts/readthedocs.org/user_builds/jax/envs/latest/lib/python3.12/site-packages/jax/_src/pjit.py:645,</span> in <span class="ni">_infer_input_type</span><span class="nt">(fun, dbg_fn, explicit_args)</span>
+<span class="g g-Whitespace">    </span><span class="mi">643</span>   <span class="n">dbg</span> <span class="o">=</span> <span class="n">dbg_fn</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">644</span>   <span class="n">arg_description</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;path </span><span class="si">{</span><span class="n">dbg</span><span class="o">.</span><span class="n">arg_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">dbg</span><span class="o">.</span><span class="n">arg_names</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;unknown&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">645</span>   <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">646</span>     <span class="sa">f</span><span class="s2">&quot;Error interpreting argument to </span><span class="si">{</span><span class="n">fun</span><span class="si">}</span><span class="s2"> as an abstract array.&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">647</span>     <span class="sa">f</span><span class="s2">&quot; The problematic value is of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2"> and was passed to&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">648</span>     <span class="sa">f</span><span class="s2">&quot; the function at </span><span class="si">{</span><span class="n">arg_description</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">649</span>     <span class="s2">&quot;This typically means that a jit-wrapped function was called with a non-array&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">650</span>     <span class="s2">&quot; argument, and this argument was not marked as static using the&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">651</span>     <span class="s2">&quot; static_argnums or static_argnames parameters of jax.jit.&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">652</span>   <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">653</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">mutable_array_checks</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">654</span>   <span class="n">check_no_aliased_ref_args</span><span class="p">(</span><span class="n">dbg_fn</span><span class="p">,</span> <span class="n">avals</span><span class="p">,</span> <span class="n">explicit_args</span><span class="p">)</span>
+
+<span class="ne">TypeError</span>: Error interpreting argument to &lt;function f at 0x70ac7b2bcea0&gt; as an abstract array. The problematic value is of type &lt;class &#39;str&#39;&gt; and was passed to the function at path x.name.
+<span class="n">This</span> <span class="n">typically</span> <span class="n">means</span> <span class="n">that</span> <span class="n">a</span> <span class="n">jit</span><span class="o">-</span><span class="n">wrapped</span> <span class="n">function</span> <span class="n">was</span> <span class="n">called</span> <span class="k">with</span> <span class="n">a</span> <span class="n">non</span><span class="o">-</span><span class="n">array</span> <span class="n">argument</span><span class="p">,</span> <span class="ow">and</span> <span class="n">this</span> <span class="n">argument</span> <span class="n">was</span> <span class="ow">not</span> <span class="n">marked</span> <span class="k">as</span> <span class="n">static</span> <span class="n">using</span> <span class="n">the</span> <span class="n">static_argnums</span> <span class="ow">or</span> <span class="n">static_argnames</span> <span class="n">parameters</span> <span class="n">of</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The whole set of functions for operating on pytrees are in <a class="reference internal" href="jax.tree_util.html#module-jax.tree_util" title="jax.tree_util"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jax.tree_util</span></code></a>.</p>
+<section id="custom-pytrees-and-initialization-with-unexpected-values">
+<h2>Custom pytrees and initialization with unexpected values<a class="headerlink" href="#custom-pytrees-and-initialization-with-unexpected-values" title="Link to this heading">#</a></h2>
+<p>Another common gotcha with user-defined pytree objects is that JAX transformations occasionally initialize them with unexpected values, so that any input validation done at initialization may fail. For example:</p>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyTree</span><span class="p">:</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">register_pytree_node</span><span class="p">(</span><span class="n">MyTree</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">tree</span><span class="p">:</span> <span class="p">((</span><span class="n">tree</span><span class="o">.</span><span class="n">a</span><span class="p">,),</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="k">lambda</span> <span class="n">_</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">MyTree</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span>
+
+<span class="n">tree</span> <span class="o">=</span> <span class="n">MyTree</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">5.0</span><span class="p">))</span>
+
+<span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)(</span><span class="n">tree</span><span class="p">)</span>      <span class="c1"># Error because object() is passed to `MyTree`.</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;__main__.MyTree at 0x70ac7b28ff20&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jax</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)(</span><span class="n">tree</span><span class="p">)</span>  <span class="c1"># Error because MyTree(...) is passed to `MyTree`.</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">jax</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)(</span><span class="n">tree</span><span class="p">)</span>  <span class="c1"># Error because MyTree(...) is passed to `MyTree`.</span>
+
+<span class="nn">File ~/checkouts/readthedocs.org/user_builds/jax/envs/latest/lib/python3.12/site-packages/jax/_src/api.py:834,</span> in <span class="ni">jacrev.&lt;locals&gt;.jacfun</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">827</span> <span class="n">f</span> <span class="o">=</span> <span class="n">lu</span><span class="o">.</span><span class="n">wrap_init</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">828</span>     <span class="n">fun</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">829</span>     <span class="n">debug_info</span><span class="o">=</span><span class="n">debug_info</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">830</span>         <span class="s2">&quot;jacrev&quot;</span><span class="p">,</span> <span class="n">fun</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">831</span>         <span class="n">static_argnums</span><span class="o">=</span><span class="p">(</span><span class="n">argnums</span><span class="p">,)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">argnums</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">argnums</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">832</span> <span class="n">f_partial</span><span class="p">,</span> <span class="n">dyn_args</span> <span class="o">=</span> <span class="n">argnums_partial</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">argnums</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">833</span>                                       <span class="n">require_static_args_hashable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">834</span> <span class="n">tree_map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">_check_input_dtype_jacrev</span><span class="p">,</span> <span class="n">holomorphic</span><span class="p">,</span> <span class="n">allow_int</span><span class="p">),</span> <span class="n">dyn_args</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">835</span> <span class="k">if</span> <span class="n">has_aux</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">836</span>   <span class="n">y</span><span class="p">,</span> <span class="n">pullback</span><span class="p">,</span> <span class="n">aux</span> <span class="o">=</span> <span class="n">_vjp</span><span class="p">(</span><span class="n">f_partial</span><span class="p">,</span> <span class="o">*</span><span class="n">dyn_args</span><span class="p">,</span> <span class="n">has_aux</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nn">File ~/checkouts/readthedocs.org/user_builds/jax/envs/latest/lib/python3.12/site-packages/jax/_src/tree_util.py:398,</span> in <span class="ni">tree_map</span><span class="nt">(f, tree, is_leaf, *rest)</span>
+<span class="g g-Whitespace">    </span><span class="mi">396</span>   <span class="n">err</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">_prefix_error</span><span class="p">((),</span> <span class="n">tree</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">is_leaf</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+<span class="g g-Whitespace">    </span><span class="mi">397</span>   <span class="k">raise</span> <span class="p">(</span><span class="n">err</span><span class="p">(</span><span class="s1">&#39;tree_map tree&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">e</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+<span class="nn">--&gt; 398 return treedef.unflatten(f(*xs) for xs</span> in <span class="ni">zip</span><span class="nt">(*all_leaves))</span>
+
+<span class="nn">Cell In[10], line 6,</span> in <span class="ni">&lt;lambda&gt;</span><span class="nt">(_, args)</span>
+<span class="ne">----&gt; </span><span class="mi">6</span>     <span class="k">lambda</span> <span class="n">_</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">MyTree</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span>
+
+<span class="nn">Cell In[10], line 3,</span> in <span class="ni">MyTree.__init__</span><span class="nt">(self, a)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>   <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+<span class="ne">----&gt; </span><span class="mi">3</span>     <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="nn">File ~/checkouts/readthedocs.org/user_builds/jax/envs/latest/lib/python3.12/site-packages/jax/_src/numpy/array_constructors.py:452,</span> in <span class="ni">asarray</span><span class="nt">(a, dtype, order, copy, device, out_sharding)</span>
+<span class="g g-Whitespace">    </span><span class="mi">450</span> <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">451</span>   <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">check_and_canonicalize_user_dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="s2">&quot;asarray&quot;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">452</span> <span class="k">return</span> <span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">copy</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">453</span>              <span class="n">out_sharding</span><span class="o">=</span><span class="n">out_sharding</span><span class="p">)</span>
+
+<span class="nn">File ~/checkouts/readthedocs.org/user_builds/jax/envs/latest/lib/python3.12/site-packages/jax/_src/numpy/array_constructors.py:284,</span> in <span class="ni">array</span><span class="nt">(object, dtype, copy, order, ndmin, device, out_sharding, *args)</span>
+<span class="g g-Whitespace">    </span><span class="mi">281</span> <span class="n">leaves</span><span class="p">,</span> <span class="n">treedef</span> <span class="o">=</span> <span class="n">tree_util</span><span class="o">.</span><span class="n">tree_flatten</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">282</span>     <span class="nb">object</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)))</span>
+<span class="g g-Whitespace">    </span><span class="mi">283</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">leaf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">leaf</span> <span class="ow">in</span> <span class="n">leaves</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">284</span>   <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;None is not a valid value for jnp.array&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">285</span> <span class="n">leaves</span> <span class="o">=</span> <span class="p">[</span>
+<span class="g g-Whitespace">    </span><span class="mi">286</span>     <span class="n">leaf</span>
+<span class="g g-Whitespace">    </span><span class="mi">287</span>     <span class="k">if</span> <span class="p">(</span><span class="n">leaf_jax_array</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">leaf</span><span class="p">,</span> <span class="s2">&quot;__jax_array__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">288</span>     <span class="k">else</span> <span class="n">leaf_jax_array</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">289</span>     <span class="k">for</span> <span class="n">leaf</span> <span class="ow">in</span> <span class="n">leaves</span>
+<span class="g g-Whitespace">    </span><span class="mi">290</span> <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">291</span> <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">292</span>   <span class="c1"># Use lattice_result_type rather than result_type to avoid canonicalization.</span>
+<span class="g g-Whitespace">    </span><span class="mi">293</span>   <span class="c1"># Otherwise, weakly-typed inputs would have their dtypes canonicalized.</span>
+
+<span class="ne">ValueError</span>: None is not a valid value for jnp.array
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p>In the first case with <code class="docutils literal notranslate"><span class="pre">jax.vmap(...)(tree)</span></code>, JAX’s internals use arrays of <code class="docutils literal notranslate"><span class="pre">object()</span></code> values to infer the structure of the tree</p></li>
+<li><p>In the second case with <code class="docutils literal notranslate"><span class="pre">jax.jacobian(...)(tree)</span></code>, the Jacobian of a function mapping a tree to a tree is defined as a tree of trees.</p></li>
+</ul>
+<p><strong>Potential solution 1:</strong></p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">__init__</span></code> and <code class="docutils literal notranslate"><span class="pre">__new__</span></code> methods of custom pytree classes should generally avoid doing any array conversion or other input validation, or else anticipate and handle these special cases. For example:</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyTree</span><span class="p">:</span>
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">object</span> <span class="ow">or</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">MyTree</span><span class="p">)):</span>
+      <span class="n">a</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Potential solution 2:</strong></p>
+<ul class="simple">
+<li><p>Structure your custom <code class="docutils literal notranslate"><span class="pre">tree_unflatten</span></code> function so that it avoids calling <code class="docutils literal notranslate"><span class="pre">__init__</span></code>. If you choose this route, make sure that your <code class="docutils literal notranslate"><span class="pre">tree_unflatten</span></code> function stays in sync with <code class="docutils literal notranslate"><span class="pre">__init__</span></code> if and when the code is updated. Example:</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tree_unflatten</span><span class="p">(</span><span class="n">aux_data</span><span class="p">,</span> <span class="n">children</span><span class="p">):</span>
+  <span class="k">del</span> <span class="n">aux_data</span>  <span class="c1"># Unused in this class.</span>
+  <span class="n">obj</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">MyTree</span><span class="p">)</span>
+  <span class="n">obj</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="k">return</span> <span class="n">obj</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="internal-pytree-handling">
+<h2>Internal pytree handling<a class="headerlink" href="#internal-pytree-handling" title="Link to this heading">#</a></h2>
+<p>JAX flattens pytrees into lists of leaves at the <code class="docutils literal notranslate"><span class="pre">api.py</span></code> boundary (and also
+in control flow primitives). This keeps downstream JAX internals simpler:
+transformations like <a class="reference internal" href="_autosummary/jax.grad.html#jax.grad" title="jax.grad"><code class="xref py py-func docutils literal notranslate"><span class="pre">grad()</span></code></a>, <a class="reference internal" href="_autosummary/jax.jit.html#jax.jit" title="jax.jit"><code class="xref py py-func docutils literal notranslate"><span class="pre">jit()</span></code></a>, and <a class="reference internal" href="_autosummary/jax.vmap.html#jax.vmap" title="jax.vmap"><code class="xref py py-func docutils literal notranslate"><span class="pre">vmap()</span></code></a>
+can handle user functions that accept and return the myriad different Python
+containers, while all the other parts of the system can operate on functions
+that only take (multiple) array arguments and always return a flat list of arrays.</p>
+<p>When JAX flattens a pytree it will produce a list of leaves and a <code class="docutils literal notranslate"><span class="pre">treedef</span></code>
+object that encodes the structure of the original value. The <code class="docutils literal notranslate"><span class="pre">treedef</span></code> can
+then be used to construct a matching structured value after transforming the
+leaves. Pytrees are tree-like, rather than DAG-like or graph-like, in that we
+handle them assuming referential transparency and that they can’t contain
+reference cycles.</p>
+<p>Here is a simple example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">jax.tree_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">tree_flatten</span><span class="p">,</span> <span class="n">tree_unflatten</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+
+<span class="c1"># The structured value to be transformed</span>
+<span class="n">value_structured</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">)]</span>
+
+<span class="c1"># The leaves in value_flat correspond to the `*` markers in value_tree</span>
+<span class="n">value_flat</span><span class="p">,</span> <span class="n">value_tree</span> <span class="o">=</span> <span class="n">tree_flatten</span><span class="p">(</span><span class="n">value_structured</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value_flat</span><span class="si">=}</span><span class="se">\n</span><span class="si">{</span><span class="n">value_tree</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Transform the flat value list using an element-wise numeric transformer</span>
+<span class="n">transformed_flat</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="o">*</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">value_flat</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">transformed_flat</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Reconstruct the structured output, using the original</span>
+<span class="n">transformed_structured</span> <span class="o">=</span> <span class="n">tree_unflatten</span><span class="p">(</span><span class="n">value_tree</span><span class="p">,</span> <span class="n">transformed_flat</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">transformed_structured</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>value_flat=[1.0, 2.0, 3.0]
+value_tree=PyTreeDef([*, (*, *)])
+transformed_flat=[2.0, 4.0, 6.0]
+transformed_structured=[2.0, (4.0, 6.0)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>By default, pytree containers can be lists, tuples, dicts, namedtuple, None,
+OrderedDict. Other types of values, including numeric and ndarray values, are
+treated as leaves:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="n">Point</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">])</span>
+
+<span class="n">example_containers</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="p">[</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">]),</span>
+    <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mf">2.</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mf">3.</span><span class="p">}),</span>
+    <span class="mf">1.</span><span class="p">,</span>
+    <span class="kc">None</span><span class="p">,</span>
+    <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">Point</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">show_example</span><span class="p">(</span><span class="n">structured</span><span class="p">):</span>
+  <span class="n">flat</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">tree_flatten</span><span class="p">(</span><span class="n">structured</span><span class="p">)</span>
+  <span class="n">unflattened</span> <span class="o">=</span> <span class="n">tree_unflatten</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">flat</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">structured</span><span class="si">=}</span><span class="se">\n</span><span class="s2">  </span><span class="si">{</span><span class="n">flat</span><span class="si">=}</span><span class="se">\n</span><span class="s2">  </span><span class="si">{</span><span class="n">tree</span><span class="si">=}</span><span class="se">\n</span><span class="s2">  </span><span class="si">{</span><span class="n">unflattened</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">structured</span> <span class="ow">in</span> <span class="n">example_containers</span><span class="p">:</span>
+  <span class="n">show_example</span><span class="p">(</span><span class="n">structured</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>structured=(1.0, [2.0, 3.0])
+  flat=[1.0, 2.0, 3.0]
+  tree=PyTreeDef((*, [*, *]))
+  unflattened=(1.0, [2.0, 3.0])
+structured=(1.0, {&#39;b&#39;: 2.0, &#39;a&#39;: 3.0})
+  flat=[1.0, 3.0, 2.0]
+  tree=PyTreeDef((*, {&#39;a&#39;: *, &#39;b&#39;: *}))
+  unflattened=(1.0, {&#39;a&#39;: 3.0, &#39;b&#39;: 2.0})
+structured=1.0
+  flat=[1.0]
+  tree=PyTreeDef(*)
+  unflattened=1.0
+structured=None
+  flat=[]
+  tree=PyTreeDef(None)
+  unflattened=None
+structured=Array([0., 0.], dtype=float32)
+  flat=[Array([0., 0.], dtype=float32)]
+  tree=PyTreeDef(*)
+  unflattened=Array([0., 0.], dtype=float32)
+structured=Point(x=1.0, y=2.0)
+  flat=[1.0, 2.0]
+  tree=PyTreeDef(CustomNode(namedtuple[Point], [*, *]))
+  unflattened=Point(x=1.0, y=2.0)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="transfer_guard.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Transfer guard</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="persistent_compilation_cache.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Persistent compilation cache</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-pytrees-and-initialization-with-unexpected-values">Custom pytrees and initialization with unexpected values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#internal-pytree-handling">Internal pytree handling</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The JAX authors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, The JAX Authors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
