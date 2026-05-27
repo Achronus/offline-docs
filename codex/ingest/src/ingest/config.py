@@ -29,6 +29,11 @@ class Source:
     crawl: CrawlConfig | None = None
     exclude_pattern: str | None = None
     """Regex matched against the URL path. Matching URLs are skipped during fetch."""
+    icon: str | None = None
+    """Override the auto-detected favicon. Useful when upstream's icons are
+    low-res or unusably styled (e.g. only an apple-touch-icon with brand bg).
+    Accepts an absolute URL path (``/img/source-icons/react.svg``) or external
+    URL. When set, this wins over ``_detect_favicon``."""
 
 
 @dataclass
@@ -95,6 +100,7 @@ def load(config_path: Path) -> CodexConfig:
             tag=body.get("tag", "??"),
             crawl=crawl,
             exclude_pattern=body.get("exclude_pattern"),
+            icon=body.get("icon"),
         )
 
     return CodexConfig(

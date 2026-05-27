@@ -13,6 +13,7 @@ from . import __version__
 from .config import CodexConfig, Source, cache_root, find_config, load
 from .emitter import write_catalogue, write_manifest
 from .fetchers import local as local_fetcher
+from .fetchers import playwright_ as playwright_fetcher
 from .fetchers import rtd as rtd_fetcher
 from .fetchers import wget as wget_fetcher
 from .stager import stage_source
@@ -177,8 +178,18 @@ def _do_fetch(src: Source) -> Path:
         return local_fetcher.fetch(Path(src.repo_path), cache_dir)
 
     if src.type == "spa":
-        raise click.ClickException(
-            f"{src.name}: spa fetcher not implemented yet (Phase 5)"
+        if not src.url or not src.crawl:
+            raise click.ClickException(
+                f"{src.name}: spa sources need 'url' and 'crawl' "
+                f"(start_paths/url_pattern/content_selector) in codex.yaml"
+            )
+        return playwright_fetcher.fetch(
+            src.url,
+            cache_dir,
+            start_paths=src.crawl.start_paths,
+            url_pattern=src.crawl.url_pattern,
+            content_selector=src.crawl.content_selector or "main",
+            exclude_pattern=src.exclude_pattern,
         )
 
     raise click.ClickException(f"{src.name}: unknown type {src.type!r}")

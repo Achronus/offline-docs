@@ -18,6 +18,7 @@ browser-readable docs library with the upstream styling preserved.
 | Mujorax | 0.2.0 | 39 | <https://mujorax.achronus.dev/> |
 | Optax | 0.2.5 | 40 | <https://optax.readthedocs.io/en/latest/> |
 | Orbax | 0.1.9 | 154 | <https://orbax.readthedocs.io/en/latest/> |
+| React | 19.1 | 158 | <https://react.dev/> |
 
 To add or remove sources, edit `codex/codex.yaml` and re-run `ingest sync`.
 
@@ -62,7 +63,8 @@ a new source.
 cd codex/ingest
 uv venv
 .venv/Scripts/activate            # PowerShell: .venv\Scripts\Activate.ps1
-uv pip install -e ".[local]"      # `[local]` adds mkdocs/mkdocs-material for local sources
+uv pip install -e ".[local,spa]"  # both optional extras (see below)
+playwright install chromium       # only needed for `spa` sources
 
 # Fetch + stage everything
 ingest sync
@@ -71,10 +73,19 @@ ingest sync
 ingest sync --only fastapi,flax
 ```
 
+### Optional extras
+
+- **`[local]`** adds `mkdocs` + `mkdocs-material` so the local fetcher can
+  build `mkdocs-local` sources (e.g. Envrax/Mujorax). Each project's MkDocs
+  plugins must also be installed in this venv —
+  `uv pip install "mkdocstrings[python]"`, for example.
+- **`[spa]`** adds Playwright so the SPA fetcher can render JS-heavy sites
+  (React, Next.js). After installing, run `playwright install chromium` once
+  to fetch the headless browser binary.
+
 For any `mkdocs-local` entries in `codex/codex.yaml` (e.g. Envrax/Mujorax),
-clone the project repo into `codex/sources/<name>/` first. Extra MkDocs
-plugins must be installed in the same venv (e.g.
-`uv pip install "mkdocstrings[python]"`).
+clone the project repo into `codex/sources/<name>/` first. SPA sources don't
+need anything on disk — Chromium fetches the live site.
 
 ### Ingest CLI commands
 
@@ -100,7 +111,7 @@ codex/
 │   └── src/ingest/
 │       ├── cli.py
 │       ├── stager.py
-│       └── fetchers/
+│       └── fetchers/   # wget, local mkdocs, playwright SPA
 ├── site/               # Docusaurus shell (iframe + library sidebar)
 │   ├── src/
 │   │   ├── pages/index.tsx
