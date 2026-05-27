@@ -55,12 +55,12 @@ def fetch(
     session.headers["User-Agent"] = user_agent
 
     visited: set[str] = set()
-    img_visited: set[str] = set()
+    asset_visited: set[str] = set()
     queue: deque[str] = deque([base])
     fetched = 0
     skipped = 0
     excluded = 0
-    images = 0
+    assets = 0
 
     while queue and fetched < max_pages:
         url = queue.popleft()
@@ -107,40 +107,58 @@ def fetch(
             if absolute not in visited:
                 queue.append(absolute)
 
-        # Pull image assets referenced by this page. Same-host only; assets
-        # may live outside the docs `path_prefix` (e.g. /img/...) so we do
-        # NOT apply the no-parent constraint here.
-        for img in soup.find_all("img", src=True):
-            src = img["src"]
-            if src.startswith(("data:", "//")):
+        # Pull page-requisites: images, stylesheets, scripts, icons.
+        # Same-host only; these may live outside the docs `path_prefix`
+        # (e.g. /assets/..., /img/...) so the no-parent constraint does
+        # NOT apply.
+        for el, attr in _asset_elements(soup):
+            raw = el.get(attr)
+            if not raw or raw.startswith(("data:", "//")):
                 continue
-            img_url, _ = urldefrag(urljoin(url, src))
-            if img_url in img_visited:
+            asset_url, _ = urldefrag(urljoin(url, raw))
+            if asset_url in asset_visited:
                 continue
-            img_visited.add(img_url)
-            img_parsed = urlparse(img_url)
-            if img_parsed.netloc != host or not img_parsed.path:
+            asset_visited.add(asset_url)
+            asset_parsed = urlparse(asset_url)
+            if asset_parsed.netloc != host or not asset_parsed.path:
                 continue
             try:
-                img_resp = session.get(img_url, timeout=30)
-                img_resp.raise_for_status()
+                asset_resp = session.get(asset_url, timeout=30)
+                asset_resp.raise_for_status()
             except requests.RequestException:
                 continue
-            img_rel = img_parsed.path.lstrip("/")
-            if not img_rel:
+            asset_rel = asset_parsed.path.lstrip("/")
+            if not asset_rel:
                 continue
-            img_out = cache_dir / img_rel
-            img_out.parent.mkdir(parents=True, exist_ok=True)
-            img_out.write_bytes(img_resp.content)
-            images += 1
+            asset_out = cache_dir / asset_rel
+            asset_out.parent.mkdir(parents=True, exist_ok=True)
+            asset_out.write_bytes(asset_resp.content)
+            assets += 1
 
         time.sleep(delay)
 
     console.log(
         f"[bold green]fetched {fetched} pages[/bold green] from {base_url} "
-        f"(images {images}, skipped {skipped}, excluded {excluded})"
+        f"(assets {assets}, skipped {skipped}, excluded {excluded})"
     )
     return cache_dir
+
+
+def _asset_elements(soup: BeautifulSoup):
+    """Yield (element, attr_name) for every page-requisite reference."""
+    for img in soup.find_all("img", src=True):
+        yield img, "src"
+    for link in soup.find_all("link", href=True):
+        rels = link.get("rel") or []
+        # Material/MkDocs frequently includes rel="stylesheet" and rel="icon"
+        # plus rel="preload" rel="manifest" rel="alternate". Pull the visual
+        # essentials only.
+        if any(r in ("stylesheet", "icon", "shortcut icon", "apple-touch-icon", "mask-icon", "manifest") for r in rels):
+            yield link, "href"
+    for script in soup.find_all("script", src=True):
+        yield script, "src"
+    for source in soup.find_all("source", src=True):
+        yield source, "src"
 
 
 def _url_to_path(url_path: str, prefix: str) -> str:

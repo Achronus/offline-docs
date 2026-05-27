@@ -31,4 +31,20 @@ export const manifests: Manifest[] = [
     page_count: 151,
     source_url: 'https://fastapi.tiangolo.com/',
   },
+  {
+    dir: 'envrax',
+    name: 'Envrax',
+    tag: 'Ev',
+    color: '#854F0B',
+    version: '0.3.1',
+    page_count: 33,
+  },
+  {
+    dir: 'mujorax',
+    name: 'Mujorax',
+    tag: 'Mr',
+    color: '#854F0B',
+    version: '0.2.0',
+    page_count: 39,
+  },
 ];

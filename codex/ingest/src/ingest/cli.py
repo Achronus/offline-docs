@@ -10,11 +10,10 @@ from rich.table import Table
 
 from . import __version__
 from .config import CodexConfig, Source, cache_root, find_config, load
-from .converters import mkdocs as mkdocs_converter
-from .converters.common import copy_cached_assets
-from .emitter import write_categories, write_manifest
+from .emitter import write_manifest
 from .fetchers import local as local_fetcher
 from .fetchers import wget as wget_fetcher
+from .stager import stage_source
 
 console = Console()
 
@@ -26,8 +25,12 @@ def _load() -> CodexConfig:
 def _selected(cfg: CodexConfig, only: tuple[str, ...]) -> list[Source]:
     if not only:
         return list(cfg.sources.values())
+    # Accept both `--only a --only b` and `--only a,b`.
+    names: list[str] = []
+    for raw in only:
+        names.extend(n.strip() for n in raw.split(",") if n.strip())
     out: list[Source] = []
-    for name in only:
+    for name in names:
         if name not in cfg.sources:
             raise click.ClickException(f"Unknown source: {name}")
         out.append(cfg.sources[name])
@@ -37,28 +40,28 @@ def _selected(cfg: CodexConfig, only: tuple[str, ...]) -> list[Source]:
 @click.group()
 @click.version_option(__version__, prog_name="ingest")
 def main() -> None:
-    """Fetch and convert documentation sources defined in codex.yaml."""
+    """Fetch documentation sources and stage them for offline reading."""
 
 
 @main.command(name="list")
 def list_sources() -> None:
-    """Show all sources defined in codex.yaml and their cached status."""
+    """Show all sources defined in codex.yaml and their cached/staged status."""
     cfg = _load()
     table = Table(title="Codex sources")
     table.add_column("Name")
     table.add_column("Type")
     table.add_column("Version")
     table.add_column("Cached?")
-    table.add_column("Built?")
+    table.add_column("Staged?")
     for src in cfg.sources.values():
         cached = (cache_root() / src.name).exists()
-        built = (cfg.output_dir / src.name / "_manifest.json").exists()
+        staged = (cfg.sources_dir / src.name / "_manifest.json").exists()
         table.add_row(
             src.name,
             src.type,
             src.version or "—",
             "yes" if cached else "no",
-            "yes" if built else "no",
+            "yes" if staged else "no",
         )
     console.print(table)
 
@@ -66,7 +69,7 @@ def list_sources() -> None:
 @main.command()
 @click.option("--only", multiple=True, help="Restrict to specific sources.")
 def fetch(only: tuple[str, ...]) -> None:
-    """Download source HTML into the cache."""
+    """Download source HTML + assets into the cache."""
     cfg = _load()
     for src in _selected(cfg, only):
         _do_fetch(src)
@@ -74,21 +77,21 @@ def fetch(only: tuple[str, ...]) -> None:
 
 @main.command()
 @click.option("--only", multiple=True, help="Restrict to specific sources.")
-def convert(only: tuple[str, ...]) -> None:
-    """Convert cached HTML into MDX under output_dir."""
+def stage(only: tuple[str, ...]) -> None:
+    """Stage cached content into the site's static tree (URL-rewritten)."""
     cfg = _load()
     for src in _selected(cfg, only):
-        _do_convert(src, cfg)
+        _do_stage(src, cfg)
 
 
 @main.command()
 @click.option("--only", multiple=True, help="Restrict to specific sources.")
 def sync(only: tuple[str, ...]) -> None:
-    """Fetch + convert in one step."""
+    """Fetch + stage in one step."""
     cfg = _load()
     for src in _selected(cfg, only):
         _do_fetch(src)
-        _do_convert(src, cfg)
+        _do_stage(src, cfg)
 
 
 @main.command()
@@ -140,39 +143,23 @@ def _do_fetch(src: Source) -> Path:
     raise click.ClickException(f"{src.name}: unknown type {src.type!r}")
 
 
-def _do_convert(src: Source, cfg: CodexConfig) -> None:
+def _do_stage(src: Source, cfg: CodexConfig) -> None:
     cache_dir = cache_root() / src.name
     if not cache_dir.exists():
         raise click.ClickException(
-            f"{src.name}: cache not found at {cache_dir}. Run `ingest fetch --only {src.name}` first."
+            f"{src.name}: cache not found at {cache_dir}. "
+            f"Run `ingest fetch --only {src.name}` first."
         )
 
-    output_dir = cfg.output_dir / src.name
-    console.rule(f"[bold]convert[/bold] {src.name} → {output_dir}")
+    dest_dir = cfg.sources_dir / src.name
+    console.rule(f"[bold]stage[/bold] {src.name} -> {dest_dir}")
 
-    if output_dir.exists():
-        shutil.rmtree(output_dir)
-
-    if src.type in ("mkdocs", "docusaurus", "mkdocs-local"):
-        count, nav_order = mkdocs_converter.convert_tree(
-            cache_dir, output_dir, source_name=src.name
-        )
-    else:
-        raise click.ClickException(
-            f"{src.name}: converter for type {src.type!r} not implemented yet"
-        )
-
-    write_categories(output_dir, nav_order=nav_order)
-    write_manifest(output_dir, src, count)
-
-    # Copy non-HTML cache files (images, etc.) into the site's static tree so
-    # MDX URLs rewritten via rewrite_asset_url actually resolve.
-    site_root = cfg.output_dir.parent  # site/docs → site/
-    assets = copy_cached_assets(cache_dir, site_root, src.name)
-    if assets:
-        console.log(f"copied {assets} assets → {site_root / 'static' / 'img' / src.name}")
-
-    console.print(f"[bold green]done[/bold green]: {count} pages in {output_dir}")
+    pages, files = stage_source(cache_dir, cfg.site_root, src.name)
+    write_manifest(dest_dir, src, pages)
+    console.print(
+        f"[bold green]done[/bold green]: {pages} pages ({files} files total) "
+        f"in {dest_dir}"
+    )
 
 
 if __name__ == "__main__":

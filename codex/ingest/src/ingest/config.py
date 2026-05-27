@@ -33,7 +33,7 @@ class Source:
 
 @dataclass
 class CodexConfig:
-    output_dir: Path
+    site_root: Path
     sources: dict[str, Source]
     config_path: Path
 
@@ -41,14 +41,27 @@ class CodexConfig:
     def root(self) -> Path:
         return self.config_path.parent
 
+    @property
+    def sources_dir(self) -> Path:
+        """Where staged native HTML lives (one subdir per source)."""
+        return self.site_root / "static" / "sources"
+
 
 def load(config_path: Path) -> CodexConfig:
     config_path = config_path.resolve()
     with config_path.open("r", encoding="utf-8") as f:
         raw = yaml.safe_load(f) or {}
 
-    output_dir_raw = raw.get("output_dir", "./site/docs")
-    output_dir = (config_path.parent / output_dir_raw).resolve()
+    # Accept either the new `site_root` key or the legacy `output_dir` (where
+    # MDX docs used to live — treat its parent as site_root for backwards
+    # compatibility with old codex.yaml files).
+    if "site_root" in raw:
+        site_root = (config_path.parent / raw["site_root"]).resolve()
+    elif "output_dir" in raw:
+        legacy = (config_path.parent / raw["output_dir"]).resolve()
+        site_root = legacy.parent
+    else:
+        site_root = (config_path.parent / "site").resolve()
 
     sources_raw = raw.get("sources", {})
     sources: dict[str, Source] = {}
@@ -85,7 +98,7 @@ def load(config_path: Path) -> CodexConfig:
         )
 
     return CodexConfig(
-        output_dir=output_dir,
+        site_root=site_root,
         sources=sources,
         config_path=config_path,
     )
