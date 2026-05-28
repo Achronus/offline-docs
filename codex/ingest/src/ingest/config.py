@@ -6,7 +6,13 @@ from typing import Literal
 
 import yaml
 
-SourceType = Literal["sphinx-html", "mkdocs", "mkdocs-local", "spa", "docusaurus"]
+SourceType = Literal[
+    "sphinx-html",
+    "mkdocs",
+    "mkdocs-local",
+    "spa",
+    "docusaurus",
+]
 
 
 @dataclass

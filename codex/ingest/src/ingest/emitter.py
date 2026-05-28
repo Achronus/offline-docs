@@ -18,9 +18,32 @@ _ICON_LINK_RE = re.compile(
     r"""<link\b[^>]*>""",
     re.IGNORECASE,
 )
-_REL_RE = re.compile(r"""\brel=["']([^"']+)["']""", re.IGNORECASE)
-_HREF_RE = re.compile(r"""\bhref=["']([^"']+)["']""", re.IGNORECASE)
-_SIZES_RE = re.compile(r"""\bsizes=["']?(\d+)x(\d+)""", re.IGNORECASE)
+# Match attribute values whether they're double-quoted, single-quoted, or
+# unquoted (MkDocs Material's HTML minifier strips the quotes).
+# Unquoted values per HTML5 may contain slashes (they're part of URLs) — only
+# whitespace and ``>`` end the token.
+_REL_RE = re.compile(
+    r"""\brel\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))""",
+    re.IGNORECASE,
+)
+_HREF_RE = re.compile(
+    r"""\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))""",
+    re.IGNORECASE,
+)
+_SIZES_RE = re.compile(
+    r"""\bsizes\s*=\s*["']?(\d+)x(\d+)""",
+    re.IGNORECASE,
+)
+
+
+def _first_group(m: re.Match[str] | None) -> str | None:
+    """Return the first non-empty capture group from a multi-alternative regex."""
+    if not m:
+        return None
+    for group in m.groups():
+        if group:
+            return group
+    return None
 _META_REFRESH_RE = re.compile(
     r"""<meta[^>]*http-equiv=["']refresh["'][^>]*content=["'][^"']*url\s*=\s*([^"';\s]+)""",
     re.IGNORECASE,
@@ -71,20 +94,20 @@ def _detect_favicon(output_dir: Path, source_name: str) -> str | None:
 
         scored: list[tuple[int, str]] = []
         for link_tag in _ICON_LINK_RE.findall(head):
-            rel_match = _REL_RE.search(link_tag)
-            if not rel_match:
+            rel_val = _first_group(_REL_RE.search(link_tag))
+            if not rel_val:
                 continue
-            rels = rel_match.group(1).lower().split()
+            rels = rel_val.lower().split()
             if not any(r in ("icon", "apple-touch-icon", "shortcut") for r in rels):
                 continue
             # mask-icon is monochrome silhouette — skip even though it matches
             # the broader icon regex.
             if any(r == "mask-icon" for r in rels):
                 continue
-            href_match = _HREF_RE.search(link_tag)
-            if not href_match:
+            href = _first_group(_HREF_RE.search(link_tag))
+            if not href:
                 continue
-            href = href_match.group(1).strip()
+            href = href.strip()
             if not href or href.startswith("data:"):
                 continue
             scored.append((_favicon_score(rels, link_tag, href), href))

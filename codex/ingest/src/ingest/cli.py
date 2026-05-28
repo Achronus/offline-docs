@@ -15,7 +15,6 @@ from .config import CodexConfig, Source, cache_root, find_config, load
 from .emitter import write_catalogue, write_manifest
 from .fetchers import local as local_fetcher
 from .fetchers import playwright_ as playwright_fetcher
-from .fetchers import rtd as rtd_fetcher
 from .fetchers import wget as wget_fetcher
 from .stager import stage_source
 
@@ -209,8 +208,10 @@ def _do_stage(src: Source, cfg: CodexConfig) -> None:
 
     # Derive the source's URL path prefix so the stager strips it from
     # rewritten root-relative links (matches the fetcher's cache layout).
+    # Local-build sources (mkdocs-local) put their HTML at the cache root
+    # regardless of the upstream URL, so the URL prefix doesn't apply.
     url_prefix = ""
-    if src.url:
+    if src.url and src.type != "mkdocs-local":
         url_path = urlparse(src.url).path
         if url_path and url_path != "/":
             url_prefix = url_path.rstrip("/") + "/"

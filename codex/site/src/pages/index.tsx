@@ -1,9 +1,52 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import Head from '@docusaurus/Head';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import Landing from '@site/src/components/Landing';
 import LibrarySidebar from '@site/src/components/LibrarySidebar';
 import {useCatalogue, type Manifest} from '@site/src/data/manifests';
+
+function CodexFrame({source}: {source: string}): React.ReactElement {
+  const ref = useRef<HTMLIFrameElement>(null);
+  const [loading, setLoading] = useState(true);
+
+  const onLoad = useCallback(() => {
+    setLoading(false);
+    const frame = ref.current;
+    if (!frame) return;
+    const doc = frame.contentDocument || frame.contentWindow?.document;
+    if (!doc) return;
+    // Show spinner the instant the user clicks a navigation link inside the
+    // iframe, so the loading state is visible before the browser starts
+    // unloading the current page.
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented) return;
+      if (e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = (e.target as Element | null)?.closest?.('a');
+      if (!a || !(a instanceof HTMLAnchorElement)) return;
+      if (a.target === '_blank') return;
+      const href = a.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+      setLoading(true);
+    };
+    doc.addEventListener('click', onClick, true);
+  }, []);
+
+  return (
+    <div className="codex-frame-wrapper">
+      <iframe
+        ref={ref}
+        title={source}
+        src={`/sources/${source}/`}
+        className="codex-frame"
+        onLoad={onLoad}
+      />
+      {loading && (
+        <div className="codex-frame-loader" role="progressbar" aria-label="Loading" />
+      )}
+    </div>
+  );
+}
 
 function CodexShell(): React.ReactElement {
   const catalogue = useCatalogue();
@@ -92,12 +135,7 @@ function CodexShell(): React.ReactElement {
       />
       <main className="codex-frame-pane">
         {active ? (
-          <iframe
-            key={active}
-            title={active}
-            src={`/sources/${active}/`}
-            className="codex-frame"
-          />
+          <CodexFrame key={active} source={active} />
         ) : (
           <Landing manifests={manifests} onSelect={onSelect} />
         )}

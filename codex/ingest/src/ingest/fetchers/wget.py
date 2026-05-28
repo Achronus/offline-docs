@@ -159,18 +159,30 @@ def fetch(
                 if target not in visited:
                     queue.append(target)
 
-        for a in soup.find_all("a", href=True):
-            href = a["href"]
-            if href.startswith(("mailto:", "javascript:", "tel:", "#")):
-                continue
+        def enqueue(href: str) -> None:
+            if not href or href.startswith(("mailto:", "javascript:", "tel:", "#", "data:")):
+                return
             absolute, _ = urldefrag(urljoin(url, href))
             # Sphinx links its raw .rst/.ipynb sources under /_sources/ for the
             # "View source" widget. RTD returns 403 for them and we don't need
             # them in the offline mirror — the rendered HTML is enough.
             if "/_sources/" in absolute or absolute.endswith((".rst", ".ipynb")):
-                continue
+                return
             if absolute not in visited:
                 queue.append(absolute)
+
+        for a in soup.find_all("a", href=True):
+            enqueue(a["href"])
+        # Sphinx exposes its search page via `<link rel="search">` and a
+        # `<form action="search.html">` rather than a regular <a>. Without
+        # following these, search.html (and the JS that loads searchindex.js)
+        # never gets crawled, so search inside the iframe stays broken.
+        for link in soup.find_all("link", href=True):
+            rels = [r.lower() for r in (link.get("rel") or [])]
+            if any(r in ("search", "alternate", "next", "prev") for r in rels):
+                enqueue(link["href"])
+        for form in soup.find_all("form", action=True):
+            enqueue(form["action"])
 
         # Pull page-requisites: images, stylesheets, scripts, icons.
         # Same-host only; these may live outside the docs `path_prefix`
@@ -261,8 +273,13 @@ def _playwright_completion_pass(base_url: str, cache_dir: Path, host: str, path_
             if out.exists():
                 return
             ctype = (response.headers.get("content-type") or "").lower()
-            if "text/html" in ctype and not rel.endswith((".json", ".js", ".css", ".svg")):
-                return
+            if "text/html" in ctype:
+                # Skip regular HTML pages — those are wget's job. Keep
+                # search-related HTML pages so search.html (Sphinx) and
+                # search/index.html (MkDocs) can be picked up by the
+                # browser probe even when wget itself 403'd.
+                if "search" not in rel.lower():
+                    return
             body = response.body()
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_bytes(body)
@@ -283,11 +300,21 @@ def _playwright_completion_pass(base_url: str, cache_dir: Path, host: str, path_
         page.on("response", on_response)
         try:
             page.goto(base_url, wait_until="networkidle", timeout=20000)
-            # Some sites only fetch the search index on first interaction —
-            # try to nudge it by focusing search-like elements.
             page.wait_for_timeout(800)
         except Exception:
             pass
+
+        # Also visit the search page — Sphinx's searchindex.js is only
+        # loaded when search.html runs, and MkDocs Material loads its
+        # search worker on first nav. Probing both lets us catch all the
+        # JS-fetched assets the homepage alone wouldn't trigger.
+        for probe in ("search.html", "search/"):
+            try:
+                page.goto(urljoin(base_url, probe), wait_until="networkidle", timeout=10000)
+                page.wait_for_timeout(500)
+            except Exception:
+                pass
+
         browser.close()
 
     return captured
