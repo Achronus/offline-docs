@@ -72,12 +72,6 @@ export default function LibrarySidebar({
           ←
         </button>
       </div>
-      <input
-        type="search"
-        placeholder="Search all docs…"
-        className="codex-search"
-        aria-label="Search all docs"
-      />
       <ul className="codex-package-list">
         {manifests.map((m: Manifest) => (
           <li
