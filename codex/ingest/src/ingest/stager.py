@@ -34,10 +34,21 @@ _CSS_URL_RE = re.compile(
 )
 
 
-def stage_source(cache_dir: Path, site_root: Path, source_name: str) -> tuple[int, int]:
+def stage_source(
+    cache_dir: Path,
+    site_root: Path,
+    source_name: str,
+    *,
+    url_prefix: str = "",
+) -> tuple[int, int]:
     """Copy ``cache_dir`` into ``site_root/static/sources/<source_name>/``,
     rewriting root-relative URLs in HTML and CSS to live under the source's
     iframe path.
+
+    ``url_prefix`` is the source's URL path prefix (e.g. ``/docs/`` for
+    Next.js, ``/en/latest/`` for ReadTheDocs). The fetcher stripped this
+    prefix when laying out the cache, so the stager strips it from rewritten
+    URLs too so they line up.
 
     Returns ``(html_pages, total_files)``.
     """
@@ -64,8 +75,8 @@ def stage_source(cache_dir: Path, site_root: Path, source_name: str) -> tuple[in
                 shutil.copy2(src, dest)
                 total_files += 1
                 continue
-            text = _rewrite_attrs(text, prefix)
-            text = _rewrite_css_urls(text, prefix)
+            text = _rewrite_attrs(text, prefix, url_prefix)
+            text = _rewrite_css_urls(text, prefix, url_prefix)
             dest.write_text(text, encoding="utf-8")
             html_pages += 1
             total_files += 1
@@ -76,7 +87,7 @@ def stage_source(cache_dir: Path, site_root: Path, source_name: str) -> tuple[in
                 shutil.copy2(src, dest)
                 total_files += 1
                 continue
-            text = _rewrite_css_urls(text, prefix)
+            text = _rewrite_css_urls(text, prefix, url_prefix)
             dest.write_text(text, encoding="utf-8")
             total_files += 1
         else:
@@ -90,18 +101,28 @@ def stage_source(cache_dir: Path, site_root: Path, source_name: str) -> tuple[in
     return html_pages, total_files
 
 
-def _rewrite_attrs(text: str, prefix: str) -> str:
+def _strip_url_prefix(path: str, url_prefix: str) -> str:
+    if not url_prefix:
+        return path
+    if path.startswith(url_prefix):
+        return "/" + path[len(url_prefix):]
+    if path == url_prefix.rstrip("/"):
+        return "/"
+    return path
+
+
+def _rewrite_attrs(text: str, prefix: str, url_prefix: str) -> str:
     def repl(m: re.Match[str]) -> str:
         attr = m.group(1)
         quote = m.group(2)
-        path = m.group(3)
+        path = _strip_url_prefix(m.group(3), url_prefix)
         return f" {attr}={quote}{prefix}{path}{quote}"
     return _URL_ATTR_RE.sub(repl, text)
 
 
-def _rewrite_css_urls(text: str, prefix: str) -> str:
+def _rewrite_css_urls(text: str, prefix: str, url_prefix: str) -> str:
     def repl(m: re.Match[str]) -> str:
         quote = m.group(1)
-        path = m.group(2)
+        path = _strip_url_prefix(m.group(2), url_prefix)
         return f"url({quote}{prefix}{path}{quote})"
     return _CSS_URL_RE.sub(repl, text)

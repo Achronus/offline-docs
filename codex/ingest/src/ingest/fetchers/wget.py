@@ -311,11 +311,27 @@ def _asset_elements(soup: BeautifulSoup):
 
 
 def _url_to_path(url_path: str, prefix: str) -> str:
-    """Convert URL path to a filesystem-safe relative path ending in .html."""
-    rel = url_path[len(prefix):] if url_path.startswith(prefix) else url_path
+    """Convert URL path to a filesystem-safe relative path ending in .html.
+
+    Treats only ``.html``/``.htm`` suffixes as literal file URLs; any other
+    pageish URL — including paths with dots in them like ``/docs/3.9.2``
+    (Docusaurus version landing pages) — is stored as a directory landing
+    (``<path>/index.html``).
+    """
+    if url_path.startswith(prefix):
+        rel = url_path[len(prefix):]
+    elif prefix.endswith("/") and url_path == prefix.rstrip("/"):
+        # URL == prefix without trailing slash (e.g. "/docs" when prefix is
+        # "/docs/"). Treat as the root landing.
+        rel = ""
+    else:
+        rel = url_path
     rel = rel.lstrip("/")
-    if rel == "" or rel.endswith("/"):
-        rel = rel + "index.html"
-    elif "." not in Path(rel).name:
-        rel = rel.rstrip("/") + "/index.html"
-    return rel
+    if rel == "":
+        return "index.html"
+    if rel.endswith("/"):
+        return rel + "index.html"
+    suffix = Path(rel).suffix.lower()
+    if suffix in (".html", ".htm"):
+        return rel
+    return rel + "/index.html"

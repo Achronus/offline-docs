@@ -120,6 +120,10 @@ def fetch(
                 if href.startswith(("mailto:", "javascript:", "tel:", "#")):
                     continue
                 absolute, _ = urldefrag(urljoin(url, href))
+                # Skip alternate-view URLs that aren't HTML pages (Next.js
+                # exposes .md sources, .json metadata, .txt views, etc.).
+                if absolute.endswith((".md", ".mdx", ".txt", ".json", ".xml")):
+                    continue
                 if absolute not in visited:
                     queue.append(absolute)
 
@@ -195,13 +199,21 @@ def fetch(
 
 
 def _url_to_path(url_path: str, prefix: str) -> str:
-    rel = url_path[len(prefix):] if url_path.startswith(prefix) else url_path
+    if url_path.startswith(prefix):
+        rel = url_path[len(prefix):]
+    elif prefix.endswith("/") and url_path == prefix.rstrip("/"):
+        rel = ""
+    else:
+        rel = url_path
     rel = rel.lstrip("/")
-    if rel == "" or rel.endswith("/"):
-        rel = rel + "index.html"
-    elif "." not in Path(rel).name:
-        rel = rel.rstrip("/") + "/index.html"
-    return rel
+    if rel == "":
+        return "index.html"
+    if rel.endswith("/"):
+        return rel + "index.html"
+    suffix = Path(rel).suffix.lower()
+    if suffix in (".html", ".htm"):
+        return rel
+    return rel + "/index.html"
 
 
 def _asset_elements(soup: BeautifulSoup):

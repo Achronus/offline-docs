@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import shutil
 from pathlib import Path
+from urllib.parse import urlparse
 
 import click
 from rich.console import Console
@@ -206,7 +207,17 @@ def _do_stage(src: Source, cfg: CodexConfig) -> None:
     dest_dir = cfg.sources_dir / src.name
     console.rule(f"[bold]stage[/bold] {src.name} -> {dest_dir}")
 
-    pages, files = stage_source(cache_dir, cfg.site_root, src.name)
+    # Derive the source's URL path prefix so the stager strips it from
+    # rewritten root-relative links (matches the fetcher's cache layout).
+    url_prefix = ""
+    if src.url:
+        url_path = urlparse(src.url).path
+        if url_path and url_path != "/":
+            url_prefix = url_path.rstrip("/") + "/"
+
+    pages, files = stage_source(
+        cache_dir, cfg.site_root, src.name, url_prefix=url_prefix
+    )
     write_manifest(dest_dir, src, pages)
     write_catalogue(cfg.sources_dir, list(cfg.sources.keys()))
     console.print(
