@@ -13,6 +13,7 @@ from rich.table import Table
 from . import __version__
 from .config import CodexConfig, Source, cache_root, find_config, load
 from .emitter import write_catalogue, write_manifest
+from .indexer import write_index as write_search_index
 from .fetchers import local as local_fetcher
 from .fetchers import playwright_ as playwright_fetcher
 from .fetchers import wget as wget_fetcher
@@ -217,9 +218,16 @@ def _do_stage(src: Source, cfg: CodexConfig) -> None:
             url_prefix = url_path.rstrip("/") + "/"
 
     pages, files = stage_source(
-        cache_dir, cfg.site_root, src.name, url_prefix=url_prefix
+        cache_dir,
+        cfg.site_root,
+        src.name,
+        url_prefix=url_prefix,
+        inject_search=src.custom_search,
     )
     write_manifest(dest_dir, src, pages)
+    if src.custom_search:
+        index_path = write_search_index(dest_dir, src.name)
+        console.log(f"built search index -> {index_path.name}")
     write_catalogue(cfg.sources_dir, list(cfg.sources.keys()))
     console.print(
         f"[bold green]done[/bold green]: {pages} pages ({files} files total) "

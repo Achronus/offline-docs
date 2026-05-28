@@ -34,12 +34,16 @@ _CSS_URL_RE = re.compile(
 )
 
 
+_CODEX_SEARCH_TAG = '<script src="/codex-search.js" defer></script>'
+
+
 def stage_source(
     cache_dir: Path,
     site_root: Path,
     source_name: str,
     *,
     url_prefix: str = "",
+    inject_search: bool = False,
 ) -> tuple[int, int]:
     """Copy ``cache_dir`` into ``site_root/static/sources/<source_name>/``,
     rewriting root-relative URLs in HTML and CSS to live under the source's
@@ -77,6 +81,8 @@ def stage_source(
                 continue
             text = _rewrite_attrs(text, prefix, url_prefix)
             text = _rewrite_css_urls(text, prefix, url_prefix)
+            if inject_search:
+                text = _inject_search_script(text)
             dest.write_text(text, encoding="utf-8")
             html_pages += 1
             total_files += 1
@@ -99,6 +105,21 @@ def stage_source(
         f"{total_files - html_pages} assets -> {dest_root}"
     )
     return html_pages, total_files
+
+
+def _inject_search_script(text: str) -> str:
+    """Insert the codex-search bootstrap script just before ``</body>``.
+
+    Idempotent: skips pages that already have the tag (e.g. re-stages without
+    a clean wipe).
+    """
+    if _CODEX_SEARCH_TAG in text:
+        return text
+    lowered = text.lower()
+    idx = lowered.rfind("</body>")
+    if idx == -1:
+        return text + "\n" + _CODEX_SEARCH_TAG + "\n"
+    return text[:idx] + _CODEX_SEARCH_TAG + "\n" + text[idx:]
 
 
 def _strip_url_prefix(path: str, url_prefix: str) -> str:

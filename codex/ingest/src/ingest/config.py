@@ -40,6 +40,11 @@ class Source:
     low-res or unusably styled (e.g. only an apple-touch-icon with brand bg).
     Accepts an absolute URL path (``/img/source-icons/react.svg``) or external
     URL. When set, this wins over ``_detect_favicon``."""
+    custom_search: bool = False
+    """When true, the stager injects ``static/codex-search.js`` into each
+    page and builds ``_codex_search.json`` so the in-iframe Ctrl+K modal
+    works. For sources whose native search depends on a cloud service
+    (Algolia DocSearch on React/Next.js) and so is broken offline."""
 
 
 @dataclass
@@ -107,6 +112,7 @@ def load(config_path: Path) -> CodexConfig:
             crawl=crawl,
             exclude_pattern=body.get("exclude_pattern"),
             icon=body.get("icon"),
+            custom_search=bool(body.get("custom_search", False)),
         )
 
     return CodexConfig(
