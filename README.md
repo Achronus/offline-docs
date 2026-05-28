@@ -12,11 +12,12 @@ browser-readable docs library with the upstream styling preserved.
 | --- | --- | --- | --- |
 | Envrax | 0.3.1 | 33 | <https://envrax.achronus.dev/> |
 | FastAPI | 0.115 | 151 | <https://fastapi.tiangolo.com/> |
-| Flax | 0.10.4 | 140 | <https://flax.readthedocs.io/en/latest/> |
+| Flax | 0.10.4 | 141 | <https://flax.readthedocs.io/en/latest/> |
 | JAX | 0.6.1 | 1,699 | <https://docs.jax.dev/en/latest/> |
 | MkDocs Material | 9.6 | 108 | <https://squidfunk.github.io/mkdocs-material/> |
 | MuJoCo | 3.3.0 | 66 | <https://mujoco.readthedocs.io/en/stable/> |
 | Mujorax | 0.2.0 | 39 | <https://mujorax.achronus.dev/> |
+| Next.js | 15.2 | 453 | <https://nextjs.org/docs> |
 | Optax | 0.2.5 | 40 | <https://optax.readthedocs.io/en/latest/> |
 | Orbax | 0.1.9 | 154 | <https://orbax.readthedocs.io/en/latest/> |
 | React | 19.1 | 158 | <https://react.dev/> |

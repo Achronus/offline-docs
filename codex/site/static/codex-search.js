@@ -260,18 +260,11 @@
   // navigate directly to the parallel page under the other router.
   function hookNextjsRouterToggle(root) {
     const m = location.pathname.match(/^(\/sources\/nextjs\/)(app|pages)\/(.*?)\/?(?:index\.html)?$/);
-    if (!m) {
-      console.log('[codex] router toggle: path did not match', location.pathname);
-      return;
-    }
+    if (!m) return;
     const [, prefix, current, rest] = m;
-    if (!rest) {
-      console.log('[codex] router toggle: no rest in path');
-      return;
-    }
+    if (!rest) return;
     const other = current === 'app' ? 'pages' : 'app';
     const otherUrl = `${prefix}${other}/${rest}/`;
-    console.log('[codex] router toggle: target =', otherUrl);
 
     const re = /Using (App|Pages) Router/i;
     const walker = document.createTreeWalker(root || document.body, NodeFilter.SHOW_TEXT);
@@ -280,8 +273,6 @@
     while ((node = walker.nextNode())) {
       if (re.test(node.nodeValue || '')) hits.push(node);
     }
-    console.log('[codex] router toggle: found', hits.length, 'text node(s) matching');
-    let hooked = 0;
     hits.forEach(textNode => {
       let el = textNode.parentElement;
       let trigger = null;
@@ -297,21 +288,14 @@
         }
         el = el.parentElement;
       }
-      if (!trigger) {
-        console.log('[codex] router toggle: no clickable ancestor for', textNode.nodeValue);
-        return;
-      }
-      if (trigger.dataset.codexRouterHooked) return;
+      if (!trigger || trigger.dataset.codexRouterHooked) return;
       trigger.dataset.codexRouterHooked = '1';
-      hooked++;
       trigger.addEventListener('click', e => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('[codex] router toggle clicked, navigating to', otherUrl);
         location.href = otherUrl;
       }, true);
     });
-    console.log('[codex] router toggle: hooked', hooked, 'trigger(s)');
   }
 
   function initShims() {
