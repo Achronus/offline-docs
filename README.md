@@ -14,6 +14,7 @@ browser-readable docs library with the upstream styling preserved.
 | FastAPI | 0.115 | 151 | <https://fastapi.tiangolo.com/> |
 | Flax | 0.10.4 | 140 | <https://flax.readthedocs.io/en/latest/> |
 | JAX | 0.6.1 | 1,699 | <https://docs.jax.dev/en/latest/> |
+| MkDocs Material | 9.6 | 108 | <https://squidfunk.github.io/mkdocs-material/> |
 | MuJoCo | 3.3.0 | 66 | <https://mujoco.readthedocs.io/en/stable/> |
 | Mujorax | 0.2.0 | 39 | <https://mujorax.achronus.dev/> |
 | Optax | 0.2.5 | 40 | <https://optax.readthedocs.io/en/latest/> |
