@@ -189,7 +189,7 @@ def _do_fetch(src: Source) -> Path:
             cache_dir,
             start_paths=src.crawl.start_paths,
             url_pattern=src.crawl.url_pattern,
-            content_selector=src.crawl.content_selector or "main",
+            content_selector=src.crawl.content_selector,
             exclude_pattern=src.exclude_pattern,
         )
 

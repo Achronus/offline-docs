@@ -105,3 +105,21 @@ sources:
       url_pattern: "^/(learn|reference/react)"
       content_selector: "main"
 
+  tailwind:
+    type: spa
+    # Upstream is behind Cloudflare and throttles the Playwright crawler.
+    # To resync: clone tailwindlabs/tailwindcss.com into codex/sources/tailwind/,
+    # run `pnpm install && pnpm build && pnpm start`, temporarily change this
+    # url to http://localhost:3000, run `ingest sync --only tailwind`, then
+    # change back. The public URL here is what shows in the manifest.
+    url: https://tailwindcss.com
+    version: "4.1"
+    color: "#06B6D4"
+    tag: "Tw"
+    custom_search: true
+    crawl:
+      start_paths: ["/docs"]
+      url_pattern: "^/docs"
+      # No content_selector — Tailwind's docs don't use a standard <main>
+      # tag. Relying on networkidle to detect SPA hydration is plenty.
+

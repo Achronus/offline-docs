@@ -19,7 +19,11 @@ SourceType = Literal[
 class CrawlConfig:
     start_paths: list[str] = field(default_factory=list)
     url_pattern: str = ""
-    content_selector: str = "main"
+    content_selector: str = ""
+    """When non-empty, the SPA fetcher waits for this selector to appear
+    after each page navigation before capturing HTML. Leave empty for sites
+    that don't have a predictable container — the fetcher falls back to
+    networkidle, which is usually plenty for SSR'd Next.js docs sites."""
 
 
 @dataclass
@@ -87,7 +91,7 @@ def load(config_path: Path) -> CodexConfig:
             CrawlConfig(
                 start_paths=list(crawl_raw.get("start_paths", [])),
                 url_pattern=crawl_raw.get("url_pattern", ""),
-                content_selector=crawl_raw.get("content_selector", "main"),
+                content_selector=crawl_raw.get("content_selector", ""),
             )
             if crawl_raw
             else None

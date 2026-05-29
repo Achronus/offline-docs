@@ -231,6 +231,13 @@
       if (text.length > 0 && text.length < 60 && /^search\b/i.test(text)) {
         return true;
       }
+      // Tailwind's desktop search button is a pill containing an SVG plus
+      // two <kbd> elements showing "⌘K" / "Ctrl K". textContent collapses to
+      // "⌘KCtrl K" (no separator between kbds), so no word boundary check —
+      // just look for either shortcut substring.
+      if (text.length > 0 && text.length < 30 && /(?:⌘k|ctrl ?k)/i.test(text)) {
+        return true;
+      }
     }
     return false;
   }
@@ -298,9 +305,28 @@
     });
   }
 
+  // Tailwind's sidebar nav surfaces promotional links (Components, Templates,
+  // UI Kit, Playground, Course, Community) that go to tailwindui.com / external
+  // sites — useless and broken offline. Keep only links into our docs subtree;
+  // hide everything else (incl. the stager-rewritten /sources/tailwind/plus/…
+  // paths that don't actually exist offline).
+  function hookTailwindHideLinks(root) {
+    if (!/^\/sources\/tailwind\//.test(location.pathname)) return;
+    const docsPrefix = '/sources/tailwind/docs';
+    (root || document).querySelectorAll('nav a[href]').forEach(a => {
+      const href = a.getAttribute('href') || '';
+      if (href.startsWith('#')) return;
+      if (href.startsWith('./') || href.startsWith('../')) return;
+      if (href.startsWith(docsPrefix)) return;
+      const li = a.closest('li');
+      (li || a).style.display = 'none';
+    });
+  }
+
   function initShims() {
     try { hookSearchButtons(); } catch (e) { console.warn('[codex]', e); }
     try { hookNextjsRouterToggle(); } catch (e) { console.warn('[codex]', e); }
+    try { hookTailwindHideLinks(); } catch (e) { console.warn('[codex]', e); }
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initShims);

@@ -50,7 +50,7 @@ def fetch(
     *,
     start_paths: list[str],
     url_pattern: str,
-    content_selector: str = "main",
+    content_selector: str = "",
     exclude_pattern: str | None = None,
     max_pages: int = 5000,
     delay: float = 0.6,
@@ -106,10 +106,22 @@ def fetch(
 
             try:
                 page.goto(url, wait_until="domcontentloaded", timeout=30000)
-                page.wait_for_selector(content_selector, timeout=15000)
             except Exception as e:
                 console.log(f"[yellow]skip[/yellow] {url} ({e.__class__.__name__})")
                 continue
+            # If a content selector was explicitly configured, wait for it
+            # (with a short timeout — we don't want it to dominate crawl time).
+            # Otherwise rely on networkidle to mark hydration as complete.
+            if content_selector:
+                try:
+                    page.wait_for_selector(content_selector, timeout=4000)
+                except Exception:
+                    pass
+            else:
+                try:
+                    page.wait_for_load_state("networkidle", timeout=4000)
+                except Exception:
+                    pass
 
             html = page.content()
             soup = BeautifulSoup(html, "html.parser")
@@ -221,8 +233,10 @@ def _asset_elements(soup: BeautifulSoup):
         yield img, "src"
     for link in soup.find_all("link", href=True):
         rels = link.get("rel") or []
+        # `preload` covers Next.js-style font preloads (rel="preload" as="font").
+        # Without it the page renders with system-font fallbacks.
         if any(
-            r in ("stylesheet", "icon", "shortcut icon", "apple-touch-icon", "mask-icon", "manifest")
+            r in ("stylesheet", "icon", "shortcut icon", "apple-touch-icon", "mask-icon", "manifest", "preload")
             for r in rels
         ):
             yield link, "href"
@@ -235,11 +249,16 @@ def _asset_elements(soup: BeautifulSoup):
 def _download_assets(urls: set[str], cache_dir: Path, path_prefix: str) -> int:
     if not urls:
         return 0
-    session = (
-        http_client.Session(impersonate=_IMPERSONATE)
-        if _IMPERSONATE
-        else http_client.Session()
+    # curl_cffi's Chrome impersonation enforces TLS — it can fail against
+    # plain-HTTP localhost (used when crawling a locally-built Next.js site
+    # instead of the public origin). Detect that case and skip impersonation.
+    is_localhost = any(
+        urlparse(u).hostname in ("localhost", "127.0.0.1", "::1") for u in urls
     )
+    if _IMPERSONATE and not is_localhost:
+        session = http_client.Session(impersonate=_IMPERSONATE)
+    else:
+        session = http_client.Session()
     session.headers.update({
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -249,6 +268,7 @@ def _download_assets(urls: set[str], cache_dir: Path, path_prefix: str) -> int:
     })
 
     count = 0
+    failures: list[tuple[str, str]] = []
     for url in urls:
         parsed = urlparse(url)
         asset_path = parsed.path
@@ -263,9 +283,16 @@ def _download_assets(urls: set[str], cache_dir: Path, path_prefix: str) -> int:
         try:
             resp = session.get(url, timeout=30)
             resp.raise_for_status()
-        except Exception:
+        except Exception as e:
+            failures.append((url, f"{e.__class__.__name__}: {e}"))
             continue
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_bytes(resp.content)
         count += 1
+    if failures:
+        console.log(
+            f"[yellow]asset download failures: {len(failures)} / {len(urls)}[/yellow]"
+        )
+        for url, err in failures[:5]:
+            console.log(f"  [dim]{url}[/dim] — {err}")
     return count

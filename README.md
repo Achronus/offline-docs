@@ -21,6 +21,7 @@ browser-readable docs library with the upstream styling preserved.
 | Optax | 0.2.5 | 40 | <https://optax.readthedocs.io/en/latest/> |
 | Orbax | 0.1.9 | 154 | <https://orbax.readthedocs.io/en/latest/> |
 | React | 19.1 | 158 | <https://react.dev/> |
+| Tailwind CSS | 4.1 | 227 | <https://tailwindcss.com/> |
 
 To add or remove sources, edit `codex/codex.yaml` and re-run `ingest sync`.
 
